@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     try {
         // Insertar el nuevo cliente en la tabla CLIENTES
-        $stmt_cliente = $conn->prepare("INSERT INTO CLIENTES (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
+        $stmt_cliente = $conn->prepare("INSERT INTO CLIENTES (nombre, apellido_paterno, apellido_materno, correo, telefono,sucursalID) VALUES (?, ?, ?, ?, ?, 1)");
         if ($stmt_cliente === false) {
             throw new Exception('Error en la preparación de la consulta: ' . htmlspecialchars($conn->error));
         }
