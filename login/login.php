@@ -201,7 +201,7 @@ $conn->close();
                 <button type="submit">Iniciar sesión</button>
                 <div class="d-flex justify-content-between mt-4">
                     <a href="Reset_Password.php" title="Restablecer contraseña">Restablecer contraseña</a>
-                    <a href="Registrer.php" title="Crear cuenta">¿No tiene una cuenta? Regístrese</a>
+                    <a href="register.php" title="Crear cuenta">¿No tiene una cuenta? Regístrese</a>
                 </div>
             </form>
         </div>
