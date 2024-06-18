@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Navegación Vertical con Bootstrap</title>
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+    <style>
+        body {
+            display: flex;
+        }
+        .nav-link {
+            color: white !important;
+        }
+        .nav-link:hover {
+            background-color: #575757 !important;
+        }
+    </style>
+</head>
+<body>
+    <nav class="nav flex-column bg-dark vh-100">
+        <a class="nav-link" href="#home">Inicio</a>
+        <a class="nav-link" href="#services">Servicios</a>
+        <a class="nav-link" href="#about">Acerca de</a>
+        <a class="nav-link" href="#contact">Contacto</a>
+    </nav>
+    <div class="content p-4">
+        <h1>Bienvenido a mi sitio web</h1>
+        <p>Este es un ejemplo de una barra de navegación vertical en el lado izquierdo usando Bootstrap.</p>
+        <!-- Contenido adicional aquí -->
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.4/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+</body>
+</html>
