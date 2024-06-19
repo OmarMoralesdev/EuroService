@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $password = generateRandomPassword();
     
     // Encriptar la contraseña
-  
+    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     
     // Generar nombre de usuario basado en el correo electrónico
     $username = explode('@', $correo)[0];
@@ -31,7 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     try {
         // Insertar el nuevo cliente en la tabla CLIENTES
-        $stmt_cliente = $conn->prepare("INSERT INTO CLIENTES (nombre, apellido_paterno, apellido_materno, correo, telefono,sucursalID) VALUES (?, ?, ?, ?, ?, 1)");
+        $stmt_cliente = $conn->prepare("INSERT INTO CLIENTES (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
         if ($stmt_cliente === false) {
             throw new Exception('Error en la preparación de la consulta: ' . htmlspecialchars($conn->error));
         }
@@ -44,12 +44,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $clienteID = $stmt_cliente->insert_id;
             
             // Insertar el nuevo usuario en la tabla USUARIOS
-            $stmt_usuario = $conn->prepare("INSERT INTO USUARIOS (usuario, contraseña, roles, clienteID) VALUES (?, ?, 'cliente', ?)");
+            $stmt_usuario = $conn->prepare("INSERT INTO users (username, password, clienteID) VALUES (?, ?, ?)");
             if ($stmt_usuario === false) {
                 throw new Exception('Error en la preparación de la consulta: ' . htmlspecialchars($conn->error));
             }
             
-            $stmt_usuario->bind_param("ssi", $username, $password, $clienteID);
+            $stmt_usuario->bind_param("ssi", $username, $hashed_password, $clienteID);
             $stmt_usuario->execute();
             
             if ($stmt_usuario->affected_rows > 0) {
