@@ -1,34 +1,43 @@
 <?php
-// db.php: archivo de configuración de la base de datos (igual que arriba)
+// db.php: archivo de configuración de la base de datos
 require '../includes/db.php';
-// login.php: script para iniciar sesión de usuarios
+
+// Iniciar sesión
+session_start();
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
+    // Preparar y ejecutar consulta
     $sql = "SELECT id, username, password FROM users WHERE username = ?";
-    $stmt = $conn->prepare($sql);
-    $stmt->bind_param("s", $username);
-    $stmt->execute();
-    $stmt->store_result();
+    if ($stmt = $conn->prepare($sql)) {
+        $stmt->bind_param("s", $username);
+        $stmt->execute();
+        $stmt->store_result();
 
-    if ($stmt->num_rows > 0) {
-        $stmt->bind_result($id, $username, $hashed_password);
-        $stmt->fetch();
+        // Verificar si el usuario existe
+        if ($stmt->num_rows > 0) {
+            $stmt->bind_result($id, $db_username, $hashed_password);
+            $stmt->fetch();
 
-        if (password_verify($password, $hashed_password)) {
-            session_start();
-            $_SESSION['id'] = $id;
-            $_SESSION['username'] = $username;
-            echo "Inicio de sesión exitoso!";
+            // Verificar la contraseña
+            if (password_verify($password, $hashed_password)) {
+                $_SESSION['id'] = $id;
+                $_SESSION['username'] = $db_username;
+                echo "Inicio de sesión exitoso!";
+            } else {
+                echo "Contraseña incorrecta.";
+            }
         } else {
-            echo "Contraseña incorrecta.";
+            echo "No se encontró el usuario.";
         }
+
+        $stmt->close();
     } else {
-        echo "No se encontró el usuario.";
+        echo "Error en la consulta: " . $conn->error;
     }
 
-    $stmt->close();
     $conn->close();
 }
 ?>
