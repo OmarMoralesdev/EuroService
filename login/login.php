@@ -1,15 +1,16 @@
 <?php
-// db.php: archivo de configuración de la base de datos
-require '../includes/db.php';
-
 // Iniciar sesión
 session_start();
+
+// Incluir archivo de configuración de la base de datos
+require '../includes/db.php';
 
 // Verificar si el método de solicitud es POST
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recoger los datos del formulario
     $username = $_POST['username'];
     $password = $_POST['password'];
+    
 
     // Preparar y ejecutar consulta
     $sql = "SELECT id, username, password, roles FROM users WHERE username = ?";
@@ -30,14 +31,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['username'] = $db_username;
                 $_SESSION['role'] = $role;
 
-                echo "Rol del usuario: " . $role;
-
-                // Redireccionar a la vista de clientes
+                // Redireccionar según el rol del usuario
                 if ($role === 'cliente') {
                     header("Location: ../client_view/client.html");
                     exit();
                 } elseif ($role === 'administrador') {
-                    header("Location: ../admin_view/admin.html");
+                    header("Location: ../includes/vabr.html");
                     exit();
                 } elseif ($role === 'dueño') {
                     header("Location: ../owner_view/owner.html");

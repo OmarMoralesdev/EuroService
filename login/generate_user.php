@@ -1,5 +1,4 @@
 <?php
-include('../includes/header.php');
 require '../includes/db.php';
 
 function generateRandomPassword($length = 10) {
@@ -19,6 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $correo = trim($_POST['correo']);
     $telefono = trim($_POST['telefono']);
     $password = generateRandomPassword();
+    $role;
     
     // Encriptar la contraseña
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
@@ -31,12 +31,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     try {
         // Insertar el nuevo cliente en la tabla CLIENTES
-        $stmt_cliente = $conn->prepare("INSERT INTO CLIENTES (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
+        $stmt_cliente = $conn->prepare("INSERT INTO CLIENTES (nombre, apellido_paterno, apellido_materno, correo, telefono, roles) VALUES (?, ?, ?, ?, ?, ?)");
         if ($stmt_cliente === false) {
             throw new Exception('Error en la preparación de la consulta: ' . htmlspecialchars($conn->error));
         }
         
-        $stmt_cliente->bind_param("sssss", $nombre, $apellido_paterno, $apellido_materno, $correo, $telefono);
+        $stmt_cliente->bind_param("sssss", $nombre, $apellido_paterno, $apellido_materno, $correo, $telefono, $role);
         $stmt_cliente->execute();
         
         if ($stmt_cliente->affected_rows > 0) {
@@ -44,12 +44,12 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $clienteID = $stmt_cliente->insert_id;
             
             // Insertar el nuevo usuario en la tabla USUARIOS
-            $stmt_usuario = $conn->prepare("INSERT INTO users (username, password, clienteID) VALUES (?, ?, ?)");
+            $stmt_usuario = $conn->prepare("INSERT INTO users (username, roles, password, clienteID) VALUES (?, ?, ?)");
             if ($stmt_usuario === false) {
                 throw new Exception('Error en la preparación de la consulta: ' . htmlspecialchars($conn->error));
             }
             
-            $stmt_usuario->bind_param("ssi", $username, $hashed_password, $clienteID);
+            $stmt_usuario->bind_param("ssi", $username, $role, $hashed_password, $clienteID);
             $stmt_usuario->execute();
             
             if ($stmt_usuario->affected_rows > 0) {
@@ -74,5 +74,4 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 }
 
 $conn->close();
-include('../includes/footer.php');
 ?>
