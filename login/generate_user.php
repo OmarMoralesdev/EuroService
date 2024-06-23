@@ -33,8 +33,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
     try {
         // Insertar el nuevo cliente en la tabla CLIENTES
-        $stmt_cliente = $conn->prepare("INSERT INTO CLIENTES (nombre, apellido_paterno, apellido_materno, correo, telefono, roles) VALUES (?, ?, ?, ?, ?, ?)");
-        $stmt_cliente->execute([$nombre, $apellido_paterno, $apellido_materno, $correo, $telefono, $role]);
+        $stmt_cliente = $conn->prepare("INSERT INTO CLIENTES (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES ( ?, ?, ?, ?, ?)");
+        $stmt_cliente->execute([$nombre, $apellido_paterno, $apellido_materno, $correo, $telefono]);
         
         if ($stmt_cliente->rowCount() > 0) {
             // Obtener el ID del cliente recién insertado
