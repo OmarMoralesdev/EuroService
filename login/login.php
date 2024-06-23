@@ -10,19 +10,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     // Recoger los datos del formulario
     $username = $_POST['username'];
     $password = $_POST['password'];
-    
 
-    // Preparar y ejecutar consulta
-    $sql = "SELECT id, username, password, roles FROM users WHERE username = ?";
-    if ($stmt = $conn->prepare($sql)) {
-        $stmt->bind_param("s", $username);
-        $stmt->execute();
-        $stmt->store_result();
+    try {
+        // Preparar y ejecutar consulta
+        $sql = "SELECT id, username, password, roles FROM users WHERE username = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$username]);
 
         // Verificar si el usuario existe
-        if ($stmt->num_rows > 0) {
-            $stmt->bind_result($id, $db_username, $hashed_password, $role);
-            $stmt->fetch();
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $id = $row['id'];
+            $db_username = $row['username'];
+            $hashed_password = $row['password'];
+            $role = $row['roles'];
 
             // Verificar la contraseña
             if (password_verify($password, $hashed_password)) {
@@ -50,14 +51,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             echo "No se encontró el usuario.";
         }
-
-        // Cerrar la declaración
-        $stmt->close();
-    } else {
-        echo "Error en la consulta: " . $conn->error;
+    } catch (PDOException $e) {
+        echo "Error en la consulta: " . $e->getMessage();
     }
 
     // Cerrar la conexión
-    $conn->close();
+    $conn = null;
 }
 ?>
