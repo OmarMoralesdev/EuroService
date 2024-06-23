@@ -6,14 +6,14 @@ $dbname = "TALLER_EURO";
 
 // Crear conexión
 try{
-$conexion = new PDO("mysql:host=$servername;dbname=$dbname",$username, $password, );
+$conn = new PDO("mysql:host=$servername;dbname=$dbname",$username, $password, );
 
-$conexion->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
 echo "Conexión exitosa";
 }
 
 catch(PDOException $e){
 echo "Error: ". $e->getMessage();
 }
-$conexion=null;
+$conn=null;
 
