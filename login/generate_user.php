@@ -1,5 +1,5 @@
 <?php
-require '../includes/db.php';
+require '../includes/db.php'; // Incluye el archivo de conexión a la base de datos
 
 function generateRandomPassword($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -18,60 +18,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $correo = trim($_POST['correo']);
     $telefono = trim($_POST['telefono']);
     $password = generateRandomPassword();
-    $role;
     
     // Encriptar la contraseña
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     
-    // Generar nombre de usuario basado en el correo electrónico
-    $username = explode('@', $correo)[0];
+    // Definir el rol del usuario según tus requisitos
+    $role = 'cliente'; // Ejemplo
+    
+    // Obtener la conexión a la base de datos desde el archivo db.php
+    global $conn; // Permite utilizar la variable $conn declarada en db.php
     
     // Iniciar una transacción
-    $conn->begin_transaction();
+    $conn->beginTransaction();
     
     try {
         // Insertar el nuevo cliente en la tabla CLIENTES
         $stmt_cliente = $conn->prepare("INSERT INTO CLIENTES (nombre, apellido_paterno, apellido_materno, correo, telefono, roles) VALUES (?, ?, ?, ?, ?, ?)");
-        if ($stmt_cliente === false) {
-            throw new Exception('Error en la preparación de la consulta: ' . htmlspecialchars($conn->error));
-        }
+        $stmt_cliente->execute([$nombre, $apellido_paterno, $apellido_materno, $correo, $telefono, $role]);
         
-        $stmt_cliente->bind_param("sssss", $nombre, $apellido_paterno, $apellido_materno, $correo, $telefono, $role);
-        $stmt_cliente->execute();
-        
-        if ($stmt_cliente->affected_rows > 0) {
+        if ($stmt_cliente->rowCount() > 0) {
             // Obtener el ID del cliente recién insertado
-            $clienteID = $stmt_cliente->insert_id;
+            $clienteID = $conn->lastInsertId();
             
-            // Insertar el nuevo usuario en la tabla USUARIOS
-            $stmt_usuario = $conn->prepare("INSERT INTO users (username, roles, password, clienteID) VALUES (?, ?, ?)");
-            if ($stmt_usuario === false) {
-                throw new Exception('Error en la preparación de la consulta: ' . htmlspecialchars($conn->error));
-            }
+            // Insertar el nuevo usuario en la tabla users
+            $stmt_usuario = $conn->prepare("INSERT INTO users (username, roles, password, clienteID) VALUES (?, ?, ?, ?)");
+            $stmt_usuario->execute([$correo, $role, $hashed_password, $clienteID]);
             
-            $stmt_usuario->bind_param("ssi", $username, $role, $hashed_password, $clienteID);
-            $stmt_usuario->execute();
-            
-            if ($stmt_usuario->affected_rows > 0) {
+            if ($stmt_usuario->rowCount() > 0) {
                 // Confirmar la transacción
                 $conn->commit();
-                echo "<div class='alert alert-success'>Usuario registrado exitosamente.<br>Nombre de usuario: <strong>$username</strong><br>Contraseña: <strong>$password</strong></div>";
+                echo "<div class='alert alert-success'>Usuario registrado exitosamente.<br>Nombre de usuario: <strong>$correo</strong><br>Contraseña: <strong>$password</strong></div>";
             } else {
                 throw new Exception('Error al insertar el usuario.');
             }
-            
-            $stmt_usuario->close();
         } else {
             throw new Exception('Error al insertar el cliente.');
         }
-        
-        $stmt_cliente->close();
     } catch (Exception $e) {
         // Revertir la transacción en caso de error
         $conn->rollback();
         echo "<div class='alert alert-danger'>Error: " . $e->getMessage() . "</div>";
     }
 }
-
-$conn->close();
 ?>
