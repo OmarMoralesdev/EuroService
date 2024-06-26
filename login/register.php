@@ -42,7 +42,7 @@
             width: 100%;
             overflow: hidden;
             transition: all 0.35s ease-in-out;
-            background-color: #fafbfe;
+            background-color: #FFFFFF;
         }
         #sidebar {
             width: 70px;
@@ -252,6 +252,7 @@
 
 <div class="container">
     <h2>Registrar Cliente</h2>
+    <br>
     <form method="post" action="generate_user.php">
         <div class="form-group">
             <label for="nombre">Nombre:</label>
@@ -273,7 +274,8 @@
             <label for="telefono">Teléfono:</label>
             <input type="text" class="form-control" id="telefono" name="telefono" required>
         </div>
-        <button type="submit" class="btn btn-primary">Registrar</button>
+        <br>
+        <button type="submit" class="btn btn-dark">Registrar</button>
     </form>
 </div>
 <?php
