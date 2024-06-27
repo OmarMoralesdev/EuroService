@@ -4,7 +4,7 @@ include 'db.php';
 if (isset($_GET['nombre'])) {
     $nombre = $_GET['nombre'];
 
-    // Primero obtenemos el ID del cliente basado en el nombre
+
     $sqlCliente = "SELECT id FROM clientes WHERE nombre LIKE ?";
     $stmtCliente = $pdo->prepare($sqlCliente);
     $searchTerm = "%" . $nombre . "%";
@@ -15,7 +15,7 @@ if (isset($_GET['nombre'])) {
     if ($cliente) {
         $clienteId = $cliente['id'];
 
-        // Ahora obtenemos los vehículos basados en el ID del cliente
+        
         $sqlVehiculos = "SELECT * FROM vehiculos WHERE cliente_id = ?";
         $stmtVehiculos = $pdo->prepare($sqlVehiculos);
         $stmtVehiculos->execute([$clienteId]);
