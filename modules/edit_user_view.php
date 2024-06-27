@@ -39,12 +39,12 @@
                     <div class="form-group">
                         <label for="apellido_paterno">Apellido Paterno:</label>
                         <br>
-                        <label for="staticEmail" class="col-sm-2 col-form-label">lastname</label>
+                        <label for="staticEmail" class="col-sm-2 col-form-label">LASTNAME</label>
                     </div>
                     <div class="form-group">
                         <label for="apellido_materno">Apellido Materno:</label>
                         <br>
-                        <label for="staticEmail" class="col-sm-2 col-form-label">lastname</label>
+                        <label for="staticEmail" class="col-sm-2 col-form-label">LASTNAME</label>
                     </div>
                     <div class="form-group">
                         <label for="correo">Correo Electrónico:</label>
