@@ -10,19 +10,22 @@
 </head>
 <body>
     <h1>Registrar Cita</h1>
-    <label for="cliente">Cliente:</label>
-    <input type="text" id="cliente" list="clientes" oninput="buscarClientes(); buscarVehiculos();">
-    <datalist id="clientes"></datalist>
-
-    <label for="vehiculos">Vehículos:</label>
-    <select id="listaVehiculos"></select>
-
-    <label for="fecha">Fecha:</label>
-    <input type="datetime-local" id="fecha">
-
-    <button onclick="registrarCita()">Registrar Cita</button>
-
-    <p id="mensaje"></p>
+    <form action="">
+        <label for="cliente">Cliente:</label>
+        <input type="text" id="cliente" list="clientes" oninput="buscarClientes(); buscarVehiculos();">
+        <datalist id="clientes"></datalist>
+    
+        <label for="vehiculos">Vehículos:</label>
+        <select id="listaVehiculos"></select>
+    
+        <label for="fecha">Fecha:</label>
+        <input type="datetime-local" id="fecha">
+    
+        <button onclick="registrarCita()">Registrar Cita</button>
+    
+        <p id="mensaje"></p>
+    </form>
+   
 
     <script>
         async function buscarClientes() {
@@ -69,7 +72,6 @@
             const vehiculoId = document.getElementById('listaVehiculos').value;
             const fecha = document.getElementById('fecha').value;
 
-            // Obtener el ID del cliente basado en el nombre
             const responseCliente = await fetch(`clientes.php?nombre=${clienteNombre}`);
             const clientes = await responseCliente.json();
             if (clientes.length === 0) {
