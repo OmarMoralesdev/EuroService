@@ -21,11 +21,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     
 
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    
-   
     $role = 'cliente'; 
-    
-  
+    $conn->beginTransaction();
     
     try {
       
