@@ -34,13 +34,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
               
                 if ($role === 'cliente') {
-                    header("Location: ../client_view/client.html");
+                    header("Location: ../general_views/client.php");
                     exit();
                 } elseif ($role === 'administrador') {
-                    header("Location: ../includes/vabr.html");
+                    header("Location: ../general_views/admin.php");
                     exit();
                 } elseif ($role === 'dueño') {
-                    header("Location: ../owner_view/owner.html");
+                    header("Location: ../general_views/dueño.php");
                     exit();
                 } else {
                     echo "Rol no reconocido.";

@@ -3,48 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REGISTRO CLIENTE</title>
+    <title>Editar Cliente</title>
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-</head> 
-
-<style>
-    ul{
-        list-style-type: none;
-    }
+    <style>
+        ul {
+            list-style-type: none;
+        }
     </style>
-
+</head>
 <body>
     <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
             <div class="container">
                 <h2>Editar datos</h2>
-                <br>            
-                <form action="post"  autocomplete="off">
-
-                    <div class="input-group mb-3">
-                        <input type="text" name="search" class="form-control" placeholder="Nombre del cliente">
-                        <ul id="list"><ul>
-                        <button class="btn btn-dark" type="submit">SELECIONAR</button>
-                    </div>
-                </form>
-
-                <form method="post" action="generate_user.php">
+                <br>
+                <div class="input-group mb-3">
+                    <input type="text" id="search" class="form-control" placeholder="Nombre del cliente">
+                    <button class="btn btn-dark" id="searchButton" type="button">SELECCIONAR</button>
+                </div>
+                <form method="post" action="edit_user.php" id="editForm" style="display:none;">
+                    <input type="hidden" id="clienteID" name="clienteID">
                     <div class="form-group">
                         <label for="nombre">Nombre:</label>
-                        <br>
-                        <label for="staticEmail" class="col-sm-2 col-form-label">NAME</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" readonly>
                     </div>
                     <div class="form-group">
                         <label for="apellido_paterno">Apellido Paterno:</label>
-                        <br>
-                        <label for="staticEmail" class="col-sm-2 col-form-label">LASTNAME</label>
+                        <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" readonly>
                     </div>
                     <div class="form-group">
                         <label for="apellido_materno">Apellido Materno:</label>
-                        <br>
-                        <label for="staticEmail" class="col-sm-2 col-form-label">LASTNAME</label>
+                        <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" readonly>
                     </div>
                     <div class="form-group">
                         <label for="correo">Correo Electrónico:</label>
@@ -55,10 +46,36 @@
                         <input type="text" class="form-control" id="telefono" name="telefono" required>
                     </div>
                     <br>
-                    <button type="submit" class="btn btn-dark">Registrar</button>
+                    <button type="submit" class="btn btn-dark">Actualizar</button>
                 </form>
             </div>
         </div>
     </div>
+
+    <script>
+        document.getElementById('searchButton').addEventListener('click', function() {
+            var searchValue = document.getElementById('search').value;
+            if (searchValue) {
+                fetch(`search_user.php?nombre=${searchValue}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.success) {
+                            document.getElementById('clienteID').value = data.cliente.id;
+                            document.getElementById('nombre').value = data.cliente.nombre;
+                            document.getElementById('apellido_paterno').value = data.cliente.apellido_paterno;
+                            document.getElementById('apellido_materno').value = data.cliente.apellido_materno;
+                            document.getElementById('correo').value = data.cliente.correo;
+                            document.getElementById('telefono').value = data.cliente.telefono;
+                            document.getElementById('editForm').style.display = 'block';
+                        } else {
+                            alert('Cliente no encontrado');
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                alert('Por favor ingrese un nombre');
+            }
+        });
+    </script>
 </body>
 </html>

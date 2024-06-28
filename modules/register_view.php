@@ -17,6 +17,9 @@
             <div class="container">
                 <h2>Registrar Cliente</h2>
                 <br>
+<div class="alert alert-success" role="alert">
+  A simple danger alert—check it out!
+</div>
                 <form method="post" action="../login/generate_user.php">
                     <div class="form-group">
                         <label for="nombre">Nombre:</label>
