@@ -51,7 +51,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         } else {
             echo "No se encontró el usuario.";
         }
-<<<<<<< HEAD
     } catch (PDOException $e) {
         echo "Error en la consulta: " . $e->getMessage();
     }
