@@ -1,25 +1,65 @@
-<!DOCTYPE html>
-<html lang="es">
+<?php
 
-<head>
-    <meta charset="UTF-8">
-    <title>Iniciar sesión</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css" rel="stylesheet">
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background: linear-gradient(to right, #000000 25%, #0e0e0e 65%);
+session_start();
+
+
+require '../includes/db.php';
+
+
+if ($_SERVER["REQUEST_METHOD"] == "POST") {
+
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    try {
+    
+        $sql = "SELECT id, username, password, roles FROM users WHERE username = ?";
+        $stmt = $conn->prepare($sql);
+        $stmt->execute([$username]);
+
+      
+        if ($stmt->rowCount() > 0) {
+            $row = $stmt->fetch(PDO::FETCH_ASSOC);
+            $id = $row['id'];
+            $db_username = $row['username'];
+            $hashed_password = $row['password'];
+            $role = $row['roles'];
+
+          
+            if (password_verify($password, $hashed_password)) {
+            
+                $_SESSION['id'] = $id;
+                $_SESSION['username'] = $db_username;
+                $_SESSION['role'] = $role;
+
+              
+                if ($role === 'cliente') {
+                    header("Location: ../client_view/client.html");
+                    exit();
+                } elseif ($role === 'administrador') {
+                    header("Location: ../includes/vabr.html");
+                    exit();
+                } elseif ($role === 'dueño') {
+                    header("Location: ../owner_view/owner.html");
+                    exit();
+                } else {
+                    echo "Rol no reconocido.";
+                }
+            } else {
+                echo "Contraseña incorrecta.";
+            }
+        } else {
+            echo "No se encontró el usuario.";
         }
+    } catch (PDOException $e) {
+        echo "Error en la consulta: " . $e->getMessage();
+    }
 
+   
+    $conn = null;
+}
+?>
+=======
         .form-container {
             width: 100%;
             max-width: 500px;
@@ -123,3 +163,4 @@
 </body>
 
 </html>
+>>>>>>> a580fdc06025389d0b87eede2a6711b5ad88aca2
