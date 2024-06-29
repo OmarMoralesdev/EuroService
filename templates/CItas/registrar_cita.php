@@ -13,7 +13,7 @@ $fechaCita = filter_input(INPUT_POST, 'fecha_cita', FILTER_SANITIZE_STRING);
 $fechaActual = date('Y-m-d H:i:s');
 $fechaCitaTimestamp = strtotime($fechaCita);
 
-if ($fechaCitaTimestamp <= strtotime($fechaActual)) {
+if ($fechaCitaTimestamp >= strtotime($fechaActual)) {
     die("Error: La fecha de la cita debe ser posterior a la fecha actual.");
 }
 
