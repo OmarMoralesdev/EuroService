@@ -59,51 +59,57 @@ th, td {
     </style>
 </head>
 <body>
-    <div class="accordion">
-        <div class="accordion-item" id="item1">
-            <div class="accordion-title">Terreno 1</div>
-            <div class="accordion-content">
-                <table class="table-wrapper">
-                    <tr>
-                        <th>Vehículo</th>
-                        <th>Propietario</th>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div class="accordion-item" id="item2">
-            <div class="accordion-title">Terreno 2</div>
-            <div class="accordion-content">
-            <table class="table-wrapper">
-                    <tr>
-                        <th>Vehículo</th>
-                        <th>Propietario</th>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div class="accordion-item" id="item3">
-            <div class="accordion-title">Terreno 3</div>
-            <div class="accordion-content">
-            <table class="table-wrapper">
-                    <tr>
-                        <th>Vehículo</th>
-                        <th>Propietario</th>
-                    </tr>
-                </table>
-            </div>
-        </div>
-        <div class="accordion-item" id="item4">
-            <div class="accordion-title">Terreno 4</div>
-            <div class="accordion-content">
-            <table class="table-wrapper">
-                    <tr>
-                        <th>Vehículo</th>
-                        <th>Propietario</th>
-                    </tr>
-                </table>
+    <div class="wrapper">
+        <?php include '../includes/vabr.html'; ?>
+        <div class="main p-3">
+            <div class="accordion">
+                <div class="accordion-item" id="item1">
+                    <div class="accordion-title">Terreno 1</div>
+                    <div class="accordion-content">
+                        <table class="table-wrapper">
+                            <tr>
+                                <th>Vehículo</th>
+                                <th>Propietario</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="accordion-item" id="item2">
+                    <div class="accordion-title">Terreno 2</div>
+                    <div class="accordion-content">
+                    <table class="table-wrapper">
+                            <tr>
+                                <th>Vehículo</th>
+                                <th>Propietario</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="accordion-item" id="item3">
+                    <div class="accordion-title">Terreno 3</div>
+                    <div class="accordion-content">
+                    <table class="table-wrapper">
+                            <tr>
+                                <th>Vehículo</th>
+                                <th>Propietario</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
+                <div class="accordion-item" id="item4">
+                    <div class="accordion-title">Terreno 4</div>
+                    <div class="accordion-content">
+                    <table class="table-wrapper">
+                            <tr>
+                                <th>Vehículo</th>
+                                <th>Propietario</th>
+                            </tr>
+                        </table>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </body>
 </html>
+
