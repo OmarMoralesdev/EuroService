@@ -46,6 +46,7 @@
     </style>
 </head>
 <body>
+<?php include '../../includes/vabr.html'; ?>
     <div class="container">
         <h2>Registrar Cita</h2>
         <form action="registrar_Cita.php" method="post" id="formCita" novalidate>

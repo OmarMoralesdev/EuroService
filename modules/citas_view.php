@@ -2,33 +2,92 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Registrar Nueva Cita</title>
-
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registrar Cita</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+    <style>
+        body {
+            background-color: #f8f9fa;
+            color: #333;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 600px;
+            margin: 50px auto;
+        }
+        h2 {
+            text-align: center;
+            color: #000;
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+        ul li {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+        }
+        ul li:hover {
+            background-color: #f0f0f0;
+        }
+        ul li:last-child {
+            border-bottom: none;
+        }
+    </style>
 </head>
 <body>
+<?php include '../includes/vabr.html'; ?>
     <div class="container">
-        <h2>Registrar Nueva Cita</h2>
-        <form action="../templates/citas.php" method="post">
-            <div class="form-group">
-                <label for="vehiculoID">ID del Vehículo:</label>
-                <input type="text" class="form-control" id="vehiculoID" name="vehiculoID" required>
+        <h2>Registrar Cita</h2>
+        <form action="../templates/CItas/registrar_cita.php" method="post" id="formCita" novalidate>
+            <div class="mb-3">
+                <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required>
+                <ul id="lista" class="list-group" style="display: none;"></ul>
+                <input type="hidden" id="clienteID" name="clienteID">
+                <div class="invalid-feedback">Debes seleccionar un cliente.</div>
             </div>
-            <div class="form-group">
-                <label for="servicio">Servicio Solicitado:</label>
-                <input type="text" class="form-control" id="servicio" name="servicio" required>
+            <div class="mb-3">
+                <ul id="lista-vehiculos" class="list-group" style="display: none;"></ul>
+                <input type="hidden" id="vehiculoID" name="vehiculoID">
+                <input type="text" class="form-control" id="vehiculoSeleccionado" readonly>
+                <div class="invalid-feedback">Debes seleccionar un vehículo.</div>
             </div>
-            <div class="form-group">
-                <label for="fecha_cita">Fecha de la Cita:</label>
-                <input type="date" class="form-control" id="fecha_cita" name="fecha_cita" required>
+            <div class="mb-3">
+                <label for="servicioSolicitado" class="form-label">Servicio Solicitado:</label>
+                <input type="text" class="form-control" id="servicioSolicitado" name="servicioSolicitado" required>
+                <div class="invalid-feedback">Debes ingresar el servicio solicitado.</div>
             </div>
-            <button type="submit" class="btn btn-primary">Registrar Cita</button>
+            <div class="mb-3">
+                <label for="fecha_cita" class="form-label">Fecha de la Cita:</label>
+                <input type="datetime-local" class="form-control" id="fecha_cita" name="fecha_cita" required>
+                <div class="invalid-feedback">Debes seleccionar la fecha y hora de la cita.</div>
+            </div>
+            <button type="submit" class="btn btn-dark w-100">Registrar Cita</button>
         </form>
     </div>
-
-
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
+   
+    <script src="../templates/CItas/app.js"></script>
+    <script>
+        // Validación personalizada para verificar si se ha seleccionado cliente y vehículo
+        document.getElementById('formCita').addEventListener('submit', function(event) {
+            if (!document.getElementById('clienteID').value || !document.getElementById('vehiculoID').value) {
+                event.preventDefault();
+                event.stopPropagation();
+                document.getElementById('campo').classList.add('is-invalid');
+                document.getElementById('vehiculoSeleccionado').classList.add('is-invalid');
+            }
+            this.classList.add('was-validated');
+        });
+    </script>
 </body>
 </html>
