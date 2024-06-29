@@ -34,7 +34,42 @@ function mostrar(cliente) {
     document.getElementById("campo").value = `${cliente.nombre} ${cliente.apellido_paterno} ${cliente.apellido_materno}`;
     document.getElementById("clienteID").value = cliente.clienteID;
     lista.style.display = 'none';
+    getVehiculos(cliente.clienteID);
 }
+
+function getVehiculos(clienteID) {
+    let url = "getVehiculos.php";
+    let formData = new FormData();
+    formData.append("clienteID", clienteID);
+
+    fetch(url, {
+        method: "POST",
+        body: formData,
+        mode: "cors"
+    }).then(response => response.json())
+        .then(data => {
+            let listaVehiculos = document.getElementById("lista-vehiculos");
+            listaVehiculos.innerHTML = "";
+            if (data.length > 0) {
+                listaVehiculos.style.display = 'block';
+                data.forEach(vehiculo => {
+                    let li = document.createElement('li');
+                    li.textContent = `${vehiculo.marca} ${vehiculo.modelo} (${vehiculo.año})`;
+                    li.onclick = () => seleccionarVehiculo(vehiculo);
+                    listaVehiculos.appendChild(li);
+                });
+            } else {
+                listaVehiculos.style.display = 'none';
+            }
+        })
+        .catch(err => console.log(err));
+}
+
+function seleccionarVehiculo(vehiculo) {
+    document.getElementById("vehiculoSeleccionado").value = `${vehiculo.marca} ${vehiculo.modelo} (${vehiculo.año})`;
+    document.getElementById("vehiculoID").value = vehiculo.vehiculoID;
+}
+
 
 document.addEventListener("DOMContentLoaded", function () {
     const datePicker = document.getElementById("date-picker");
@@ -54,4 +89,3 @@ document.addEventListener("DOMContentLoaded", function () {
         }
     });
 });
-
