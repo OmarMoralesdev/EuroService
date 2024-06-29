@@ -70,7 +70,7 @@
     <div class="form-container">
         <h1>TALLER EURO SERVICE</h1>
         <h2>Bienvenido</h2>
-        <form method="post" action="login.php">
+        <form method="post" action="loginb.php">
             <div class="form-group">
                 <label for="username">Nombre:</label>
                 <input type="text" class="form-control" id="username" name="username" autocomplete="on" placeholder="Ingresa tu usuario" required>
