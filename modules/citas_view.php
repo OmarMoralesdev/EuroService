@@ -22,31 +22,12 @@
             text-align: center;
             color: #000;
         }
-        ul {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-        ul li {
-            padding: 10px;
-            cursor: pointer;
-            background-color: #fff;
-            border-bottom: 1px solid #ddd;
-        }
-        ul li:hover {
-            background-color: #f0f0f0;
-        }
-        ul li:last-child {
-            border-bottom: none;
-        }
     </style>
 </head>
-<body>
-<?php include '../includes/vabr.html'; ?>
+<body>  
+    <div class="wrapper">
+        <?php include '../includes/vabr.html'; ?>
+        <div class="main p-3">
     <div class="container">
         <h2>Registrar Cita</h2>
         <form action="../templates/CItas/registrar_cita.php" method="post" id="formCita" novalidate>
@@ -74,6 +55,8 @@
             </div>
             <button type="submit" class="btn btn-dark w-100">Registrar Cita</button>
         </form>
+    </div>
+    </div>
     </div>
    
     <script src="../templates/CItas/app.js"></script>
