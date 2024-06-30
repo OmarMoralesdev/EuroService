@@ -47,7 +47,7 @@
 </head>
 <body>
     <div class="wrapper">
-        <?php include '../EuroService/includes/vabr.php'; ?>
+        <?php include '../EuroService/includes/vabr.h'; ?>
         <div class="main p-3">
     <div class="container">
         <h2>Registrar Cita</h2>

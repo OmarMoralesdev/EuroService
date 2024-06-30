@@ -43,21 +43,6 @@
             margin-bottom: 15px;
         }
 
-        input[type="text"],
-        input[type="password"] {
-            border: 2px solid #100630;
-            border-radius: 5px;
-            background: linear-gradient(to right, #F0F0F0 25%, #C9C9C9 75%);
-            width: 100%;
-            padding: 10px;
-        }
-
-        input[type="text"]:focus,
-        input[type="password"]:focus {
-            outline: none;
-            box-shadow: 0 0 5px #1544FF;
-        }
-
         input[type="submit"] {
             background: linear-gradient(to right, #000000 25%, #171717 75%);
             color: white;
@@ -75,7 +60,6 @@
         }
     </style>
 </head>
-
 <body>
     <div class="form-container">
         <h1>TALLER EURO SERVICE</h1>
@@ -121,5 +105,4 @@
         <?php unset($_SESSION['error']); ?>
     <?php endif; ?>
 </body>
-
 </html>

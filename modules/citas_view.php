@@ -32,7 +32,7 @@
         <h2>Registrar Cita</h2>
         <form action="../templates/CItas/registrar_cita.php" method="post" id="formCita" novalidate>
             <div class="mb-3">
-                <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required>
+                <input type="text" class="form-control"  id="campo" name="campo" placeholder="Buscar cliente..." required>
                 <ul id="lista" class="list-group" style="display: none;"></ul>
                 <input type="hidden" id="clienteID" name="clienteID">
                 <div class="invalid-feedback">Debes seleccionar un cliente.</div>
