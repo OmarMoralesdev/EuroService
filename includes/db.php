@@ -1,16 +1,23 @@
 <?php
-$servername = "127.0.0.1";
-$username = "root";
-$password = "1234";
-$dbname = "TALLER_EURO";
 
-// Crear conexión
-try{
-$conn = new PDO("mysql:host=$servername;dbname=$dbname",$username, $password, );
+class Database {
+    private $host = '127.0.0.1';
+    private $db_name = 'TALLER_EURO';
+    private $username = 'root';
+    private $password = '1234';
+    private $pdo;
 
-$conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+    public function conectar() {
+        $this->pdo = null;
+
+        try {
+            $this->pdo = new PDO('mysql:host=' . $this->host . ';dbname=' . $this->db_name, $this->username, $this->password);
+            $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch(PDOException $e) {
+            echo 'Error de conexión: ' . $e->getMessage();
+        }
+
+        return $this->pdo;
+    }
 }
-
-catch(PDOException $e){
-echo "Error: ". $e->getMessage();
-}
+?>

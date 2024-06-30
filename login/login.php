@@ -4,7 +4,8 @@ session_start();
 
 
 require '../includes/db.php';
-
+$con = new Database();
+$pdo = $con->conectar();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
@@ -14,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
     
         $sql = "SELECT id, username, password, roles FROM users WHERE username = ?";
-        $stmt = $conn->prepare($sql);
+        $stmt = $pdo->prepare($sql);
         $stmt->execute([$username]);
 
       
