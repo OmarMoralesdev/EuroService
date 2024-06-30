@@ -1,7 +1,8 @@
 <?php
 
 require '../includes/db.php';
-
+$con = new Database();
+$pdo = $con->conectar();
 
 function generateRandomPassword($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -32,16 +33,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
   
-        $stmt_cliente = $conn->prepare("INSERT INTO CLIENTES (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
+        $stmt_cliente = $pdo->prepare("INSERT INTO CLIENTES (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
         $stmt_cliente->execute([$nombre, $apellido_paterno, $apellido_materno, $correo, $telefono]);
         
        
         if ($stmt_cliente->rowCount() > 0) {
           
-            $clienteID = $conn->lastInsertId();
+            $clienteID = $pdo->lastInsertId();
             
            
-            $stmt_usuario = $conn->prepare("INSERT INTO users (username, roles, password, clienteID) VALUES (?, ?, ?, ?)");
+            $stmt_usuario = $pdo->prepare("INSERT INTO users (username, roles, password, clienteID) VALUES (?, ?, ?, ?)");
             $stmt_usuario->execute([$correo, $role, $hashed_password, $clienteID]);
             
          
