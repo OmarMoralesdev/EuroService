@@ -11,7 +11,6 @@ $sql = "SELECT CLIENTES.clienteid, CLIENTES.nombre, CLIENTES.apellido_paterno, C
         LEFT JOIN CITAS ON CLIENTES.clienteid = CITAS.clienteid
         ORDER BY CLIENTES.nombre, CITAS.fecha_cita DESC";
 $query = $pdo->prepare($sql);
-$query->execute();
 $clientes = $query->fetchAll(PDO::FETCH_ASSOC);
 ?>
 

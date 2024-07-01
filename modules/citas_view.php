@@ -16,7 +16,7 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 600px;
-            margin: 50px auto;
+            margin: 10px auto;
         }
         h2 {
             text-align: center;
@@ -24,15 +24,16 @@
         }
     </style>
 </head>
-<body>  
-    <div class="wrapper">
+<body>
+<div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
+            <div class="container">
     <div class="container">
         <h2>Registrar Cita</h2>
-        <form action="../templates/CItas/registrar_cita.php" method="post" id="formCita" novalidate>
+        <form action="registrar_Cita.php" method="post" id="formCita" novalidate>
             <div class="mb-3">
-                <input type="text" class="form-control"  id="campo" name="campo" placeholder="Buscar cliente..." required>
+                <input type="text" class="form-control" autocomplete="off" id="campo" name="campo" placeholder="Buscar cliente..." required>
                 <ul id="lista" class="list-group" style="display: none;"></ul>
                 <input type="hidden" id="clienteID" name="clienteID">
                 <div class="invalid-feedback">Debes seleccionar un cliente.</div>
@@ -59,9 +60,8 @@
     </div>
     </div>
    
-    <script src="../templates/CItas/app.js"></script>
+    <script src="app.js"></script>
     <script>
-        // Validación personalizada para verificar si se ha seleccionado cliente y vehículo
         document.getElementById('formCita').addEventListener('submit', function(event) {
             if (!document.getElementById('clienteID').value || !document.getElementById('vehiculoID').value) {
                 event.preventDefault();

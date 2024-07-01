@@ -15,9 +15,6 @@
             <div class="container">
                 <h2>Registrar Cliente</h2>
                 <br>
-<div class="alert alert-success" role="alert">
-  A simple danger alert—check it out!
-</div>
                 <form method="post" action="../login/generate_user.php">
                     <div class="form-group">
                         <label for="nombre">Nombre:</label>
@@ -40,10 +37,40 @@
                         <input type="text" class="form-control" id="telefono" name="telefono" required>
                     </div>
                     <br>
-                    <button type="submit" class="btn btn-dark">Registrar</button>
+            <button type="submit" class="btn btn-dark w-100">Registrar</button>
+
                 </form>
             </div>
         </div>
     </div>
 </body>
 </html>
+
+<?php
+    session_start();
+    if (isset($_SESSION['error']) && $_SESSION['error']) : ?>
+        <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+            <div class="modal-dialog" role="document">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                            <span aria-hidden="true">&times;</span>
+                        </button>
+                    </div>
+                    <div class="modal-body">
+                        <?php echo htmlspecialchars($_SESSION['error'], ENT_QUOTES, 'UTF-8'); ?>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+            $(document).ready(function() {
+                $('#errorModal').modal('show');
+            });
+        </script>
+        <?php unset($_SESSION['error']); ?>
+    <?php endif; ?>

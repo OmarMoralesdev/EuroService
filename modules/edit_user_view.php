@@ -13,13 +13,13 @@
                 <h2>Editar datos</h2>
                 <br>            
                 <form action="post"  autocomplete="off">
-
-                    <div class="input-group mb-3">
-                        <input type="text" name="search" class="form-control" placeholder="Nombre del cliente">
-                        <ul id="list"><ul>
-                        <button class="btn btn-dark" type="submit">SELECIONAR</button>
-                    </div>
-                </form>
+                <div class="mb-3">
+                    
+                <input type="text" class="form-control" autocomplete="off" id="campo" name="campo" placeholder="Buscar cliente..." required>
+                <ul id="lista" class="list-group" style="display: none;"></ul>
+                <input type="hidden" id="clienteID" name="clienteID">
+                <div class="invalid-feedback">Debes seleccionar un cliente.</div>
+            </div>
 
                 <form method="post" action="generate_user.php">
                     <div class="form-group">
@@ -46,7 +46,7 @@
                         <input type="text" class="form-control" id="telefono" name="telefono" required>
                     </div>
                     <br>
-                    <button type="submit" class="btn btn-dark">Registrar</button>
+            <button type="submit" class="btn btn-dark w-100">Registrar</button>
                 </form>
             </div>
         </div>
