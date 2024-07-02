@@ -24,7 +24,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($errores)) {
         // Preparar la consulta SQL para insertar los datos
         $stmt = $pdo->prepare("INSERT INTO proveedores (nombre, contacto) VALUES (?, ?)");
-        $stmt->bindParam($nombre, $contacto);
+        $stmt->execute([$nombre, $contacto]);
 
         // Ejecutar la consulta
         if ($stmt->execute()) {
@@ -53,10 +53,10 @@ if ($result->rowCount() > 0) {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Catalogo de Proveedores</title>
+    <title>Registro de Proveedores</title>
 </head>
 <body>
-    <h1>Catalogo de Proveedores</h1>
+    <h1>Registro de Proveedores</h1>
     <nav>
         <a href="#registrar">Registrar Proveedor</a> 
     </nav>
@@ -86,6 +86,5 @@ if ($result->rowCount() > 0) {
             </tr>
             <?php endforeach; ?>
         </table>
-  
 </body>
 </html>
