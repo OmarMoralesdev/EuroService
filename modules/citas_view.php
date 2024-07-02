@@ -28,7 +28,6 @@
 <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
-            <div class="container">
     <div class="container">
         <h2>Registrar Cita</h2>
         <form action="registrar_Cita.php" method="post" id="formCita" novalidate>
@@ -56,7 +55,6 @@
             </div>
             <button type="submit" class="btn btn-dark w-100">Registrar Cita</button>
         </form>
-    </div>
     </div>
     </div>
    
