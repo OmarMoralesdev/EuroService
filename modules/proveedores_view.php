@@ -56,6 +56,10 @@ if ($result->rowCount() > 0) {
     <title>Registro de Proveedores</title>
 </head>
 <body>
+<div class="wrapper">
+        <?php include '../includes/vabr.html'; ?>
+        <div class="main p-3">
+    <div class="container">
     <h1>Registro de Proveedores</h1>
     <nav>
         <a href="#registrar">Registrar Proveedor</a> 
@@ -86,5 +90,7 @@ if ($result->rowCount() > 0) {
             </tr>
             <?php endforeach; ?>
         </table>
+    </div>
+    </div>
 </body>
 </html>
