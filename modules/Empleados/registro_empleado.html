@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Empleados</title>
+</head>
+<body>
+    <h1>Registro de Empleados</h1>
+    <form action="registrar_empleado.php" method="post">
+        <label for="nombre">Nombre:</label>
+        <input type="text" id="nombre" name="nombre" required><br><br>
+        
+        <label for="tipo">Tipo:</label>
+        <select id="tipo" name="tipo" required>
+            <option value="master">Master</option>
+            <option value="intermedio">Intermedio</option>
+            <option value="ayudante">Ayudante</option>
+        </select><br><br>
+        
+        <input type="submit" value="Registrar">
+    </form>
+</body>
+</html>
