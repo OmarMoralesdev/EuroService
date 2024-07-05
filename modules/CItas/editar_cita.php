@@ -27,7 +27,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fechaActual = date('Y-m-d H:i:s');
         $fechaCitaTimestamp = strtotime($fechaCita);
 
-        if ($fechaCitaTimestamp <= strtotime($fechaActual)) {
+         if ($fechaCitaTimestamp >= strtotime($fechaActual)) {
             $mensaje = "Error: La fecha de la cita debe ser posterior a la fecha actual.";
         } else {
             $fechaLimite = date('Y-m-d H:i:s', strtotime('+30 minutes', $fechaCitaTimestamp));
