@@ -145,10 +145,19 @@
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="../modules/citas_view.php" class="sidebar-link">
+            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#citas" aria-expanded="false" aria-controls="citas">
                 <i class="lni lni-agenda"></i>
                 <span>CITAS</span>
             </a>
+            <ul id="citas" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                <li class="sidebar-item">
+                    <a href="../modules/citas_view.php" class="sidebar-link">REGISTRAR CITA</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="../modules/crear_cita.php" class="sidebar-link">EDITAR CITA</a>
+                </li>
+            </ul>
+
         </li>
         <li class="sidebar-item">
             <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#usuarios" aria-expanded="false" aria-controls="usuarios">
@@ -165,7 +174,11 @@
                 <li class="sidebar-item">
                     <a href="#" class="sidebar-link">ELIMINAR</a>
                 </li>
+                <li class="sidebar-item">
+                    <a href="#" class="sidebar-link">BUSCAR</a>
+                </li>
             </ul>
+
         </li>
         <li class="sidebar-item">
             <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#vehiculos" aria-expanded="false" aria-controls="vehiculos">
@@ -173,6 +186,9 @@
                 <span>VEHICULOS</span>
             </a>
             <ul id="vehiculos" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                <li class="sidebar-item">
+                    <a href="../modules/autos_view.php" class="sidebar-link">AGREGAR</a>
+                </li>
                 <li class="sidebar-item">
                     <a href="#" class="sidebar-link">ATENCIÓN</a>
                 </li>
