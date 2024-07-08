@@ -58,7 +58,7 @@
     </div>
     </div>
    
-    <script src="app.js"></script>
+    <script src="../modules/CItas/app.js"></script>
     <script>
         document.getElementById('formCita').addEventListener('submit', function(event) {
             if (!document.getElementById('clienteID').value || !document.getElementById('vehiculoID').value) {
