@@ -65,7 +65,6 @@
                             <th scope="col">VEHICULO</th>
                             <th scope="col">SERVICIO SOLICITADO</th>
                             <th scope="col">FECHA DE CITA</th>
-                            <th scope="col">ESTADO</th>
                         </tr>
                     </thead>
                     <tbody>
@@ -78,7 +77,6 @@
                         SELECT c.*, v.marca AS vehiculo 
                         FROM CITAS c 
                         JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID 
-                        WHERE c.estado = 'pendiente' 
                         ORDER BY c.fecha_cita ASC;
                         ");
                         $stmt->execute();
@@ -89,7 +87,6 @@
                             echo '<td>' . $cita['vehiculo'] . '</td>';
                             echo '<td>' . $cita['servicio_solicitado'] . '</td>';
                             echo '<td>' . $cita['fecha_cita'] . '</td>';
-                            echo '<td>' . $cita['estado'] . '</td>';
                             echo '</tr>';
                         }
                         ?>

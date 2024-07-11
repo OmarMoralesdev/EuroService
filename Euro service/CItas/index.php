@@ -11,39 +11,38 @@
     <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
-    <div class="container">
-        <h2>Registrar Cita</h2>
-        <form action="registrar_Cita.php" method="post" id="formCita" novalidate>
-            <div class="mb-3">
-                <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required>
-                <ul id="lista" class="list-group" style="display: none;"></ul>
-                <input type="hidden" id="clienteID" name="clienteID">
-                <div class="invalid-feedback">Debes seleccionar un cliente.</div>
+            <div class="container">
+                <h2>Registrar Cita</h2>
+                <form action="registrar_Cita.php" method="post" id="formCita" novalidate>
+                    <div class="mb-3">
+                        <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required>
+                        <ul id="lista" class="list-group" style="display: none;"></ul>
+                        <input type="hidden" id="clienteID" name="clienteID">
+                        <div class="invalid-feedback">Debes seleccionar un cliente.</div>
+                    </div>
+                    <div class="mb-3">
+                        <ul id="lista-vehiculos" class="list-group" style="display: none;"></ul>
+                        <input type="hidden" id="vehiculoID" name="vehiculoID">
+                        <input type="text" class="form-control" id="vehiculoSeleccionado" readonly>
+                        <div class="invalid-feedback">Debes seleccionar un vehículo.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="servicioSolicitado" class="form-label">Servicio Solicitado:</label>
+                        <input type="text" class="form-control" id="servicioSolicitado" name="servicioSolicitado" required>
+                        <div class="invalid-feedback">Debes ingresar el servicio solicitado.</div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="fecha_cita" class="form-label">Fecha de la Cita:</label>
+                        <input type="datetime-local" class="form-control" id="fecha_cita" name="fecha_cita" required>
+                        <div class="invalid-feedback">Debes seleccionar la fecha y hora de la cita.</div>
+                    </div>
+                    <button type="submit" class="btn btn-dark w-100">Registrar Cita</button>
+                </form>
             </div>
-            <div class="mb-3">
-                <ul id="lista-vehiculos" class="list-group" style="display: none;"></ul>
-                <input type="hidden" id="vehiculoID" name="vehiculoID">
-                <input type="text" class="form-control" id="vehiculoSeleccionado" readonly>
-                <div class="invalid-feedback">Debes seleccionar un vehículo.</div>
-            </div>
-            <div class="mb-3">
-                <label for="servicioSolicitado" class="form-label">Servicio Solicitado:</label>
-                <input type="text" class="form-control" id="servicioSolicitado" name="servicioSolicitado" required>
-                <div class="invalid-feedback">Debes ingresar el servicio solicitado.</div>
-            </div>
-            <div class="mb-3">
-                <label for="fecha_cita" class="form-label">Fecha de la Cita:</label>
-                <input type="datetime-local" class="form-control" id="fecha_cita" name="fecha_cita" required>
-                <div class="invalid-feedback">Debes seleccionar la fecha y hora de la cita.</div>
-            </div>
-            <button type="submit" class="btn btn-dark w-100">Registrar Cita</button>
-        </form>
-    </div>
-    </div>
+        </div>
     </div>
     
-   
-    <script src="app.js"></script>
+    <script src="../CItas/app.js"></script>
     <script>
         // Validación personalizada para verificar si se ha seleccionado cliente y vehículo
         document.getElementById('formCita').addEventListener('submit', function(event) {
