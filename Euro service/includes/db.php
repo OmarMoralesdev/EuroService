@@ -19,5 +19,29 @@ class Database {
 
         return $this->pdo;
     }
+    function seleccionar($consulta)
+    {
+        try
+        {
+           $resultado = $this->pdo->query($consulta);
+           $fila = $resultado->fetchAll(PDO::FETCH_OBJ);
+           return $fila;
+
+        }
+        catch (PDOException $e)
+        {
+            echo $e->getMessage();
+        }
+    }
+    function ejecuta($consulta)
+    {
+        try{
+            $this->pdo->query($consulta);
+        }
+        catch(PDOException $e)
+        {
+            echo $e->getMessage();
+        }
+    }
 }
 ?>
