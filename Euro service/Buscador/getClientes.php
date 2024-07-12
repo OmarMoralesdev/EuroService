@@ -4,7 +4,6 @@ require '../includes/db.php'; // Ajusta la ruta según tu estructura de carpetas
 $con = new Database();
 $pdo = $con->conectar();
 
-// Verificar si se ha enviado el campo de búsqueda
 $campo = filter_input(INPUT_POST, 'campo', FILTER_SANITIZE_STRING);
 
 if ($campo) {

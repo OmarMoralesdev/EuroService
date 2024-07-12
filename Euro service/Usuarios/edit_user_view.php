@@ -18,7 +18,7 @@
         <div class="container" style="width: 90%; margin: auto; background-color: #EBEBEB; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
                 <h2>Editar datos</h2>
                 <br>            
-                <form action="edit_user_view.php" method="POST" autocomplete="off">
+                <form action="../Buscador/getClientes.php" method="POST" autocomplete="off">
                     <div class="mb-3">
                         <input type="text" class="form-control" autocomplete="off" id="campo" name="campo" placeholder="Buscar cliente..." required>
                         <ul id="lista" class="list-group" style="display: none;"></ul>
@@ -51,7 +51,7 @@
             </div>
         </div>
     </div>
-    <script src="/modules/CItas/app.js"></script>
+    <script src="../Buscador/app.js"></script>
     <script>
         document.getElementById('formCita').addEventListener('submit', function(event) {
             if (!document.getElementById('clienteID').value) {

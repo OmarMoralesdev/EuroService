@@ -13,10 +13,10 @@
         <div class="main p-3">
             <div class="container">
                 <h2>Registrar Cita</h2>
-                <label for="clienteID" class="form-label">Ingrese un cliente:</label>
-                <form action="registrar_Cita.php" method="post" id="formCita" novalidate>
+                <br>            
+                <form action="../Buscador/getClientes.php" method="POST" autocomplete="off">
                     <div class="mb-3">
-                        <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required>
+                        <input type="text" class="form-control" autocomplete="off" id="campo" name="campo" placeholder="Buscar cliente..." required>
                         <ul id="lista" class="list-group" style="display: none;"></ul>
                         <input type="hidden" id="clienteID" name="clienteID">
                         <div class="invalid-feedback">Debes seleccionar un cliente.</div>
@@ -44,18 +44,16 @@
         </div>
     </div>
     
-    <script src="../CItas/app.js"></script>
+    <script src="../Buscador/app.js"></script>
     <script>
-        // Validación personalizada para verificar si se ha seleccionado cliente y vehículo
         document.getElementById('formCita').addEventListener('submit', function(event) {
-            if (!document.getElementById('clienteID').value || !document.getElementById('vehiculoID').value) {
+            if (!document.getElementById('clienteID').value) {
                 event.preventDefault();
                 event.stopPropagation();
                 document.getElementById('campo').classList.add('is-invalid');
-                document.getElementById('vehiculoSeleccionado').classList.add('is-invalid');
             }
             this.classList.add('was-validated');
         });
-    </script>
+    </script>   
 </body>
 </html>
