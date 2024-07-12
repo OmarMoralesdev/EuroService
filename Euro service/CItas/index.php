@@ -4,7 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Cita</title>
-
 </head>
 <body class="Body_citas">
     <div class="wrapper">
@@ -13,7 +12,7 @@
             <div class="container">
                 <h2>Registrar Cita</h2>
                 <br>            
-                <form action="../Buscador/getClientes.php" method="POST" autocomplete="off">
+                <form action="../CItas/registrar_cita.php" method="POST" autocomplete="off">
                     <div class="mb-3">
                         <input type="text" class="form-control" autocomplete="off" id="campo" name="campo" placeholder="Buscar cliente..." required>
                         <ul id="lista" class="list-group" style="display: none;"></ul>
@@ -43,9 +42,9 @@
         </div>
     </div>
     
-    <script src="../Buscador/app.js"></script>
+    <script src="../CItas/app.js"></script>
     <script>
-        document.getElementById('formCita').addEventListener('submit', function(event) {
+         document.getElementById('formCita').addEventListener('submit', function(event) {
             if (!document.getElementById('clienteID').value) {
                 event.preventDefault();
                 event.stopPropagation();
