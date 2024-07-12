@@ -4,7 +4,10 @@ require 'database.php';
 $con = new Database();
 $pdo = $con->conectar();
 
-$sql = "SELECT empleadoID, nombre FROM EMPLEADOS";
+$sql = "SELECT CLIENTES.clienteID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno 
+            FROM CLIENTES 
+            JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID 
+            ";
 $result = $pdo->query($sql);
 
 $empleados = array();
