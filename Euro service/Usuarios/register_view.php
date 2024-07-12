@@ -18,7 +18,7 @@
             <div class="container" style="width: 90%; margin: auto; background-color: #EBEBEB; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
                 <h2>Registrar Cliente</h2>
                 <br>
-                <form method="post" action="generate_user.php">
+                <form method="post" action="../login/generate_user.php">
                     <div class="form-group">
                         <label for="nombre">Nombre:</label>
                         <input type="text" class="form-control" id="nombre" name="nombre" required>
