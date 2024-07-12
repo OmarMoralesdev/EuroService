@@ -14,8 +14,9 @@
                 $ubicacionID = $_POST['ubicacionID'];
                 $atencion = "Muy Urgente";
 
-                require 'conexion.php';
-
+                require '../includes/db.php';
+                $con = new Database();
+                $pdo = $con->conectar();
                 try {
                     $pdo->beginTransaction();
                     $sqlCita = "INSERT INTO CITAS (vehiculoID, servicio_solicitado, fecha_solicitud, fecha_cita, urgencia, estado) VALUES (?, ?, ?, ?, ?, 'pendiente')";

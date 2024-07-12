@@ -1,6 +1,7 @@
 <?php
-require 'conexion.php'; 
-
+require '../includes/db.php';
+$con = new Database();
+$pdo = $con->conectar();
 // Función para obtener la lista de empleados disponibles
 function obtenerEmpleadosDisponibles($pdo) {
     $sql = "SELECT EMPLEADOS.empleadoID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno 

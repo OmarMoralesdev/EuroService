@@ -1,19 +1,26 @@
 <?php
-require 'database.php';
+require 'conexion.php';
 
-$con = new Database();
-$pdo = $con->conectar();
+// Verificar si se ha enviado el campo de búsqueda
+$campo = filter_input(INPUT_POST, 'campo', FILTER_SANITIZE_STRING);
 
-$sql = "SELECT CLIENTES.clienteID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno 
+if ($campo) {
+    $sql = "SELECT CLIENTES.clienteID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno 
             FROM CLIENTES 
             JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID 
-            ";
-$result = $pdo->query($sql);
+            WHERE PERSONAS.nombre LIKE ? OR PERSONAS.apellido_paterno LIKE ? OR PERSONAS.apellido_materno LIKE ? 
+            ORDER BY PERSONAS.nombre ASC 
+            LIMIT 10";
+    $query = $pdo->prepare($sql);
+    $query->execute([$campo . '%', $campo . '%', $campo . '%']);
 
-$empleados = array();
-while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
-    $empleados[] = $row;
+    $clientes = [];
+    while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+        $clientes[] = $row;
+    }
+
+    echo json_encode($clientes, JSON_UNESCAPED_UNICODE);
+} else {
+    echo json_encode([]);
 }
-
-echo json_encode($empleados);
 ?>

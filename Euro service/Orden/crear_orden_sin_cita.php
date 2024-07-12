@@ -52,7 +52,9 @@
                         <label for="empleado" class="form-label">Empleado ID:</label>
                         <select name="empleado" class="form-control" required>
                             <?php
-                            require 'conexion.php';
+                            require '../includes/db.php';
+                            $con = new Database();
+                            $pdo = $con->conectar();
                             function obtenerEmpleadosDisponibles($pdo)
                             {
                                 $sql = "SELECT EMPLEADOS.empleadoID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno 

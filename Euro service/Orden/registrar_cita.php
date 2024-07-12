@@ -1,6 +1,7 @@
 <?php
-require 'conexion.php';
-
+require '../includes/db.php';
+$con = new Database();
+$pdo = $con->conectar();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $clienteID = $_POST['clienteID'];
     $vehiculoID = $_POST['vehiculoID'];

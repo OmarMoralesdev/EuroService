@@ -1,6 +1,5 @@
 <?php
-require 'database.php';
-
+require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
 
@@ -18,4 +17,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error: " . $e->getMessage();
     }
 }
-?>
