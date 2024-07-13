@@ -69,23 +69,3 @@ function seleccionarVehiculo(vehiculo) {
     document.getElementById("vehiculoSeleccionado").value = `${vehiculo.marca} ${vehiculo.modelo} (${vehiculo.año})`;
     document.getElementById("vehiculoID").value = vehiculo.vehiculoID;
 }
-
-
-document.addEventListener("DOMContentLoaded", function () {
-    const datePicker = document.getElementById("date-picker");
-    const errorMessage = document.getElementById("error-message");
-
-    const today = new Date().toISOString().split('T')[0];
-    datePicker.setAttribute("min", today);
-
-    datePicker.addEventListener("change", function () {
-        const selectedDate = new Date(datePicker.value);
-        const currentDate = new Date();
-
-        if (selectedDate < currentDate) {
-            errorMessage.textContent = "La fecha seleccionada no puede ser anterior a hoy. Selecciona una fecha a partir de hoy.";
-        } else {
-            errorMessage.textContent = "";
-        }
-    });
-});

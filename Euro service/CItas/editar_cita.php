@@ -1,5 +1,5 @@
 <?php
-require 'database.php';
+require '../includes/db.php';
 
 $con = new Database();
 $pdo = $con->conectar();

@@ -5,7 +5,6 @@ require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
 
-$clienteID = filter_input(INPUT_POST, 'clienteID', FILTER_SANITIZE_NUMBER_INT);
 $vehiculoID = filter_input(INPUT_POST, 'vehiculoID', FILTER_SANITIZE_NUMBER_INT);
 $servicioSolicitado = filter_input(INPUT_POST, 'servicioSolicitado', FILTER_SANITIZE_STRING);
 $fechaCita = filter_input(INPUT_POST, 'fecha_cita', FILTER_SANITIZE_STRING);
@@ -16,7 +15,7 @@ $fechaCitaTimestamp = strtotime($fechaCita);
 if ($fechaCitaTimestamp >= strtotime($fechaActual)) {
     die("Error: La fecha de la cita debe ser posterior a la fecha actual.");
 }
-
+echo "$vehiculoID";
 $sql = "SELECT COUNT(*) AS countCitas FROM CITAS WHERE vehiculoID = ? AND fecha_cita BETWEEN DATE_SUB(?, INTERVAL 1 YEAR) AND ?";
 $query = $pdo->prepare($sql);
 $query->execute([$vehiculoID, $fechaCita, $fechaCita]);
