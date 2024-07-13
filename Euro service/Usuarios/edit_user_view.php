@@ -53,15 +53,15 @@
         <div class="main p-3">
         <div class="container" style="width: 80%; margin: auto; background-color: #EBEBEB; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
             <h2>Editar datos</h2>
-            <br>            
-            <label for="correo_actual">Selecciona un cliente:</label>
-                <form action="../Buscador/getClientes.php" method="POST" autocomplete="off">
-                    <div class="mb-3">
-                        <input type="text" class="form-control" autocomplete="off" id="campo" name="campo" placeholder="Buscar cliente..." required>
-                        <ul id="lista" class="list-group" style="display: none;"></ul>
-                        <input type="hidden" id="clienteID" name="clienteID">
-                        <div class="invalid-feedback">Debes seleccionar un cliente.</div>
-                    </div>
+                <br>            
+                <label for="correo_actual">Selecciona un cliente:</label>
+                    <form action="../Buscador/getClientes.php" method="POST" autocomplete="off">
+                        <div class="mb-3">
+                            <input type="text" class="form-control" autocomplete="off" id="campo" name="campo" placeholder="Buscar cliente..." required>
+                            <ul id="lista" class="list-group" style="display: none;"></ul>
+                            <input type="hidden" id="clienteID" name="clienteID">
+                            <div class="invalid-feedback">Debes seleccionar un cliente.</div>
+                        </div>
                     <div class="form-group">
                         <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" readonly>
                     </div>
@@ -73,8 +73,8 @@
                     </div>
                     <div class="form-group">
                         <br>
-                        <label for="correo_actual">Teléfono Actual:</label><br>
-                        <label for="correo_actual">Correo Electrónico Actual:</label><br><br>
+                        <label for="correo_actual">Teléfono Actual: </label><label for="correo_actual">x</label><br><br>
+                        <label for="correo_actual">Correo Electrónico Actual: </label><label for="correo_actual">x</label><br><br>
                         <input type="email" class="form-control" id="correo" name="correo" placeholder="correo electrónico"required>
                     </div>
                     <div class="form-group">
