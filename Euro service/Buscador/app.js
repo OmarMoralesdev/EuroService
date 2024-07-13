@@ -33,9 +33,10 @@ function getClientes() {
 
 function mostrar(cliente) {
     document.getElementById("campo").value = `${cliente.nombre} ${cliente.apellido_paterno} ${cliente.apellido_materno}`;
-    document.getElementById("clienteID").value = cliente.clienteID;
     document.getElementById("nombre").value = cliente.nombre;
     document.getElementById("apellido_paterno").value = cliente.apellido_paterno;
     document.getElementById("apellido_materno").value = cliente.apellido_materno;
-    document.getElementById("lista").style.display = 'none';
+    let lista = document.getElementById("lista");
+    lista.style.display = 'none';
+    lista.innerHTML = '';  // Limpia la lista de sugerencias
 }
