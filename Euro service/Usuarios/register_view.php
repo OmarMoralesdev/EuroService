@@ -21,7 +21,7 @@
             <div class="container" >
                 <h2>Registrar Cliente</h2>
                 <br>
-                <form method="post" action="../login/generate_user.php">
+                <form method="post" action="../Usuarios/generate_user.php">
                     <!-- Formulario para registrar un cliente, los datos se envían al archivo generate_user.php -->
                     <div class="form-group">
                         <label for="nombre">Nombre:</label>
