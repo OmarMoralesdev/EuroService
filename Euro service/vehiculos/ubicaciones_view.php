@@ -23,7 +23,7 @@
         <div class="main p-3">
             <h2 class="text-center">UBICACIONES DE VEHÍCULOS</h2>
             <div>
-                <button type="button" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#addLocationModal">AÑADIR NUEVA UBICACIÓN</button>
+                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addLocationModal">AÑADIR NUEVA UBICACIÓN</button>
             </div>
             <div class="row mt-4">
                 <?php
@@ -54,7 +54,7 @@
 
                         // Botones en un div separado para controlar la alineación
                         echo "<div class='card-footer d-flex justify-content-between align-items-center'>";
-                        echo "<button type='button' class='btn btn-primary btn-md' style='width: 80%;' data-bs-toggle='modal' data-bs-target='#modal{$ubicacion->ubicacionID}'>VER VEHÍCULOS</button>";
+                        echo "<button type='button' class='btn btn-dark btn-md' style='width: 80%;' data-bs-toggle='modal' data-bs-target='#modal{$ubicacion->ubicacionID}'>VER VEHÍCULOS</button>";
                         echo "<button type='button' class='btn btn-danger btn-md ml-2' style='width: 20%;' data-bs-toggle='modal' data-bs-target='#deleteModal{$ubicacion->ubicacionID}'><i class='bi bi-trash3'></i></button>";
                         echo "</div>"; // Cierre de card-footer
 
@@ -143,7 +143,7 @@
             <div class='modal-content'>
                 <div class='modal-header'>
                     <h5 class='modal-title' id='addLocationModalLabel'>Añadir Nueva Ubicación</h5>
-                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                    <button type='button' class='btn-close bg-dark' data-bs-dismiss='modal' aria-label='Close'></button>
                 </div>
                 <div class='modal-body'>
                     <form action='addLocation.php' method='POST'>
