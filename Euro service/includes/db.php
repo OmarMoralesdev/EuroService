@@ -161,9 +161,3 @@ function actualizarEstadoCita($pdo, $citaID, $nuevoEstado)
     $stmt->execute([':nuevoEstado' => $nuevoEstado, ':citaID' => $citaID]);
 }
 
-function cerrarsesion()
-{
-    session_start();
-    session_destroy();
-    header("Location: ../login/login_view.php");
-}
