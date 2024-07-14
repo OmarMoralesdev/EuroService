@@ -1,11 +1,12 @@
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Crear Orden de Trabajo</title>
 </head>
 <body>
-    <h1>Crear Orden de Trabajo</h1>
+<h1>Crear Orden de Trabajo</h1>
     <form action="" method="get">
         <label for="tipoOrden">Seleccione el tipo de orden:</label>
         <select id="tipoOrden" name="tipoOrden" required>

@@ -4,8 +4,8 @@ require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
 
-// Verificar si se ha enviado el formulario
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+// Verificar si se ha enviado el formulario de registro
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre']) && isset($_POST['contacto'])) {
     // Obtener datos del formulario
     $nombre = $_POST['nombre'];
     $contacto = $_POST['contacto'];
@@ -34,11 +34,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 
+// Manejar la solicitud de búsqueda AJAX
+if (isset($_GET['ajax_search'])) {
+    $search = $_GET['ajax_search'];
+    $stmt = $pdo->prepare("SELECT nombre, contacto FROM proveedores WHERE nombre LIKE ?");
+    $stmt->execute(["%$search%"]);
+    $proveedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    echo json_encode($proveedores);
+    exit();
+}
+
+// Obtener la consulta de búsqueda
+$search = isset($_GET['search']) ? $_GET['search'] : '';
+
 // Obtener la lista de proveedores
 $proveedores = [];
-$result = $pdo->query("SELECT nombre, contacto FROM proveedores");
-if ($result->rowCount() > 0) {
-    while ($row = $result->fetch(PDO::FETCH_ASSOC)) {
+if ($search) {
+    $stmt = $pdo->prepare("SELECT nombre, contacto FROM proveedores WHERE nombre LIKE ?");
+    $stmt->execute(["%$search%"]);
+} else {
+    $stmt = $pdo->query("SELECT nombre, contacto FROM proveedores");
+}
+
+if ($stmt->rowCount() > 0) {
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $proveedores[] = $row;
     }
 }
@@ -48,7 +67,7 @@ if ($result->rowCount() > 0) {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Registro de Proveedores</title>
+    <title>Proveedores</title>
     <style>
         .modal {
             display: none; 
@@ -85,14 +104,36 @@ if ($result->rowCount() > 0) {
             text-decoration: none;
             cursor: pointer;
         }
+        .mover-derecha {
+            margin-left: 50%;
+        }
     </style>
 </head>
 <body>
 <div class="wrapper">
     <?php include '../includes/vabr.html'; ?>
     <div class="main p-3">
-        <div class="container">
-            <h1>Registro de Proveedores</h1>
+        
+            <div class="mover-derecha">
+                <h2>Buscar Proveedores</h2>
+                <form id="searchForm">
+                    <input type="text" id="search" name="search" placeholder="Buscar..." onkeyup="buscarProveedores()">
+                </form>
+            </div>
+            <h2>Lista de Proveedores</h2>
+            <table border="1" id="tablaProveedores">
+                <tr>
+                    <th>Nombre</th>
+                    <th>Contacto</th>
+                </tr>
+                <?php foreach ($proveedores as $proveedor): ?>
+                <tr>
+                    <td><?php echo htmlspecialchars($proveedor['nombre']); ?></td>
+                    <td><?php echo htmlspecialchars($proveedor['contacto']); ?></td>
+                </tr>
+                <?php endforeach; ?>
+            </table>
+            <div class="container">
             <nav>
                 <a href="#registrar" id="openModalBtn">Registrar nuevo Proveedor</a>
             </nav>
@@ -105,31 +146,19 @@ if ($result->rowCount() > 0) {
                         <label for="nombre">Nombre:</label><br>
                         <input type="text" id="nombre" name="nombre" required><br>
                         <label for="contacto">Contacto:</label><br>
-                        <input type="text" id="contacto" name="contacto"><br>
+                        <input type="text" id="contacto" name="contacto" require><br>
                         <input type="submit" value="Registrar">
                     </form>
                 </div>
             </div>
-
-            <h2>Lista de Proveedores</h2>
-            <table border="1">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Contacto</th>
-                </tr>
-                <?php foreach ($proveedores as $proveedor): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($proveedor['nombre']); ?></td>
-                    <td><?php echo htmlspecialchars($proveedor['contacto']); ?></td>
-                </tr>
-                <?php endforeach; ?>
-            </table>
         </div>
+        
     </div>
+    
 </div>
 
-<script>
 
+<script>
     var modal = document.getElementById("myModal");
     var btn = document.getElementById("openModalBtn");
     var span = document.getElementsByClassName("close")[0];
@@ -147,6 +176,24 @@ if ($result->rowCount() > 0) {
             modal.style.display = "none";
         }
     }
+
+    function buscarProveedores() {
+        var search = document.getElementById('search').value;
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '?ajax_search=' + search, true);
+        xhr.onload = function() {
+            if (this.status == 200) {
+                var proveedores = JSON.parse(this.responseText);
+                var output = '<tr><th>Nombre</th><th>Contacto</th></tr>';
+                for (var i in proveedores) {
+                    output += '<tr><td>' + proveedores[i].nombre + '</td><td>' + proveedores[i].contacto + '</td></tr>';
+                }
+                document.getElementById('tablaProveedores').innerHTML = output;
+            }
+        }
+        xhr.send();
+    }
 </script>
+
 </body>
 </html>
