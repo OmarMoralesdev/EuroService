@@ -31,6 +31,7 @@ try {
 ?>
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -41,6 +42,7 @@ try {
             background-color: #f8f9fa;
             color: #333;
         }
+
         .container {
             background-color: #fff;
             padding: 20px;
@@ -49,19 +51,24 @@ try {
             max-width: 800px;
             margin: 50px auto;
         }
+
         h2 {
             text-align: center;
             color: #000;
         }
-        .table th, .table td {
+
+        .table th,
+        .table td {
             vertical-align: middle;
         }
+
         .thead-dark th {
             background-color: #343a40;
             color: #fff;
         }
     </style>
 </head>
+
 <body>
     <div class="container">
         <h2>Vehículos en el Taller</h2>
@@ -80,8 +87,8 @@ try {
                 </tr>
             </thead>
             <tbody>
-                <?php if (!empty($citas)): ?>
-                    <?php foreach ($citas as $cita): ?>
+                <?php if (!empty($citas)) : ?>
+                    <?php foreach ($citas as $cita) : ?>
                         <tr>
                             <td><?php echo htmlspecialchars($cita['citaID']); ?></td>
                             <td><?php echo htmlspecialchars($cita['vin']); ?></td>
@@ -94,7 +101,7 @@ try {
                             <td><?php echo htmlspecialchars($cita['dias_restantes']); ?> días</td>
                         </tr>
                     <?php endforeach; ?>
-                <?php else: ?>
+                <?php else : ?>
                     <tr>
                         <td colspan="9" class="text-center">No hay vehículos registrados.</td>
                     </tr>
@@ -103,4 +110,5 @@ try {
         </table>
     </div>
 </body>
+
 </html>
