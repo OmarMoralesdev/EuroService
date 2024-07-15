@@ -7,16 +7,24 @@ $pdo = $con->conectar();
 $cita = null;
 $mensaje = "";
 
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['buscar'])) {
         $citaID = filter_input(INPUT_POST, 'citaID', FILTER_SANITIZE_NUMBER_INT);
-        $sql = "SELECT * FROM CITAS WHERE citaID = ?";
-        $query = $pdo->prepare($sql);
-        $query->execute([$citaID]);
-        $cita = $query->fetch(PDO::FETCH_ASSOC);
+        if ($citaID) {
+            $sql = "SELECT * FROM CITAS WHERE citaID = ?";
+            $query = $pdo->prepare($sql);
+            $query->execute([$citaID]);
+            $cita = $query->fetch(PDO::FETCH_ASSOC);
 
-        if (!$cita) {
-            $mensaje = "Cita no encontrada.";
+            if (!$cita) {
+                $mensaje = "Cita no encontrada.";
+            } else {
+                $vehiculoID = $cita['vehiculoID'];
+                $detalles = obtenerDetallesVehiculoyCliente($pdo, $vehiculoID);
+            }
+        } else {
+            $mensaje = "ID de cita inválido.";
         }
     } elseif (isset($_POST['actualizar'])) {
         $citaID = filter_input(INPUT_POST, 'citaID', FILTER_SANITIZE_NUMBER_INT);
@@ -27,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $fechaActual = date('Y-m-d H:i:s');
         $fechaCitaTimestamp = strtotime($fechaCita);
 
-         if ($fechaCitaTimestamp >= strtotime($fechaActual)) {
+        if ($fechaCitaTimestamp > strtotime($fechaActual)) {
             $mensaje = "Error: La fecha de la cita debe ser posterior a la fecha actual.";
         } else {
             $fechaLimite = date('Y-m-d H:i:s', strtotime('+30 minutes', $fechaCitaTimestamp));
@@ -38,9 +46,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $row = $query->fetch(PDO::FETCH_ASSOC);
             $countCitasProximas = $row['countCitas'];
 
-            if ($countCitasProximas > 0) {
-                $mensaje = "Error: Hay una cita programada dentro de los próximos 30 minutos. Por favor, selecciona otra fecha.";
-            } else {
+    
                 $sqlUpdate = "UPDATE CITAS SET servicio_solicitado = ?, fecha_cita = ?, estado = ? WHERE citaID = ?";
                 $queryUpdate = $pdo->prepare($sqlUpdate);
                 $resultUpdate = $queryUpdate->execute([$servicioSolicitado, $fechaCita, $estado, $citaID]);
@@ -51,15 +57,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $query = $pdo->prepare($sql);
                     $query->execute([$citaID]);
                     $cita = $query->fetch(PDO::FETCH_ASSOC);
+                    $vehiculoID = $cita['vehiculoID'];
+                    $detalles = obtenerDetallesVehiculoyCliente($pdo, $vehiculoID);
                 } else {
                     $mensaje = "Error al actualizar la cita.";
                 }
-            }
+            
         }
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -89,38 +96,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <body>
     <div class="container">
         <h2>Editar Cita</h2>
-        <form method="post" action="editar_cita.php">
+        <form method="post" action="#">
             <div class="mb-3">
-                <label for="citaID" class="form-label">Buscar Cita por ID:</label>
-                <input type="text" class="form-control" id="citaID" name="citaID" value="<?php echo isset($cita['citaID']) ? $cita['citaID'] : ''; ?>" required>
-                <div class="invalid-feedback">Por favor, ingresa un ID de cita válido.</div>
+                <label for="citaID">Seleccionar Cita:</label>
+                <select id="citaID" name="citaID" required>
+                    <?php
+                    $citas = listarCitasPendientes($pdo);
+                    foreach ($citas as $citaOption) {
+                        echo "<option value=\"{$citaOption['citaID']}\">Cita ID: {$citaOption['citaID']} - Vehículo: {$citaOption['marca']} {$citaOption['modelo']} {$citaOption['anio']} - Cliente: {$citaOption['nombre']} {$citaOption['apellido_paterno']} {$citaOption['apellido_materno']} - Servicio: {$citaOption['servicio_solicitado']}</option>";
+                    }
+                    ?>
+                </select>
             </div>
             <button type="submit" name="buscar" class="btn btn-dark w-100">Buscar Cita</button>
         </form>
 
-        <?php if ($mensaje): ?>
+        <?php if ($mensaje) : ?>
             <div class="alert alert-info mt-3"><?php echo $mensaje; ?></div>
         <?php endif; ?>
 
-        <?php if ($cita): ?>
-            <form method="post" action="editar_cita.php" class="mt-4">
+        <?php if ($cita) : ?>
+            <?php $detalles = obtenerDetallesVehiculoyCliente($pdo, $cita['vehiculoID']); ?>
+            <form method="post" action="#" class="mt-4">
                 <div class="mb-3">
-                    <label for="clienteID" class="form-label">Cliente ID:</label>
-                    <input type="text" class="form-control" id="clienteID" name="clienteID" value="<?php echo $cita['clienteid']; ?>" readonly>
+                    <label for="clienteID" class="form-label">Cliente:</label>
+                    <input type="text" class="form-control" id="clienteID" name="clienteID" value="<?php echo $detalles['nombre'] . ' ' . $detalles['apellido_paterno']; ?>" readonly>
                 </div>
                 <div class="mb-3">
-                    <label for="vehiculoID" class="form-label">Vehículo ID:</label>
-                    <input type="text" class="form-control" id="vehiculoID" name="vehiculoID" value="<?php echo $cita['vehiculoID']; ?>" readonly>
+                    <label for="vehiculoID" class="form-label">Vehículo:</label>
+                    <input type="text" class="form-control" id="vehiculoID" name="vehiculoID" value="<?php echo $detalles['marca'] . ' ' . $detalles['modelo'] . ' ' . $detalles['anio']; ?>" readonly>
                 </div>
                 <div class="mb-3">
                     <label for="servicioSolicitado" class="form-label">Servicio Solicitado:</label>
-                    <input type="text" class="form-control" id="servicioSolicitado" name="servicioSolicitado" value="<?php echo $cita['servicio_solicitado']; ?>" required>
-                    <div class="invalid-feedback">Debes ingresar el servicio solicitado.</div>
+                    <input type="text" class="form-control" id="servicioSolicitado" name="servicioSolicitado" value="<?php echo htmlspecialchars($cita['servicio_solicitado']); ?>" required>
                 </div>
                 <div class="mb-3">
                     <label for="fecha_cita" class="form-label">Fecha de la Cita:</label>
                     <input type="datetime-local" class="form-control" id="fecha_cita" name="fecha_cita" value="<?php echo date('Y-m-d\TH:i', strtotime($cita['fecha_cita'])); ?>" required>
-                    <div class="invalid-feedback">Debes seleccionar la fecha y hora de la cita.</div>
                 </div>
                 <div class="mb-3">
                     <label for="estado" class="form-label">Estado:</label>
@@ -129,7 +141,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <option value="en proceso" <?php echo $cita['estado'] == 'en proceso' ? 'selected' : ''; ?>>En Proceso</option>
                         <option value="completado" <?php echo $cita['estado'] == 'completado' ? 'selected' : ''; ?>>Completado</option>
                     </select>
-                    <div class="invalid-feedback">Debes seleccionar el estado de la cita.</div>
                 </div>
                 <input type="hidden" name="citaID" value="<?php echo $cita['citaID']; ?>">
                 <button type="submit" name="actualizar" class="btn btn-dark w-100">Guardar Cambios</button>

@@ -15,8 +15,8 @@
             $con = new Database();
             $pdo = $con->conectar();
             $citas = listarCitasPendientes($pdo);
-            foreach ($citas as $cita) {
-                echo "<option value=\"{$cita['citaID']}\">Cita ID: {$cita['citaID']} - Vehículo ID: {$cita['vehiculoID']} - Servicio: {$cita['servicio_solicitado']}</option>";
+            foreach ($citas as $citaOption) {
+                echo "<option value=\"{$citaOption['citaID']}\">Cita ID: {$citaOption['citaID']} - Vehículo: {$citaOption['marca']} {$citaOption['modelo']} {$citaOption['anio']} - Cliente: {$citaOption['nombre']} {$citaOption['apellido_paterno']} {$citaOption['apellido_materno']} - Servicio: {$citaOption['servicio_solicitado']}</option>";
             }
             ?>
         </select><br><br>
