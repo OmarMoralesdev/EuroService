@@ -7,7 +7,7 @@ $pdo = $con->conectar();
 
 // Verificar si el usuario está logueado
 if (!isset($_SESSION['clienteID'])) {
-    header("Location: ../login.php");
+    header("Location: ../login_view.php");
     exit();
 }
 
@@ -71,6 +71,20 @@ try {
 
 <body>
     <div class="container">
+        <div class="welcome">
+            <?php
+            $usuario = obtenerDetallesClientepersona($pdo, $_SESSION['clienteID']);
+
+            if ($usuario) {
+                echo "Bienvenido, " . $usuario['nombre'] . " " . $usuario['apellido_paterno'] . " " . $usuario['apellido_materno'];
+            } else {
+                echo "Usuario no encontrado.";
+            }
+            ?>
+
+            <a href="../includes/cerrarsesion.php">Cerrar sesión</a>
+        </div>
+
         <h2>Vehículos en el Taller</h2>
         <table class="table table-striped table-hover">
             <thead class="thead-dark">
