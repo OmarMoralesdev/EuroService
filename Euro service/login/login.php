@@ -21,28 +21,40 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $hashed_password = $row['password'];
             $personaID = $row['personaID'];
             $role = $row['rolID'];
-
+            
             if (password_verify($password, $hashed_password)) {
-                // Obtener clienteID desde personaID
+            
+
+                // Verificar si la persona es un cliente
                 $sql_cliente = "SELECT clienteID FROM CLIENTES WHERE personaID = ?";
                 $stmt_cliente = $pdo->prepare($sql_cliente);
                 $stmt_cliente->execute([$personaID]);
                 $cliente = $stmt_cliente->fetch(PDO::FETCH_ASSOC);
-                $clienteID = $cliente['clienteID'];
+
+                // Verificar si la persona es un empleado
+                $sql_empleado = "SELECT empleadoID FROM EMPLEADOS WHERE personaID = ?";
+                $stmt_empleado = $pdo->prepare($sql_empleado);
+                $stmt_empleado->execute([$personaID]);
+                $empleado = $stmt_empleado->fetch(PDO::FETCH_ASSOC);
+
+                if ($cliente) {
+                    $_SESSION['clienteID'] = $cliente['clienteID'];
+                } elseif ($empleado) {
+                    $_SESSION['empleadoID'] = $empleado['empleadoID'];
+                }
 
                 $_SESSION['cuentaID'] = $cuentaID;
                 $_SESSION['username'] = $db_username;
                 $_SESSION['role'] = $role;
-                $_SESSION['clienteID'] = $clienteID;
-
+                $_SESSION['personaID'] =  $personaID;
                 // Redireccionar según el rol
-                if ($role == 1) { 
+                if ($role == 1) {
                     header("Location: ../Cliente/client.php");
                     exit();
-                } elseif ($role == 2) { 
+                } elseif ($role == 2) {
                     header("Location: ../general_views/admin.php");
                     exit();
-                } elseif ($role == 3) { 
+                } elseif ($role == 3) {
                     header("Location: ../owner_view/owner.html");
                     exit();
                 } else {
@@ -58,4 +70,3 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo "Error en la consulta: " . $e->getMessage();
     }
 }
-?>

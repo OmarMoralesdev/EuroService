@@ -10,6 +10,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $role = 'administrador';
 
     try {
+        // Verificar que las contraseñas coincidan
+        if ($_POST['password'] !== $_POST['confirm_password']) {
+            throw new Exception("Las contraseñas no coinciden.");
+        }
+
         // Hashear la contraseña
         $hashed_password = password_hash($password, PASSWORD_BCRYPT);
 
@@ -29,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             throw new Exception("Error al insertar en CUENTAS.");
         }
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        echo "Error de base de datos: " . $e->getMessage();
     } catch (Exception $e) {
         echo "Error: " . $e->getMessage();
     }
