@@ -7,7 +7,7 @@
     <title>EDITAR DATOS</title>
     <style>
         .form-group {
-            margin-bottom: 5px;
+            margin-bottom: 15px; /* Aumentar el margen inferior */
         }
 
         body {
@@ -21,7 +21,7 @@
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 600px;
-            margin: 50px auto;
+            margin: 20px auto; /* Reducir margen superior */
         }
 
         h2 {
@@ -53,6 +53,10 @@
         #lista li:last-child {
             border-bottom: none;
         }
+
+        .form-control {
+            margin-bottom: 10px; /* Agregar margen inferior a los inputs */
+        }
     </style>
 </head>
 
@@ -65,10 +69,10 @@
                 <label for="campo">Selecciona un cliente:</label>
                 <form id="formCita" action="editar_user.php" method="POST" autocomplete="off">
                     <div class="mb-3">
-                        <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required>
+                        <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente...">
                         <ul id="lista" class="list-group" style="display: none;"></ul>
                         <input type="hidden" id="clienteID" name="clienteID">
-                        <div class="invalid-feedback">Debes seleccionar un cliente.</div>
+                        <div class="invalid-feedback">Debes seleccionar un cliente.</div><br>
                     </div>
                     <div class="form-group">
                         <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" readonly>
@@ -79,14 +83,17 @@
                     <div class="form-group">
                         <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" placeholder="Apellido materno" readonly>
                     </div>
+
                     <div class="form-group">
-                        <label for="telefono_actual">Teléfono Actual: </label><label id="telefono_actual">x</label><br>
-                        <label for="correo_actual">Correo Electrónico Actual: </label><label id="correo_actual">x</label><br>
+                        <label for="correo_actual">Correo Electrónico Actual: <span id="correo_actual">No disponible</span></label><br>
                         <input type="email" class="form-control" id="correo" name="correo" placeholder="Nuevo correo electrónico" required>
                     </div>
+
                     <div class="form-group">
+                        <label for="telefono_actual">Teléfono Actual: <span id="telefono_actual">No disponible</span></label><br>
                         <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Nuevo número telefónico" required>
                     </div>
+
                     <button type="submit" name="enviar" class="btn btn-dark w-100">Editar</button>
                 </form>
             </div>
@@ -123,6 +130,7 @@
                                     document.getElementById('apellido_materno').value = cliente.apellido_materno;
                                     document.getElementById('telefono_actual').innerText = cliente.telefono || 'No disponible'; // Actualiza el teléfono
                                     document.getElementById('correo_actual').innerText = cliente.correo || 'No disponible'; // Actualiza el correo
+                                    document.getElementById('campo').value = ''; // Vaciar el campo de búsqueda
                                     lista.style.display = 'none'; // Ocultar la lista después de la selección
                                 };
                                 lista.appendChild(li);

@@ -85,7 +85,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             border-radius: 10px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 600px;
-            margin: 50px auto;
+            margin: 20px auto;
         }
         h2 {
             text-align: center;
@@ -94,6 +94,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </style>
 </head>
 <body>
+<div class="wrapper">
+        <?php include '../includes/vabr.html'; ?>
+        <div class="main p-3">
+            <div class="container">
     <div class="container">
         <h2>Editar Cita</h2>
         <form method="post" action="#">
@@ -147,5 +151,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </form>
         <?php endif; ?>
     </div>
+            </div>
+        </div></div>
 </body>
 </html>
