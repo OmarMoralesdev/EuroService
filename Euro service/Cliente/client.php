@@ -14,16 +14,26 @@ if (!isset($_SESSION['clienteID'])) {
 $clienteID = $_SESSION['clienteID'];
 
 try {
-    $sql = "SELECT c.citaID, c.servicio_solicitado, c.fecha_cita, c.estado,
-                v.vin, v.marca, v.modelo, v.anio,
-                   DATEDIFF(c.fecha_cita, CURDATE()) AS dias_restantes
-            FROM CITAS c
-            INNER JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
-            WHERE v.clienteID = ?
-            ORDER BY c.fecha_cita DESC";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute([$clienteID]);
-    $citas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    // Obtener nombre completo del cliente
+    $stmtCliente = $pdo->prepare("
+        SELECT p.nombre, p.apellido_paterno, p.apellido_materno 
+        FROM CLIENTES c
+        JOIN PERSONAS p ON c.personaID = p.personaID 
+        WHERE c.clienteID = ?");
+    $stmtCliente->execute([$clienteID]);
+    $cliente = $stmtCliente->fetch(PDO::FETCH_ASSOC);
+
+    // Obtener citas del cliente
+    $stmtCitas = $pdo->prepare("
+        SELECT c.citaID, c.servicio_solicitado, c.fecha_cita, c.estado,
+               v.vin, v.marca, v.modelo, v.anio,
+               DATEDIFF(c.fecha_cita, CURDATE()) AS dias_restantes
+        FROM CITAS c
+        INNER JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
+        WHERE v.clienteID = ?
+        ORDER BY c.fecha_cita DESC");
+    $stmtCitas->execute([$clienteID]);
+    $citas = $stmtCitas->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "Error en la consulta: " . $e->getMessage();
     die();
@@ -42,7 +52,6 @@ try {
             background-color: #f8f9fa;
             color: #333;
         }
-
         .container {
             background-color: #fff;
             padding: 20px;
@@ -51,27 +60,28 @@ try {
             max-width: 800px;
             margin: 50px auto;
         }
-
-        h2 {
+        h2, h4 {
             text-align: center;
             color: #000;
         }
-
-        .table th,
-        .table td {
-            vertical-align: middle;
-        }
-
-        .thead-dark th {
-            background-color: #343a40;
-            color: #fff;
+        .logout-btn {
+            float: right;
+            margin-top: -40px;
         }
     </style>
 </head>
 
 <body>
     <div class="container">
+       
         <h2>Vehículos en el Taller</h2>
+      
+        <?php if ($cliente): ?>
+            <h4>Bienvenido, <?php echo htmlspecialchars($cliente['nombre'] . ' ' . $cliente['apellido_paterno'] . ' ' . $cliente['apellido_materno']); ?>!</h4>
+        <?php endif; ?>
+        <div class="d-flex justify-content-end">
+            <a href="../includes/cerrarsesion.php" class="btn btn-danger logout-btn">Cerrar Sesión</a>
+        </div>
         <table class="table table-striped table-hover">
             <thead class="thead-dark">
                 <tr>
