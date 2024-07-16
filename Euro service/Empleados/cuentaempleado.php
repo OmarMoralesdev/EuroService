@@ -15,26 +15,27 @@
         <div class="main p-3">
             <h2>Registro de Cuenta de Administrador</h2>
             <form action="registrocuena.php" method="POST">
-
                 <label for="empleado" class="form-label">Empleado:</label>
                 <select name="empleado" class="form-control" required>
                     <?php
                     require '../includes/db.php';
                     $con = new Database();
                     $pdo = $con->conectar();
+                    
                     function obtenerEmpleadosDisponibles($pdo)
                     {
-                        $sql = "SELECT EMPLEADOS.empleadoID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno 
-                                        FROM EMPLEADOS 
-                                        JOIN PERSONAS ON EMPLEADOS.personaID = PERSONAS.personaID
-                                        where EMPLEADOS.tipo = 'administrativo'";
+                        $sql = "SELECT EMPLEADOS.personaID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
+                                FROM EMPLEADOS 
+                                JOIN PERSONAS ON EMPLEADOS.personaID = PERSONAS.personaID
+                                WHERE EMPLEADOS.tipo = 'administrativo'";
                         $stmt = $pdo->query($sql);
                         return $stmt->fetchAll(PDO::FETCH_ASSOC);
                     }
+
                     $empleados = obtenerEmpleadosDisponibles($pdo);
                     foreach ($empleados as $empleado) {
                         $nombreCompleto = "{$empleado['nombre']} {$empleado['apellido_paterno']} {$empleado['apellido_materno']}";
-                        echo "<option value=\"{$empleado['empleadoID']}\">{$nombreCompleto}</option>";
+                        echo "<option value=\"{$empleado['personaID']}\">{$nombreCompleto}</option>";
                     }
                     ?>
                 </select>
@@ -50,7 +51,6 @@
             </form>
         </div>
     </div>
-
 </body>
 
 </html>

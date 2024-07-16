@@ -41,6 +41,7 @@
                         <option value="master">Master</option>
                         <option value="intermedio">Intermedio</option>
                         <option value="ayudante">Ayudante</option>
+                        <option value="administrativo">administrativo</option>
                     </select><br><br>
                     <br>
                     <button type="submit" class="btn btn-dark w-100 ">Registrar</button>
