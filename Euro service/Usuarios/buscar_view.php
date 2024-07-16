@@ -55,14 +55,17 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
         .card-text {
             margin-bottom: 0.25rem;
         }
+        .pagination a {
+            color: black;
+        }
     </style>
 </head>
 <body>
     <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
-            <h2 class="text-center">BUSCAR CLIENTES</h2>
-            <!-- Formulario de búsqueda -->
+            <h2 class="text-center h2" style="color: white;">BUSCAR CLIENTES</h2>
+            <!-- Formulario de bús  queda -->
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" class="mb-3">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Buscar clientes..." name="buscar" value="<?php echo htmlspecialchars($buscar); ?>">
