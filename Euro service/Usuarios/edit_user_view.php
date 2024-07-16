@@ -6,22 +6,9 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDITAR DATOS</title>
     <style>
-        .form-group {
-            margin-bottom: 15px; /* Aumentar el margen inferior */
-        }
-
         body {
             background-color: #f8f9fa;
             color: #333;
-        }
-
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: 20px auto; /* Reducir margen superior */
         }
 
         h2 {
@@ -64,8 +51,9 @@
     <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
-            <div class="container">
-                <h2>Editar datos</h2>
+        <div class="container">
+                <div class="form-container">
+                <h2>EDITAR DATOS</h2>
                 <label for="campo">Selecciona un cliente:</label>
                 <form id="formCita" action="editar_user.php" method="POST" autocomplete="off">
                     <div class="mb-3">
@@ -96,6 +84,8 @@
 
                     <button type="submit" name="enviar" class="btn btn-dark w-100">Editar</button>
                 </form>
+            </div>
+            </div>
             </div>
         </div>
     </div>

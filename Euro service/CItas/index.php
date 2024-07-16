@@ -10,6 +10,7 @@
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
             <div class="container">
+                <div class="form-container">
                 <h2>Registrar Cita</h2>
                 <br>            
                 <form action="../CItas/registrar_cita.php" method="POST" autocomplete="off">
