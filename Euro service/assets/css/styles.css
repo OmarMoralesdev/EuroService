@@ -6,6 +6,7 @@
     align-items: center;
     height: 100vh;
   display: flex;
+  color: white;
 }
 
 .form-container {
