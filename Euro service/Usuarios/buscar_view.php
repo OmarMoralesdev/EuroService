@@ -55,18 +55,39 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
         .card-text {
             margin-bottom: 0.25rem;
         }
+        .pagination a {
+            color: black;
+        }
+        /* Estilo para el título */
+        h2 {
+            text-transform: uppercase; /* título en mayúsculas */
+            text-align: center; /* centrado */
+            color: black;
+        }
+        /* Estilo para los campos de texto */
+        input[type=text], input[type=email] {
+            color: black; /* texto negro */
+        }
+        /* Estilo para el botón */
+        .btn {
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+            /* sombra leve para el botón */
+        }
+    
     </style>
 </head>
 <body>
     <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
-            <h2 class="text-center">BUSCAR CLIENTES</h2>
-            <!-- Formulario de búsqueda -->
+        <div class="container">
+                <div class="form-container">
+            <h2 class="text-center h2">BUSCAR CLIENTES</h2>
+            <!-- Formulario de bús  queda -->
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" class="mb-3">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Buscar clientes..." name="buscar" value="<?php echo htmlspecialchars($buscar); ?>">
-                    <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+                    <button type="submit" class="btn btn-dark">Buscar</button>
                 </div>
             </form>
 
@@ -109,11 +130,13 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
 
                     <?php if ($pagina_actual < $total_paginas): ?>
                         <li class="page-item">
-                            <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] . '?pagina=' . ($pagina_actual + 1) . '&buscar=' . urlencode($buscar); ?>">Siguiente</a>
+                            <a class="page-link " href="<?php echo $_SERVER['PHP_SELF'] . '?pagina=' . ($pagina_actual + 1) . '&buscar=' . urlencode($buscar); ?>">Siguiente</a>
                         </li>
                     <?php endif; ?>
                 </ul>
             </nav>
+        </div>
+        </div>
         </div>
     </div>
 

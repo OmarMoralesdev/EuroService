@@ -129,3 +129,6 @@ function obtenerDetallesClientepersona($pdo, $clienteID)
     $stmt->execute([':clienteID' => $clienteID]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
+
+
+
