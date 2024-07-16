@@ -9,7 +9,7 @@
     @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
     body {
-        background-color: #B2B2B2;
+        background-color: #232323;
     }
 
     ::after,
@@ -39,13 +39,29 @@
     .wrapper {
         display: flex;
     }
-
     .main {
         min-height: 100vh;
         width: 100%;
         overflow: hidden;
         transition: all 0.35s ease-in-out;
     }
+
+.container {
+            width: 90%;
+            margin: auto;
+            background-color: #f2f2f2; /* fondo ligeramente más oscuro */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* sombra para el contenedor principal */
+            padding: 20px; /* espacio interno para el contenedor principal */
+        }
+        /* Contenedor interno del formulario */
+        .form-container {
+            padding: 20px; /* espacio interno para el contenido del formulario */
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* sombra más marcada */
+        }
+
 
     #sidebar {
         width: 70px;
@@ -233,7 +249,7 @@
         <li class="sidebar-item">
             <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
                 data-bs-target="#empleados" aria-expanded="false" aria-controls="empleados">
-                <i class="lni lni-car-alt"></i>
+                <i class="lni lni-user"></i> 
                 <span>EMPLEADOS</span>
             </a>
             <ul id="empleados" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
@@ -246,6 +262,9 @@
                 <li class="sidebar-item">
                     <a href="../Empleados/cuentaempleado.php" class="sidebar-link">Cuenta Empleado</a>
                 </li>
+                <li class="sidebar-item">
+                    <a href="../Empleados/salario.php" class="sidebar-link">Salario</a>
+                </li>
             </ul>
         </li>
 
@@ -257,7 +276,7 @@
             </a>
             <ul id="finanzas" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="../" class="sidebar-link">INGRESOS SEMANALES</a>
+                    <a href="#" class="sidebar-link">INGRESOS SEMANALES</a>
                 </li>
             </ul>
         </li>

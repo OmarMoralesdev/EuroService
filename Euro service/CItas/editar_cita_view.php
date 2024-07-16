@@ -67,91 +67,84 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Cita</title>
-    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
     <style>
-        body {
-            background-color: #f8f9fa;
-            color: #333;
-        }
-        .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            margin: 20px auto;
-        }
         h2 {
             text-align: center;
             color: #000;
+        }
+        .form-control[readonly] {
+            background-color: #e9ecef;
+            opacity: 1;
         }
     </style>
 </head>
 <body>
 <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?>
-        <div class="main p-3">
-            <div class="container">
-    <div class="container">
-        <h2>Editar Cita</h2>
-        <form method="post" action="#">
-            <div class="mb-3">
-                <label for="citaID">Seleccionar Cita:</label>
-                <select id="citaID" name="citaID" required>
-                    <?php
-                    $citas = listarCitasPendientes($pdo);
-                    foreach ($citas as $citaOption) {
-                        echo "<option value=\"{$citaOption['citaID']}\">Cita ID: {$citaOption['citaID']} - Vehículo: {$citaOption['marca']} {$citaOption['modelo']} {$citaOption['anio']} - Cliente: {$citaOption['nombre']} {$citaOption['apellido_paterno']} {$citaOption['apellido_materno']} - Servicio: {$citaOption['servicio_solicitado']}</option>";
-                    }
-                    ?>
-                </select>
+    <?php include '../includes/vabr.html'; ?>
+    <div class="main p-2">
+        <div class="container">
+            <div class="form-container">
+                <h2>EDITAR CITA</h2>
+                <form method="post" action="#">
+                    <div class="mb-3">
+                        <label for="citaID" class="form-label">Seleccionar Cita:</label>
+                        <select id="citaID" name="citaID" class="form-select" required>
+                            <?php
+                            $citas = listarCitasPendientes($pdo);
+                            foreach ($citas as $citaOption) {
+                                echo "<option value=\"{$citaOption['citaID']}\">Cita ID: {$citaOption['citaID']} - Vehículo: {$citaOption['marca']} {$citaOption['modelo']} {$citaOption['anio']} - Cliente: {$citaOption['nombre']} {$citaOption['apellido_paterno']} {$citaOption['apellido_materno']} - Servicio: {$citaOption['servicio_solicitado']}</option>";
+                            }
+                            ?>
+                        </select>
+                    </div>
+                    <button type="submit" name="buscar" class="btn btn-dark w-100">Buscar Cita</button>
+                </form>
+                <?php if ($mensaje) : ?>
+                    <div class="alert alert-info mt-3"><?php echo $mensaje; ?></div>
+                <?php endif; ?>
+
+                <?php if ($cita) : ?>
+                    <?php $detalles = obtenerDetallesVehiculoyCliente($pdo, $cita['vehiculoID']); ?>
+                    <form method="post" action="#" class="mt-4">
+                        <div class="mb-3">
+                            <label for="clienteID" class="form-label">Cliente:</label>
+                            <input type="text" class="form-control" id="clienteID" name="clienteID" value="<?php echo $detalles['nombre'] . ' ' . $detalles['apellido_paterno']; ?>" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="vehiculoID" class="form-label">Vehículo:</label>
+                            <input type="text" class="form-control" id="vehiculoID" name="vehiculoID" value="<?php echo $detalles['marca'] . ' ' . $detalles['modelo'] . ' ' . $detalles['anio']; ?>" readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="servicioSolicitado" class="form-label">Servicio Solicitado:</label>
+                            <input type="text" class="form-control" id="servicioSolicitado" name="servicioSolicitado" value="<?php echo htmlspecialchars($cita['servicio_solicitado']); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fecha_cita" class="form-label">Fecha de la Cita:</label>
+                            <input type="datetime-local" class="form-control" id="fecha_cita" name="fecha_cita" value="<?php echo date('Y-m-d\TH:i', strtotime($cita['fecha_cita'])); ?>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="estado" class="form-label">Estado:</label>
+                            <select class="form-select" id="estado" name="estado" required>
+                                <option value="pendiente" <?php echo $cita['estado'] == 'pendiente' ? 'selected' : ''; ?>>Pendiente</option>
+                                <option value="en proceso" <?php echo $cita['estado'] == 'en proceso' ? 'selected' : ''; ?>>En Proceso</option>
+                                <option value="completado" <?php echo $cita['estado'] == 'completado' ? 'selected' : ''; ?>>Completado</option>
+                            </select>
+                        </div>
+                        <input type="hidden" name="citaID" value="<?php echo $cita['citaID']; ?>">
+                        <button type="submit" name="actualizar" class="btn btn-dark w-100">Guardar Cambios</button>
+                    </form>
+                <?php endif; ?>
             </div>
-            <button type="submit" name="buscar" class="btn btn-dark w-100">Buscar Cita</button>
-        </form>
-
-        <?php if ($mensaje) : ?>
-            <div class="alert alert-info mt-3"><?php echo $mensaje; ?></div>
-        <?php endif; ?>
-
-        <?php if ($cita) : ?>
-            <?php $detalles = obtenerDetallesVehiculoyCliente($pdo, $cita['vehiculoID']); ?>
-            <form method="post" action="#" class="mt-4">
-                <div class="mb-3">
-                    <label for="clienteID" class="form-label">Cliente:</label>
-                    <input type="text" class="form-control" id="clienteID" name="clienteID" value="<?php echo $detalles['nombre'] . ' ' . $detalles['apellido_paterno']; ?>" readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="vehiculoID" class="form-label">Vehículo:</label>
-                    <input type="text" class="form-control" id="vehiculoID" name="vehiculoID" value="<?php echo $detalles['marca'] . ' ' . $detalles['modelo'] . ' ' . $detalles['anio']; ?>" readonly>
-                </div>
-                <div class="mb-3">
-                    <label for="servicioSolicitado" class="form-label">Servicio Solicitado:</label>
-                    <input type="text" class="form-control" id="servicioSolicitado" name="servicioSolicitado" value="<?php echo htmlspecialchars($cita['servicio_solicitado']); ?>" required>
-                </div>
-                <div class="mb-3">
-                    <label for="fecha_cita" class="form-label">Fecha de la Cita:</label>
-                    <input type="datetime-local" class="form-control" id="fecha_cita" name="fecha_cita" value="<?php echo date('Y-m-d\TH:i', strtotime($cita['fecha_cita'])); ?>" required>
-                </div>
-                <div class="mb-3">
-                    <label for="estado" class="form-label">Estado:</label>
-                    <select class="form-control" id="estado" name="estado" required>
-                        <option value="pendiente" <?php echo $cita['estado'] == 'pendiente' ? 'selected' : ''; ?>>Pendiente</option>
-                        <option value="en proceso" <?php echo $cita['estado'] == 'en proceso' ? 'selected' : ''; ?>>En Proceso</option>
-                        <option value="completado" <?php echo $cita['estado'] == 'completado' ? 'selected' : ''; ?>>Completado</option>
-                    </select>
-                </div>
-                <input type="hidden" name="citaID" value="<?php echo $cita['citaID']; ?>">
-                <button type="submit" name="actualizar" class="btn btn-dark w-100">Guardar Cambios</button>
-            </form>
-        <?php endif; ?>
+        </div>
     </div>
-            </div>
-        </div></div>
+</div>
 </body>
 </html>
