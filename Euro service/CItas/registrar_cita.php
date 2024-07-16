@@ -17,7 +17,7 @@ if (!$vehiculoID || !$servicioSolicitado || !$fechaCita) {
 $fechaActual = date('Y-m-d H:i:s');
 $fechaCitaTimestamp = strtotime($fechaCita);
 
-if ($fechaCitaTimestamp < strtotime('today')) {
+if ($fechaCitaTimestamp <= strtotime($fechaActual)) {
     die("Error: La fecha de la cita debe ser posterior a la fecha actual.");
 }
 
