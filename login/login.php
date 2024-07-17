@@ -58,15 +58,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     header("Location: ../owner_view/owner.html");
                     exit();
                 } else {
-                    echo "Rol no reconocido.";
+                    $_SESSION['error'] = "Rol no reconocido.";
+                    header("Location: ../login/login_view.php");
+                    exit();
                 }
             } else {
-                echo "Contraseña incorrecta.";
+                $_SESSION['error'] = "Contraseña incorrecta.";
+                header("Location: ../login/login_view.php");
+                exit();
             }
         } else {
-            echo "No se encontró el usuario.";
+            $_SESSION['error'] = "No se encontró el usuario.";
+            header("Location: ../login/login_view.php");
+            exit();
         }
     } catch (PDOException $e) {
-        echo "Error en la consulta: " . $e->getMessage();
+        $_SESSION['error'] = "Error en la consulta: " . $e->getMessage();
+        header("Location: ../login/login_view.php");
+        exit();
     }
 }
+?>
