@@ -69,6 +69,10 @@ if ($stmt->rowCount() > 0) {
     <meta charset="UTF-8">
     <title>Proveedores</title>
     <style>
+        body {
+            font-family: Arial, sans-serif;
+        }
+
         .modal {
             display: none; 
             position: fixed; 
@@ -89,6 +93,7 @@ if ($stmt->rowCount() > 0) {
             padding: 20px;
             border: 1px solid #888;
             width: 80%;
+            max-width: 500px;
         }
 
         .close {
@@ -104,8 +109,31 @@ if ($stmt->rowCount() > 0) {
             text-decoration: none;
             cursor: pointer;
         }
+
         .mover-derecha {
-            margin-left: 50%;
+            margin: 0 auto;
+            max-width: 500px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+
+        table, th, td {
+            border: 1px solid black;
+        }
+
+        th, td {
+            padding: 8px;
+            text-align: left;
+        }
+
+        @media screen and (max-width: 600px) {
+            .modal-content {
+                width: 95%;
+            }
         }
     </style>
 </head>
@@ -113,32 +141,19 @@ if ($stmt->rowCount() > 0) {
 <div class="wrapper">
     <?php include '../includes/vabr.html'; ?>
     <div class="main p-3">
-        
-            <div class="mover-derecha">
-                <h2>Buscar Proveedores</h2>
-                <form id="searchForm">
-                    <input type="text" id="search" name="search" placeholder="Buscar..." onkeyup="buscarProveedores()">
-                </form>
-            </div>
-            <h2>Lista de Proveedores</h2>
-            <table border="1" id="tablaProveedores">
-                <tr>
-                    <th>Nombre</th>
-                    <th>Contacto</th>
-                </tr>
-                <?php foreach ($proveedores as $proveedor): ?>
-                <tr>
-                    <td><?php echo htmlspecialchars($proveedor['nombre']); ?></td>
-                    <td><?php echo htmlspecialchars($proveedor['contacto']); ?></td>
-                </tr>
-                <?php endforeach; ?>
-            </table>
-            <div class="container">
+        <div class="mover-derecha">
+            <h2>Buscar Proveedores</h2>
+            <form id="searchForm">
+                <input type="text" id="search" name="search" placeholder="Buscar..." onkeyup="buscarProveedores()">
+            </form>
+        </div>
+        <h2>Lista de Proveedores</h2>
+        <div class="container">
             <nav>
                 <a href="#registrar" id="openModalBtn">Registrar nuevo Proveedor</a>
             </nav>
 
-            <div id="myModal" class="modal">
+           <div id="myModal" class="modal">
                 <div class="modal-content">
                     <span class="close">&times;</span>
                     <h2>Registrar Proveedor</h2>
@@ -146,17 +161,27 @@ if ($stmt->rowCount() > 0) {
                         <label for="nombre">Nombre:</label><br>
                         <input type="text" id="nombre" name="nombre" required><br>
                         <label for="contacto">Contacto:</label><br>
-                        <input type="text" id="contacto" name="contacto" require><br>
+                        <input type="text" id="contacto" name="contacto" required><br>
                         <input type="submit" value="Registrar">
                     </form>
                 </div>
             </div>
         </div>
+        <table border="1" id="tablaProveedores">
+            <tr>
+                <th>Nombre</th>
+                <th>Contacto</th>
+            </tr>
+            <?php foreach ($proveedores as $proveedor): ?>
+            <tr>
+                <td><?php echo htmlspecialchars($proveedor['nombre']); ?></td>
+                <td><?php echo htmlspecialchars($proveedor['contacto']); ?></td>
+            </tr>
+            <?php endforeach; ?>
+        </table>
         
     </div>
-    
 </div>
-
 
 <script>
     var modal = document.getElementById("myModal");
