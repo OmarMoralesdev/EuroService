@@ -5,6 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Cita</title>
 </head>
+<?php
+        session_start();
+        if (isset($_SESSION['error'])) {
+            echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
+            unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
+        }
+        ?>
 <body class="Body_citas">
     <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
