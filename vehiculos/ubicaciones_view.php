@@ -59,7 +59,7 @@
 
                         // Botones en un div separado para controlar la alineación
                         echo "<div class='card-footer d-flex justify-content-between align-items-center'>";
-                        echo "<button type='button' class='btn btn-dark btn-md' style='width: 79%;' data-bs-toggle='modal' data-bs-target='#modal{$ubicacion->ubicacionID}'>VER VEHÍCULOS</button>";
+                        echo "<button type='button' class='btn btn-dark btn-md' style='width: 80%;' data-bs-toggle='modal' data-bs-target='#modal{$ubicacion->ubicacionID}'>VER VEHÍCULOS</button>";
                         echo" ";
                         echo "<button type='button' class='btn btn-danger btn-md ml-2' style='width: 19%;' data-bs-toggle='modal' data-bs-target='#deleteModal{$ubicacion->ubicacionID}'><i class='bi bi-trash3'></i></button>";
                         echo "</div>"; // Cierre de card-footer
