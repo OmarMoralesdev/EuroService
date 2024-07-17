@@ -117,15 +117,15 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                                 echo "<label for='rebaja{$empleado->empleadoID}'>Cantidad de Rebaja:</label>";
                                 echo "<input type='number' class='form-control' id='rebaja{$empleado->empleadoID}' name='rebaja'>";
                                 echo "</div>";
-                                echo "</form>";
-                                echo "</div>";
                                 echo "<div class='modal-footer'>";
                                 echo "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>";
-                                echo "<button type='button' class='btn btn-dark' onclick='guardarRebaja({$empleado->empleadoID})'>Guardar</button>";
+                                echo "<button type='submit' class='btn btn-dark'>Guardar</button>";
+                                echo "</div>";
+                                echo "</form>";
                                 echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
-                                echo "</div>";
+                                echo "</div>";                                
                             }
                         } else {
                             echo "<p class='text-center'>No se encontraron empleados.</p>";
@@ -137,29 +137,10 @@ $empleados = $conexion->seleccionar($consulta_empleados);
         </div>
     </div>
 
-    <script>
-        function guardarRebaja(empleadoID) {
-            // Obtener el formulario específico para este empleado
-            var form = document.getElementById('formRebaja' + empleadoID);
-
-            // Enviar el formulario usando AJAX
-            var formData = new FormData(form);
-            var xhr = new XMLHttpRequest();
-            xhr.open('POST', 'AddRebaja.php', true);
-            xhr.onload = function () {
-                // Cerrar el modal después de guardar
-                $('#modalRebajas' + empleadoID).modal('hide');
-
-                // Recargar la página actual para reflejar los cambios
-                location.reload();
-            };
-            xhr.send(formData);
-        }
-    </script>
+  
 </body>
 </html>
 
 <?php
-// Desconectar la base de datos al finalizar
 $conexion->desconectar();
 ?>
