@@ -11,10 +11,10 @@
         }
     </style>
 <body>
-    <div class="wrapper">
+<div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
-        <div class="main p-3">
-        <div class="container" style="width: 90%; margin: auto; background-color: #EBEBEB; border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.2);">
+        <div class="main">
+            <div class="container">
                 <h2>Editar datos</h2>
                 <br>            
                 <form action="edit_user_view.php" method="POST" autocomplete="off">

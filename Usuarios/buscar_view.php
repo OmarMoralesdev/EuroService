@@ -58,12 +58,6 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
         .pagination a {
             color: black;
         }
-        /* Estilo para el título */
-        h2 {
-            text-transform: uppercase; /* título en mayúsculas */
-            text-align: center; /* centrado */
-            color: black;
-        }
         /* Estilo para los campos de texto */
         input[type=text], input[type=email] {
             color: black; /* texto negro */
@@ -81,8 +75,8 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
         <div class="container">
-                <div class="form-container">
             <h2 class="text-center h2">BUSCAR CLIENTES</h2>
+                <div class="form-container">
             <!-- Formulario de bús  queda -->
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" class="mb-3">
                 <div class="input-group">

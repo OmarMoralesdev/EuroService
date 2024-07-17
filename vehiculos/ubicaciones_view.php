@@ -15,17 +15,22 @@
         .card-text {
             margin-bottom: 0.25rem; /* Reduce el margen inferior del texto dentro de la card */
         }
+        h2{
+            color:black !important
+        }
     </style>
 </head>
 <body>
-    <div class="wrapper">
+<div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
+        <div class="container">
             <h2 class="text-center">UBICACIONES DE VEHÍCULOS</h2>
+                <div class="form-container">
             <div>
                 <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addLocationModal">AÑADIR NUEVA UBICACIÓN</button>
             </div>
-            <div class="row mt-4">
+            <div class="row mt-3">
                 <?php
                 include '../includes/db.php';
                 $conexion = new Database();

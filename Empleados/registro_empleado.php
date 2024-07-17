@@ -12,10 +12,10 @@
 <body>
     <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
-        <div class="main p-2">
+        <div class="main">
             <div class="container">
+                <h2>REGISTRAR EMPLEADO</h2>
                 <div class="form-container">
-                    <h2>REGISTRAR EMPLEADO</h2>
                     <form method="post" action="registrar_empleado.php">
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre:</label>

@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,14 +7,18 @@
     <link rel="stylesheet" href="../assets/css/styles.css">
     <title>Control de Asistencia</title>
 </head>
+<style>
 
+</style>
 <body>
-    <div class="wrapper">
+<div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
-            <h1>Control de Asistencia</h1>
+        <div class="container">
+            <h2>CONTROL DE ASISTENCIA</h2>
+                <div class="form-container">
             <form action="registrar_asistencia.php" method="post">
-                <label for="empleado" class="form-label">Empleado ID:</label>
+                <label for="empleado" class="form-label">Selecciona un empleado:</label>
                 <select name="empleado" class="form-control" required>
                     <?php
                     require '../includes/db.php';
@@ -37,8 +40,6 @@
                     ?>
                 </select>
                 <div class="invalid-feedback">Debes seleccionar un empleado.</div>
-
-
                 <label for="fecha">Fecha:</label>
                 <input type="date" id="fecha" name="fecha" class="form-control" required><br><br>
 
@@ -51,6 +52,9 @@
                 <input type="submit" value="Registrar">
             </form>
         </div>
+        </div>
+        </div>
+</div>
 </body>
 
 </html>

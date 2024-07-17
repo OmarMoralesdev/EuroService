@@ -30,7 +30,6 @@ $empleados = $conexion->seleccionar($consulta_empleados);
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Empleados</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <style>
         .card-body {
             padding: 1rem;
@@ -41,13 +40,18 @@ $empleados = $conexion->seleccionar($consulta_empleados);
         .card-text {
             margin-bottom: 0.25rem;
         }
+        h2{
+            color: black;
+        }
     </style>
 </head>
 <body>
     <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
-            <h2 class="text-center h2" style="color: white;">CONTROL FINANCIERO EMPLEADOS</h2>
+        <div class="container">
+            <h2 class="text-center h2">CONTROL FINANCIERO EMPLEADOS</h2>
+                <div class="form-container">
             <!-- Formulario de búsqueda -->
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" class="mb-3">
                 <div class="input-group">

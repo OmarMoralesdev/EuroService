@@ -40,9 +40,9 @@
         <?php include '../includes/vabr.html'; ?>
         <div class="main">
             <div class="container">
+                <h2 style="text-align: center;">CITAS PENDIENTES</h2>
                 <div class="form-container">
                     <div class="table-wrapper">
-                        <h1 style="text-align: center;">CITAS PENDIENTES</h1>
                         <table class="table">
                             <thead>
                                 <tr>

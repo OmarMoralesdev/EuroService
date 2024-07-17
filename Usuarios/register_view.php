@@ -29,8 +29,8 @@
         <?php include '../includes/vabr.html'; ?> <!-- barra lateral -->
         <div class="main p-3">
             <div class="container">
+                <h2>REGISTRAR CLIENTE</h2>
                 <div class="form-container">
-                    <h2>REGISTRAR CLIENTE</h2>
                     <br>
                     <form method="post" action="../Usuarios/generate_user.php">
                         <!-- Formulario para registrar un cliente, los datos se envían al archivo generate_user.php -->

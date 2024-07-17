@@ -11,11 +11,6 @@
             color: #333;
         }
 
-        h2 {
-            text-align: center;
-            color: #000;
-        }
-
         #lista {
             list-style: none;
             padding: 0;
@@ -52,8 +47,8 @@
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
         <div class="container">
+            <h2>EDITAR DATOS</h2>
                 <div class="form-container">
-                <h2>EDITAR DATOS</h2>
                 <label for="campo">Selecciona un cliente:</label>
                 <form id="formCita" action="editar_user.php" method="POST" autocomplete="off">
                     <div class="mb-3">

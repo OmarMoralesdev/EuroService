@@ -14,11 +14,12 @@
     </style>
 </head>
 <body>
-    <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?> <!-- barra lateral -->
-        <div class="main p-3">
+<div class="wrapper">
+        <?php include '../includes/vabr.html'; ?>
+        <div class="main">
             <div class="container">
                 <h2>REGISTRAR VEHICULO</h2>
+                <div class="form-container">
                 <br>
                 <form id="formCita" action="autos.php" method="POST" autocomplete="off" novalidate>
                     <div class="mb-3">

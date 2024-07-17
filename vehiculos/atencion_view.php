@@ -18,10 +18,13 @@
     </style>
 </head>
 <body>
-    <div class="wrapper">
+
+<div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
+        <div class="container">
             <h2 class="text-center">ATENCIÓN DE VEHÍCULOS</h2>
+                <div class="form-container">
             <div class="row mt-4">
                 <?php
                 include '../includes/db.php';
@@ -31,9 +34,9 @@
                         echo "<div class='col-md-4 mb-3'>";
                         echo "<div class='card' style='width: 95%;'>";
                         echo "<div class='card-body'>";
-                        echo "<h5 class='card-title'>ATENCIÓN: Muy urgente</h5>";
+                        echo "<h5 class='card-title'>MUY URGENTE</h5>";
                         echo "<hr>";
-                        echo "<p class='card-text'>Vehículos que necesitan ser atendidos con mucha urgencia...</p>";
+                        echo "<p class='card-text'>Necesitan ser atendidos con mucha urgencia...</p>";
                         echo "</div>"; // Cierre de card-body
 
                         // Botones en un div separado para controlar la alineación
@@ -47,9 +50,9 @@
                         echo "<div class='col-md-4 mb-3'>";
                         echo "<div class='card' style='width: 95%;'>";
                         echo "<div class='card-body'>";
-                        echo "<h5 class='card-title'>ATENCIÓN: Urgente</h5>";
+                        echo "<h5 class='card-title'>URGENTE</h5>";
                         echo "<hr>";
-                        echo "<p class='card-text'>Vehículos que necesitan ser atendidos con urgencia...</p>";
+                        echo "<p class='card-text'>Necesitan ser atendidos con urgencia...</p>";
                         echo "</div>"; // Cierre de card-body
 
                         // Botones en un div separado para controlar la alineación
@@ -63,9 +66,9 @@
                         echo "<div class='col-md-4 mb-3'>";
                         echo "<div class='card' style='width: 95%;'>";
                         echo "<div class='card-body'>";
-                        echo "<h5 class='card-title'>ATENCIÓN: No urgente</h5>";
+                        echo "<h5 class='card-title'>NO URGENTE</h5>";
                         echo "<hr>";
-                        echo "<p class='card-text'>Vehículos que no necesitan ser atendidos con urgencia...</p>";
+                        echo "<p class='card-text'>Necesitan ser atendidos con urgencia...</p>";
                         echo "</div>"; // Cierre de card-body
 
                         // Botones en un div separado para controlar la alineación
@@ -203,6 +206,5 @@
         </div>
     </div>
 
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>

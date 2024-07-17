@@ -111,9 +111,11 @@ if ($stmt->rowCount() > 0) {
 </head>
 <body>
 <div class="wrapper">
-    <?php include '../includes/vabr.html'; ?>
-    <div class="main p-3">
-        
+        <?php include '../includes/vabr.html'; ?>
+        <div class="main p-3">
+        <div class="container">
+            <h2>PROVEEDORES </h2>
+                <div class="form-container">
             <div class="mover-derecha">
                 <h2>Buscar Proveedores</h2>
                 <form id="searchForm">
