@@ -7,11 +7,31 @@
     <link rel="stylesheet" href="../assets/css/styles.css">
     <title>Registro de Cuenta de Administrador</title>
 </head>
-
+<style>
+        .wrapper {
+            display: flex;
+            height: 100vh;
+        }
+        .main {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        .form-container {
+            width: 100%;
+            max-width: 100%;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 10px;
+            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
 <body>
 <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?>
-        <div class="main p-3">
+    <?php include '../includes/vabr.html'; ?>
+    <div class="main p-3">
         <div class="container">
             <h2>Registro de Cuenta de Administrador</h2>
             <div class="form-container">

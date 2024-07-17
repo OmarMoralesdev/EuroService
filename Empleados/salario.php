@@ -40,9 +40,7 @@ $empleados = $conexion->seleccionar($consulta_empleados);
         .card-text {
             margin-bottom: 0.25rem;
         }
-        h2{
-            color: black;
-        }
+        
     </style>
 </head>
 <body>
@@ -73,9 +71,11 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                         echo "<p class='card-text'><strong>Alias:</strong> {$empleado->alias}</p>";
                         echo "<p class='card-text'><strong>Tipo:</strong> {$empleado->tipo}</p>";
                         echo "<p class='card-text'><strong>Salario:</strong> <!-- Coloca aquí el salario del empleado desde la base de datos --></p>";
+
                         // Botones para agregar deudas y rebajas
-                        echo "<button type='button' class='btn btn-primary' data-bs-toggle='modal' data-bs-target='#modalDeudas{$empleado->empleadoID}'>Agregar Deudas</button>";
-                        echo "<button type='button' class='btn btn-success ms-2' data-bs-toggle='modal' data-bs-target='#modalRebajas{$empleado->empleadoID}'>Agregar Rebajas</button>";
+                        echo "<button type='button' class='btn btn-dark btn-md' style='width: 49%;' data-bs-toggle='modal' data-bs-target='#modalDeudas{$empleado->empleadoID}'>Agregar Deudas</button>";
+                        echo" ";
+                        echo "<button type='button' class='btn btn-dark btn-md ml-2' style='width: 49%;' data-bs-toggle='modal' data-bs-target='#modalRebajas{$empleado->empleadoID}'>Agregar Rebajas</button>";
                         echo "</div>";
                         echo "</div>";
                         echo "</div>";
@@ -98,7 +98,7 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                         echo "</div>";
                         echo "<div class='modal-footer'>";
                         echo "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>";
-                        echo "<button type='button' class='btn btn-primary'>Guardar Deuda</button>";
+                        echo "<button type='button' class='btn btn-dark'>Guardar Deuda</button>";
                         echo "</div>";
                         echo "</div>";
                         echo "</div>";
@@ -122,7 +122,7 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                         echo "</div>";
                         echo "<div class='modal-footer'>";
                         echo "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>";
-                        echo "<button type='button' class='btn btn-success'>Guardar Rebaja</button>";
+                        echo "<button type='button' class='btn btn-dark'>Guardar Rebaja</button>";
                         echo "</div>";
                         echo "</div>";
                         echo "</div>";
@@ -135,9 +135,6 @@ $empleados = $conexion->seleccionar($consulta_empleados);
             </div>
         </div>
     </div>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 

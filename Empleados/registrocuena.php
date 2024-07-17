@@ -17,7 +17,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         // Hashear la contraseña
         $hashed_password = password_hash($password, PASSWORD_BCRYPT);
-
+        
         // Obtener rolID del rol 'administrador'
         $stmt_rol = $pdo->prepare("SELECT rolID FROM ROLES WHERE nombre_rol = ?");
         $stmt_rol->execute([$role]);
