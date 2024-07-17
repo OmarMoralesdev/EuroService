@@ -11,28 +11,23 @@
     <title>EURO SERVICE</title>
     <style>
         body {
-            background-color: #212529;
-            color: #fff;
-            margin: 0;
-            padding: 0;
+            background-color: black;
         }
-        .navbar {
-            background-color: rgba(0, 0, 0, 0.75) !important;
-            padding-top: 1rem;
-            padding-bottom: 1rem;
+        .nav-link.btn {
+            font-size: 1.25rem; /* tamaño base más grande */
+            padding: 10px 20px;
         }
 
-        .nav-link,
-        .navbar-brand {
-            color: #fff !important;
+        .nav-link {
+            color: white !important;
         }
 
-        .nav-link.active {
-            color: #ffd700 !important;
+        .nav-link.btn:hover {
+            transform: scale(1.1);
         }
 
         .bg-fixed {
-            background-image: url('../Euro service/img/FONDO LOGIN.jpg');
+            background-image: url('../EuroService/img/FONDO LOGIN.jpg');
             background-size: cover;
             background-position: center center;
             background-attachment: fixed;
@@ -40,7 +35,13 @@
             width: 100%;
             position: relative;
             overflow-x: hidden;
-            margin-top: 10px;
+            margin-top: 20px;
+        }
+
+        h2 {
+            text-align: center !important;
+            text-transform: uppercase;
+            color: black;
         }
 
         .overlay {
@@ -52,61 +53,33 @@
             background-color: rgba(0, 0, 0, 0.5);
         }
 
-        .navbar {
-            position: relative;
-            z-index: 9999;
-        }
-
         .content {
-            padding-top: 20vh;
-            padding-bottom: 50px;
+            padding-top: 10vh;
         }
 
         .features {
             padding: 50px 0;
-            background-color: #343a40;
-            color: #fff;
+            background-color: #545454;
         }
 
         .features .feature-item {
             padding: 20px;
-            border: 5px solid #444;
             border-radius: 10px;
-            background-color: #212529;
-            transition: transform 0.3s ease-in-out;
+            background-color: #242424;
+            transition: transform 0.2s ease-in-out;
         }
 
         .features .feature-item:hover {
-            transform: translateY(-10px);
+            transform: translateY(-9px);
         }
 
         footer {
-            background-color: #212529;
+            background-color: #1E1D1D;
             color: #aaa;
             padding: 20px 0;
             position: relative;
             bottom: 0;
             width: 100%;
-        }
-
-        footer a {
-            color: #ffd700;
-            text-decoration: none;
-        }
-
-        footer a:hover {
-            text-decoration: underline;
-        }
-
-        .btn-custom {
-            background-color: #ffd700;
-            color: #212529;
-            border: none;
-        }
-
-        .btn-custom:hover {
-            background-color: #e6c200;
-            color: #212529;
         }
 
         .accordion-button {
@@ -124,17 +97,14 @@
 <body>
     <nav class="navbar navbar-expand-lg navbar-dark">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">EURO SERVICE</a>
+            <label class="navbar-brand" href="#">EURO SERVICE</label>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link active" aria-current="page" href="#">Home</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="./login/login_view.php">INICIAR SESION</a>
+                        <button class="nav-link btn" data-bs-toggle="modal" data-bs-target="#loginModal">INICIAR SESIÓN</button>
                     </li>
                 </ul>
             </div>
@@ -149,6 +119,7 @@
         <section class="features text-center text-light">
             <div class="container">
                 <h2 class="section-heading">Nuestros Servicios</h2>
+                <hr>
                 <div class="row">
                     <div class="col-md-4">
                         <div class="feature-item">
@@ -172,6 +143,7 @@
                         </div>
                     </div>
                 </div>
+                <hr>
             </div>
         </section>
     </div>
@@ -196,6 +168,38 @@
             <p>&copy; 2024 EURO SERVICE. Todos los derechos reservados.</p>
         </div>
     </footer>
+
+    <!-- Modal -->
+    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h2 class="modal-title" id="loginModalLabel">Iniciar Sesión</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form method="post" action="login.php">
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="username" name="username" autocomplete="on" placeholder="Ingresa tu usuario" required>
+                            <br>
+                        </div>
+                        <div class="form-group">
+                            <input type="password" class="form-control" id="password" name="password" placeholder="Ingresa tu contraseña" required>
+                        </div>
+                        <br>
+                        <input type="submit" value="Iniciar sesión" class="btn btn-dark">
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        <?php if (isset($_SESSION['error']) && $_SESSION['error']) : ?>
+            var errorModal = new bootstrap.Modal(document.getElementById('errorModal'));
+            errorModal.show();
+        <?php endif; ?>
+    </script>
 </body>
 
 </html>
