@@ -60,7 +60,8 @@
                                 $stmt = $pdo->prepare("
                                 SELECT c.*, v.marca AS vehiculo 
                                 FROM CITAS c 
-                                JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID 
+                                JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
+                                WHERE c.estado='pendiente' 
                                 ORDER BY c.fecha_cita ASC;
                                 ");
                                 $stmt->execute();
