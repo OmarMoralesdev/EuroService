@@ -90,10 +90,10 @@
                         echo "</div>";
                         echo "<div class='modal-body'>";
                         $consultita = "SELECT concat(vehiculos.marca,' ',vehiculos.modelo,' ',vehiculos.anio,' ',vehiculos.color) AS VEHICULO,
-                        ordenes_trabajo.detalles_trabajo as OPERACIÓN_EFECTUAR
+                        citas.servicio_solicitado as OPERACIÓN_EFECTUAR
                         From vehiculos join citas On citas.vehiculoID=vehiculos.vehiculoID join ordenes_trabajo On
                         ordenes_trabajo.citaID=citas.citaID
-                        where ordenes_trabajo.atencion='muy urgente';";
+                        where ordenes_trabajo.atencion='muy urgente' and citas.estado='pendiente';";
                         
                         $tabla = $conexion->seleccionar($consultita);
 
@@ -129,10 +129,10 @@
                         echo "</div>";
                         echo "<div class='modal-body'>";
                         $consultita = "SELECT concat(vehiculos.marca,' ',vehiculos.modelo,' ',vehiculos.anio,' ',vehiculos.color) AS VEHICULO,
-                        ordenes_trabajo.detalles_trabajo as OPERACIÓN_EFECTUAR
+                        citas.servicio_solicitado as OPERACIÓN_EFECTUAR
                         From vehiculos join citas On citas.vehiculoID=vehiculos.vehiculoID join ordenes_trabajo On
                         ordenes_trabajo.citaID=citas.citaID
-                        where ordenes_trabajo.atencion='urgente';";
+                        where ordenes_trabajo.atencion='urgente' and citas.estado='pendiente';";
                         
                         $tabla = $conexion->seleccionar($consultita);
 
@@ -168,10 +168,10 @@
                         echo "</div>";
                         echo "<div class='modal-body'>";
                         $consultita = "SELECT concat(vehiculos.marca,' ',vehiculos.modelo,' ',vehiculos.anio,' ',vehiculos.color) AS VEHICULO,
-                        ordenes_trabajo.detalles_trabajo as OPERACIÓN_EFECTUAR
+                        citas.servicio_solicitado as OPERACIÓN_EFECTUAR
                         From vehiculos join citas On citas.vehiculoID=vehiculos.vehiculoID join ordenes_trabajo On
                         ordenes_trabajo.citaID=citas.citaID
-                        where ordenes_trabajo.atencion='no urgente';";
+                        where ordenes_trabajo.atencion='no urgente' and citas.estado='pendiente';";
                         
                         $tabla = $conexion->seleccionar($consultita);
 
