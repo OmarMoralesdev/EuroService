@@ -1,5 +1,4 @@
 <?php
-
 require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
@@ -8,11 +7,14 @@ function generateRandomPassword($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomPassword = '';
-    for ($i = 0; $i < $length; $i++) {
+    for ($i = 0; $length > $i; $i++) {
         $randomPassword .= $characters[rand(0, $charactersLength - 1)];
     }
     return $randomPassword;
 }
+
+$showModal = false;
+$modalContent = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre = trim($_POST['nombre']);
@@ -51,18 +53,87 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $stmt_cuenta->execute([$correo, $hashed_password, $personaID, $rolID]);
                 
                 if ($stmt_cuenta->rowCount() > 0) {
-                    echo "<div class='alert alert-success'>Usuario registrado exitosamente.<br>Nombre de usuario: <strong>$correo</strong><br>Contraseña: <strong>$password</strong></div>";
+                    $showModal = true;
+                    $modalContent = "
+                        <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                            <div class='modal-dialog'>
+                                <div class='modal-content'>
+                                    <div class='modal-header'>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
+                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                    </div>
+                                    <div class='modal-body'>
+                                        cuenta del cliente: <strong>$correo</strong><br><br>
+                                        contraseña del cliente: <strong>$password</strong><br><hr>
+                                        presiona siguiente para registrar su vehículo
+                                    </div>
+                                    <div class='modal-footer'>
+                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                        <button type='button' class='btn btn-dark'>siguiente</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>";
                 } else {
-                    echo "<div class='alert alert-danger'>Error al insertar la cuenta.</div>";
+                    $showModal = true;
+                    $modalContent = "
+                        <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                            <div class='modal-dialog'>
+                                <div class='modal-content'>
+                                    <div class='modal-header'>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>ERROR AL REGISTRAR LA CUENTA</h1>
+                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                    </div>
+                                    <div class='modal-body'>
+                                        El cliente no se ha registrado con éxito.
+                                    </div>
+                                    <div class='modal-footer'>
+                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>";
                 }
             } else {
-                echo "<div class='alert alert-danger'>Error al insertar el cliente.</div>";
+                $showModal = true;
+                $modalContent = "
+                    <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                        <div class='modal-dialog'>
+                            <div class='modal-content'>
+                                <div class='modal-header'>
+                                    <h1 class='modal-title fs-5' id='staticBackdropLabel'>ERROR AL REGISTRAR LA CUENTA</h1>
+                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                </div>
+                                <div class='modal-body'>
+                                    El cliente no se ha registrado con éxito.
+                                </div>
+                                <div class='modal-footer'>
+                                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>";
             }
-        } else {
-            echo "<div class='alert alert-danger'>Error al insertar la persona.</div>";
-        }
+        } 
     } catch (PDOException $e) {
-        echo "<div class='alert alert-danger'>Error: " . $e->getMessage() . "</div>";
+        $showModal = true;
+        $modalContent = "
+            <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                <div class='modal-dialog'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                            <h1 class='modal-title fs-5' id='staticBackdropLabel'>ERROR AL REGISTRAR LA CUENTA</h1>
+                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                        </div>
+                        <div class='modal-body'>
+                            El cliente no se ha registrado con éxito. " . $e->getMessage() . "
+                        </div>
+                        <div class='modal-footer'>
+                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>";
     }
 }
 ?>
