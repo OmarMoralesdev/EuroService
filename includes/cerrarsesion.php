@@ -3,7 +3,7 @@ function cerrarsesion()
 {
     session_start();
     session_destroy();
-    header("Location: ../login/login_view.php");
+    header("Location: ../index.php");
     exit();
 }
 

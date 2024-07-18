@@ -1,7 +1,6 @@
 <?php
-
 require '../includes/db.php'; 
-
+session_start();
 $con = new Database();
 $pdo = $con->conectar();
 
@@ -11,14 +10,18 @@ $servicioSolicitado = filter_input(INPUT_POST, 'servicioSolicitado', FILTER_SANI
 $fechaCita = filter_input(INPUT_POST, 'fecha_cita', FILTER_SANITIZE_STRING);
 
 if (!$vehiculoID || !$servicioSolicitado || !$fechaCita) {
-    die("Error: Todos los campos son obligatorios.");
+    $_SESSION['error'] = "Error: Todos los campos son obligatorios.";
+    header("Location: index.php");
+    exit();
 }
 
 $fechaActual = date('Y-m-d H:i:s');
 $fechaCitaTimestamp = strtotime($fechaCita);
 
 if ($fechaCitaTimestamp <= strtotime($fechaActual)) {
-    die("Error: La fecha de la cita debe ser posterior a la fecha actual.");
+    $_SESSION['error'] = "Error: La fecha de la cita debe ser posterior a la fecha actual.";
+    header("Location: index.php");
+    exit();
 }
 
 // Verificar que no haya citas programadas dentro de los próximos 30 minutos de la fecha solicitada
@@ -31,7 +34,9 @@ $row = $query->fetch(PDO::FETCH_ASSOC);
 $countCitasProximas = $row['countCitas'];
 
 if ($countCitasProximas > 0) {
-    die("Error: Hay una cita programada dentro de los próximos 30 minutos. Por favor, selecciona otra fecha.");
+    $_SESSION['error'] = "Error: Hay una cita programada dentro de los próximos 30 minutos. Por favor, selecciona otra fecha.";
+    header("Location: index.php");
+    exit();
 }
 
 // Insertar la nueva cita en la base de datos
@@ -41,8 +46,12 @@ $queryInsert = $pdo->prepare($sqlInsert);
 $resultInsert = $queryInsert->execute([$vehiculoID, $servicioSolicitado, $fechaActual, $fechaCita]);
 
 if ($resultInsert) {
-    echo "Cita registrada correctamente.";
+    $_SESSION['bien'] = "Cita registrada correctamente.";
+    header("Location: index.php");
+    exit();
 } else {
-    echo "Error al registrar la cita.";
+    $_SESSION['error'] = "Error al registrar la cita.";
+    header("Location: index.php");
+    exit();
 }
 ?>
