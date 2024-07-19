@@ -69,7 +69,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     </div>
                                     <div class='modal-footer'>
                                         <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                                        <button type='button' class='btn btn-dark'>siguiente</button>
+                                        <a href='.vehiculos/autos_view.php' type='button' class='btn btn-dark'>siguiente</a>
                                     </div>
                                 </div>
                             </div>
