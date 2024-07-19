@@ -49,7 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['personaID'] =  $personaID;
                 // Redireccionar según el rol
                 if ($role == 1) {
-                    header("Location: ../EuroService/general_views/client.php");
+                    header("Location: ../EuroService/Cliente/client.php");
                     exit();
                 } elseif ($role == 2) {
                     header("Location: ../EuroService/general_views/admin.php");
