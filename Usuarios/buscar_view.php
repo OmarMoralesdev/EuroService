@@ -15,7 +15,7 @@ $pagina_actual = isset($_GET['pagina']) ? (int)$_GET['pagina'] : 1;
 $inicio = ($pagina_actual - 1) * $resultados_por_pagina;
 
 // Consulta SQL base para obtener clientes (con limit y offset para paginación)
-$consulta_clientes = "SELECT c.clienteID, CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, c.correo, c.telefono
+$consulta_clientes = "SELECT c.clienteID, CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, p.correo, p.telefono
                       FROM clientes c
                       INNER JOIN personas p ON c.personaID = p.personaID";
 

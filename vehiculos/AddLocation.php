@@ -18,7 +18,7 @@ $modalContent = '';
     
     if($capacidad > 0 && $capacidad < 40 ){
 
-        $consulta = "INSERT INTO ubicaciones (lugar, capacidad) VALUES ('$lugar', $capacidad)";
+        $consulta = "INSERT INTO ubicaciones (lugar, capacidad, activo) VALUES ('$lugar', $capacidad, 'si')";
         $conexion->ejecuta($consulta);
         
         $conexion->desconectar();
@@ -45,7 +45,6 @@ $modalContent = '';
                 </div>
             </div>";
         
-
         header('Location: ubicaciones_view.php');
         exit();
     }

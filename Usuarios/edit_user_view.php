@@ -8,10 +8,10 @@ $showModal = false;
 $modalContent = '';
 
 // Función para verificar si el correo o el teléfono ya existen en la base de datos
-function checkDuplicate($pdo, $correo, $telefono, $clienteID) {
-    $sql = "SELECT COUNT(*) FROM CLIENTES WHERE (correo = :correo OR telefono = :telefono) AND clienteID <> :clienteID";
+function checkDuplicate($pdo, $correo, $telefono, $personaID) {
+    $sql = "SELECT COUNT(*) FROM PERSONAS WHERE (correo = :correo OR telefono = :telefono) AND personaID <> :personaID";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute(['correo' => $correo, 'telefono' => $telefono, 'clienteID' => $clienteID]);
+    $stmt->execute(['correo' => $correo, 'telefono' => $telefono, 'personaID' => $personaID]);
     return $stmt->fetchColumn() > 0;
 }
 
@@ -20,7 +20,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $correo = $_POST['correo'];
     $telefono = $_POST['telefono'];
 
-    if (checkDuplicate($pdo, $correo, $telefono, $clienteID)) {
+    // Obtener personaID asociado con clienteID
+    $stmt = $pdo->prepare("SELECT personaID FROM CLIENTES WHERE clienteID = ?");
+    $stmt->execute([$clienteID]);
+    $personaID = $stmt->fetchColumn();
+
+    if (!$personaID) {
+        die("Error: Cliente no encontrado.");
+    }
+
+    if (checkDuplicate($pdo, $correo, $telefono, $personaID)) {
         $showModal = true;
         $modalContent = "
             <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
@@ -41,14 +50,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>";
     } else {
         // Actualiza la base de datos
-        $sql = "UPDATE CLIENTES SET correo = ?, telefono = ? WHERE clienteID = ?";
+        $sql = "UPDATE PERSONAS SET correo = ?, telefono = ? WHERE personaID = ?";
 
         // Usa PDO para preparar la declaración
         $stmt = $pdo->prepare($sql);
 
         try {
             // Ejecuta la consulta
-            $stmt->execute([$correo, $telefono, $clienteID]);
+            $stmt->execute([$correo, $telefono, $personaID]);
             $showModal = true;
             $modalContent = "
                 <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
@@ -84,6 +93,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EDITAR DATOS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
             background-color: #f8f9fa;
@@ -200,9 +210,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     document.getElementById('nombre').value = cliente.nombre;
                                     document.getElementById('apellido_paterno').value = cliente.apellido_paterno;
                                     document.getElementById('apellido_materno').value = cliente.apellido_materno;
-                                    document.getElementById('telefono_actual').innerText = cliente.telefono || 'No disponible';
-                                    document.getElementById('correo_actual').innerText = cliente.correo || 'No disponible';
-                                    document.getElementById('campo').value = '';
+                                    document.getElementById('telefono_actual').innerText = cliente.telefono;
+                                    document.getElementById('correo_actual').innerText = cliente.correo;
                                     lista.style.display = 'none';
                                 };
                                 lista.appendChild(li);
@@ -211,13 +220,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         } else {
                             lista.style.display = 'none';
                         }
-                    })
-                    .catch(error => console.error('Error fetching clients:', error));
+                    });
             } else {
                 lista.style.display = 'none';
             }
         });
     </script>
+
+    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 </body>
 
 </html>
