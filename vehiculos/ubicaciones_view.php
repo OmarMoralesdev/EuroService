@@ -27,6 +27,7 @@
                 <div class="form-container">
             <div>
                 <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addLocationModal">AÑADIR NUEVA UBICACIÓN</button>
+                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#enableLocationModal">HABILITAR UBICACIÓN</button>
             </div>
             <div class="row mt-3">
                 <?php
@@ -163,6 +164,48 @@
                         <div class='modal-footer'>
                             <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
                             <button type='submit' class='btn btn-dark'>Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+     <!-- Modal para habilitar una ubicación -->
+     <div class='modal fade' id='enableLocationModal' tabindex='-1' aria-labelledby='enableLocationModalLabel' aria-hidden='true'>
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <h5 class='modal-title' id='enableLocationModalLabel'>Habilitar Ubicación</h5>
+                    <button type='button' class='btn-close bg-dark' data-bs-dismiss='modal' aria-label='Close'></button>
+                </div>
+                <div class='modal-body'>
+                    <form action='enableLocation.php' method='POST'>
+                        <div class='mb-3'>
+                            <label for='lugar' class='form-label'>Lugar</label>
+                            <select class="form-select" name="lugaru" id="lugaru" required>
+                            <option value="Selecciona la ubicación">Selecciona la ubicación</option>
+                            <?php
+                    include '../class/database.php';
+                    $conexion = new Database();
+                    $conexion->conectar();
+                    $consulta = "SELECT u.ubicacionID, u.lugar, u.capacidad, COUNT(v.vehiculoID) AS cantidad_vehiculos
+                                        FROM ubicaciones u
+                                        LEFT JOIN ordenes_trabajo ot ON u.ubicacionID = ot.ubicacionID
+                                        LEFT JOIN citas c ON ot.citaID = c.citaID
+                                        LEFT JOIN vehiculos v ON c.vehiculoID = v.vehiculoID
+                                        WHERE u.activo = 'no'
+                                        GROUP BY u.ubicacionID, u.lugar, u.capacidad";
+                    $desactivados = $conexion->seleccionar($consulta);
+                    foreach($desactivados as $desactivado) {
+                        echo "<option value='".$desactivado->ubicacionID."'>".$desactivado->lugar."</option>";
+                    }
+                    ?>
+                            </select>
+                        </div>
+                        <div class='modal-footer'>
+                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                            <button type='submit' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#enabledM'>Guardar</button>
                         </div>
                     </form>
                 </div>
