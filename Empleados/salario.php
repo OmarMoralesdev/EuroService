@@ -9,7 +9,7 @@ $conexion->conectar();
 // Inicializar la variable de búsqueda
 $buscar = isset($_POST['buscar']) ? $_POST['buscar'] : '';
 
-$consulta_empleados = "SELECT e.empleadoID, CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, e.alias, e.tipo, n.salario
+$consulta_empleados = "SELECT e.empleadoID, CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, e.alias, e.tipo, n.total
                     FROM EMPLEADOS e
                     INNER JOIN PERSONAS p ON e.personaID = p.personaID
                     LEFT JOIN NOMINAS n ON e.empleadoID = n.empleadoID";
@@ -69,7 +69,7 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                                 echo "<hr>";
                                 echo "<p class='card-text'><strong>Alias:</strong> {$empleado->alias}</p>";
                                 echo "<p class='card-text'><strong>Tipo:</strong> {$empleado->tipo}</p>";
-                                echo "<p class='card-text'><strong>Salario:</strong> {$empleado->salario}</p>";
+                                echo "<p class='card-text'><strong>Salario:</strong> {$empleado->total}</p>";
 
                                 // Botones para agregar deudas y rebajas
                                 echo "<button type='button' class='btn btn-dark btn-md' style='width: 49%;' data-bs-toggle='modal' data-bs-target='#modalDeudas{$empleado->empleadoID}'>Agregar Deudas</button>";
