@@ -75,7 +75,7 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
         <div class="container">
-            <h2 class="text-center h2">BUSCAR CLIENTES</h2>
+            <h2 class="text-center">BUSCAR CLIENTES</h2>
                 <div class="form-container">
             <!-- Formulario de bús  queda -->
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" class="mb-3">
@@ -133,9 +133,6 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
         </div>
         </div>
     </div>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 

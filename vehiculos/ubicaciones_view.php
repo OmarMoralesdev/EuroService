@@ -16,9 +16,6 @@
         .card-text {
             margin-bottom: 0.25rem; /* Reduce el margen inferior del texto dentro de la card */
         }
-        h2{
-            color:black !important
-        }
     </style>
 </head>
 <body>
