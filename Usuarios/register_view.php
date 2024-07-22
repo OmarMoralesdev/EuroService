@@ -36,15 +36,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         try {
             // Insertar en PERSONAS
-            $stmt_persona = $pdo->prepare("INSERT INTO PERSONAS (nombre, apellido_paterno, apellido_materno) VALUES (?, ?, ?)");
-            $stmt_persona->execute([$nombre, $apellido_paterno, $apellido_materno]);
+            $stmt_persona = $pdo->prepare("INSERT INTO PERSONAS (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
+            $stmt_persona->execute([$nombre, $apellido_paterno, $apellido_materno, $correo, $telefono]);
             
             if ($stmt_persona->rowCount() > 0) {
                 $personaID = $pdo->lastInsertId();
                 
                 // Insertar en CLIENTES
-                $stmt_cliente = $pdo->prepare("INSERT INTO CLIENTES (personaID, correo, telefono) VALUES (?, ?, ?)");
-                $stmt_cliente->execute([$personaID, $correo, $telefono]);
+                $stmt_cliente = $pdo->prepare("INSERT INTO CLIENTES (personaID) VALUES (?)");
+                $stmt_cliente->execute([$personaID]);
                 
                 if ($stmt_cliente->rowCount() > 0) {
                     $clienteID = $pdo->lastInsertId();
