@@ -54,7 +54,7 @@ function getVehiculos(clienteID) {
                 listaVehiculos.style.display = 'block';
                 data.forEach(vehiculo => {
                     let li = document.createElement('li');
-                    li.textContent = `${vehiculo.marca} ${vehiculo.modelo} (${vehiculo.año})`;
+                    li.textContent = `${vehiculo.marca} ${vehiculo.modelo} (${vehiculo.anio})`;
                     li.onclick = () => seleccionarVehiculo(vehiculo);
                     listaVehiculos.appendChild(li);
                 });
@@ -66,7 +66,7 @@ function getVehiculos(clienteID) {
 }
 
 function seleccionarVehiculo(vehiculo) {
-    document.getElementById("vehiculoSeleccionado").value = `${vehiculo.marca} ${vehiculo.modelo} (${vehiculo.año})`;
+    document.getElementById("vehiculoSeleccionado").value = `${vehiculo.marca} ${vehiculo.modelo} (${vehiculo.anio})`;
     document.getElementById("vehiculoID").value = vehiculo.vehiculoID;
 }
 
