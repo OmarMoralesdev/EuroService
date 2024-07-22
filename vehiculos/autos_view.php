@@ -36,7 +36,32 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$clienteID, $marca, $modelo, $anio, $color, $kilometraje, $placas, $vin]);
 
             if ($stmt->rowCount() > 0) {
-                $success = "Vehículo registrado exitosamente.";
+                $success =
+                $showModal = true;
+                $modalContent = "
+                    <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                        <div class='modal-dialog'>
+                            <div class='modal-content'>
+                                <div class='modal-header'>
+                                    <h1 class='modal-title fs-5' id='staticBackdropLabel'>Vehículo registrado!</h1>
+                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                </div>
+                                <div class='modal-body'>
+                                <h3>Datos:</h3>
+                                    MARCA: <strong>$marca</strong><br><br>
+                                    MODELO: <strong>$modelo</strong><br><br>
+                                    AÑO: <strong>$anio</strong><br><br>
+                                    VIN: <strong>$vin</strong><br><br>
+                                    Contraseña del cliente: <strong>$password</strong><br><hr>
+                                    Presiona siguiente para registrar su
+                                </div>
+                                <div class='modal-footer'>
+                                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                    <a href='../CItas' type='button' class='btn btn-dark'>Siguiente</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>";
             } else {
                 $errors['general'] = "Error: " . $pdo->errorInfo()[2];
             }
@@ -118,7 +143,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
     <script src="app.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
     <script>
         document.getElementById('formCita').addEventListener('submit', function(event) {
             let valid = true;
