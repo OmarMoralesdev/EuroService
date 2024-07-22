@@ -7,7 +7,7 @@ if (isset($_GET['id'])) {
     $conexion = new Database();
     $conexion->conectar();
     
-    $consulta = "DELETE FROM ubicaciones WHERE ubicacionID = $ubicacionID";
+    $consulta = "UPDATE `ubicaciones` SET `activo` = 'no' WHERE `ubicacionID` = $ubicacionID";
     $conexion->ejecuta($consulta);
     
     $conexion->desconectar();
