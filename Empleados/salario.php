@@ -53,7 +53,7 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" class="mb-3">
                         <div class="input-group">
                             <input type="text" class="form-control" placeholder="Buscar empleados..." name="buscar" value="<?php echo htmlspecialchars($buscar); ?>">
-                            <button type="submit" class="btn btn-outline-secondary">Buscar</button>
+                            <button type="submit" class="btn btn-dark">Buscar</button>
                         </div>
                     </form>
 
@@ -72,7 +72,7 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                                 echo "<p class='card-text'><strong>Salario:</strong> {$empleado->total}</p>";
 
                                 // Botones para agregar deudas y rebajas
-                                echo "<button type='button' class='btn btn-dark btn-md ml-2' style='width: 100%;' data-bs-toggle='modal' data-bs-target='#modalRebajas{$empleado->empleadoID}'>Agregar Rebajas</button>";
+                                echo "<button type='button' class='btn btn-dark btn-md ml-2'  style='width: 100% ;' data-bs-toggle='modal' data-bs-target='#modalRebajas{$empleado->empleadoID}'>Agregar Rebajas</button>";
                                 echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
