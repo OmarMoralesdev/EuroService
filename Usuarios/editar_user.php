@@ -11,7 +11,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 $showModal = false;
 $modalContent = '';
     // Actualiza la base de datos
-    $sql = "UPDATE CLIENTES SET correo = ?, telefono = ? WHERE clienteID = ?";
+    $sql = "UPDATE PERSONAS SET correo = ?, telefono = ? from personas
+    join clientes on peronas = clientes.clienteID WHERE clienteID = ?";
     
     // Usa PDO para preparar la declaración
     $stmt = $pdo->prepare($sql);
