@@ -76,10 +76,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <title>Editar Cita</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
     <style>
-        h2 {
-            text-align: center;
-            color: #000;
-        }
         .form-control[readonly] {
             background-color: #e9ecef;
             opacity: 1;
@@ -91,8 +87,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <?php include '../includes/vabr.html'; ?>
     <div class="main p-2">
         <div class="container">
+            <h2>EDITAR CITA</h2>
             <div class="form-container">
-                <h2>EDITAR CITA</h2>
                 <form method="post" action="#">
                     <div class="mb-3">
                         <label for="citaID" class="form-label">Seleccionar Cita:</label>

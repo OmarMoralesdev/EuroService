@@ -17,8 +17,8 @@
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
             <div class="container">
+                <h2>REGISTRAR CITA</h2>
                 <div class="form-container">
-                <h2>Registrar Cita</h2>
                 <br>            
                 <form action="../CItas/registrar_cita.php" method="POST" autocomplete="off">
                     <div class="mb-3">
@@ -27,6 +27,8 @@
                         <input type="hidden" id="clienteID" name="clienteID">
                         <div class="invalid-feedback">Debes seleccionar un cliente.</div>
                     </div>
+                    <label for="correo_actual">Correo Electrónico Actual: <span id="correo_actual">No disponible</span></label><br> 
+                <label for="telefono_actual">Teléfono Actual: <span id="telefono_actual">No disponible</span></label><br><br>
                     <div class="mb-3">
                     <label for="vehiculoSeleccionado" class="form-label">Seleccione un vehiculo:</label>
                         <ul id="lista-vehiculos" class="list-group" style="display: none;"></ul>

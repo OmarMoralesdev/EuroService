@@ -50,7 +50,7 @@
                         <label for="vin">Vin:</label>
                         <input type="text" id="vin" name="vin" maxlength="40" class="form-control" placeholder="Introduce el VIN del vehículo" required><br>
 
-                        <input type="submit" class="btn btn-primary" value="Registrar Vehículo">
+                        <input type="submit" class="btn btn-dark" value="Registrar Vehículo">
                     </div>
                 </form>
             </div>

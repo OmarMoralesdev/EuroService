@@ -55,8 +55,18 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
         .card-text {
             margin-bottom: 0.25rem;
         }
-        .pagination a {
-            color: black;
+        .pagination .page-link {
+            color: white; /* Texto blanco para mejor contraste */
+            background-color: black; /* Fondo negro */
+            border-color: black; /* Borde negro */
+        }
+        .pagination .page-link:hover {
+            border-color: black; /* Borde negro */
+            background-color: #252525; /* Fondo gris oscuro al pasar el mouse */
+        }
+        .pagination .page-item.active .page-link {
+            background-color: #252525; /* Fondo gris oscuro al pasar el mouse */
+            border-color: #000; /* Borde negro para el elemento activo */
         }
         /* Estilo para los campos de texto */
         input[type=text], input[type=email] {
@@ -67,7 +77,6 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
             /* sombra leve para el botón */
         }
-    
     </style>
 </head>
 <body>
@@ -75,9 +84,9 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
         <div class="container">
-            <h2 class="text-center h2">BUSCAR CLIENTES</h2>
+            <h2 class="text-center">BUSCAR CLIENTES</h2>
                 <div class="form-container">
-            <!-- Formulario de bús  queda -->
+            <!-- Formulario de búsqueda -->
             <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" class="mb-3">
                 <div class="input-group">
                     <input type="text" class="form-control" placeholder="Buscar clientes..." name="buscar" value="<?php echo htmlspecialchars($buscar); ?>">
@@ -124,7 +133,7 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
 
                     <?php if ($pagina_actual < $total_paginas): ?>
                         <li class="page-item">
-                            <a class="page-link " href="<?php echo $_SERVER['PHP_SELF'] . '?pagina=' . ($pagina_actual + 1) . '&buscar=' . urlencode($buscar); ?>">Siguiente</a>
+                            <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] . '?pagina=' . ($pagina_actual + 1) . '&buscar=' . urlencode($buscar); ?>">Siguiente</a>
                         </li>
                     <?php endif; ?>
                 </ul>
@@ -133,9 +142,6 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
         </div>
         </div>
     </div>
-
-    <!-- Scripts -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 

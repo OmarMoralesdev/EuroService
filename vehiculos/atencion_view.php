@@ -4,18 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Ubicaciones</title>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
-    <style>
-        .card-body {
-            padding: 1rem; /* Ajusta el padding interior de la card-body */
-        }
-        .card-title {
-            margin-bottom: 0.5rem; /* Reduce el margen inferior del título */
-        }
-        .card-text {
-            margin-bottom: 0.25rem; /* Reduce el margen inferior del texto dentro de la card */
-        }
-    </style>
 </head>
 <body>
 
@@ -41,7 +29,7 @@
 
                         // Botones en un div separado para controlar la alineación
                         echo "<div class='card-footer d-flex justify-content-between align-items-center'>";
-                        echo "<button type='button' class='btn btn-dark btn-md' style='width: 80%;' data-bs-toggle='modal' data-bs-target='#modalmu'>VER...</button>";
+                        echo "<button type='button' class='btn btn-dark btn-md' style='width: 100%;' data-bs-toggle='modal' data-bs-target='#modalmu'>VER...</button>";
                         echo "</div>"; // Cierre de card-footer
 
                         echo "</div>"; // Cierre de card
@@ -57,7 +45,7 @@
 
                         // Botones en un div separado para controlar la alineación
                         echo "<div class='card-footer d-flex justify-content-between align-items-center'>";
-                        echo "<button type='button' class='btn btn-dark btn-md' style='width: 80%;' data-bs-toggle='modal' data-bs-target='#modalu'>VER...</button>";
+                        echo "<button type='button' class='btn btn-dark btn-md' style='width: 100%;' data-bs-toggle='modal' data-bs-target='#modalu'>VER...</button>";
                         echo "</div>"; // Cierre de card-footer
 
                         echo "</div>"; // Cierre de card
@@ -73,7 +61,7 @@
 
                         // Botones en un div separado para controlar la alineación
                         echo "<div class='card-footer d-flex justify-content-between align-items-center'>";
-                        echo "<button type='button' class='btn btn-dark btn-md' style='width: 80%;' data-bs-toggle='modal' data-bs-target='#modalnu'>VER...</button>";
+                        echo "<button type='button' class='btn btn-dark btn-md' style='width: 100%;' data-bs-toggle='modal' data-bs-target='#modalnu'>VER...</button>";
                         echo "</div>"; // Cierre de card-footer
 
                         echo "</div>"; // Cierre de card
@@ -92,8 +80,10 @@
                         $consultita = "SELECT concat(vehiculos.marca,' ',vehiculos.modelo,' ',vehiculos.anio,' ',vehiculos.color) AS VEHICULO,
                         citas.servicio_solicitado as OPERACIÓN_EFECTUAR
                         From vehiculos join citas On citas.vehiculoID=vehiculos.vehiculoID join ordenes_trabajo On
-                        ordenes_trabajo.citaID=citas.citaID
-                        where ordenes_trabajo.atencion='muy urgente' and citas.estado='pendiente';";
+                        ordenes_trabajo.citaID=citas.citaID inner join pagos On pagos.ordenID = ordenes_trabajo.OrdenID
+                        inner join Entregados On entregados.PagoID = Pagos.PagoID
+                        where ordenes_trabajo.atencion='muy urgente' and citas.estado='pendiente' and 
+                        pagos.tipo_pago ='anticipo'";
                         
                         $tabla = $conexion->seleccionar($consultita);
 
@@ -131,8 +121,10 @@
                         $consultita = "SELECT concat(vehiculos.marca,' ',vehiculos.modelo,' ',vehiculos.anio,' ',vehiculos.color) AS VEHICULO,
                         citas.servicio_solicitado as OPERACIÓN_EFECTUAR
                         From vehiculos join citas On citas.vehiculoID=vehiculos.vehiculoID join ordenes_trabajo On
-                        ordenes_trabajo.citaID=citas.citaID
-                        where ordenes_trabajo.atencion='urgente' and citas.estado='pendiente';";
+                        ordenes_trabajo.citaID=citas.citaID inner join pagos On pagos.ordenID = ordenes_trabajo.OrdenID
+                        inner join Entregados On entregados.PagoID = Pagos.PagoID
+                        where ordenes_trabajo.atencion='urgente' and citas.estado='pendiente' and 
+                        pagos.tipo_pago ='anticipo'";
                         
                         $tabla = $conexion->seleccionar($consultita);
 
@@ -170,8 +162,11 @@
                         $consultita = "SELECT concat(vehiculos.marca,' ',vehiculos.modelo,' ',vehiculos.anio,' ',vehiculos.color) AS VEHICULO,
                         citas.servicio_solicitado as OPERACIÓN_EFECTUAR
                         From vehiculos join citas On citas.vehiculoID=vehiculos.vehiculoID join ordenes_trabajo On
-                        ordenes_trabajo.citaID=citas.citaID
-                        where ordenes_trabajo.atencion='no urgente' and citas.estado='pendiente';";
+                        ordenes_trabajo.citaID=citas.citaID inner join pagos On pagos.ordenID = ordenes_trabajo.OrdenID
+                        inner join Entregados On entregados.PagoID = Pagos.PagoID
+                        where ordenes_trabajo.atencion='no urgente' and citas.estado='pendiente' and 
+                        pagos.tipo_pago ='anticipo';
+                     ";
                         
                         $tabla = $conexion->seleccionar($consultita);
 

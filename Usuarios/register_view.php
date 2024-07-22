@@ -23,100 +23,146 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $correo = trim($_POST['correo']);
     $telefono = trim($_POST['telefono']);
     
-    $password = generateRandomPassword();
-    $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-    $role = 'cliente';
-    
-    try {
-        // Insertar en PERSONAS
-        $stmt_persona = $pdo->prepare("INSERT INTO PERSONAS (nombre, apellido_paterno, apellido_materno) VALUES (?, ?, ?)");
-        $stmt_persona->execute([$nombre, $apellido_paterno, $apellido_materno]);
+    // Validaciones del lado del servidor
+    if (preg_match('/^[a-zA-Z\s]+$/', $nombre) &&
+        preg_match('/^[a-zA-Z\s]+$/', $apellido_paterno) &&
+        preg_match('/^[a-zA-Z\s]+$/', $apellido_materno) &&
+        filter_var($correo, FILTER_VALIDATE_EMAIL) &&
+        preg_match('/^\d{10}$/', $telefono)) {
         
-        if ($stmt_persona->rowCount() > 0) {
-            $personaID = $pdo->lastInsertId();
+        $password = generateRandomPassword();
+        $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+        $role = 'cliente';
+        
+        try {
+            // Insertar en PERSONAS
+            $stmt_persona = $pdo->prepare("INSERT INTO PERSONAS (nombre, apellido_paterno, apellido_materno) VALUES (?, ?, ?)");
+            $stmt_persona->execute([$nombre, $apellido_paterno, $apellido_materno]);
             
-            // Insertar en CLIENTES
-            $stmt_cliente = $pdo->prepare("INSERT INTO CLIENTES (personaID, correo, telefono) VALUES (?, ?, ?)");
-            $stmt_cliente->execute([$personaID, $correo, $telefono]);
-            
-            if ($stmt_cliente->rowCount() > 0) {
-                $clienteID = $pdo->lastInsertId();
+            if ($stmt_persona->rowCount() > 0) {
+                $personaID = $pdo->lastInsertId();
                 
-                // Obtener rolID del rol 'cliente'
-                $stmt_rol = $pdo->prepare("SELECT rolID FROM ROLES WHERE nombre_rol = ?");
-                $stmt_rol->execute([$role]);
-                $rol = $stmt_rol->fetch();
-                $rolID = $rol['rolID'];
+                // Insertar en CLIENTES
+                $stmt_cliente = $pdo->prepare("INSERT INTO CLIENTES (personaID, correo, telefono) VALUES (?, ?, ?)");
+                $stmt_cliente->execute([$personaID, $correo, $telefono]);
                 
-                // Insertar en CUENTAS
-                $stmt_cuenta = $pdo->prepare("INSERT INTO CUENTAS (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
-                $stmt_cuenta->execute([$correo, $hashed_password, $personaID, $rolID]);
-                
-                if ($stmt_cuenta->rowCount() > 0) {
-                    $showModal = true;
-                    $modalContent = "
-                        <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
-                            <div class='modal-dialog'>
-                                <div class='modal-content'>
-                                    <div class='modal-header'>
-                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
-                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                                    </div>
-                                    <div class='modal-body'>
-                                        Cuenta del cliente: <strong>$correo</strong><br><br>
-                                        Contraseña del cliente: <strong>$password</strong><br><hr>
-                                        Presiona siguiente para registrar su vehículo
-                                    </div>
-                                    <div class='modal-footer'>
-                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                                        <a href='../vehiculos/autos_view.php' type='button' class='btn btn-dark'>Siguiente</a>
+                if ($stmt_cliente->rowCount() > 0) {
+                    $clienteID = $pdo->lastInsertId();
+                    
+                    // Obtener rolID del rol 'cliente'
+                    $stmt_rol = $pdo->prepare("SELECT rolID FROM ROLES WHERE nombre_rol = ?");
+                    $stmt_rol->execute([$role]);
+                    $rol = $stmt_rol->fetch();
+                    $rolID = $rol['rolID'];
+                    
+                    // Insertar en CUENTAS
+                    $stmt_cuenta = $pdo->prepare("INSERT INTO CUENTAS (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
+                    $stmt_cuenta->execute([$correo, $hashed_password, $personaID, $rolID]);
+                    
+                    if ($stmt_cuenta->rowCount() > 0) {
+                        $showModal = true;
+                        $modalContent = "
+                            <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                                <div class='modal-dialog'>
+                                    <div class='modal-content'>
+                                        <div class='modal-header'>
+                                            <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
+                                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                        </div>
+                                        <div class='modal-body'>
+                                            Cuenta del cliente: <strong>$correo</strong><br><br>
+                                            Contraseña del cliente: <strong>$password</strong><br><hr>
+                                            Presiona siguiente para registrar su vehículo
+                                        </div>
+                                        <div class='modal-footer'>
+                                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                            <a href='../vehiculos/autos_view.php' type='button' class='btn btn-dark'>Siguiente</a>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>";
-                            }            }
-        } 
-    } catch (PDOException $e) {
-        $showModal = true;
-        $errorMessage = $e->getMessage();
-        
-        if (strpos($errorMessage, 'Duplicate entry') !== false && strpos($errorMessage, 'for key \'correo\'') !== false) {
-            $modalContent = "
-                <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
-                    <div class='modal-dialog'>
-                        <div class='modal-content'>
-                            <div class='modal-header'>
-                                <h1 class='modal-title fs-5' id='staticBackdropLabel'>ERROR AL REGISTRAR LA CUENTA</h1>
-                                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                            </div>
-                            <div class='modal-body'>
-                                El correo electrónico ya está registrado. Por favor, utiliza otro correo electrónico.
-                            </div>
-                            <div class='modal-footer'>
-                                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                            </div>
-                        </div>
-                    </div>
-                </div>";
-        } else {
-            $modalContent = "
-                <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
-                    <div class='modal-dialog'>
-                        <div class='modal-content'>
-                            <div class='modal-header'>
-                                <h1 class='modal-title fs-5' id='staticBackdropLabel'>ERROR AL REGISTRAR LA CUENTA</h1>
-                                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                            </div>
-                            <div class='modal-body'>
-                                Ha ocurrido un error al registrar la cuenta. Por favor, inténtalo de nuevo más tarde.
-                            </div>
-                            <div class='modal-footer'>
-                                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                            </div>";
+                    }
+                }
+            } 
+        } catch (PDOException $e) {
+            $showModal = true;
+            $errorMessage = $e->getMessage();
+            
+            if (strpos($errorMessage, 'Duplicate entry') !== false && strpos($errorMessage, 'for key \'telefono\'') !== false) {
+                $modalContent = "
+                    <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                        <div class='modal-dialog'>
+                            <div class='modal-content'>
+                                <div class='modal-header'>
+                                    <h1 class='modal-title fs-5' id='staticBackdropLabel'>ERROR AL REGISTRAR LA CUENTA</h1>
+                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                </div>
+                                <div class='modal-body'>
+                                    El teléfono ya está registrado. Por favor, utiliza otro número teléfonico.
+                                </div>
+                                <div class='modal-footer'>
+                                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>";
+                    </div>";
+            } elseif (strpos($errorMessage, 'Duplicate entry') !== false && strpos($errorMessage, 'for key \'correo\'') !== false) {
+                $modalContent = "
+                    <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                        <div class='modal-dialog'>
+                            <div class='modal-content'>
+                                <div class='modal-header'>
+                                    <h1 class='modal-title fs-5' id='staticBackdropLabel'>ERROR AL REGISTRAR LA CUENTA</h1>
+                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                </div>
+                                <div class='modal-body'>
+                                    El correo electrónico ya está registrado. Por favor, utiliza otro correo electrónico.
+                                </div>
+                                <div class='modal-footer'>
+                                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>";
+            } else {
+                $modalContent = "
+                    <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                        <div class='modal-dialog'>
+                            <div class='modal-content'>
+                                <div class='modal-header'>
+                                    <h1 class='modal-title fs-5' id='staticBackdropLabel'>ERROR AL REGISTRAR LA CUENTA</h1>
+                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                </div>
+                                <div class='modal-body'>
+                                    Ha ocurrido un error al registrar la cuenta. Por favor, inténtalo de nuevo más tarde.
+                                </div>
+                                <div class='modal-footer'>
+                                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>";
+            }
         }
+    } else {
+        $showModal = true;
+        $modalContent = "
+            <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                <div class='modal-dialog'>
+                    <div class='modal-content'>
+                        <div class='modal-header'>
+                            <h1 class='modal-title fs-5' id='staticBackdropLabel'>ERROR AL REGISTRAR LA CUENTA</h1>
+                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                        </div>
+                        <div class='modal-body'>
+                            Por favor, asegúrate de que todos los campos estén correctamente llenados.
+                        </div>
+                        <div class='modal-footer'>
+                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                        </div>
+                    </div>
+                </div>
+            </div>";
     }
 }
 ?>
@@ -156,15 +202,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     <form method="post" action="">
                         <div class="form-group">
                             <label for="nombre">Nombre:</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            <input type="text" class="form-control" id="nombre" name="nombre" required pattern="[a-zA-Z\s]+" title="Solo letras y espacios">
                         </div>
                         <div class="form-group">
                             <label for="apellido_paterno">Apellido Paterno:</label>
-                            <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" required>
+                            <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" required pattern="[a-zA-Z\s]+" title="Solo letras y espacios">
                         </div>
                         <div class="form-group">
                             <label for="apellido_materno">Apellido Materno:</label>
-                            <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" required>
+                            <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" required pattern="[a-zA-Z\s]+" title="Solo letras y espacios">
                         </div>
                         <div class="form-group">
                             <label for="correo">Correo electrónico:</label>
@@ -172,7 +218,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         </div>
                         <div class="form-group">
                             <label for="telefono">Teléfono:</label>
-                            <input type="text" class="form-control" id="telefono" name="telefono" required>
+                            <input type="text" class="form-control" id="telefono" name="telefono" required pattern="\d{10}" title="Debe contener 10 dígitos">
                         </div>
                         <br>
                         <button type="submit" class="btn btn-dark btn-block">Registrar</button>

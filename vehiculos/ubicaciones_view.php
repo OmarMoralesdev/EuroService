@@ -16,9 +16,6 @@
         .card-text {
             margin-bottom: 0.25rem; /* Reduce el margen inferior del texto dentro de la card */
         }
-        h2{
-            color:black !important
-        }
     </style>
 </head>
 <body>
@@ -42,6 +39,7 @@
                                         LEFT JOIN ordenes_trabajo ot ON u.ubicacionID = ot.ubicacionID
                                         LEFT JOIN citas c ON ot.citaID = c.citaID
                                         LEFT JOIN vehiculos v ON c.vehiculoID = v.vehiculoID
+                                        WHERE u.activo = 'si'
                                         GROUP BY u.ubicacionID, u.lugar, u.capacidad";
                 $ubicaciones = $conexion->seleccionar($consulta_ubicaciones);
                 
@@ -62,7 +60,7 @@
                         echo "<div class='card-footer d-flex justify-content-between align-items-center'>";
                         echo "<button type='button' class='btn btn-dark btn-md' style='width: 80%;' data-bs-toggle='modal' data-bs-target='#modal{$ubicacion->ubicacionID}'>VER VEHÍCULOS</button>";
                         echo" ";
-                        echo "<button type='button' class='btn btn-danger btn-md ml-2' style='width: 19%;' data-bs-toggle='modal' data-bs-target='#deleteModal{$ubicacion->ubicacionID}'><i class='bi bi-trash3'></i></button>";
+                        echo "<button type='button' class='btn btn-danger btn-md ml-2' style='width: 19%;' data-bs-toggle='modal' data-bs-target='#deleteModal{$ubicacion->ubicacionID}'><i class='lni lni-pause'></i></button>";
                         echo "</div>"; // Cierre de card-footer
 
                         echo "</div>"; // Cierre de card
@@ -88,7 +86,7 @@
                             INNER JOIN citas ON citas.vehiculoID = vehiculos.vehiculoID 
                             INNER JOIN ordenes_trabajo ON ordenes_trabajo.citaID = citas.citaID 
                             INNER JOIN ubicaciones ON ordenes_trabajo.ubicacionID = ubicaciones.ubicacionID 
-                            WHERE ubicaciones.ubicacionID = {$ubicacion->ubicacionID}";
+                            WHERE ubicaciones.ubicacionID = {$ubicacion->ubicacionID} and ubicaciones.activo = 'si'";
                         
                         $tabla = $conexion->seleccionar($consulta);
 
@@ -127,11 +125,11 @@
                         echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
                         echo "</div>";
                         echo "<div class='modal-body'>";
-                        echo "<p>¿Estás seguro de que deseas eliminar la ubicación <strong>{$ubicacion->lugar}</strong>?</p>";
+                        echo "<p>¿Estás seguro de que deseas inhabilitar la ubicación <strong>{$ubicacion->lugar}</strong>?</p>";
                         echo "</div>";
                         echo "<div class='modal-footer'>";
                         echo "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancelar</button>";
-                        echo "<a href='deleteLocation.php?id={$ubicacion->ubicacionID}' class='btn btn-danger'>Eliminar</a>";
+                        echo "<a href='deleteLocation.php?id={$ubicacion->ubicacionID}' class='btn btn-danger'>Inhabilitar</a>";
                         echo "</div>";
                         echo "</div>";
                         echo "</div>";
@@ -164,7 +162,7 @@
                         </div>
                         <div class='modal-footer'>
                             <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                            <button type='submit' class='btn btn-primary'>Guardar</button>
+                            <button type='submit' class='btn btn-dark'>Guardar</button>
                         </div>
                     </form>
                 </div>
