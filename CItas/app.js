@@ -19,7 +19,7 @@ function getClientes() {
                 lista.innerHTML = "";
                 data.forEach(cliente => {
                     let li = document.createElement('li');
-                    li.textContent = `${cliente.nombre} ${cliente.apellido_paterno} ${cliente.apellido_materno}`;
+                    li.textContent = `${cliente.nombre} ${cliente.apellido_paterno} ${cliente.apellido_materno} - ${cliente.telefono}`;
                     li.onclick = () => mostrar(cliente);
                     lista.appendChild(li);
                 });
@@ -69,7 +69,6 @@ function seleccionarVehiculo(vehiculo) {
     document.getElementById("vehiculoSeleccionado").value = `${vehiculo.marca} ${vehiculo.modelo} (${vehiculo.año})`;
     document.getElementById("vehiculoID").value = vehiculo.vehiculoID;
 }
-
 
 document.addEventListener("DOMContentLoaded", function () {
     const datePicker = document.getElementById("date-picker");
