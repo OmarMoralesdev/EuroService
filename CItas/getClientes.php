@@ -8,7 +8,7 @@ $pdo = $con->conectar();
 $campo = filter_input(INPUT_POST, 'campo', FILTER_SANITIZE_STRING);
 
 if ($campo) {
-    $sql = "SELECT CLIENTES.clienteID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno, CLIENTES.telefono
+    $sql = "SELECT CLIENTES.clienteID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno, PERSONAS.telefono
             FROM CLIENTES 
             JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID 
             WHERE PERSONAS.nombre LIKE ? OR PERSONAS.apellido_paterno LIKE ? OR PERSONAS.apellido_materno LIKE ? 
