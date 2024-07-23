@@ -16,7 +16,7 @@ $modalContent = '';
 
     
     
-    if($capacidad > 0 && $capacidad < 40 ){
+    if($capacidad > 0 && $capacidad <= 40 ){
 
         $consulta = "INSERT INTO ubicaciones (lugar, capacidad, activo) VALUES ('$lugar', $capacidad, 'si')";
         $conexion->ejecuta($consulta);
@@ -25,7 +25,7 @@ $modalContent = '';
         
         header('Location: ubicaciones_view.php');
         exit();
-    }else{
+    }else if ($capacidad < 0){
         $modalContent = "
             <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                 <div class='modal-dialog'>
@@ -44,9 +44,33 @@ $modalContent = '';
                     </div>
                 </div>
             </div>";
+            header('Location: ubicaciones_view.php');
+            exit();
         
+
+    }
+    else if ($capacidad > 40){
+    $modalContent = "
+        <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+            <div class='modal-dialog'>
+                <div class='modal-content'>
+                    <div class='modal-header'>
+                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>La capacidad no puede ser mayor a 40</h1>
+                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                    </div>
+                    <div class='modal-body'>
+                        Ingresa datos válidos.<br><br>
+                        
+                    </div>
+                    <div class='modal-footer'>
+                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                    </div>
+                </div>
+            </div>
+        </div>";
         header('Location: ubicaciones_view.php');
         exit();
-    }
+
+}
 }
 ?>
