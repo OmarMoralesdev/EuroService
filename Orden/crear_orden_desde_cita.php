@@ -32,10 +32,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($cita) {
         // Crear la orden de trabajo basada en los detalles de la cita
-        $vehiculoID = $cita['vehiculoID'];
+        $citaID = $_POST['citaID'];
         $fechaOrden = date('Y-m-d H:i:s');
-        $detallesTrabajo = $cita['servicio_solicitado'];
-        $estado = 'pendiente';
 
         // Verificar si se han enviado los detalles adicionales del formulario
         if (isset($_POST['detallesFormulario'])) {
@@ -43,12 +41,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $costoRefacciones = $_POST['costoRefacciones'];
             $empleado = $_POST['empleado'];
             $ubicacionID = $_POST['ubicacionID'];
-            $atencion = 'no urgente';
+            $anticipo = $_POST['anticipo'];
+            $tipoPago = "anticipo";
+            $atencion = 'no urgente'; // Puedes ajustar esto según los detalles del formulario
+            $formaDePago = $_POST['formadepago'];
+            
+            // Calcular el total estimado
+            $total_estimado = $costoManoObra + $costoRefacciones;
 
             try {
                 // Crear la orden de trabajo
-                $nuevaOrdenID = crearOrdenTrabajo($pdo, $vehiculoID, $fechaOrden, $detallesTrabajo, $costoManoObra, $costoRefacciones, $estado, $empleado, $ubicacionID, $atencion);
+                $nuevaOrdenID = crearOrdenTrabajo($pdo, $fechaOrden, $costoManoObra, $costoRefacciones, $total_estimado, $atencion, $citaID, $empleado, $ubicacionID);
 
+                realizarPago($pdo, $ordenID, $fechaPago, $anticipo, $tipoPago, $formaDePago);
                 // Actualizar el estado de la cita a 'completado'
                 actualizarEstadoCita($pdo, $citaID, 'completado');
 
@@ -60,17 +65,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Mostrar formulario para ingresar detalles adicionales de la orden de trabajo
             // y seleccionar empleado
 ?>
-           
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-    <link rel="stylesheet" href="../assets/css/styles.css">
-    <title>Completar Detalles de Orden de Trabajo</title>
-</head>
-<body>
+
+            <!DOCTYPE html>
+            <html lang="en">
+
+            <head>
+                <meta charset="UTF-8">
+                <meta name="viewport" content="width=device-width, initial-scale=1.0">
+                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
+                <link rel="stylesheet" href="../assets/css/styles.css">
+                <title>Completar Detalles de Orden de Trabajo</title>
+            </head>
+
+            <body>
                 <div class="wrapper">
                     <?php include '../includes/vabr.html'; ?>
                     <div class="main p-3">
@@ -83,6 +90,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                             <label for="costoRefacciones">Costo de Refacciones:</label>
                             <input type="number" step="0.01" id="costoRefacciones" name="costoRefacciones" class="form-control" required><br><br>
+
+                            <label for="anticipo">Anticipo:</label>
+                            <input type="number" step="0.01" name="anticipo" class="form-control" required><br><br>
+
+                            <label for="formadepago" class="form-label">Forma de pago:</label>
+                            <select name="formadepago" class="form-control" required>
+                                <option value="efectivo">Efectivo</option>
+                                <option value="tarjeta">Tarjeta</option>
+                                <option value="transferencia">Transferencia</option>
+                            </select>
 
                             <label for="empleado" class="form-label">Empleado ID:</label>
                             <select name="empleado" class="form-control" required>
@@ -118,7 +135,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
             </body>
-</html>
+
+            </html>
 <?php
         }
     } else {

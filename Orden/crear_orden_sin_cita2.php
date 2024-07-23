@@ -7,7 +7,6 @@
                 $urgencia = "si";
                 $fechaSolicitud = date('Y-m-d'); // Fecha actual
                 $fechaOrden = $fechaCita;
-                $detallesTrabajo = $servicioSolicitado;
                 $costoManoObra = $_POST['costoManoObra'];
                 $costoRefacciones = $_POST['costoRefacciones'];
                 $empleadoID = $_POST['empleado'];
@@ -23,9 +22,9 @@
                     $stmtCita = $pdo->prepare($sqlCita);
                     $stmtCita->execute([$vehiculoID, $servicioSolicitado, $fechaSolicitud, $fechaCita, $urgencia]);
                     $citaID = $pdo->lastInsertId(); 
-                    $sqlOrden = "INSERT INTO ORDENES_TRABAJO (fecha_orden, detalles_trabajo, costo_mano_obra, costo_refacciones, estado, citaID, empleadoID, ubicacionID, atencion) VALUES (?, ?, ?, ?, 'pendiente', ?, ?, ?, ?)";
+                    $sqlOrden = "INSERT INTO ORDENES_TRABAJO (fecha_orden, costo_mano_obra, costo_refacciones,atencion, citaID, empleadoID, ubicacionID ) VALUES (?, ?, ?, ?, ?, ?, ?)";
                     $stmtOrden = $pdo->prepare($sqlOrden);
-                    $stmtOrden->execute([$fechaOrden, $detallesTrabajo, $costoManoObra, $costoRefacciones, $citaID, $empleadoID, $ubicacionID, $atencion]);
+                    $stmtOrden->execute([$fechaOrden, $costoManoObra, $costoRefacciones, $atencion, $citaID, $empleadoID, $ubicacionID]);
                     $pdo->commit();
                     echo '<div class="alert alert-success mt-3">Cita y orden de trabajo creadas exitosamente.</div>';
                 } catch (PDOException $e) {

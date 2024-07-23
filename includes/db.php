@@ -82,21 +82,20 @@ function obtenerDetallesCliente($pdo, $clienteID)
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-function crearOrdenTrabajo($pdo, $vehiculoID, $fechaOrden, $detallesTrabajo, $costoManoObra, $costoRefacciones, $estado, $empleado, $ubicacionID, $atencion)
+function crearOrdenTrabajo($pdo, $fechaOrden, $costoManoObra, $costoRefacciones, $total_estimado,  $atencion, $citaID, $empleado, $ubicacionID)
 {
-    $sql = "INSERT INTO ORDENES_TRABAJO (fecha_orden, detalles_trabajo, costo_mano_obra, costo_refacciones, estado, citaID, empleadoID, ubicacionID, atencion) 
-            VALUES (:fechaOrden, :detallesTrabajo, :costoManoObra, :costoRefacciones, :estado,:vehiculoID, :empleado, :ubicacionID, :atencion)";
+    $sql = "INSERT INTO ORDENES_TRABAJO (fecha_orden, costo_mano_obra, costo_refacciones, total_estimado, atencion, citaID, empleadoID, ubicacionID) 
+            VALUES (:fechaOrden, :costoManoObra, :costoRefacciones, :total_estimado, :anticipo,  :citaID, :empleado, :ubicacionID)";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([
-        ':vehiculoID' => $vehiculoID,
         ':fechaOrden' => $fechaOrden,
-        ':detallesTrabajo' => $detallesTrabajo,
         ':costoManoObra' => $costoManoObra,
         ':costoRefacciones' => $costoRefacciones,
-        ':estado' => $estado,
+        ':total_estimado' => $total_estimado,
+        ':atencion' => $atencion,
+        ':citaID' => $citaID,
         ':empleado' => $empleado,
         ':ubicacionID' => $ubicacionID,
-        ':atencion' => $atencion,
     ]);
 
     return $pdo->lastInsertId();
@@ -130,5 +129,42 @@ function obtenerDetallesClientepersona($pdo, $clienteID)
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
+function realizarPago($pdo, $ordenID, $fechaPago, $monto, $tipoPago, $formaDePago)
+{
+    try {
+        // Iniciar una transacción
+        $pdo->beginTransaction();
+        
+        // Insertar el pago en la tabla PAGOS
+        $sqlPago = "INSERT INTO PAGOS (ordenID, fecha_pago, monto, tipo_pago, forma_de_pago)
+                    VALUES (:ordenID, :fechaPago, :monto, :tipoPago, :formaDePago)";
+        $stmtPago = $pdo->prepare($sqlPago);
+        $stmtPago->execute([
+            ':ordenID' => $ordenID,
+            ':fechaPago' => $fechaPago,
+            ':monto' => $monto,
+            ':tipoPago' => $tipoPago,
+            ':formaDePago' => $formaDePago,
+        ]);
+
+        // Actualizar el campo anticipo en la tabla ORDENES_TRABAJO
+        if ($tipoPago == 'anticipo') {
+            $sqlUpdateAnticipo = "UPDATE ORDENES_TRABAJO SET anticipo = anticipo + :monto WHERE ordenID = :ordenID";
+            $stmtUpdate = $pdo->prepare($sqlUpdateAnticipo);
+            $stmtUpdate->execute([
+                ':monto' => $monto,
+                ':ordenID' => $ordenID,
+            ]);
+        }
+
+        // Confirmar la transacción
+        $pdo->commit();
+        echo "Pago realizado y anticipo actualizado con éxito.";
+    } catch (PDOException $e) {
+        // Revertir la transacción en caso de error
+        $pdo->rollBack();
+        echo "Error al realizar el pago: " . $e->getMessage();
+    }
+}
 
 

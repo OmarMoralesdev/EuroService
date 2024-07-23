@@ -62,15 +62,45 @@ if (isset($_SESSION['error'])) {
 
         <script src="../CItas/app.js"></script>
         <script>
-            document.getElementById('formCita').addEventListener('submit', function(event) {
-                if (!document.getElementById('clienteID').value) {
-                    event.preventDefault();
-                    event.stopPropagation();
-                    document.getElementById('campo').classList.add('is-invalid');
+        document.addEventListener('DOMContentLoaded', function() {
+            const dateInput = document.getElementById('fecha_cita');
+            const today = new Date();
+            const year = today.getFullYear();
+            const month = String(today.getMonth() + 1).padStart(2, '0');
+            const day = String(today.getDate()).padStart(2, '0');
+            const minDate = `${year}-${month}-${day}T09:00`;
+            const maxDate = `${year + 1}-${month}-${day}T17:00`;
+
+            // Establecer el valor mínimo y máximo del Date Picker
+            dateInput.min = minDate;
+            dateInput.max = maxDate;
+
+            dateInput.addEventListener('input', function() {
+                const selectedDate = new Date(dateInput.value);
+                const selectedHour = selectedDate.getHours();
+                const selectedMinutes = selectedDate.getMinutes();
+
+                if (selectedHour < 9 || (selectedHour >= 17 && selectedMinutes > 0)) {
+                    dateInput.setCustomValidity('La hora debe estar dentro del horario laboral (09:00 - 17:00).');
+                } else {
+                    dateInput.setCustomValidity('');
                 }
-                this.classList.add('was-validated');
             });
-        </script>
+
+            // Función para deshabilitar horas fuera del horario laboral
+            dateInput.addEventListener('focus', function() {
+                const calendar = document.querySelector('input[type="datetime-local"]');
+                const options = calendar.querySelectorAll('option');
+                options.forEach(option => {
+                    const date = new Date(option.value);
+                    const hour = date.getHours();
+                    if (hour < 9 || hour >= 17) {
+                        option.disabled = true;
+                    }
+                });
+            });
+        });
+    </script>
 </body>
 
 </html>
