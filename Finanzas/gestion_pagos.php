@@ -8,7 +8,7 @@ try {
 
 
     // Obtener la semana desde el formulario
-    $semana = $_POST['semana'];
+    $semana = $_POST['week'];
 
     // Calcular la fecha de inicio (lunes) y la fecha de fin (domingo) de la semana seleccionada
     $fecha_inicio = date('Y-m-d', strtotime($semana));
