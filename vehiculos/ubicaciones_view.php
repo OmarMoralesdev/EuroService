@@ -59,7 +59,9 @@
 
                         // Botones en un div separado para controlar la alineación
                         echo "<div class='card-footer d-flex justify-content-between align-items-center'>";
-                        echo "<button type='button' class='btn btn-dark btn-md' style='width: 80%;' data-bs-toggle='modal' data-bs-target='#modal{$ubicacion->ubicacionID}'>VER VEHÍCULOS</button>";
+                        echo "<button type='button' class='btn btn-dark btn-md' style='width: 60%;' data-bs-toggle='modal' data-bs-target='#modal{$ubicacion->ubicacionID}'>VER VEHÍCULOS</button>";
+                        echo" ";
+                        echo "<button type='button' class='btn btn-dark btn-md ml-2' style='width: 19%;' data-bs-toggle='modal' data-bs-target='#renameModal{$ubicacion->ubicacionID}'><i class='lni lni-pencil'></i></button>";
                         echo" ";
                         echo "<button type='button' class='btn btn-danger btn-md ml-2' style='width: 19%;' data-bs-toggle='modal' data-bs-target='#deleteModal{$ubicacion->ubicacionID}'><i class='lni lni-pause'></i></button>";
                         echo "</div>"; // Cierre de card-footer
@@ -117,12 +119,12 @@
                         echo "</div>";
                         echo "</div>";
 
-                        // Modal para confirmar eliminación
+                        // Modal para inhabilitar ubicación
                         echo "<div class='modal fade' id='deleteModal{$ubicacion->ubicacionID}' tabindex='-1' aria-labelledby='deleteModalLabel{$ubicacion->ubicacionID}' aria-hidden='true'>";
                         echo "<div class='modal-dialog'>";
                         echo "<div class='modal-content'>";
                         echo "<div class='modal-header'>";
-                        echo "<h5 class='modal-title' id='deleteModalLabel{$ubicacion->ubicacionID}'>Confirmar Eliminación</h5>";
+                        echo "<h5 class='modal-title' id='deleteModalLabel{$ubicacion->ubicacionID}'>Confirmar Inhabilitación</h5>";
                         echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
                         echo "</div>";
                         echo "<div class='modal-body'>";
@@ -135,6 +137,31 @@
                         echo "</div>";
                         echo "</div>";
                         echo "</div>";
+
+                         // Modal para editar nombre
+                         echo "<div class='modal fade' id='renameModal{$ubicacion->ubicacionID}' tabindex='-1' aria-labelledby='deleteModalLabel{$ubicacion->ubicacionID}' aria-hidden='true'>";
+                         echo "<div class='modal-dialog'>";
+                         echo "<div class='modal-content'>";
+                         echo "<div class='modal-header'>";
+                         echo "<h5 class='modal-title' id='deleteModalLabel{$ubicacion->ubicacionID}'>Confirmar Renombrar</h5>";
+                         echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
+                         echo "</div>";
+                         echo "<div class='modal-body'>";
+                         echo "<form action='renameLocation.php' method='POST'>";
+                         echo "<div class='mb-3'>";
+                         echo "<label for='lugarn' class='form-label'>Nuevo nombre de la ubicación </label>";
+                         echo "<input type='text' class='form-control' id='lugarn' name='lugarn' required>";
+                         echo "</div>";
+                         echo "</div>";
+                         echo "<div class='modal-footer'>";
+                         echo "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancelar</button>";
+                         echo "<input type='hidden' name='ubicacionID' value='{$ubicacion->ubicacionID}'>";
+                         echo "<button type='submit' class='btn btn-dark'>Renombrar</button>";
+                         echo "</div>";
+                         echo "</form>";
+                         echo "</div>";
+                         echo "</div>";
+                         echo "</div>";
                     }
                 }
                 $conexion->desconectar();
@@ -163,7 +190,7 @@
                         </div>
                         <div class='modal-footer'>
                             <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                            <button type='submit' class='btn btn-dark'>Guardar</button>
+                            <button type='submit' class='btn btn-dark'>Guardar</button> 
                         </div>
                     </form>
                 </div>
@@ -205,7 +232,7 @@
                         </div>
                         <div class='modal-footer'>
                             <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                            <button type='submit' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#enabledM'>Guardar</button>
+                            <button type='submit' class='btn btn-dark'>Guardar</button>
                         </div>
                     </form>
                 </div>

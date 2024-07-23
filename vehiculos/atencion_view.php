@@ -56,7 +56,7 @@
                         echo "<div class='card-body'>";
                         echo "<h5 class='card-title'>NO URGENTE</h5>";
                         echo "<hr>";
-                        echo "<p class='card-text'>Necesitan ser atendidos con urgencia...</p>";
+                        echo "<p class='card-text'>No necesitan ser atendidos con urgencia...</p>";
                         echo "</div>"; // Cierre de card-body
 
                         // Botones en un div separado para controlar la alineación
