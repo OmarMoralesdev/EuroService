@@ -1,10 +1,10 @@
 <?php
+session_start();
 require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
 
-function generateRandomPassword($length = 10)
-{
+function generateRandomPassword($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomPassword = '';
@@ -44,9 +44,23 @@ function usernameExists($pdo, $username) {
     return $stmt->fetchColumn() > 0;
 }
 
+function setModalContent($type, $message) {
+    $_SESSION['modal'] = [
+        'type' => $type,
+        'message' => $message
+    ];
+}
+
+function getModalContent() {
+    if (isset($_SESSION['modal'])) {
+        $modalContent = $_SESSION['modal'];
+        unset($_SESSION['modal']); // Limpiar el contenido del modal después de mostrarlo
+        return $modalContent;
+    }
+    return null;
+}
 
 $showModal = false;
-$modalContent = '';
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $nombre = trim($_POST['nombre']);
@@ -62,13 +76,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         filter_var($correo, FILTER_VALIDATE_EMAIL) &&
         preg_match('/^\d{10}$/', $telefono)
     ) {
-        
         $password = generateRandomPassword();
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         $role = 'cliente';
 
         try {
-            // Insertar en PERSONAS
             $stmt_persona = $pdo->prepare("INSERT INTO personas (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
             $stmt_persona->execute([$nombre, $apellido_paterno, $apellido_materno, $correo, $telefono]);
 
@@ -80,26 +92,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     throw new Exception('No se pudo generar un nombre de usuario único.');
                 }
 
-                // Insertar en CLIENTES
                 $stmt_cliente = $pdo->prepare("INSERT INTO clientes (personaID) VALUES (?)");
                 $stmt_cliente->execute([$personaID]);
 
                 if ($stmt_cliente->rowCount() > 0) {
                     $clienteID = $pdo->lastInsertId();
 
-                    // Obtener rolID del rol 'cliente'
                     $stmt_rol = $pdo->prepare("SELECT rolID FROM roles WHERE nombre_rol = ?");
                     $stmt_rol->execute([$role]);
                     $rol = $stmt_rol->fetch();
                     $rolID = $rol['rolID'];
 
-                    // Insertar en CUENTAS
                     $stmt_cuenta = $pdo->prepare("INSERT INTO cuentas (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
                     $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID]);
-
                     if ($stmt_cuenta->rowCount() > 0) {
-                        $showModal = true;
-                        $modalContent = "
+                        setModalContent('success', "
                             <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                                 <div class='modal-dialog'>
                                     <div class='modal-content'>
@@ -118,16 +125,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         </div>
                                     </div>
                                 </div>
-                            </div>";
+                            </div>");
+                        $showModal = true;
                     }
                 }
             }
         } catch (PDOException $e) {
-            $showModal = true;
             $errorMessage = $e->getMessage();
-
+    
             if (strpos($errorMessage, 'Duplicate entry') !== false && strpos($errorMessage, 'for key \'telefono\'') !== false) {
-                $modalContent = "
+                setModalContent('error', "
                     <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                         <div class='modal-dialog'>
                             <div class='modal-content'>
@@ -143,9 +150,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </div>
                             </div>
                         </div>
-                    </div>";
+                    </div>");
+                $showModal = true;
             } elseif (strpos($errorMessage, 'Duplicate entry') !== false && strpos($errorMessage, 'for key \'correo\'') !== false) {
-                $modalContent = "
+                setModalContent('error', "
                     <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                         <div class='modal-dialog'>
                             <div class='modal-content'>
@@ -161,9 +169,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 </div>
                             </div>
                         </div>
-                    </div>";
+                    </div>");
+                $showModal = true;
             } else {
-                $modalContent = "
+                setModalContent('error', "
                     <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                         <div class='modal-dialog'>
                             <div class='modal-content'>
@@ -172,120 +181,58 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                     <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                                 </div>
                                 <div class='modal-body'>
-                                    Ha ocurrido un error al registrar la cuenta. Por favor, inténtalo de nuevo más tarde.
+                                    Verifica que todos los campos estén correctamente llenos y vuelve a intentar.
                                 </div>
                                 <div class='modal-footer'>
                                     <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
                                 </div>
                             </div>
                         </div>
-                    </div>";
+                    </div>");
+                $showModal = true;
             }
+        } catch (Exception $e) {
+            setModalContent('error', "
+                <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                    <div class='modal-dialog'>
+                        <div class='modal-content'>
+                            <div class='modal-header'>
+                                <h1 class='modal-title fs-5' id='staticBackdropLabel'>ERROR EN LOS DATOS INGRESADOS</h1>
+                                <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                            </div>
+                            <div class='modal-body'>
+                                Verifica que todos los campos estén correctamente llenos y vuelve a intentar.
+                            </div>
+                            <div class='modal-footer'>
+                                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>");
+            $showModal = true;
         }
     } else {
-        $showModal = true;
-        $modalContent = "
+        setModalContent('error', "
             <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                 <div class='modal-dialog'>
                     <div class='modal-content'>
                         <div class='modal-header'>
-                            <h1 class='modal-title fs-5' id='staticBackdropLabel'>ERROR AL REGISTRAR LA CUENTA</h1>
+                            <h1 class='modal-title fs-5' id='staticBackdropLabel'>ERROR EN LOS DATOS INGRESADOS</h1>
                             <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                         </div>
                         <div class='modal-body'>
-                            Por favor, asegúrate de que todos los campos estén correctamente llenados.
+                            Verifica que todos los campos estén correctamente llenos y vuelve a intentar.
                         </div>
                         <div class='modal-footer'>
                             <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
                         </div>
                     </div>
                 </div>
-            </div>";
+            </div>");
+        $showModal = true;
     }
+
+    header('Location: vista_registro_cliente.php');
+    exit();
 }
 ?>
-
-<!DOCTYPE html>
-<html lang="es">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>REGISTRO CLIENTE</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
-    <style>
-        .form-group {
-            margin-bottom: 5px;
-        }
-
-        h2 {
-            text-transform: uppercase;
-            text-align: center;
-        }
-
-        input[type=text],
-        input[type=email] {
-            color: black;
-        }
-
-        .btn {
-            width: 100%;
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-    </style>
-</head>
-
-<body>
-    <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?> <!-- barra lateral -->
-        <div class="main p-3">
-            <div class="container">
-                <h2>REGISTRAR CLIENTE</h2>
-                <div class="form-container">
-                    <br>
-                    <form method="post" action="">
-                        <div class="form-group">
-                            <label for="nombre">Nombre:</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" required pattern="[a-zA-Z\s]+" title="Solo letras y espacios">
-                        </div>
-                        <div class="form-group">
-                            <label for="apellido_paterno">Apellido Paterno:</label>
-                            <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" required pattern="[a-zA-Z\s]+" title="Solo letras y espacios">
-                        </div>
-                        <div class="form-group">
-                            <label for="apellido_materno">Apellido Materno:</label>
-                            <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" required pattern="[a-zA-Z\s]+" title="Solo letras y espacios">
-                        </div>
-                        <div class="form-group">
-                            <label for="correo">Correo electrónico:</label>
-                            <input type="email" class="form-control" id="correo" name="correo" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="telefono">Teléfono:</label>
-                            <input type="text" class="form-control" id="telefono" name="telefono" required pattern="\d{10}" title="Debe contener 10 dígitos">
-                        </div>
-                        <br>
-                        <button type="submit" class="btn btn-dark btn-block">Registrar</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal -->
-    <?php echo $modalContent; ?>
-
-    <!-- Scripts -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
-    <script>
-        <?php if ($showModal) : ?>
-            var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'), {
-                keyboard: false
-            });
-            myModal.show();
-        <?php endif; ?>
-    </script>
-</body>
-
-</html>
