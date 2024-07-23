@@ -65,7 +65,7 @@
                 <input type="time" id="hora_entrada" name="hora_entrada" class="form-control" required><br><br>
 
                 <label for="hora_salida">Hora de Salida:</label>
-                <input type="time" id="hora_salida" class="form-control"><br><br>
+                <input type="time" id="hora_salida" name="hora_salida" class="form-control"><br><br>
 
                 <input type="submit" value="Registrar">
             </form>

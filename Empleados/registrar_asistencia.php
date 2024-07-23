@@ -10,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $hora_salida = !empty($_POST['hora_salida']) ? $_POST['hora_salida'] : null;
 
     try {
-        $sql = "INSERT INTO Asistencia (empleadoID, fecha, hora_entrada, hora_salida) VALUES (?, ?, ?, ?)";
+        $sql = "INSERT INTO Asistencia (empleadoID, asistencia, fecha, hora_entrada, hora_salida) VALUES (?, 'asistencia',?, ?, ?)";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$empleadoID, $fecha, $hora_entrada, $hora_salida]);
 
