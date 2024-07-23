@@ -57,15 +57,24 @@
                     }
                     ?>
                 </select>
+                <br>
                 <div class="invalid-feedback">Debes seleccionar un empleado.</div>
                 <label for="fecha">Fecha:</label>
-                <input type="date" id="fecha" name="fecha" class="form-control" required><br><br>
+                <input type="date" id="fecha" name="fecha" class="form-control" required><br>
+
+                <label for="asistencia">Asistencia:</label>
+                <select class="form-select" name="asistencia" id="asistencia" required>
+                            <option value="Selecciona">Selecciona una opción</option>
+                            <option value="asistencia">Asistencia</option>
+                            <option value="falta">Falta</option>
+                            <option value="justificado">Justificado</option>
+                            </select><br>
 
                 <label for="hora_entrada">Hora de Entrada:</label>
-                <input type="time" id="hora_entrada" name="hora_entrada" class="form-control" required><br><br>
+                <input type="time" id="hora_entrada" name="hora_entrada" class="form-control" required><br>
 
                 <label for="hora_salida">Hora de Salida:</label>
-                <input type="time" id="hora_salida" class="form-control"><br><br>
+                <input type="time" id="hora_salida" name="hora_salida" class="form-control"><br>
 
                 <input type="submit" value="Registrar">
             </form>
