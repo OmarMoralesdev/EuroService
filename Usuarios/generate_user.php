@@ -12,6 +12,30 @@ function generateRandomPassword($length = 10) {
     }
     return $randomPassword;
 }
+function generarUsername($pdo) {
+
+
+    $sql = "SELECT personas.nombre, personas.apellido_paterno, personas.apellido_materno
+            FROM clientes 
+            JOIN personas ON clientes.personaID = personas.personaID";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute();
+
+    // Array para almacenar los nombres de usuario generados
+    $usernames = [];
+
+    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        // Obtener la primera letra del nombre
+        $firstLetter = strtoupper(substr($row['nombre'], 0, 1));
+        // Concatenar con el apellido paterno
+        $username = $firstLetter . strtolower($row['ap_paterno']);
+        // Almacenar el nombre de usuario en el array
+        $usernames[] = $username;
+    }
+
+    return $usernames;
+}
+
 
 $showModal = false;
 $modalContent = '';
@@ -24,6 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $telefono = trim($_POST['telefono']);
     
     $password = generateRandomPassword();
+    $username = generarUsername($pdo);
     $hashed_password = password_hash($password, PASSWORD_DEFAULT);
     $role = 'cliente';
     
@@ -50,7 +75,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 
                 // Insertar en CUENTAS
                 $stmt_cuenta = $pdo->prepare("INSERT INTO CUENTAS (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
-                $stmt_cuenta->execute([$correo, $hashed_password, $personaID, $rolID]);
+                $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID]);
                 
                 if ($stmt_cuenta->rowCount() > 0) {
                     $showModal = true;
@@ -63,7 +88,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                                     </div>
                                     <div class='modal-body'>
-                                        cuenta del cliente: <strong>$correo</strong><br><br>
+                                        cuenta del cliente: <strong>$username</strong><br><br>
                                         contraseña del cliente: <strong>$password</strong><br><hr>
                                         presiona siguiente para registrar su vehículo
                                     </div>

@@ -3,15 +3,47 @@ require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
 
-function generateRandomPassword($length = 10) {
+function generateRandomPassword($length = 10)
+{
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
     $randomPassword = '';
     for ($i = 0; $i < $length; $i++) {
-        $randomPassword .= $characters[rand(0, $charactersLength - 1)];
+        $randomPassword .= $characters[random_int(0, $charactersLength - 1)];
     }
     return $randomPassword;
 }
+
+function generarUsernameParaCliente($pdo, $personaID) {
+    $sql = "SELECT nombre, apellido_paterno FROM personas WHERE personaID = :personaID";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['personaID' => $personaID]);
+
+    if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        $firstLetter = strtoupper(substr($row['nombre'], 0, 1));
+        $baseUsername = $firstLetter . strtolower($row['apellido_paterno']);
+        
+        $username = $baseUsername;
+        $counter = 1;
+
+        while (usernameExists($pdo, $username)) {
+            $username = $baseUsername . $counter;
+            $counter++;
+        }
+
+        return $username;
+    }
+
+    return null;
+}
+
+function usernameExists($pdo, $username) {
+    $sql = "SELECT COUNT(*) FROM cuentas WHERE username = :username";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute(['username' => $username]);
+    return $stmt->fetchColumn() > 0;
+}
+
 
 $showModal = false;
 $modalContent = '';
@@ -22,43 +54,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $apellido_materno = trim($_POST['apellido_materno']);
     $correo = trim($_POST['correo']);
     $telefono = trim($_POST['telefono']);
-    
-    // Validaciones del lado del servidor
-    if (preg_match('/^[a-zA-Z\s]+$/', $nombre) &&
+
+    if (
+        preg_match('/^[a-zA-Z\s]+$/', $nombre) &&
         preg_match('/^[a-zA-Z\s]+$/', $apellido_paterno) &&
         preg_match('/^[a-zA-Z\s]+$/', $apellido_materno) &&
         filter_var($correo, FILTER_VALIDATE_EMAIL) &&
-        preg_match('/^\d{10}$/', $telefono)) {
+        preg_match('/^\d{10}$/', $telefono)
+    ) {
         
         $password = generateRandomPassword();
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         $role = 'cliente';
-        
+
         try {
             // Insertar en PERSONAS
-            $stmt_persona = $pdo->prepare("INSERT INTO PERSONAS (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
+            $stmt_persona = $pdo->prepare("INSERT INTO personas (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
             $stmt_persona->execute([$nombre, $apellido_paterno, $apellido_materno, $correo, $telefono]);
-            
+
             if ($stmt_persona->rowCount() > 0) {
                 $personaID = $pdo->lastInsertId();
-                
+                $username = generarUsernameParaCliente($pdo, $personaID);
+
+                if ($username === null) {
+                    throw new Exception('No se pudo generar un nombre de usuario único.');
+                }
+
                 // Insertar en CLIENTES
-                $stmt_cliente = $pdo->prepare("INSERT INTO CLIENTES (personaID) VALUES (?)");
+                $stmt_cliente = $pdo->prepare("INSERT INTO clientes (personaID) VALUES (?)");
                 $stmt_cliente->execute([$personaID]);
-                
+
                 if ($stmt_cliente->rowCount() > 0) {
                     $clienteID = $pdo->lastInsertId();
-                    
+
                     // Obtener rolID del rol 'cliente'
-                    $stmt_rol = $pdo->prepare("SELECT rolID FROM ROLES WHERE nombre_rol = ?");
+                    $stmt_rol = $pdo->prepare("SELECT rolID FROM roles WHERE nombre_rol = ?");
                     $stmt_rol->execute([$role]);
                     $rol = $stmt_rol->fetch();
                     $rolID = $rol['rolID'];
-                    
+
                     // Insertar en CUENTAS
-                    $stmt_cuenta = $pdo->prepare("INSERT INTO CUENTAS (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
-                    $stmt_cuenta->execute([$correo, $hashed_password, $personaID, $rolID]);
-                    
+                    $stmt_cuenta = $pdo->prepare("INSERT INTO cuentas (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
+                    $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID]);
+
                     if ($stmt_cuenta->rowCount() > 0) {
                         $showModal = true;
                         $modalContent = "
@@ -70,7 +108,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                             <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                                         </div>
                                         <div class='modal-body'>
-                                            Cuenta del cliente: <strong>$correo</strong><br><br>
+                                            Cuenta del cliente: <strong>$username</strong><br><br>
                                             Contraseña del cliente: <strong>$password</strong><br><hr>
                                             Presiona siguiente para registrar su vehículo
                                         </div>
@@ -83,11 +121,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>";
                     }
                 }
-            } 
+            }
         } catch (PDOException $e) {
             $showModal = true;
             $errorMessage = $e->getMessage();
-            
+
             if (strpos($errorMessage, 'Duplicate entry') !== false && strpos($errorMessage, 'for key \'telefono\'') !== false) {
                 $modalContent = "
                     <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
@@ -169,6 +207,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -178,19 +217,24 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .form-group {
             margin-bottom: 5px;
         }
+
         h2 {
             text-transform: uppercase;
             text-align: center;
         }
-        input[type=text], input[type=email] {
+
+        input[type=text],
+        input[type=email] {
             color: black;
         }
+
         .btn {
             width: 100%;
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
     </style>
 </head>
+
 <body>
     <div class="wrapper">
         <?php include '../includes/vabr.html'; ?> <!-- barra lateral -->
@@ -227,7 +271,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             </div>
         </div>
     </div>
-    
+
     <!-- Modal -->
     <?php echo $modalContent; ?>
 
@@ -235,7 +279,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/2.10.2/umd/popper.min.js"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.min.js"></script>
     <script>
-        <?php if ($showModal): ?>
+        <?php if ($showModal) : ?>
             var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'), {
                 keyboard: false
             });
@@ -243,4 +287,5 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <?php endif; ?>
     </script>
 </body>
+
 </html>
