@@ -11,6 +11,7 @@ if (!isset($_SESSION['clienteID'])) {
     exit();
 }
 
+
 $clienteID = $_SESSION['clienteID'];
 
 if (!function_exists('obtenerDetallesClientepersona')) {
@@ -29,7 +30,7 @@ try {
                    DATEDIFF(c.fecha_cita, CURDATE()) AS dias_restantes
             FROM CITAS c
             INNER JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
-            WHERE v.clienteID = ? and c.estado = 'pendiente' and c.estado = 'en proceso'
+            WHERE v.clienteID = ? and c.estado = 'cancelado' and c.estado = 'completado'
             ORDER BY c.fecha_cita DESC";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$clienteID]);
@@ -155,6 +156,7 @@ try {
             <?php endif; ?>
         </div>
     </div>
+
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>
