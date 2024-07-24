@@ -4,17 +4,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-
     <title>Seleccionar Cita para Orden de Trabajo</title>
 </head>
 
 <body>
-    <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?>
-        <div class="main p-3">
-            <div class="container">
-                <h1>Seleccionar Cita para Crear Orden de Trabajo</h1>
+<div class="wrapper">
+    <?php include '../includes/vabr.html'; ?>
+    <div class="main p-2">
+        <div class="container">
+            <h2>SELECCIONAR CITA PARA CREAR ORDEN DE TRABAJO</h2>
+            <div class="form-container">
                 <form action="crear_orden_desde_cita.php" method="post">
                     <label for="citaID">Seleccionar Cita:</label>
                     <select id="citaID" name="citaID" class="form-control" required>
@@ -28,7 +27,7 @@
                         }
                         ?>
                     </select><br><br>
-                    <input type="submit" value="Crear Orden de Trabajo">
+                    <input type="submit" class="btn btn-dark" value="Crear Orden de Trabajo">
                 </form>
             </div>
         </div>

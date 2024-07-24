@@ -11,7 +11,7 @@
 <body class="Body_citas">
     <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
-        <div class="main p-3">
+        <div class="main p-">
             <div class="container">
                 <h2>Registrar Cita y Crear Orden de Trabajo</h2>
                 <div class="form-container">
