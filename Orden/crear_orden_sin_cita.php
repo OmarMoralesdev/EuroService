@@ -5,16 +5,15 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Cita y Crear Orden de Trabajo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
-    <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 
 <body class="Body_citas">
     <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
-        <div class="main p-3">
+        <div class="main p-">
             <div class="container">
                 <h2>Registrar Cita y Crear Orden de Trabajo</h2>
+                <div class="form-container">
                 <form action="crear_orden_sin_cita2.php" method="post" id="formCita" novalidate autocomplete="off">
                     <!-- Formulario de Cita -->
                     <div class="mb-3">

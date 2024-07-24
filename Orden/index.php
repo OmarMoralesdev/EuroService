@@ -20,17 +20,18 @@
 
 <body>
     <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?>
-        <div class="main p-3">
-            <div class="container">
-                <h1>Crear Orden de Trabajo</h1>
+    <?php include '../includes/vabr.html'; ?>
+    <div class="main p-2">
+        <div class="container">
+            <h2>CREAR ORDEN DE TRABAJO</h2>
+            <div class="form-container">
                 <form action="" method="get">
                     <label for="tipoOrden">Seleccione el tipo de orden:</label>
                     <select id="tipoOrden" name="tipoOrden" required>
                         <option value="conCita">Con Cita</option>
                         <option value="sinCita">Sin Cita</option>
                     </select><br><br>
-                    <input type="submit" value="Continuar">
+                    <input type="submit"  class="btn btn-dark" value="Continuar">
                 </form>
             </div>
         </div>
