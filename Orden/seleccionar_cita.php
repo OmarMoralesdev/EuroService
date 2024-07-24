@@ -27,7 +27,7 @@
                         }
                         ?>
                     </select><br><br>
-                    <input type="submit" class="btn btn-dark" value="Crear Orden de Trabajo">
+                    <input type="submit" class="btn btn-dark w-100" value="Crear Orden de Trabajo">
                 </form>
             </div>
         </div>

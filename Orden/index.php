@@ -27,11 +27,11 @@ if (isset($_GET['tipoOrden'])) {
                 <div class="form-container">
                     <form action="" method="get">
                         <label for="tipoOrden">Seleccione el tipo de orden:</label>
-                        <select id="tipoOrden" name="tipoOrden" required>
+                        <select id="tipoOrden" name="tipoOrden" class="form-control" required>
                             <option value="conCita">Con Cita</option>
                             <option value="sinCita">Sin Cita</option>
                         </select><br><br>
-                        <input type="submit" value="Continuar">
+                        <input type="submit" class="btn btn-dark w-100" value="Continuar">
                     </form>
                 </div>
             </div>
