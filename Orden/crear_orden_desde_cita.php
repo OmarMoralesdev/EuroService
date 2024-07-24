@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $tipoPago = "anticipo";
             $atencion = 'no urgente'; // Puedes ajustar esto según los detalles del formulario
             $formaDePago = $_POST['formadepago'];
-            
+
             // Calcular el total estimado
             $total_estimado = $costoManoObra + $costoRefacciones;
 
@@ -73,65 +73,67 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
                 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
-                <link rel="stylesheet" href="../assets/css/styles.css">
                 <title>Completar Detalles de Orden de Trabajo</title>
             </head>
-
             <body>
                 <div class="wrapper">
                     <?php include '../includes/vabr.html'; ?>
                     <div class="main p-3">
-                        <h1>Completar Detalles de Orden de Trabajo</h1>
-                        <form action="crear_orden_desde_cita.php" method="post">
-                            <input type="hidden" name="citaID" value="<?php echo $citaID; ?>">
+                        <div class="container">
+                            <h2>Completar Detalles de Orden de Trabajo</h2>
+                            <div class="form-container">
+                                <form action="crear_orden_desde_cita.php" method="post">
+                                    <input type="hidden" name="citaID" value="<?php echo $citaID; ?>">
 
-                            <label for="costoManoObra">Costo Mano de Obra:</label>
-                            <input type="number" step="0.01" id="costoManoObra" name="costoManoObra" class="form-control" required><br><br>
+                                    <label for="costoManoObra">Costo Mano de Obra:</label>
+                                    <input type="number" step="0.01" id="costoManoObra" name="costoManoObra" class="form-control" required><br>
 
-                            <label for="costoRefacciones">Costo de Refacciones:</label>
-                            <input type="number" step="0.01" id="costoRefacciones" name="costoRefacciones" class="form-control" required><br><br>
+                                    <label for="costoRefacciones">Costo de Refacciones:</label>
+                                    <input type="number" step="0.01" id="costoRefacciones" name="costoRefacciones" class="form-control" required><br>
 
-                            <label for="anticipo">Anticipo:</label>
-                            <input type="number" step="0.01" name="anticipo" class="form-control" required><br><br>
+                                    <label for="anticipo">Anticipo:</label>
+                                    <input type="number" step="0.01" name="anticipo" class="form-control" required><br>
 
-                            <label for="formadepago" class="form-label">Forma de pago:</label>
-                            <select name="formadepago" class="form-control" required>
-                                <option value="efectivo">Efectivo</option>
-                                <option value="tarjeta">Tarjeta</option>
-                                <option value="transferencia">Transferencia</option>
-                            </select>
+                                    <label for="formadepago" class="form-label">Forma de pago:</label>
+                                    <select name="formadepago" class="form-control" required>
+                                        <option value="efectivo">Efectivo</option>
+                                        <option value="tarjeta">Tarjeta</option>
+                                        <option value="transferencia">Transferencia</option>
+                                    </select><br>
 
-                            <label for="empleado" class="form-label">Empleado ID:</label>
-                            <select name="empleado" class="form-control" required>
-                                <?php
-                                $empleados = obtenerEmpleadosDisponibles($pdo);
-                                foreach ($empleados as $empleado) {
-                                    $nombreCompleto = "{$empleado['nombre']} {$empleado['apellido_paterno']} {$empleado['apellido_materno']}";
-                                    echo "<option value=\"{$empleado['empleadoID']}\">{$nombreCompleto}</option>";
-                                }
-                                ?>
-                            </select>
-                            <div class="invalid-feedback">Debes seleccionar un empleado.</div>
+                                    <label for="empleado" class="form-label">Empleado ID:</label>
+                                    <select name="empleado" class="form-control" required>
+                                        <?php
+                                        $empleados = obtenerEmpleadosDisponibles($pdo);
+                                        foreach ($empleados as $empleado) {
+                                            $nombreCompleto = "{$empleado['nombre']} {$empleado['apellido_paterno']} {$empleado['apellido_materno']}";
+                                            echo "<option value=\"{$empleado['empleadoID']}\">{$nombreCompleto}</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                    <div class="invalid-feedback">Debes seleccionar un empleado.</div><br>
 
-                            <label for="ubicacionID" class="form-label">Ubicación ID:</label>
-                            <select name="ubicacionID" class="form-control" required>
-                                <?php
-                                $ubicaciones = obtenerUbicacionesActivas($pdo);
-                                if (empty($ubicaciones)) {
-                                    echo "<option value=''>No hay ubicaciones disponibles</option>";
-                                } else {
-                                    foreach ($ubicaciones as $ubicacion) {
-                                        echo "<option value=\"{$ubicacion['ubicacionID']}\">{$ubicacion['lugar']}</option>";
-                                    }
-                                }
-                                ?>
-                            </select>
-                            <div class="invalid-feedback">Debes seleccionar una ubicación.</div>
+                                    <label for="ubicacionID" class="form-label">Ubicación ID:</label>
+                                    <select name="ubicacionID" class="form-control" required>
+                                        <?php
+                                        $ubicaciones = obtenerUbicacionesActivas($pdo);
+                                        if (empty($ubicaciones)) {
+                                            echo "<option value=''>No hay ubicaciones disponibles</option>";
+                                        } else {
+                                            foreach ($ubicaciones as $ubicacion) {
+                                                echo "<option value=\"{$ubicacion['ubicacionID']}\">{$ubicacion['lugar']}</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                    <div class="invalid-feedback">Debes seleccionar una ubicación.</div><br>
 
-                            <input type="hidden" name="detallesFormulario" value="true">
+                                    <input type="hidden" name="detallesFormulario" value="true">
 
-                            <input type="submit" value="Crear Orden de Trabajo">
-                        </form>
+                                    <input type="submit" class="btn btn-dark w-100"  value="Crear Orden de Trabajo">
+                                </form>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </body>

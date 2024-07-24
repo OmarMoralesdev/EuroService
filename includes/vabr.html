@@ -239,29 +239,41 @@ h2 {
             </a>
             <ul id="citas" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="../CItas/index.php" class="sidebar-link">REGISTRAR CITA</a>
+                    <a href="../CItas/index.php" class="sidebar-link">REGISTRAR</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../CItas/editar_cita_view.php" class="sidebar-link">EDITAR CITA</a>
+                    <a href="../CItas/editar_cita_view.php" class="sidebar-link">EDITAR</a>
                 </li>
             </ul>
-
+        </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#orden"
+                aria-expanded="false" aria-controls="orden">
+                <i class="lni lni-agenda"></i>
+                <span>ORDEN</span>
+            </a>
+            <ul id="orden" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+                <li class="sidebar-item">
+                    <a href="../Orden/index.php" class="sidebar-link">REGISTRAR ORDEN</a>
+                </li>
+             
+            </ul>
         </li>
         <li class="sidebar-item">
             <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#usuarios"
                 aria-expanded="false" aria-controls="usuarios">
                 <i class="lni lni-user"></i>
-                <span>USUARIOS</span>
+                <span>CLIENTES</span>
             </a>
             <ul id="usuarios" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="../Usuarios/register_view.php" class="sidebar-link">REGISTRAR</a>
+                    <a href="../Usuarios/vista_registro_cliente.php" class="sidebar-link">REGISTRAR</a>
                 </li>
                 <li class="sidebar-item">
                     <a href="../Usuarios/edit_user_view.php" class="sidebar-link">EDITAR</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="#" class="sidebar-link">ELIMINAR</a>
+                    <a href="../Cliente/deshabilitar_client_view.php" class="sidebar-link">ELIMINAR</a>
                 </li>
                 <li class="sidebar-item">
                     <a href="../Usuarios/buscar_view.php" class="sidebar-link">BUSCAR</a>
@@ -283,6 +295,9 @@ h2 {
                     <a href="../vehiculos/atencion_view.php" class="sidebar-link">ATENCIÓN</a>
                 </li>
                 <li class="sidebar-item">
+                    <a href="../vehiculos/deshabilitar_car_view.php" class="sidebar-link">ELIMINAR</a>
+                </li>
+                <li class="sidebar-item">
                     <a href="../vehiculos/ubicaciones_view.php" class="sidebar-link">UBICACIONES</a>
                 </li>
             </ul>
@@ -295,16 +310,16 @@ h2 {
             </a>
             <ul id="empleados" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="../Empleados/registro_asistencia.php" class="sidebar-link">Asistencia</a>
+                    <a href="../Empleados/registro_asistencia.php" class="sidebar-link">ASISTENCIA</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Empleados/registro_empleado.php" class="sidebar-link">Agregar empleado</a>
+                    <a href="../Empleados/registro_empleado.php" class="sidebar-link">AGREGAR</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Empleados/cuentaempleado.php" class="sidebar-link">Cuenta Empleado</a>
+                    <a href="../Empleados/cuentaempleado.php" class="sidebar-link">HABILITAR CUENTA</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Empleados/salario.php" class="sidebar-link">Salario</a>
+                    <a href="../Empleados/salario.php" class="sidebar-link">BUSCAR</a>
                 </li>
             </ul>
         </li>

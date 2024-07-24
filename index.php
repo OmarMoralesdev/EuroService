@@ -163,6 +163,7 @@
                         <a href="#"><i class="bi bi-instagram"></i></a>
                     </div>
                 </div>
+                <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3598.18782262292!2d-103.41128942458826!3d25.598674315322345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x868fdbbc87fdf615%3A0xe5e0fd19352eff0b!2sKike%20Mecanico!5e0!3m2!1ses!2smx!4v1721771817805!5m2!1ses!2smx" width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
             </div>
             <hr>
             <p>&copy; 2024 EURO SERVICE. Todos los derechos reservados.</p>

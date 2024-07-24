@@ -62,7 +62,7 @@
                         echo "<button type='button' class='btn btn-dark btn-md' style='width: 60%;' data-bs-toggle='modal' data-bs-target='#modal{$ubicacion->ubicacionID}'>VER VEHÍCULOS</button>";
                         echo" ";
                         echo "<button type='button' class='btn btn-dark btn-md ml-2' style='width: 19%;' data-bs-toggle='modal' data-bs-target='#renameModal{$ubicacion->ubicacionID}'><i class='lni lni-pencil'></i></button>";
-                        echo" ";
+                        echo" ";    
                         echo "<button type='button' class='btn btn-danger btn-md ml-2' style='width: 19%;' data-bs-toggle='modal' data-bs-target='#deleteModal{$ubicacion->ubicacionID}'><i class='lni lni-pause'></i></button>";
                         echo "</div>"; // Cierre de card-footer
 

@@ -72,30 +72,33 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                                 echo "<p class='card-text'><strong>Salario:</strong> {$empleado->total}</p>";
 
                                 // Botones para agregar deudas y rebajas
-                                echo "<button type='button' class='btn btn-dark btn-md ml-2'  style='width: 100% ;' data-bs-toggle='modal' data-bs-target='#modalRebajas{$empleado->empleadoID}'>Agregar Rebajas</button>";
+                                echo "<button type='button' class='btn btn-dark btn-md ml-2'  style='width: 49% ;' data-bs-toggle='modal' data-bs-target='#modalRebajas{$empleado->empleadoID}'>REBAJAS</button>";
+                                echo" ";
+                                echo "<button type='button' class='btn btn-dark btn-md ml-2'  style='width: 49% ;' data-bs-toggle='modal' data-bs-target='#modalBonos{$empleado->empleadoID}'>BONOS</button>";
+                                echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
 
-                                // Modal para agregar deudas
-                                echo "<div class='modal fade' id='modalDeudas{$empleado->empleadoID}' tabindex='-1' aria-labelledby='modalDeudas{$empleado->empleadoID}Label' aria-hidden='true'>";
+                                // Modal para agregar bonos
+                                echo "<div class='modal fade' id='modalBonos{$empleado->empleadoID}' tabindex='-1' aria-labelledby='modalBonos{$empleado->empleadoID}Label' aria-hidden='true'>";
                                 echo "<div class='modal-dialog'>";
                                 echo "<div class='modal-content'>";
                                 echo "<div class='modal-header'>";
-                                echo "<h5 class='modal-title' id='modalDeudas{$empleado->empleadoID}Label'>Agregar Deudas para {$empleado->nombre_completo}</h5>";
+                                echo "<h5 class='modal-title' id='modalBonos{$empleado->empleadoID}Label'>Agregar Bonos para {$empleado->nombre_completo}</h5>";
                                 echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
                                 echo "</div>";
                                 echo "<div class='modal-body'>";
                                 echo "<form>";
                                 echo "<div class='mb-3'>";
-                                echo "<label for='deuda{$empleado->empleadoID}'>Cantidad de Deuda:</label>";
-                                echo "<input type='number' class='form-control' id='deuda{$empleado->empleadoID}' name='deuda'>";
+                                echo "<label for='bono{$empleado->empleadoID}'>Cantidad del bono:</label>";
+                                echo "<input type='number' class='form-control' id='bono{$empleado->empleadoID}' name='bono'>";
                                 echo "</div>";
                                 echo "</form>";
                                 echo "</div>";
                                 echo "<div class='modal-footer'>";
                                 echo "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>";
-                                echo "<button type='button' class='btn btn-dark'>Guardar Deuda</button>";
+                                echo "<button type='button' class='btn btn-dark'>Guardar</button>";
                                 echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
