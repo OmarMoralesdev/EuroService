@@ -106,16 +106,13 @@ try {
 }
 ?>
 
-
-
 <!DOCTYPE html>
-<html lang="es">
+<html lang="en">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Nómina Automáticamente</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-
 </head>
 
 <body>
@@ -136,20 +133,19 @@ try {
                                 <label for="week">Selecciona la semana:</label>
                                 <input type="week" id="week" name="week" class="form-control" value="<?php echo date('Y-\WW'); ?>" required>
                             </div>
-                        </div>
-                        <button type="submit" class="btn btn-primary btn-block">Registrar Nómina</button>
+                        </div><br>
+                        <button type="submit" class="btn btn-dark w-100">Registrar Nómina</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.5.3/dist/umd/popper.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+
 </body>
 
 </html>
 
 <?php
-$pdo = null; // Cerrar la conexión
+$pdo = null;
 ?>
+
