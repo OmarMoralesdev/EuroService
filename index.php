@@ -234,7 +234,7 @@
     <div class="content">
         <section class="features text-center text-light">
             <div class="container">
-                <h2 class="section-heading">Nuestros Servicios</h2>
+                <h2 class="section-heading">NUESTROS SERVICIOS</h2>
                 <hr class="bg-light">
                 <div class="row">
                     <div class="col-md-4">
