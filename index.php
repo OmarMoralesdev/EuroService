@@ -302,14 +302,14 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form>
+                    <form action="login.php" method="POST" >
                         <div class="mb-3">
                             <label for="username" class="form-label">Usuario</label>
-                            <input type="text" class="form-control" id="username" required>
+                            <input type="text" class="form-control" name="username" id="username" required>
                         </div>
                         <div class="mb-3">
                             <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" id="password" required>
+                            <input type="password" class="form-control" name="password" id="password" required>
                         </div>
                         <hr> 
                         <button type="submit" class="btn btn-light w-100">Iniciar Sesión</button>
