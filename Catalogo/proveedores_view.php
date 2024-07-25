@@ -34,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre']) && isset($_
             exit();
         }
     } else {
-        $errorMensaje = implode("<br>", $errores);
+        $errorMensaje = implode("", $errores);
     }
     
 }
@@ -174,6 +174,9 @@ if ($stmt->rowCount() > 0) {
         var modal = document.getElementById("myModal");
         var btn = document.getElementById("openModalBtn");
         var span = document.getElementsByClassName("close")[0];
+        if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
 
         btn.onclick = function() {
             modal.style.display = "block";
