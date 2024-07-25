@@ -8,25 +8,25 @@ $pdo = $con->conectar();
 $vehiculoID = filter_input(INPUT_POST, 'vehiculoID', FILTER_SANITIZE_NUMBER_INT);
 $servicioSolicitado = filter_input(INPUT_POST, 'servicioSolicitado', FILTER_SANITIZE_STRING);
 $fechaCita = filter_input(INPUT_POST, 'fecha_cita', FILTER_SANITIZE_STRING);
-$urgencia = 'no';
+
 if (!$vehiculoID || !$servicioSolicitado || !$fechaCita) {
     $_SESSION['error'] = "Error: Todos los campos son obligatorios.";
     header("Location: index.php");
     exit();
 }
 
-$fechaActual = date('Y-m-d H:i:s');
-$fechaCitaTimestamp = strtotime($fechaCita);
+$fechaActual = new DateTime();
+$fechaCita = new DateTime($fechaCita);
 
 // Validación: La fecha de la cita no debe estar en el pasado
-if ($fechaCitaTimestamp < strtotime($fechaActual)) {
+if ($fechaCita < $fechaActual) {
     $_SESSION['error'] = "Error: La fecha de la cita no puede estar en el pasado.";
     header("Location: index.php");
     exit();
 }
 
 // Validación: La hora de la cita debe estar dentro del horario laboral permitido
-$horaCita = date('H:i:s', $fechaCitaTimestamp);
+$horaCita = $fechaCita->format('H:i:s');
 $horaInicioLaboral = "09:00:00";
 $horaFinLaboral = "17:00:00";
 
@@ -37,8 +37,8 @@ if ($horaCita < $horaInicioLaboral || $horaCita > $horaFinLaboral) {
 }
 
 // Validación: Verificar que la nueva cita no se solape con otras citas en el sistema
-$fechaInicioIntervalo = date('Y-m-d H:i:s', strtotime('-30 minutes', $fechaCitaTimestamp));
-$fechaFinIntervalo = date('Y-m-d H:i:s', strtotime('+30 minutes', $fechaCitaTimestamp));
+$fechaInicioIntervalo = (clone $fechaCita)->modify('-30 minutes')->format('Y-m-d H:i:s');
+$fechaFinIntervalo = (clone $fechaCita)->modify('+30 minutes')->format('Y-m-d H:i:s');
 
 // Verificar si hay citas existentes en el intervalo de 30 minutos
 $sqlGlobal = "SELECT COUNT(*) AS countCitasGlobal FROM CITAS WHERE fecha_cita BETWEEN ? AND ?";
@@ -54,16 +54,30 @@ if ($countCitasGlobal > 0) {
     exit();
 }
 
+// Validación: Verificar que el vehículo no tenga citas pendientes
+$sqlVehiculoPendiente = "SELECT COUNT(*) AS countCitasPendientes FROM CITAS WHERE vehiculoID = ? AND estado = 'pendiente'";
+$queryVehiculoPendiente = $pdo->prepare($sqlVehiculoPendiente);
+$queryVehiculoPendiente->execute([$vehiculoID]);
+
+$rowVehiculoPendiente = $queryVehiculoPendiente->fetch(PDO::FETCH_ASSOC);
+$countCitasPendientes = $rowVehiculoPendiente['countCitasPendientes'];
+
+if ($countCitasPendientes > 0) {
+    $_SESSION['error'] = "Error: El vehículo ya tiene una cita pendiente. No se puede programar una nueva cita hasta que se libere la cita actual.";
+    header("Location: index.php");
+    exit();
+}
+
 // Validación: Verificar que no haya citas para el mismo vehículo en el intervalo de 30 minutos
-$sqlVehiculo = "SELECT COUNT(*) AS countCitasVehiculo FROM CITAS WHERE vehiculoID = ? and estado = 'pendiente' ";
+$sqlVehiculo = "SELECT COUNT(*) AS countCitasVehiculo FROM CITAS WHERE vehiculoID = ? AND fecha_cita BETWEEN ? AND ?";
 $queryVehiculo = $pdo->prepare($sqlVehiculo);
-$queryVehiculo->execute([$vehiculoID]);
+$queryVehiculo->execute([$vehiculoID, $fechaInicioIntervalo, $fechaFinIntervalo]);
 
 $rowVehiculo = $queryVehiculo->fetch(PDO::FETCH_ASSOC);
 $countCitasVehiculo = $rowVehiculo['countCitasVehiculo'];
 
 if ($countCitasVehiculo > 0) {
-    $_SESSION['error'] = "Error: El vehículo ya tiene una cita programada dentro de los 30 minutos antes o después de la franja horaria solicitada.";
+    $_SESSION['error'] = "Error: El vehículo ya tiene una cita programada dentro del intervalo de 30 minutos.";
     header("Location: index.php");
     exit();
 }
@@ -72,7 +86,7 @@ if ($countCitasVehiculo > 0) {
 $sqlInsert = "INSERT INTO CITAS (vehiculoID, servicio_solicitado, fecha_solicitud, fecha_cita, urgencia, estado)
               VALUES (?, ?, ?, ?, ?, 'pendiente')";
 $queryInsert = $pdo->prepare($sqlInsert);
-$resultInsert = $queryInsert->execute([$vehiculoID, $servicioSolicitado, $fechaActual, $fechaCita, $urgencia]);
+$resultInsert = $queryInsert->execute([$vehiculoID, $servicioSolicitado, $fechaActual->format('Y-m-d H:i:s'), $fechaCita->format('Y-m-d H:i:s'), 'no']);
 
 if ($resultInsert) {
     $_SESSION['bien'] = "Cita registrada correctamente.";

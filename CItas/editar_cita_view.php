@@ -1,70 +1,17 @@
 <?php
 require '../includes/db.php';
+session_start();
 
 $con = new Database();
 $pdo = $con->conectar();
 
-$cita = null;
-$mensaje = "";
+$cita = isset($_SESSION['cita']) ? $_SESSION['cita'] : null;
+$mensaje = isset($_SESSION['mensaje']) ? $_SESSION['mensaje'] : "";
+unset($_SESSION['mensaje']); // Limpiar el mensaje después de mostrarlo
 
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    if (isset($_POST['buscar'])) {
-        $citaID = filter_input(INPUT_POST, 'citaID', FILTER_SANITIZE_NUMBER_INT);
-        if ($citaID) {
-            $sql = "SELECT * FROM CITAS WHERE citaID = ?";
-            $query = $pdo->prepare($sql);
-            $query->execute([$citaID]);
-            $cita = $query->fetch(PDO::FETCH_ASSOC);
-
-            if (!$cita) {
-                $mensaje = "Cita no encontrada.";
-            } else {
-                $vehiculoID = $cita['vehiculoID'];
-                $detalles = obtenerDetallesVehiculoyCliente($pdo, $vehiculoID);
-            }
-        } else {
-            $mensaje = "ID de cita inválido.";
-        }
-    } elseif (isset($_POST['actualizar'])) {
-        $citaID = filter_input(INPUT_POST, 'citaID', FILTER_SANITIZE_NUMBER_INT);
-        $servicioSolicitado = filter_input(INPUT_POST, 'servicioSolicitado', FILTER_SANITIZE_STRING);
-        $fechaCita = filter_input(INPUT_POST, 'fecha_cita', FILTER_SANITIZE_STRING);
-        $estado = filter_input(INPUT_POST, 'estado', FILTER_SANITIZE_STRING);
-
-        $fechaActual = date('Y-m-d H:i:s');
-        $fechaCitaTimestamp = strtotime($fechaCita);
-
-        if ($fechaCitaTimestamp > strtotime($fechaActual)) {
-            $mensaje = "Error: La fecha de la cita debe ser posterior a la fecha actual.";
-        } else {
-            $fechaLimite = date('Y-m-d H:i:s', strtotime('+30 minutes', $fechaCitaTimestamp));
-            $sql = "SELECT COUNT(*) AS countCitas FROM CITAS WHERE fecha_cita BETWEEN ? AND ? AND citaID != ?";
-            $query = $pdo->prepare($sql);
-            $query->execute([$fechaCita, $fechaLimite, $citaID]);
-
-            $row = $query->fetch(PDO::FETCH_ASSOC);
-            $countCitasProximas = $row['countCitas'];
-
-    
-                $sqlUpdate = "UPDATE CITAS SET servicio_solicitado = ?, fecha_cita = ?, estado = ? WHERE citaID = ?";
-                $queryUpdate = $pdo->prepare($sqlUpdate);
-                $resultUpdate = $queryUpdate->execute([$servicioSolicitado, $fechaCita, $estado, $citaID]);
-
-                if ($resultUpdate) {
-                    $mensaje = "Cita actualizada correctamente.";
-                    $sql = "SELECT * FROM CITAS WHERE citaID = ?";
-                    $query = $pdo->prepare($sql);
-                    $query->execute([$citaID]);
-                    $cita = $query->fetch(PDO::FETCH_ASSOC);
-                    $vehiculoID = $cita['vehiculoID'];
-                    $detalles = obtenerDetallesVehiculoyCliente($pdo, $vehiculoID);
-                } else {
-                    $mensaje = "Error al actualizar la cita.";
-                }
-            
-        }
-    }
+if ($cita) {
+    $vehiculoID = $cita['vehiculoID'];
+    $detalles = obtenerDetallesVehiculoyCliente($pdo, $vehiculoID);
 }
 ?>
 
@@ -74,13 +21,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Cita</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
-    <style>
-        .form-control[readonly] {
-            background-color: #e9ecef;
-            opacity: 1;
-        }
-    </style>
 </head>
 <body>
 <div class="wrapper">
@@ -89,34 +29,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="container">
             <h2>EDITAR CITA</h2>
             <div class="form-container">
-                <form method="post" action="#">
-                    <div class="mb-3">
-                        <label for="citaID" class="form-label">Seleccionar Cita:</label>
-                        <select id="citaID" name="citaID" class="form-select" required>
-                            <?php
-                            $citas = listarCitasPendientes($pdo);
-                            foreach ($citas as $citaOption) {
-                                echo "<option value=\"{$citaOption['citaID']}\">Cita ID: {$citaOption['citaID']} - Vehículo: {$citaOption['marca']} {$citaOption['modelo']} {$citaOption['anio']} - Cliente: {$citaOption['nombre']} {$citaOption['apellido_paterno']} {$citaOption['apellido_materno']} - Servicio: {$citaOption['servicio_solicitado']}</option>";
-                            }
-                            ?>
-                        </select>
-                    </div>
-                    <button type="submit" name="buscar" class="btn btn-dark w-100">Buscar Cita</button>
-                </form>
                 <?php if ($mensaje) : ?>
-                    <div class="alert alert-info mt-3"><?php echo $mensaje; ?></div>
+                    <div class="alert alert-info mt-3"><?php echo htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8'); ?></div>
                 <?php endif; ?>
 
                 <?php if ($cita) : ?>
-                    <?php $detalles = obtenerDetallesVehiculoyCliente($pdo, $cita['vehiculoID']); ?>
-                    <form method="post" action="#" class="mt-4">
+                    <form method="post" action="editar_cita_back.php" class="mt-4">
+                        <input type="hidden" name="citaID" value="<?php echo htmlspecialchars($cita['citaID']); ?>">
                         <div class="mb-3">
                             <label for="clienteID" class="form-label">Cliente:</label>
-                            <input type="text" class="form-control" id="clienteID" name="clienteID" value="<?php echo $detalles['nombre'] . ' ' . $detalles['apellido_paterno']; ?>" readonly>
+                            <input type="text" class="form-control" id="clienteID" name="clienteID" value="<?php echo htmlspecialchars($detalles['nombre'] . ' ' . $detalles['apellido_paterno']); ?>" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="vehiculoID" class="form-label">Vehículo:</label>
-                            <input type="text" class="form-control" id="vehiculoID" name="vehiculoID" value="<?php echo $detalles['marca'] . ' ' . $detalles['modelo'] . ' ' . $detalles['anio']; ?>" readonly>
+                            <input type="text" class="form-control" id="vehiculoID" name="vehiculoID" value="<?php echo htmlspecialchars($detalles['marca'] . ' ' . $detalles['modelo'] . ' ' . $detalles['anio']); ?>" readonly>
                         </div>
                         <div class="mb-3">
                             <label for="servicioSolicitado" class="form-label">Servicio Solicitado:</label>
@@ -134,13 +60,41 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 <option value="completado" <?php echo $cita['estado'] == 'completado' ? 'selected' : ''; ?>>Completado</option>
                             </select>
                         </div>
-                        <input type="hidden" name="citaID" value="<?php echo $cita['citaID']; ?>">
                         <button type="submit" name="actualizar" class="btn btn-dark w-100">Guardar Cambios</button>
                     </form>
+                <?php else : ?>
+                    <div class="alert alert-warning mt-3">No se encontraron detalles de la cita.</div>
                 <?php endif; ?>
             </div>
         </div>
     </div>
 </div>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const dateInput = document.getElementById('fecha_cita');
+        const today = new Date();
+        const year = today.getFullYear();
+        const month = String(today.getMonth() + 1).padStart(2, '0');
+        const day = String(today.getDate()).padStart(2, '0');
+        const minDate = `${year}-${month}-${day}T09:00`;
+        const maxDate = `${year + 1}-${month}-${day}T17:00`;
+
+        // Establecer el valor mínimo y máximo del Date Picker
+        dateInput.min = minDate;
+        dateInput.max = maxDate;
+
+        dateInput.addEventListener('input', function() {
+            const selectedDate = new Date(dateInput.value);
+            const selectedHour = selectedDate.getHours();
+            const selectedMinutes = selectedDate.getMinutes();
+
+            if (selectedHour < 9 || (selectedHour >= 17 && selectedMinutes > 0)) {
+                dateInput.setCustomValidity('La hora debe estar dentro del horario laboral (09:00 - 17:00).');
+            } else {
+                dateInput.setCustomValidity('');
+            }
+        });
+    });
+</script>
 </body>
 </html>
