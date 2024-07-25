@@ -19,16 +19,43 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $diferencia_horas = ($time_salida - $time_entrada) / 3600;
 
+    // Validación: Verificar que no se registre una asistencia/falta/justificada al mismo empleado mas de una vez en un día
+$sqlVehiculo = "SELECT count(*) AS L FROM  asistencia WHERE empleadoID= ? AND fecha = ?";
+$queryGlobal = $pdo->prepare($sqlVehiculo);
+$queryGlobal->execute([$empleadoID, $fecha]);
+
+$rowGlobal = $queryGlobal->fetch(PDO::FETCH_ASSOC);
+$countCitasGlobal = $rowGlobal['L'];
+
+if ($countCitasGlobal >= 1) {
+   echo "No puedes tener registrado más de una vez a un empleado en la misma fecha";
+} else {
     try {
         switch ($fecha) {
             case ($fecha >= $fecha_minima && $fecha <= $fecha_maxima):
                 switch ($diferencia_horas) {
                     case ($diferencia_horas >= 4 && $time_entrada < $time_salida):
-                        $sql = "INSERT INTO Asistencia (empleadoID, asistencia, fecha, hora_entrada, hora_salida) VALUES (?, ?,?, ?, ?)";
-                        $stmt = $pdo->prepare($sql);
-                        $stmt->execute([$empleadoID, $asistencia, $fecha, $hora_entrada, $hora_salida]);
-                
-                        echo "Asistencia registrada exitosamente";
+                        switch ($asistencia) 
+                        {
+                            case 'asistencia':
+                            $sql = "INSERT INTO Asistencia (empleadoID, asistencia, fecha, hora_entrada, hora_salida) VALUES (?, ?,?, ?, ?)";
+                            $stmt = $pdo->prepare($sql);
+                            $stmt->execute([$empleadoID, $asistencia, $fecha, $hora_entrada, $hora_salida]);
+                            echo "Asistencia registrada exitosamente";
+                            break;
+                            case 'falta':
+                                $sql = "INSERT INTO Asistencia (empleadoID, asistencia, fecha, hora_entrada, hora_salida) VALUES (?, ?,?, ?, ?)";
+                                $stmt = $pdo->prepare($sql);
+                                $stmt->execute([$empleadoID, $asistencia, $fecha, $hora_entrada, $hora_salida]);
+                                echo "Falta registrada exitosamente";
+                                break;
+                            case 'justificado':
+                                    $sql = "INSERT INTO Asistencia (empleadoID, asistencia, fecha, hora_entrada, hora_salida) VALUES (?, ?,?, ?, ?)";
+                                    $stmt = $pdo->prepare($sql);
+                                    $stmt->execute([$empleadoID, $asistencia, $fecha, $hora_entrada, $hora_salida]);
+                                    echo "Falta justificada registrada exitosamente";
+                                    break;
+                        } 
                         break;
                     case ($diferencia_horas < 4):
                         $diferencia_horas = $diferencia_horas * -1;
@@ -53,5 +80,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage();
     }
+}
 }
 ?>
