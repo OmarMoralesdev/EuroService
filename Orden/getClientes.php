@@ -9,7 +9,7 @@ if ($campo) {
     $sql = "SELECT CLIENTES.clienteID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno 
             FROM CLIENTES 
             JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID 
-            WHERE PERSONAS.nombre LIKE ? OR PERSONAS.apellido_paterno LIKE ? OR PERSONAS.apellido_materno LIKE ? 
+            WHERE CLIENTES.activo = 'si' and PERSONAS.nombre LIKE ? OR PERSONAS.apellido_paterno LIKE ? OR PERSONAS.apellido_materno LIKE ? 
             ORDER BY PERSONAS.nombre ASC 
             LIMIT 10";
     $query = $pdo->prepare($sql);

@@ -19,7 +19,7 @@ function getClientes() {
                 lista.innerHTML = "";
                 data.forEach(cliente => {
                     let li = document.createElement('li');
-                    li.textContent = `${cliente.nombre} ${cliente.apellido_paterno} ${cliente.apellido_materno} - ${cliente.telefono}`;
+                    li.textContent = `${cliente.nombre} ${cliente.apellido_paterno} ${cliente.apellido_materno} - ${persona.telefono}`;
                     li.onclick = () => mostrar(cliente);
                     lista.appendChild(li);
                 });
