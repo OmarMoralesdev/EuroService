@@ -63,18 +63,18 @@
                 <input type="date" id="fecha" name="fecha" class="form-control" required><br>
 
                 <label for="asistencia">Asistencia:</label>
-                <select class="form-select" name="asistencia" id="asistencia" required>
-                            <option value="Selecciona">Selecciona una opción</option>
+                <select class="form-select" name="asistencia" id="asistencias" required>
+                            <option value="">Selecciona una opción</option>
                             <option value="asistencia">Asistencia</option>
                             <option value="falta">Falta</option>
                             <option value="justificado">Justificado</option>
                             </select><br>
 
-                <label for="hora_entrada">Hora de Entrada:</label>
+                <label for="hora_entrada" id="he">Hora de Entrada:</label>
                 <input type="time" id="hora_entrada" name="hora_entrada" class="form-control" required><br>
 
-                <label for="hora_salida">Hora de Salida:</label>
-                <input type="time" id="hora_salida" name="hora_salida" class="form-control"><br>
+                <label for="hora_salida" id="hs">Hora de Salida:</label>
+                <input type="time" id="hora_salida" name="hora_salida" class="form-control" required><br>
 
                 <input type="submit" value="Registrar">
             </form>
@@ -82,6 +82,38 @@
         </div>
         </div>
 </div>
+<script>
+    document.getElementById('asistencias').addEventListener('change', function()
+    {
+        var selectedOption = this.value;
+        switch (selectedOption)
+        {
+            case 'asistencia':
+                document.getElementById('hora_entrada').style.display = 'block';
+                document.getElementById('hora_salida').style.display = 'block';
+                document.getElementById('he').style.display = 'block';
+                document.getElementById('hs').style.display = 'block';
+                break;
+            case 'falta':
+                document.getElementById('hora_entrada').style.display = 'none';
+                document.getElementById('hora_salida').style.display = 'none';
+                document.getElementById('he').style.display = 'none';
+                document.getElementById('hs').style.display = 'none';
+                document.getElementById('hora_entrada').removeAttribute('required');
+                document.getElementById('hora_salida').removeAttribute('required');
+                break;
+            case 'justificado':
+                document.getElementById('hora_entrada').style.display = 'none';
+                document.getElementById('hora_salida').style.display = 'none';
+                document.getElementById('he').style.display = 'none';
+                document.getElementById('hs').style.display = 'none';
+                document.getElementById('hora_entrada').removeAttribute('required');
+                document.getElementById('hora_salida').removeAttribute('required');
+                break;
+        }
+    });
+</script>
+
 </body>
 
 </html>
