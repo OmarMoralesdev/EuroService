@@ -192,6 +192,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             this.classList.add('was-validated');
         });
+        if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
 
         document.getElementById('campo').addEventListener('input', function() {
             const searchTerm = this.value;
