@@ -183,26 +183,6 @@
             color: #fff;
         }
 
-        .nav-link.btn.pulse {
-            animation: pulse 3.5s infinite;
-        }
-
-        @keyframes pulse {
-            0% {
-                transform: scale(1.1);
-                opacity: 1;
-            }
-
-            50% {
-                transform: scale(1.2);
-                opacity: 0.9;
-            }
-
-            100% {
-                transform: scale(1.4);
-                opacity: 0.2;
-            }
-        }
     </style>
 </head>
 <body>
@@ -253,7 +233,7 @@
                     </div>
                     <div class="col-md-4">
                         <div class="feature-item">
-                            <i class="lni lni-checked"></i>
+                            <i class="lni lni-cog"></i>
                             <h3>Inspección Vehicular</h3>
                             <p>Realizamos inspecciones exhaustivas para garantizar la seguridad de su vehículo.</p>
                         </div>

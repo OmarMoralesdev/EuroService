@@ -47,11 +47,12 @@ try {
 </head>
 
 <body>
-    <div class="wrapper">
+<div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
             <div class="container">
-                <h1 class="text-center mb-4">Reporte de Nómina Semanal</h1>
+                <h2>REPORTE DE NÓMINA SEMANAL</h2>
+                <div class="form-container">
                 <form method="GET" action="" class="mb-4">
                     <div class="form-row">
                         <div class="form-group col-md-6 offset-md-3">
