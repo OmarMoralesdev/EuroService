@@ -5,12 +5,6 @@ require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
 
-// Verificar si el usuario está logueado
-if (!isset($_SESSION['clienteID'])) {
-    header("Location: ../login/login_view.php");
-    exit();
-}
-
 
 $clienteID = $_SESSION['clienteID'];
 
