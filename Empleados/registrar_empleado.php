@@ -34,14 +34,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($stmt_empleado->rowCount() > 0) {
                 $_SESSION['bien'] = "Empleado agregado exitosamente.";
+                header('Location: registro_empleado.php'); 
+                exit();
             } else {
                 $_SESSION['error'] =  "Error al agregar el empleado.";
+                header('Location: registro_empleado.php'); 
+                exit();
             }
         } else {
           $_SESSION['error'] = "Error al agregar la persona.";
+          header('Location: registro_empleado.php'); 
+          exit();
         }
     } catch (PDOException $e) {
         $_SESSION['error'] =  "Error: " . $e->getMessage();
+        header('Location: registro_empleado.php'); 
+        exit();
     }
 }
 ?>

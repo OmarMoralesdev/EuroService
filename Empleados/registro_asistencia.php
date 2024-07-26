@@ -43,7 +43,7 @@ session_start();
                         echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
                         unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
                     }
-                    if ($_SESSION['bien']) {
+                    if (isset($_SESSION['bien'])) {
                         echo "
                         <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                             <div class='modal-dialog'>
@@ -63,6 +63,7 @@ session_start();
                             </div>
                         </div>";
                     }
+                    unset($_SESSION['bien']);
                     ?>
             <form action="registrar_asistencia.php" method="post">
                 <label for="empleado" class="form-label">Selecciona un empleado:</label>
@@ -146,7 +147,13 @@ session_start();
         }
     });
 </script>
-
+<script>
+        $(document).ready(function() {
+            if ($('#staticBackdrop').length) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
+    </script>
 </body>
 
 </html>

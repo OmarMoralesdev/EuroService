@@ -1,9 +1,7 @@
 <?php
-require '../includes/db.php'; // Ajusta la ruta según tu estructura de carpetas
-
+require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
-
 // Verificar si se ha enviado el clienteID
 $clienteID = filter_input(INPUT_POST, 'clienteID', FILTER_VALIDATE_INT);
 

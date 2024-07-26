@@ -12,39 +12,42 @@ session_start();
     <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 <style>
-        .wrapper {
-            display: flex;
-            height: 100vh;
-        }
-        .main {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        .form-container {
-            width: 100%;
-            max-width: 100%;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 10px;
-            box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-        }
-    </style>
+    .wrapper {
+        display: flex;
+        height: 100vh;
+    }
+
+    .main {
+        flex: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .form-container {
+        width: 100%;
+        max-width: 100%;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 10px;
+        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
+    }
+</style>
 </head>
+
 <body>
-<div class="wrapper">
-    <?php include '../includes/vabr.html'; ?>
-    <div class="main p-3">
-        <div class="container">
+    <div class="wrapper">
+        <?php include '../includes/vabr.html'; ?>
+        <div class="main p-3">
+            <div class="container">
                 <h2>REGISTRAR EMPLEADO</h2>
                 <div class="form-container">
-                <?php
+                    <?php
                     if (isset($_SESSION['error'])) {
                         echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
                         unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
                     }
-                    if ($_SESSION['bien']) {
+                    if (isset($_SESSION['bien'])) {
                         echo "
                         <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                             <div class='modal-dialog'>
@@ -63,6 +66,7 @@ session_start();
                                 </div>
                             </div>
                         </div>";
+                        unset($_SESSION['bien']);
                     }
                     ?>
                     <form method="post" action="registrar_empleado.php">
@@ -97,6 +101,13 @@ session_start();
             </div>
         </div>
     </div>
+    <script>
+        $(document).ready(function() {
+            if ($('#staticBackdrop').length) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
+    </script>
 </body>
 
 </html>
