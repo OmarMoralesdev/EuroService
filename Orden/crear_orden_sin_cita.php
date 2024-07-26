@@ -1,3 +1,8 @@
+<?php
+session_start();
+$mensaje = isset($_SESSION['mensaje']) ? $_SESSION['mensaje'] : "";
+unset($_SESSION['mensaje']);
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -5,7 +10,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Cita y Crear Orden de Trabajo</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
 </head>
 
 <body class="Body_citas">
@@ -16,6 +20,31 @@
                 <h2>Registrar Cita y Crear Orden de Trabajo</h2>
                 <div class="form-container">
                     <form action="crear_orden_sin_cita2.php" method="post" id="formCita" novalidate autocomplete="off">
+                    <?php
+                      if (isset($_SESSION['error'])) {
+                        echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
+                        unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
+                    }
+                    if ($mensaje) {
+                        echo "
+                        <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                            <div class='modal-dialog'>
+                                <div class='modal-content'>
+                                    <div class='modal-header'>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
+                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                    </div>
+                                    <div class='modal-body'>
+                                        <div class='alert alert-success' role='alert'>{$mensaje}</div>
+                                    </div>
+                                    <div class='modal-footer'>
+                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>";
+                    }
+                    ?>
                         <!-- Formulario de Cita -->
                         <div class="mb-3">
                             <label for="clienteID" class="form-label">Ingrese un cliente:</label>
@@ -101,6 +130,13 @@
         </div>
     </div>
     <script src="app.js"></script>
+    <script>
+    $(document).ready(function () {
+        if ($('#staticBackdrop').length) {
+            $('#staticBackdrop').modal('show');
+        }
+    });
+    </script>
 </body>
 
 </html>

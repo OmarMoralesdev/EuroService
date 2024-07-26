@@ -29,9 +29,31 @@ if ($cita) {
         <div class="container">
             <h2>EDITAR CITA</h2>
             <div class="form-container">
-                <?php if ($mensaje) : ?>
-                    <div class="alert alert-info mt-3"><?php echo htmlspecialchars($mensaje, ENT_QUOTES, 'UTF-8'); ?></div>
-                <?php endif; ?>
+            <?php
+                      if (isset($_SESSION['error'])) {
+                        echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
+                        unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
+                    }
+                    if ($mensaje) {
+                        echo "
+                        <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                            <div class='modal-dialog'>
+                                <div class='modal-content'>
+                                    <div class='modal-header'>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
+                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                    </div>
+                                    <div class='modal-body'>
+                                        <div class='alert alert-success' role='alert'>{$mensaje}</div>
+                                    </div>
+                                    <div class='modal-footer'>
+                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>                                       
+                                    </div>
+                                </div>
+                            </div>
+                        </div>";
+                    }
+                    ?>
 
                 <?php if ($cita) : ?>
                     <form method="post" action="editar_cita_back.php" class="mt-4">
@@ -70,31 +92,42 @@ if ($cita) {
     </div>
 </div>
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const dateInput = document.getElementById('fecha_cita');
-        const today = new Date();
-        const year = today.getFullYear();
-        const month = String(today.getMonth() + 1).padStart(2, '0');
-        const day = String(today.getDate()).padStart(2, '0');
-        const minDate = `${year}-${month}-${day}T09:00`;
-        const maxDate = `${year + 1}-${month}-${day}T17:00`;
+   document.addEventListener('DOMContentLoaded', function() {
+    const dateInput = document.getElementById('fecha_cita');
+    const today = new Date();
+    const year = today.getFullYear();
+    const month = String(today.getMonth() + 1).padStart(2, '0');
+    const day = String(today.getDate()).padStart(2, '0');
+    const minDate = `${year}-${month}-${day}T09:00`;
+    const maxDate = `${year + 1}-${month}-${day}T17:00`;
 
-        // Establecer el valor mínimo y máximo del Date Picker
-        dateInput.min = minDate;
-        dateInput.max = maxDate;
+    // Establecer el valor mínimo y máximo del Date Picker
+    dateInput.min = minDate;
+    dateInput.max = maxDate;
 
-        dateInput.addEventListener('input', function() {
-            const selectedDate = new Date(dateInput.value);
-            const selectedHour = selectedDate.getHours();
-            const selectedMinutes = selectedDate.getMinutes();
+    dateInput.addEventListener('input', function() {
+        const selectedDate = new Date(dateInput.value);
+        const selectedHour = selectedDate.getHours();
+        const selectedMinutes = selectedDate.getMinutes();
 
-            if (selectedHour < 9 || (selectedHour >= 17 && selectedMinutes > 0)) {
-                dateInput.setCustomValidity('La hora debe estar dentro del horario laboral (09:00 - 17:00).');
-            } else {
-                dateInput.setCustomValidity('');
-            }
-        });
+        // Verificar si la fecha seleccionada es anterior a hoy
+        if (selectedDate < today) {
+            dateInput.setCustomValidity('No se puede seleccionar una fecha anterior a hoy.');
+        } else if (selectedHour < 9 || (selectedHour >= 17 && selectedMinutes > 0)) {
+            dateInput.setCustomValidity('La hora debe estar dentro del horario laboral (09:00 - 17:00).');
+        } else {
+            dateInput.setCustomValidity('');
+        }
     });
+});
+
 </script>
+<script>
+    $(document).ready(function () {
+        if ($('#staticBackdrop').length) {
+            $('#staticBackdrop').modal('show');
+        }
+    });
+    </script>
 </body>
 </html>

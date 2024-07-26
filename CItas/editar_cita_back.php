@@ -28,7 +28,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 exit();
             }
         } else {
-            $mensaje = "ID de cita inválido.";
+            $_SESSION['error'] = "ID de cita inválido.";
+            header("Location: seleccionar_cita.php");
+            exit();
         }
         
         $_SESSION['mensaje'] = $mensaje;
@@ -41,14 +43,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $estado = filter_input(INPUT_POST, 'estado', FILTER_SANITIZE_STRING);
 
         if (!$citaID || !$servicioSolicitado || !$fechaCita || !$estado) {
-            $mensaje = "Error: Todos los campos son obligatorios.";
+            $_SESSION['error'] = "Error: Todos los campos son obligatorios.";
         } else {
             $fechaActual = new DateTime();
             $fechaCita = new DateTime($fechaCita);
 
             // Validación: La fecha de la cita debe ser posterior a la fecha actual
             if ($fechaCita < $fechaActual) {
-                $mensaje = "Error: La fecha de la cita debe ser posterior a la fecha actual.";
+                $_SESSION['error'] =  "Error: La fecha de la cita debe ser posterior a la fecha actual.";
+                header("Location: editar_cita_view.php");
+                exit();
             } else {
                 $horaCita = $fechaCita->format('H:i:s');
                 $horaInicioLaboral = "09:00:00";
@@ -56,7 +60,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                 // Validación: La hora de la cita debe estar dentro del horario laboral
                 if ($horaCita < $horaInicioLaboral || $horaCita > $horaFinLaboral) {
-                    $mensaje = "Error: La cita debe programarse dentro del horario laboral (09:00 - 17:00).";
+                    $_SESSION['error'] = "Error: La cita debe programarse dentro del horario laboral (09:00 - 17:00).";
+                    header("Location: editar_cita_view.php");
+                    exit();
                 } else {
                     // Verificar que la nueva cita no se solape con otras citas
                     $fechaInicioIntervalo = (clone $fechaCita)->modify('-30 minutes')->format('Y-m-d H:i:s');
@@ -70,8 +76,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $countCitasProximas = $row['countCitas'];
 
                     if ($countCitasProximas > 0) {
-                        $mensaje = "Error: La nueva fecha y hora de la cita solapan con otra cita existente en el intervalo de 30 minutos.";
-                    
+                        $_SESSION['error'] =  "Error: La nueva fecha y hora de la cita solapan con otra cita existente en el intervalo de 30 minutos.";
+                        header("Location: editar_cita_view.php");
+                        exit();
                         } else {
                             // Actualizar la cita
                             $sqlUpdate = "UPDATE CITAS SET servicio_solicitado = ?, fecha_cita = ?, estado = ? WHERE citaID = ?";
@@ -87,6 +94,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $vehiculoID = $cita['vehiculoID'];
                                 $detalles = obtenerDetallesVehiculoyCliente($pdo, $vehiculoID);
                                 $_SESSION['cita'] = $cita;
+                                $_SESSION['mensaje'] = "Cita editada exitosamente.";
+                                header("Location: editar_cita_view.php");
+                                exit();
                             } else {
                                 $mensaje = "Error al actualizar la cita.";
                             }
@@ -95,10 +105,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 }
             }
         }
-
-        $_SESSION['mensaje'] = $mensaje;
-        header("Location: editar_cita_view.php");
-        exit();
     }
 
 

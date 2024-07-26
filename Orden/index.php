@@ -25,7 +25,7 @@ if (isset($_GET['tipoOrden'])) {
             <div class="container">
                 <h2>Crear Orden de Trabajo</h2>
                 <div class="form-container">
-                    <form action="" method="get">
+                    <form action="" method="">
                         <label for="tipoOrden">Seleccione el tipo de orden:</label>
                         <select id="tipoOrden" name="tipoOrden" class="form-control" required>
                             <option value="conCita">Con Cita</option>

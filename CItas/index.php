@@ -29,6 +29,26 @@ session_start();
                         echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
                         unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
                     }
+                    if ($_SESSION['bien']) {
+                        echo "
+                        <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                            <div class='modal-dialog'>
+                                <div class='modal-content'>
+                                    <div class='modal-header'>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
+                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                    </div>
+                                    <div class='modal-body'>
+                                        <div class='alert alert-success' role='alert'>{$_SESSION['bien']}</div>
+                                    </div>
+                                    <div class='modal-footer'>
+                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                        <a href='../vehiculos/autos_view.php' type='button' class='btn btn-dark'>Siguiente</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>";
+                    }
                     ?>
 
                     <form action="../CItas/registrar_cita.php" method="POST" autocomplete="off">
@@ -84,24 +104,13 @@ session_start();
                     const selectedHour = selectedDate.getHours();
                     const selectedMinutes = selectedDate.getMinutes();
 
-                    if (selectedHour < 9 || (selectedHour >= 17 && selectedMinutes > 0)) {
+                    if (selectedDate < today) {
+                        dateInput.setCustomValidity('No se puede seleccionar una fecha anterior a hoy.');
+                    } else if (selectedHour < 9 || (selectedHour >= 17 && selectedMinutes > 0)) {
                         dateInput.setCustomValidity('La hora debe estar dentro del horario laboral (09:00 - 17:00).');
                     } else {
                         dateInput.setCustomValidity('');
                     }
-                });
-
-                // Función para deshabilitar horas fuera del horario laboral
-                dateInput.addEventListener('focus', function() {
-                    const calendar = document.querySelector('input[type="datetime-local"]');
-                    const options = calendar.querySelectorAll('option');
-                    options.forEach(option => {
-                        const date = new Date(option.value);
-                        const hour = date.getHours();
-                        if (hour < 9 || hour >= 17) {
-                            option.disabled = true;
-                        }
-                    });
                 });
             });
         </script>
