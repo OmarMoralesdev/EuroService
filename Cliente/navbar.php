@@ -1,3 +1,10 @@
+<?php
+// Verificar si el usuario está logueado
+if (!isset($_SESSION['clienteID'])) {
+    header("Location: ../login/login_view.php");
+    exit();
+}
+?>
 <!DOCTYPE html>
 <html lang="es">
 <head>
