@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="en">
 
@@ -35,6 +38,32 @@
         <div class="container">
             <h2>Registro de Cuenta de Administrador</h2>
             <div class="form-container">
+            <?php
+                    if (isset($_SESSION['error'])) {
+                        echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
+                        unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
+                    }
+                    if ($_SESSION['bien']) {
+                        echo "
+                        <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                            <div class='modal-dialog'>
+                                <div class='modal-content'>
+                                    <div class='modal-header'>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
+                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                    </div>
+                                    <div class='modal-body'>
+                                        <div class='alert alert-success' role='alert'>{$_SESSION['bien']}</div>
+                                    </div>
+                                    <div class='modal-footer'>
+                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                        <a href='../vehiculos/autos_view.php' type='button' class='btn btn-dark'>Siguiente</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>";
+                    }
+                    ?>
             <form action="registrocuena.php" method="POST">
                 <label for="empleado" class="form-label">Empleado:</label>
                 <select name="empleado" class="form-control" required>

@@ -1,4 +1,5 @@
 <?php
+session_start(); 
 require '../includes/db.php';
 
 $con = new Database();
@@ -14,8 +15,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     // Validate inputs
     if (empty($nombre) || empty($apellido_paterno) || empty($apellido_materno) || empty($alias) || empty($tipo)) {
-        echo "Todos los campos son obligatorios.";
-        exit;
+        $_SESSION['error'] = "Todos los campos son obligatorios.";
+        header('Location: registro_empleado.php'); 
+        exit();
     }
 
     try {
@@ -31,15 +33,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt_empleado->execute([$personaID, $alias, $tipo]);
 
             if ($stmt_empleado->rowCount() > 0) {
-                echo "Empleado agregado exitosamente.";
+                $_SESSION['bien'] = "Empleado agregado exitosamente.";
             } else {
-                echo "Error al agregar el empleado.";
+                $_SESSION['error'] =  "Error al agregar el empleado.";
             }
         } else {
-            echo "Error al agregar la persona.";
+          $_SESSION['error'] = "Error al agregar la persona.";
         }
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        $_SESSION['error'] =  "Error: " . $e->getMessage();
     }
 }
 ?>
