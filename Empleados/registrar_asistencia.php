@@ -96,6 +96,8 @@ if ($countCitasGlobal >= 1) {
         }
     } catch (PDOException $e) {
         $_SESSION['error'] = "Error: " . $e->getMessage();
+        header('Location: registro_asistencia.php'); 
+        exit();
     }
 }
 }

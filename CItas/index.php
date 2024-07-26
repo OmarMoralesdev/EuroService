@@ -29,7 +29,7 @@ session_start();
                         echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
                         unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
                     }
-                    if ($_SESSION['bien']) {
+                    if (isset($_SESSION['bien'])) {
                         echo "
                         <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                             <div class='modal-dialog'>
@@ -48,6 +48,7 @@ session_start();
                                 </div>
                             </div>
                         </div>";
+                        unset($_SESSION['bien']);
                     }
                     ?>
 
@@ -84,7 +85,7 @@ session_start();
             </div>
         </div>
 
-        <script src="../CItas/app.js"></script>
+        <script src="../Citas/app.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const dateInput = document.getElementById('fecha_cita');
@@ -112,8 +113,16 @@ session_start();
                         dateInput.setCustomValidity('');
                     }
                 });
+
             });
         </script>
+            <script>
+        $(document).ready(function() {
+            if ($('#staticBackdrop').length) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
+    </script>
 </body>
 
 </html>
