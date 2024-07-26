@@ -1,4 +1,5 @@
 <?php
+session_start(); 
 require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
@@ -28,7 +29,9 @@ $rowGlobal = $queryGlobal->fetch(PDO::FETCH_ASSOC);
 $countCitasGlobal = $rowGlobal['L'];
 
 if ($countCitasGlobal >= 1) {
-   echo "No puedes tener registrado más de una vez a un empleado en la misma fecha";
+    $_SESSION['error'] = "No puedes tener registrado más de una vez a un empleado en la misma fecha";
+    header('Location: registro_asistencia.php'); 
+    exit();
 } else {
     try {
         switch ($fecha) {
@@ -41,19 +44,25 @@ if ($countCitasGlobal >= 1) {
                             $sql = "INSERT INTO Asistencia (empleadoID, asistencia, fecha, hora_entrada, hora_salida) VALUES (?, ?,?, ?, ?)";
                             $stmt = $pdo->prepare($sql);
                             $stmt->execute([$empleadoID, $asistencia, $fecha, $hora_entrada, $hora_salida]);
-                            echo "Asistencia registrada exitosamente";
+                            $_SESSION['bien'] ="Asistencia registrada exitosamente";
+                            header('Location: registro_asistencia.php'); 
+                            exit();
                             break;
                             case 'falta':
                                 $sql = "INSERT INTO Asistencia (empleadoID, asistencia, fecha, hora_entrada, hora_salida) VALUES (?, ?,?, ?, ?)";
                                 $stmt = $pdo->prepare($sql);
                                 $stmt->execute([$empleadoID, $asistencia, $fecha, $hora_entrada, $hora_salida]);
-                                echo "Falta registrada exitosamente";
+                                $_SESSION['bien'] = "Falta registrada exitosamente";
+                                header('Location: registro_asistencia.php'); 
+                                exit();
                                 break;
                             case 'justificado':
                                     $sql = "INSERT INTO Asistencia (empleadoID, asistencia, fecha, hora_entrada, hora_salida) VALUES (?, ?,?, ?, ?)";
                                     $stmt = $pdo->prepare($sql);
                                     $stmt->execute([$empleadoID, $asistencia, $fecha, $hora_entrada, $hora_salida]);
-                                    echo "Falta justificada registrada exitosamente";
+                                    $_SESSION['bien'] = "Falta justificada registrada exitosamente";
+                                    header('Location: registro_asistencia.php'); 
+                                    exit();
                                     break;
                         } 
                         break;
@@ -61,24 +70,32 @@ if ($countCitasGlobal >= 1) {
                         $diferencia_horas = $diferencia_horas * -1;
                         switch ($time_entrada) {
                             case ($diferencia_horas < 4):
-                                echo "El tiempo minímo para una asistencia es de 4 horas";
+                                $_SESSION['error'] =  "El tiempo minímo para una asistencia es de 4 horas";
+                                header('Location: registro_asistencia.php'); 
+                                exit();
                                 break;
                             case ($time_entrada > $time_salida):
-                                echo "La hora de salida no puede ser mayor a la hora de entrada";
+                                $_SESSION['error'] =  "La hora de salida no puede ser mayor a la hora de entrada";
+                                header('Location: registro_asistencia.php'); 
+                                exit();
                                 break;
                         }
                         break;
                 }
                 break;
             case ($fecha < $fecha_minima):
-                echo "Solo puedes elegir una fecha con 7 días de anterioridad";
+                $_SESSION['error'] =  "Solo puedes elegir una fecha con 7 días de anterioridad";
+                header('Location: registro_asistencia.php'); 
+                exit();
                 break;
             case ($fecha > $fecha_maxima):
-                echo "No puedes elegir una fecha superior a la de hoy";
+                $_SESSION['error'] =  "No puedes elegir una fecha superior a la de hoy";
+                header('Location: registro_asistencia.php'); 
+                exit();
                 break;
         }
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        $_SESSION['error'] = "Error: " . $e->getMessage();
     }
 }
 }
