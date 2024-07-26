@@ -25,7 +25,7 @@ try {
                    DATEDIFF(c.fecha_cita, CURDATE()) AS dias_restantes
             FROM CITAS c
             INNER JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
-            WHERE v.clienteID = ? and c.estado = 'pendiente' and c.estado = 'en proceso'
+            WHERE v.clienteID = ? and c.estado = 'pendiente' or c.estado = 'en proceso'
             ORDER BY c.fecha_cita DESC";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$clienteID]);
