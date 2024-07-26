@@ -223,20 +223,27 @@ h2 {
             <a href="../Catalogo/proveedores_view.php" class="sidebar-link">
                 <i class="lni lni-delivery"></i>
                 <span>PROOVEDORES</span>
-                <li class="sidebar-item">
-                    <a href="../CItas/.php" class="sidebar-link">CATEGORÍAS</a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="../Catalogo/.php" class="sidebar-link">PRODUCTOS</a>
-                </li> 
             </a>
+        </li>
+     
+        <!-- Sección de Catálogo ajustada -->
+<li class="sidebar-item">
+    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#catalogo"
+        aria-expanded="false" aria-controls="catalogo">
+        <i class="lni lni-book"></i>
+        <span>CATÁLOGO</span>
+    </a>
+    <ul id="catalogo" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+        <li class="sidebar-item">
+            <a href="../Catalogo/" class="sidebar-link">CATEGORÍA</a>
         </li>
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link">
-                <i class="lni lni-dropbox"></i>
-                <span>INVENTARIO</span>
-            </a>
+            <a href="../Catalogo/" class="sidebar-link">INSUMOS</a>
         </li>
+    </ul>
+</li>
+
+
         <li class="sidebar-item">
             <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#citas"
                 aria-expanded="false" aria-controls="citas">
@@ -252,10 +259,14 @@ h2 {
                 </li>
             </ul>
         </li>
+
+
+        
+
         <li class="sidebar-item">
             <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#orden"
                 aria-expanded="false" aria-controls="orden">
-                <i class="lni lni-agenda"></i>
+                <i class="bi bi-clipboard"></i>
                 <span>ORDEN</span>
             </a>
             <ul id="orden" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
@@ -268,7 +279,7 @@ h2 {
         <li class="sidebar-item">
             <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#usuarios"
                 aria-expanded="false" aria-controls="usuarios">
-                <i class="lni lni-user"></i>
+                <i class="bi bi-people"></i>
                 <span>CLIENTES</span>
             </a>
             <ul id="usuarios" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
