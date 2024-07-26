@@ -7,18 +7,10 @@ $pdo = $con->conectar();
 $showModal = false;
 $modalContent = '';
 
-// Función para verificar si el correo o el teléfono ya existen en la base de datos
-function checkDuplicate($pdo, $correo, $telefono, $personaID) {
-    $sql = "SELECT COUNT(*) FROM PERSONAS WHERE (correo = :correo OR telefono = :telefono) AND personaID <> :personaID";
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute(['correo' => $correo, 'telefono' => $telefono, 'personaID' => $personaID]);
-    return $stmt->fetchColumn() > 0;
-}
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $clienteID = $_POST['clienteID'];
-    $correo = $_POST['correo'];
-    $telefono = $_POST['telefono'];
+    $activo = 'no';
 
     // Obtener personaID asociado con clienteID
     $stmt = $pdo->prepare("SELECT personaID FROM CLIENTES WHERE clienteID = ?");
@@ -27,50 +19,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if (!$personaID) {
         die("Error: Cliente no encontrado.");
-    }
-
-    if (checkDuplicate($pdo, $correo, $telefono, $personaID)) {
-        $showModal = true;
-        $modalContent = "
-            <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
-                <div class='modal-dialog'>
-                    <div class='modal-content'>
-                        <div class='modal-header'>
-                            <h1 class='modal-title fs-5' id='staticBackdropLabel'>ERROR AL ACTUALIZAR LOS DATOS</h1>
-                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                        </div>
-                        <div class='modal-body'>
-                            El correo electrónico o el número telefónico ya están registrados. Por favor, utiliza otros datos.
-                        </div>
-                        <div class='modal-footer'>
-                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                        </div>
-                    </div>
-                </div>
-            </div>";
     } else {
         // Actualiza la base de datos
-        $sql = "UPDATE PERSONAS SET correo = ?, telefono = ? WHERE personaID = ?";
+        $sql = "UPDATE CLIENTES SET activo = ? WHERE personaID = ?";
 
         // Usa PDO para preparar la declaración
         $stmt = $pdo->prepare($sql);
 
         try {
             // Ejecuta la consulta
-            $stmt->execute([$correo, $telefono, $personaID]);
+            $stmt->execute([$activo, $personaID]);
             $showModal = true;
             $modalContent = "
                 <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                     <div class='modal-dialog'>
                         <div class='modal-content'>
                             <div class='modal-header'>
-                                <h1 class='modal-title fs-5' id='staticBackdropLabel'>Datos actualizados con éxito!</h1>
+                                <h1 class='modal-title fs-5' id='staticBackdropLabel'>CLIENTE DESHABILITADO</h1>
                                 <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                            </div>
-                            <div class='modal-body'>
-                                Nuevo correo electrónico: <strong>$correo</strong><br><br>
-                                <hr>
-                                Nuevo número telefónico: <strong>$telefono</strong><br>
                             </div>
                             <div class='modal-footer'>
                                 <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
@@ -136,10 +102,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
             <div class="container">
-                <h2>EDITAR DATOS</h2>
+                <h2>ELIMINAR CLIENTE</h2>
                 <div class="form-container">
                     <label for="campo">Selecciona un cliente:</label>
-                    <form id="formCita" action="edit_user_view.php" method="POST" autocomplete="off">
+                    <form id="formCita" action="deshabilitar_client_view.php" method="POST" autocomplete="off">
                         <div class="mb-3">
                             <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente...">
                             <ul id="lista" class="list-group" style="display: none;"></ul>
@@ -155,18 +121,14 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="form-group">
                             <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" placeholder="Apellido materno" readonly>
                         </div>
-
                         <div class="form-group">
-                            <label for="correo_actual">Correo Electrónico Actual: <span id="correo_actual">No disponible</span></label><br>
-                            <input type="email" class="form-control" id="correo" name="correo" placeholder="Nuevo correo electrónico" required>
+                            <input type="text" class="form-control" id="correo" name="correo" placeholder="Correo electrónico" readonly>
+                        </div>
+                        <div class="form-group">
+                            <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Teléfono" readonly>
                         </div>
 
-                        <div class="form-group">
-                            <label for="telefono_actual">Teléfono Actual: <span id="telefono_actual">No disponible</span></label><br>
-                            <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Nuevo número telefónico" required>
-                        </div>
-
-                        <button type="submit" name="enviar" class="btn btn-dark w-100" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Editar</button>
+                        <button type="submit" name="enviar" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button>
                     </form>
                 </div>
             </div>
@@ -192,9 +154,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
             this.classList.add('was-validated');
         });
-        if (window.history.replaceState) {
-                window.history.replaceState(null, null, window.location.href);
-            }
 
         document.getElementById('campo').addEventListener('input', function() {
             const searchTerm = this.value;
@@ -213,8 +172,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     document.getElementById('nombre').value = cliente.nombre;
                                     document.getElementById('apellido_paterno').value = cliente.apellido_paterno;
                                     document.getElementById('apellido_materno').value = cliente.apellido_materno;
-                                    document.getElementById('telefono_actual').innerText = cliente.telefono;
-                                    document.getElementById('correo_actual').innerText = cliente.correo;
+                                    document.getElementById('telefono').value = cliente.telefono;
+                                    document.getElementById('correo').value = cliente.correo;
                                     lista.style.display = 'none';
                                 };
                                 lista.appendChild(li);
@@ -230,8 +189,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         });
     </script>
 
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>
+        

@@ -101,6 +101,8 @@
                 document.getElementById('hs').style.display = 'none';
                 document.getElementById('hora_entrada').removeAttribute('required');
                 document.getElementById('hora_salida').removeAttribute('required');
+                document.getElementById('hora_entrada').value='00:00:00';
+                document.getElementById('hora_salida').value='00:00:00';
                 break;
             case 'justificado':
                 document.getElementById('hora_entrada').style.display = 'none';
@@ -109,6 +111,8 @@
                 document.getElementById('hs').style.display = 'none';
                 document.getElementById('hora_entrada').removeAttribute('required');
                 document.getElementById('hora_salida').removeAttribute('required');
+                document.getElementById('hora_entrada').value='00:00:00';
+                document.getElementById('hora_salida').value='00:00:00';
                 break;
         }
     });

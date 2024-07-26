@@ -221,7 +221,7 @@
                                         LEFT JOIN ordenes_trabajo ot ON u.ubicacionID = ot.ubicacionID
                                         LEFT JOIN citas c ON ot.citaID = c.citaID
                                         LEFT JOIN vehiculos v ON c.vehiculoID = v.vehiculoID
-                                        WHERE u.activo = 'no'
+                                        WHERE u.activo = 'no' and u.lugar != 'Dueño'
                                         GROUP BY u.ubicacionID, u.lugar, u.capacidad";
                     $desactivados = $conexion->seleccionar($consulta);
                     foreach($desactivados as $desactivado) {

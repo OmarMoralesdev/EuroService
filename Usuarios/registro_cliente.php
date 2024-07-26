@@ -79,21 +79,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $password = generateRandomPassword();
         $hashed_password = password_hash($password, PASSWORD_DEFAULT);
         $role = 'cliente';
-
+        
         try {
             $stmt_persona = $pdo->prepare("INSERT INTO personas (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
             $stmt_persona->execute([$nombre, $apellido_paterno, $apellido_materno, $correo, $telefono]);
-
+            
             if ($stmt_persona->rowCount() > 0) {
                 $personaID = $pdo->lastInsertId();
                 $username = generarUsernameParaCliente($pdo, $personaID);
-
+                
                 if ($username === null) {
                     throw new Exception('No se pudo generar un nombre de usuario único.');
                 }
-
-                $stmt_cliente = $pdo->prepare("INSERT INTO clientes (personaID) VALUES (?)");
-                $stmt_cliente->execute([$personaID]);
+                
+                $activo = 'si';
+                $stmt_cliente = $pdo->prepare("INSERT INTO clientes (personaID, activo) VALUES (?, ?)");
+                $stmt_cliente->execute([$personaID,$activo]);
 
                 if ($stmt_cliente->rowCount() > 0) {
                     $clienteID = $pdo->lastInsertId();
@@ -104,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $rolID = $rol['rolID'];
 
                     $stmt_cuenta = $pdo->prepare("INSERT INTO cuentas (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
-                    $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID]);
+                    $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID,]);
                     if ($stmt_cuenta->rowCount() > 0) {
                         setModalContent('success', "
                             <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
