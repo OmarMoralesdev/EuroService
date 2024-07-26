@@ -73,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Generar Recibo de Pago</title>
     <style>
         .recibo {
-            width: 600px;
+            width: 100%;
             border: 1px solid black;
             padding: 20px;
             font-family: Arial, sans-serif;
@@ -98,36 +98,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         .recibo-field {
             display: inline-block;
-            width: 400px;
+            width: 100%;
             border-bottom: 1px solid black;
         }
 
         /* Estilos del modal */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 1;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            overflow: auto;
-            background-color: rgb(0, 0, 0);
-            background-color: rgba(0, 0, 0, 0.4);
-            padding-top: 60px;
-        }
-
         .modal-content {
             background-color: #fefefe;
             margin: 5% auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 80%;
+            width: 100%;
+            max-width: 600px;
+            align-items: center;
+            position: relative;
         }
 
         .close {
             color: #aaa;
-            float: right;
+            position: absolute;
+            top: 10px;
+            right: 20px;
             font-size: 28px;
             font-weight: bold;
         }
@@ -158,68 +149,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <input type="text" id="cantidad_pagada" name="cantidad_pagada" class="form-control" required><br><br>
                             <label for="receptor">Nombre del Receptor:</label>
                             <input type="text" id="receptor" name="receptor" class="form-control" value="<?php echo htmlspecialchars($nombreCompleto); ?>" readonly required><br><br>
-                            <input type="submit" value="Generar Recibo">
+                            <input type="submit" value="Generar Recibo"class="btn btn-dark w-100">
                         </div>
                     </form>
                 </div>
                 <?php if (!$mostrarRecibo && $reciboUrl) : ?>
-    <div id="reciboModal" class="modal">
-        <div class="modal-content">
-            <span class="close">&times;</span>
-            <h2>Vista Previa del Recibo</h2>
-            <div class="recibo">
-                <div class="recibo-header">Recibo de Pago</div>
-                <div class="recibo-section">
-                    <div class="recibo-label">Fecha:</div>
-                    <div class="recibo-field"><?php echo htmlspecialchars($fecha_recibo); ?></div>
-                </div>
-                <div class="recibo-section">
-                    <div class="recibo-label">Cliente:</div>
-                    <div class="recibo-field"><?php echo htmlspecialchars($cliente_nombre); ?></div>
-                </div>
-                <div class="recibo-section">
-                    <div class="recibo-label">Cantidad Pagada:</div>
-                    <div class="recibo-field"><?php echo htmlspecialchars($cantidad_pagada_recibo); ?></div>
-                </div>
-                <div class="recibo-section">
-                    <div class="recibo-label">Receptor:</div>
-                    <div class="recibo-field"><?php echo htmlspecialchars($receptor); ?></div>
-                </div>
-                <div class="recibo-section">
-                    <div class="recibo-label">Firma:</div>
-                    <div class="recibo-field"><?php echo htmlspecialchars($receptor); ?></div>
-                </div>
+                    <div id="reciboModal" class="modal" tabindex="-1">
+                        <div class="modal-dialog">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title">Vista Previa del Recibo</h5>
+                                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                                </div>
+                                <div class="modal-body">
+                                    <div class="recibo">
+                                        <div class="recibo-header">Recibo de Pago</div>
+                                        <div class="recibo-section">
+                                            <div class="recibo-label">Fecha:</div>
+                                            <div class="recibo-field"><?php echo htmlspecialchars($fecha_recibo); ?></div>
+                                        </div>
+                                        <div class="recibo-section">
+                                            <div class="recibo-label">Cliente:</div>
+                                            <div class="recibo-field"><?php echo htmlspecialchars($cliente_nombre); ?></div>
+                                        </div>
+                                        <div class="recibo-section">
+                                            <div class="recibo-label">Cantidad Pagada:</div>
+                                            <div class="recibo-field"><?php echo htmlspecialchars($cantidad_pagada_recibo); ?></div>
+                                        </div>
+                                        <div class="recibo-section">
+                                            <div class="recibo-label">Receptor:</div>
+                                            <div class="recibo-field"><?php echo htmlspecialchars($receptor); ?></div>
+                                        </div>
+                                        <div class="recibo-section">
+                                            <div class="recibo-label">Firma:</div>
+                                            <div class="recibo-field"><?php echo htmlspecialchars($receptor); ?></div>
+                                        </div>
+                                    </div>
+                                    <br>
+                                    <a href="recibo_preview.php?cliente_nombre=<?php echo urlencode($cliente_nombre); ?>&cantidad_pagada_recibo=<?php echo urlencode($cantidad_pagada_recibo); ?>&fecha_recibo=<?php echo urlencode($fecha_recibo); ?>&receptor=<?php echo urlencode($receptor); ?>" class="btn btn-dark w-100" target="_blank">Descargar PDF</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                <?php endif; ?>
             </div>
-            <br>
-            <a href="recibo_preview.php?cliente_nombre=<?php echo urlencode($cliente_nombre); ?>&cantidad_pagada_recibo=<?php echo urlencode($cantidad_pagada_recibo); ?>&fecha_recibo=<?php echo urlencode($fecha_recibo); ?>&receptor=<?php echo urlencode($receptor); ?>" class="btn btn-primary" target="_blank">Descargar PDF</a>
         </div>
     </div>
-<?php endif; ?>
 
-
-            </div>
-        </div>
-    </div>
-    <script src="app.js"></script>
     <script>
         // Mostrar el modal de vista previa
-        var modal = document.getElementById("reciboModal");
+        var modal = new bootstrap.Modal(document.getElementById('reciboModal'));
         var span = document.getElementsByClassName("close")[0];
 
         if (modal) {
-            modal.style.display = "block";
-        }
-
-        if (span) {
-            span.onclick = function() {
-                modal.style.display = "none";
-            }
-
-            window.onclick = function(event) {
-                if (event.target == modal) {
-                    modal.style.display = "none";
-                }
-            }
+            modal.show();
         }
     </script>
 </body>
