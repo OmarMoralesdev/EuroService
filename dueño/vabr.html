@@ -93,6 +93,7 @@ h1 {
     padding: 2rem 0;
     flex: 1 1 auto;
 }
+    
 
 a.sidebar-link {
     padding: .625rem 1.625rem;
@@ -116,7 +117,6 @@ a.sidebar-link {
     margin-right: .75rem; /* Espacio entre el ícono y el texto */
     color: #FFF;
     transition: opacity .35s;
- 
 }
 
 /* Esconde el texto en los enlaces cuando el sidebar no está expandido */
@@ -146,6 +146,7 @@ a.sidebar-link:hover {
     position: relative;
 }
 
+/* Ajustes para los módulos con submódulos */
 #sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
     position: absolute;
     top: 0;
@@ -206,135 +207,95 @@ h2 {
     text-transform: uppercase; /* título en mayúsculas */
     font-family: 'chicago', sans-serif; /* Cambio de tipografía a chicago */
 }
-
-    
 </style>
+
 <aside id="sidebar">
     <div class="d-flex">
         <button class="toggle-btn" type="button">
-            <i class="lni lni-grid-alt"></i>
+            <i class="lni lni-home"></i>
         </button>
         <div class="sidebar-logo">
-            <a href="../general_views/admin.php">EURO SERVICE</a>
+            <a href="../dueño/dueño.php">EURO SERVICE</a>
         </div>
     </div>
     <ul class="sidebar-nav">
         <li class="sidebar-item">
-            <a href="../Catalogo/proveedores_view.php" class="sidebar-link">
+            <a href="../dueño/proveedores_view.php" class="sidebar-link">
                 <i class="lni lni-delivery"></i>
                 <span>PROOVEDORES</span>
             </a>
         </li>
-     
-        <!-- Sección de Catálogo ajustada -->
-<li class="sidebar-item">
-    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#catalogo"
-        aria-expanded="false" aria-controls="catalogo">
-        <i class="lni lni-book"></i>
-        <span>CATÁLOGO</span>
-    </a>
-    <ul id="catalogo" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-        <li class="sidebar-item">
-            <a href="../Catalogo/" class="sidebar-link">CATEGORÍA</a>
-        </li>
-        <li class="sidebar-item">
-            <a href="../Catalogo/" class="sidebar-link">INSUMOS</a>
-        </li>
-    </ul>
-</li>
-
 
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#citas"
-                aria-expanded="false" aria-controls="citas">
-                <i class="lni lni-agenda"></i>
-                <span>CITAS</span>
+            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#catalogo"
+                aria-expanded="false" aria-controls="catalogo">
+                <i class="lni lni-dropbox"></i>
+                <span>INVENTARIO</span>
             </a>
-        </li>
-
-
-        
-
-        <li class="sidebar-item">
-            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#orden"
-                aria-expanded="false" aria-controls="orden">
-                <i class="bi bi-clipboard"></i>
-                <span>ORDEN</span>
-            </a>
-            </ul>
-        </li>
-        <li class="sidebar-item">
-            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#usuarios"
-                aria-expanded="false" aria-controls="usuarios">
-                <i class="bi bi-people"></i>
-                <span>CLIENTES</span>
-            </a>
-            <ul id="usuarios" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+            <ul id="catalogo" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="../Usuarios/buscar_view.php" class="sidebar-link">BUSCAR</a>
+                    <a href="../Catalogo/" class="sidebar-link">CATEGORÍA</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="../Catalogo/" class="sidebar-link">INSUMOS</a>
                 </li>
             </ul>
-
         </li>
+
+
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                data-bs-target="#vehiculos" aria-expanded="false" aria-controls="vehiculos">
+            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#car"
+                aria-expanded="false" aria-controls="car">
                 <i class="lni lni-car-alt"></i>
                 <span>VEHICULOS</span>
             </a>
-            <ul id="vehiculos" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+            <ul id="car" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="../vehiculos/atencion_view.php" class="sidebar-link">ATENCIÓN</a>
+                    <a href="../Catalogo/" class="sidebar-link">ATENCION</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../vehiculos/ubicaciones_view.php" class="sidebar-link">UBICACIONES</a>
-                </li>
-            </ul>
-        </li>
-        <li class="sidebar-item">
-            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                data-bs-target="#empleados" aria-expanded="false" aria-controls="empleados">
-                <i class="lni lni-user"></i> 
-                <span>EMPLEADOS</span>
-            </a>
-            <ul id="empleados" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                <li class="sidebar-item">
-                    <a href="../Empleados/salario.php" class="sidebar-link">BUSCAR</a>
+                    <a href="../Catalogo/" class="sidebar-link">UBICACIONES</a>
                 </li>
             </ul>
         </li>
 
+
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#finanzas"
-                aria-expanded="false" aria-controls="finanzas">
-                <i class="lni lni-coin"></i>
-                <span> FINANZAS Y PAGOS</span>
+            <a href="../dueño/pendientes.php" class="sidebar-link">
+                <i class="lni lni-agenda"></i>
+                <span>CITAS PENDIENTES</span>
             </a>
-            <ul id="finanzas" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-                <li class="sidebar-item">
-                    <a href="../Finanzas/Reporte de Ingresos.php" class="sidebar-link">INGRESOS SEMANALES</a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="../Finanzas/Reporte de Gastos.php" class="sidebar-link">GASTOS</a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="../Finanzas/Reporte de Nómina.php" class="sidebar-link">NOMINA</a>
-                </li>
-            </ul>
         </li>
+
+        <li class="sidebar-item">
+            <a href="../dueño/buscar_view.php" class="sidebar-link">
+                <i class="bi bi-people"></i>
+                <span>BUSCAR CLIENTES</span>
+            </a>
+        </li>
+        
+        <li class="sidebar-item">
+            <a href="../dueño/buscar.php" class="sidebar-link">
+            <i class="lni lni-user"></i>
+                <span>BUSCAR EMPLEADOS</span>
+            </a>
+        </li>
+
+        <li class="sidebar-item">
+            <a href="../dueño/finanzas_view.php" class="sidebar-link">
+                <i class="lni lni-coin"></i>
+                <span>FINANZAS</span>
+            </a>
+        </li>
+        
     </ul>
-    <div class="sidebar-footer">
-        <a href="../includes/cerrarsesion.php" class="sidebar-link">  
-            <i class="lni lni-exit"></i>
-            <span>SALIR</span>
-        </a>
-    </div>
 </aside>
 
 <script>
-    const hamBurger = document.querySelector(".toggle-btn");
-
-    hamBurger.addEventListener("click", function () {
-        document.querySelector("#sidebar").classList.toggle("expand");
+$(document).ready(function () {
+    $('.toggle-btn').click(function () {
+        $('#sidebar').toggleClass('expand');
+        $('.main').toggleClass('expand');
     });
+});
 </script>

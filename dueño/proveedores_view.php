@@ -124,11 +124,11 @@ if ($stmt->rowCount() > 0) {
     </style>
 </head>
 <body>
-    <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?>
-        <div class="main p-3">
+<div class="wrapper">
+        <?php include '../dueño/vabr.html'; ?>
+        <div class="main">
             <div class="container">
-                <h2 class="text-center">PROVEEDORES</h2>
+                <h2 style="text-align: center;">PROVEEDORES</h2>
                 <div class="form-container">
                     <div class="mb-3">
                         <form id="searchForm" class="input-group">
