@@ -46,11 +46,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $atencion = 'no urgente'; // Puedes ajustar esto según los detalles del formulario
             $formaDePago = $_POST['formadepago'];
 
+            if ($costoManoObra < 0 || $costoRefacciones < 0) {
+                $_SESSION['error'] = "No puedes ingresar números negativos.";
+                header("Location: crear_orden_desde_cita.php");
+                exit();
+            }
+
             // Calcular el total estimado
             $total_estimado = $costoManoObra + $costoRefacciones;
 
             try {
-                // Crear la orden de trabajo
+
+                // Verificar si ya existe una orden de trabajo para esta cita
+                $sqlVerificarOrden = "SELECT * FROM ORDENES_TRABAJO WHERE citaID = ?";
+                $stmtVerificarOrden = $pdo->prepare($sqlVerificarOrden);
+                $stmtVerificarOrden->execute([$citaID]);
+
+                if ($stmtVerificarOrden->rowCount() > 0) {
+                    $pdo->rollBack();
+                    $_SESSION['error'] = "Ya existe una orden de trabajo para esta cita.";
+                    header("Location: crear_orden_sin_cita.php");
+                    exit();
+                }
+                
                 $nuevaOrdenID = crearOrdenTrabajo($pdo, $fechaOrden, $costoManoObra, $costoRefacciones, $total_estimado, $atencion, $citaID, $empleado, $ubicacionID);
 
                 realizarPago($pdo, $ordenID, $fechaPago, $anticipo, $tipoPago, $formaDePago);
@@ -62,8 +80,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 echo "Error al crear la orden de trabajo: " . $e->getMessage();
             }
         } else {
-            // Mostrar formulario para ingresar detalles adicionales de la orden de trabajo
-            // y seleccionar empleado
+
 ?>
 
             <!DOCTYPE html>
@@ -72,9 +89,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <head>
                 <meta charset="UTF-8">
                 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
                 <title>Completar Detalles de Orden de Trabajo</title>
             </head>
+
             <body>
                 <div class="wrapper">
                     <?php include '../includes/vabr.html'; ?>
@@ -130,7 +147,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                     <input type="hidden" name="detallesFormulario" value="true">
 
-                                    <input type="submit" class="btn btn-dark w-100"  value="Crear Orden de Trabajo">
+                                    <input type="submit" class="btn btn-dark w-100" value="Crear Orden de Trabajo">
                                 </form>
                             </div>
                         </div>
