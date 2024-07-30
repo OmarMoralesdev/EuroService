@@ -35,7 +35,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sqlVerificarCita = "SELECT * FROM CITAS WHERE vehiculoID = ? AND estado IN ('pendiente', 'en proceso')";
         $stmtVerificarCita = $pdo->prepare($sqlVerificarCita);
         $stmtVerificarCita->execute([$vehiculoID]);
-        
+
         if ($stmtVerificarCita->rowCount() > 0) {
             $_SESSION['error'] = "El vehículo ya tiene una cita pendiente o en proceso.";
             header("Location: crear_orden_sin_cita.php");
@@ -72,6 +72,29 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $sqlPago = "INSERT INTO PAGOS (ordenID, fecha_pago, monto, tipo_pago, forma_de_pago) VALUES (?, ?, ?, 'anticipo', ?)";
         $stmtPago = $pdo->prepare($sqlPago);
         $stmtPago->execute([$ordenID, $fechaOrden, $anticipo, $formaDePago]);
+
+        // Verificar el límite de vehículos en la ubicación
+        $sqlVerificarUbicacion = "SELECT vehiculos_maximos, vehiculos_actuales FROM UBICACIONES WHERE ubicacionID = ?";
+        $stmtVerificarUbicacion = $pdo->prepare($sqlVerificarUbicacion);
+        $stmtVerificarUbicacion->execute([$ubicacionID]);
+        $ubicacion = $stmtVerificarUbicacion->fetch(PDO::FETCH_ASSOC);
+
+        if (!$ubicacion) {
+            $_SESSION['error'] = "Ubicación no encontrada.";
+            header("Location: crear_orden_sin_cita.php");
+            exit();
+        }
+
+        if ($ubicacion['vehiculos_actuales'] >= $ubicacion['vehiculos_maximos']) {
+            $_SESSION['error'] = "La ubicación ya está llena.";
+            header("Location: crear_orden_sin_cita.php");
+            exit();
+        }
+
+        // Actualizar el conteo de vehículos en la ubicación
+        $sqlActualizarUbicacion = "UPDATE UBICACIONES SET vehiculos_actuales = vehiculos_actuales + 1 WHERE ubicacionID = ?";
+        $stmtActualizarUbicacion = $pdo->prepare($sqlActualizarUbicacion);
+        $stmtActualizarUbicacion->execute([$ubicacionID]);
 
         $pdo->commit();
         $_SESSION['mensaje'] = "Cita y orden de trabajo creadas exitosamente.";
