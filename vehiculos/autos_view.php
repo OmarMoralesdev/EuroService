@@ -45,7 +45,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     // Registrar la cita e inspección si se ha confirmado la continuidad
                     $sqlCita = "INSERT INTO CITAS (vehiculoID, servicio_solicitado, fecha_solicitud, fecha_cita, urgencia, estado) VALUES (?, ?, ?, ?, ?, 'pendiente')";
                     $stmtCita = $pdo->prepare($sqlCita);
-                    $stmtCita->execute([$vehiculoID, 'Inspección', date('Y-m-d'), date('Y-m-d'), 'Muy Urgente']);
+                    $stmtCita->execute([$vehiculoID, 'Inspección', date('Y-m-d'), date('Y-m-d'), 'si', 'en proceso',]);
                     $citaID = $pdo->lastInsertId();
 
                     // Insertar orden de trabajo
@@ -53,11 +53,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     $stmtOrden = $pdo->prepare($sqlOrden);
                     $stmtOrden->execute([date('Y-m-d'), 800, 0, 'Muy Urgente', $citaID, $_POST['empleado'], $_POST['ubicacionID']]);
                     $ordenID = $pdo->lastInsertId();
-
+                    $anticipo = 800*0.5; 
                     // Insertar pago
-                    $sqlPago = "INSERT INTO PAGOS (ordenID, fecha_pago, monto, tipo_pago, forma_de_pago) VALUES (?, ?, ?, 'anticipo', ?)";
-                    $stmtPago = $pdo->prepare($sqlPago);
-                    $stmtPago->execute([$ordenID, date('Y-m-d'), 0, $_POST['formadepago']]);
+                    realizarPago($pdo, $ordenID, date('Y-m-d'), $anticipo, "anticipo", $_POST['formadepago']);
+                 
 
                     // Actualizar conteo de vehículos en la ubicación
                     $sqlActualizarUbicacion = "UPDATE UBICACIONES SET vehiculos_actuales = vehiculos_actuales + 1 WHERE ubicacionID = ?";

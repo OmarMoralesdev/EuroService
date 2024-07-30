@@ -93,9 +93,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $sqlActualizarUbicacion = "UPDATE UBICACIONES SET vehiculos_actuales = vehiculos_actuales + 1 WHERE ubicacionID = ?";
                 $stmtActualizarUbicacion = $pdo->prepare($sqlActualizarUbicacion);
                 $stmtActualizarUbicacion->execute([$ubicacionID]);
-                realizarPago($pdo, $ordenID, $fechaPago, $anticipo, $tipoPago, $formaDePago);
-                // Actualizar el estado de la cita a 'completado'
-                actualizarEstadoCita($pdo, $citaID, 'completado');
+                realizarPago($pdo, $nuevaOrdenID , $fechaPago, $anticipo, $tipoPago, $formaDePago);
+          
 
                 echo "Nueva orden de trabajo creada con ID: $nuevaOrdenID";
             } catch (Exception $e) {
