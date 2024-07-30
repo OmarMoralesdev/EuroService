@@ -94,7 +94,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $stmtActualizarUbicacion = $pdo->prepare($sqlActualizarUbicacion);
                 $stmtActualizarUbicacion->execute([$ubicacionID]);
                 realizarPago($pdo, $nuevaOrdenID , $fechaPago, $anticipo, $tipoPago, $formaDePago);
-          
+                // Actualizar el estado de la cita a 'completado'
+                actualizarEstadoCita($pdo, $citaID, 'en proceso');
 
                 echo "Nueva orden de trabajo creada con ID: $nuevaOrdenID";
             } catch (Exception $e) {

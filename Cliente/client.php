@@ -21,11 +21,15 @@ if (!function_exists('obtenerDetallesClientepersona')) {
 
 try {
     $sql = "SELECT c.citaID, c.servicio_solicitado, c.fecha_cita, c.estado,
-                v.vin, v.marca, v.modelo, v.anio,
+                   v.vin, v.marca, v.modelo, v.anio,
+                   COALESCE(SUM(o.total_estimado - o.anticipo), 0) AS monto_deuda,
                    DATEDIFF(c.fecha_cita, CURDATE()) AS dias_restantes
             FROM CITAS c
             INNER JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
-            WHERE v.clienteID = ? and c.estado = 'pendiente' or c.estado = 'en proceso'
+            LEFT JOIN ORDENES_TRABAJO o ON c.citaID = o.citaID
+            WHERE v.clienteID = ? AND (c.estado = 'pendiente' OR c.estado = 'en proceso')
+            GROUP BY c.citaID, c.servicio_solicitado, c.fecha_cita, c.estado,
+                     v.vin, v.marca, v.modelo, v.anio
             ORDER BY c.fecha_cita DESC";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$clienteID]);
@@ -42,7 +46,6 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Vehículos en el Taller</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         body {
             background-color: #f8f9fa;
@@ -138,6 +141,9 @@ try {
                                     <p><strong>Fecha de la Cita:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
                                     <p><strong>Estado:</strong> <?php echo htmlspecialchars($cita['estado']); ?></p>
                                     <p><strong>Días Restantes:</strong> <?php echo htmlspecialchars($cita['dias_restantes']); ?> días</p>
+                                    <?php if ($cita['estado'] == 'en proceso') : ?>
+                                        <p><strong>Deuda Actual:</strong> $<?php echo htmlspecialchars(number_format($cita['monto_deuda'], 2)); ?></p>
+                                    <?php endif; ?>
                                 </div>
                                 <div class="modal-footer">
                                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
@@ -151,8 +157,6 @@ try {
             <?php endif; ?>
         </div>
     </div>
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>
 
 </html>

@@ -105,6 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     header("Location: crear_orden_sin_cita.php");
     exit();
+    actualizarEstadoCita($pdo, $citaID, 'en proceso');
 } else {
     $_SESSION['error'] = "Método de solicitud no válido.";
     header("Location: crear_orden_sin_cita.php");
