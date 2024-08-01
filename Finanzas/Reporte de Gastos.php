@@ -42,62 +42,61 @@ try {
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte de Gastos Semanal</title>
-    <style>
-    </style>
 </head>
-
 <body>
-<div class="wrapper">
+    <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
             <div class="container">
                 <h2>REPORTE DE GASTOS SEMANAL</h2>
                 <div class="form-container">
-                <form method="GET" action="" class="mb-4">
-                    <div class="form-row">
-                        <div class="form-group col-md-6 offset-md-3">
-                            <label for="week">Selecciona la semana:</label>
-                            <input type="week" id="week" name="week" class="form-control" value="<?php echo htmlspecialchars($selected_week); ?>">
+                    <form method="GET" action="" class="mb-4">
+                        <div class="form-row">
+                            <div class="form-group col-md-6 offset-md-3">
+                                <label for="week">Selecciona la semana:</label>
+                                <input type="week" id="week" name="week" class="form-control" value="<?php echo htmlspecialchars($selected_week); ?>">
+                            </div>
                         </div>
+                        <button type="submit" class="btn btn-primary btn-block">Ver Reporte</button>
+                    </form>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                        <thead>
+                                <tr>
+                                    <th>Fecha de Compra</th>
+                                    <th>Insumo</th>
+                                    <th>Proveedor</th>
+                                    <th>Cantidad</th>
+                                    <th>Precio Unitario</th>
+                                    <th>Subtotal</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($gastos as $gasto) : ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($gasto['fecha_compra']); ?></td>
+                                        <td><?php echo htmlspecialchars($gasto['insumo']); ?></td>
+                                        <td><?php echo htmlspecialchars($gasto['proveedor']); ?></td>
+                                        <td><?php echo htmlspecialchars($gasto['cantidad']); ?></td>
+                                        <td>$<?php echo number_format($gasto['precio_unitario'], 2); ?></td>
+                                        <td>$<?php echo number_format($gasto['subtotal'], 2); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                <tr class="font-weight-bold">
+                                    <td colspan="5" class="text-right">Total:</td>
+                                    <td>$<?php echo number_format($total_gastos, 2); ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Ver Reporte</button>
-                </form>
-                <table class="table table-striped table-bordered">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Fecha de Compra</th>
-                            <th>Insumo</th>
-                            <th>Proveedor</th>
-                            <th>Cantidad</th>
-                            <th>Precio Unitario</th>
-                            <th>Subtotal</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($gastos as $gasto) : ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($gasto['fecha_compra']); ?></td>
-                                <td><?php echo htmlspecialchars($gasto['insumo']); ?></td>
-                                <td><?php echo htmlspecialchars($gasto['proveedor']); ?></td>
-                                <td><?php echo htmlspecialchars($gasto['cantidad']); ?></td>
-                                <td>$<?php echo number_format($gasto['precio_unitario'], 2); ?></td>
-                                <td>$<?php echo number_format($gasto['subtotal'], 2); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                        <tr class="font-weight-bold">
-                            <td colspan="5" class="text-right">Total:</td>
-                            <td>$<?php echo number_format($total_gastos, 2); ?></td>
-                        </tr>
-                    </tbody>
-                </table>
+                </div>
             </div>
         </div>
-    </div>
 </body>
 
 </html>

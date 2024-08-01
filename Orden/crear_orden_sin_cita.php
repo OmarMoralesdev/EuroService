@@ -20,13 +20,13 @@ unset($_SESSION['mensaje']);
                 <h2>Registrar Cita y Crear Orden de Trabajo</h2>
                 <div class="form-container">
                     <form action="crear_orden_sin_cita2.php" method="post" id="formCita" novalidate autocomplete="off">
-                        <?php
-                        if (isset($_SESSION['error'])) {
-                            echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
-                            unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
-                        }
-                        if ($mensaje) {
-                            echo "
+                    <?php
+                    if (isset($_SESSION['error'])) {
+                        echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
+                        unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
+                    }
+                    if (isset($_SESSION['bien'])) {
+                        echo "
                         <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                             <div class='modal-dialog'>
                                 <div class='modal-content'>
@@ -35,7 +35,7 @@ unset($_SESSION['mensaje']);
                                         <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                                     </div>
                                     <div class='modal-body'>
-                                        <div class='alert alert-success' role='alert'>{$mensaje}</div>
+                                        <div class='alert alert-success' role='alert'>{$_SESSION['bien']}</div>
                                     </div>
                                     <div class='modal-footer'>
                                         <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
@@ -43,8 +43,9 @@ unset($_SESSION['mensaje']);
                                 </div>
                             </div>
                         </div>";
-                        }
-                        ?>
+                        unset($_SESSION['bien']);
+                    }
+                    ?>
                         <!-- Formulario de Cita -->
                         <div class="mb-3">
                             <label for="clienteID" class="form-label">Ingrese un cliente:</label>
