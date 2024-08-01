@@ -91,7 +91,7 @@ try {
 
 <body>
     <?php include 'navbar.php'; ?>
-    <div class="container mt-5">
+    <div class="container mt-3">
         <div class="welcome">
             <?php
             $usuario = obtenerDetallesClientepersona($pdo, $_SESSION['clienteID']);

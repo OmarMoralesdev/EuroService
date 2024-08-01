@@ -110,7 +110,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </div>
                                     <div class='modal-footer'>
                                         <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                                        <a href='../vehiculos/autos_view.php' type='button' class='btn btn-dark'>Siguiente</a>
                                     </div>
                                 </div>
                             </div>

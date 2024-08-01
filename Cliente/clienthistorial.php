@@ -40,67 +40,52 @@ try {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Vehículos en el Taller</title>
+
+    <title>HISTORIAL</title>
+    <link rel="stylesheet" href="style.css">
     <style>
         body {
-            background-color: #f8f9fa;
-            color: #333;
+            background-color: black;
+            color: white;
+        }
+
+        .navbar {
+            margin-bottom: 0;
         }
 
         .container {
-            background-color: #fff;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 800px;
-            margin: 50px auto;
+            margin-top: 75px; /* Ajustar según el tamaño de la navbar */
         }
 
-        h2 {
-            text-align: center;
-            color: #000;
-        }
-
-        .welcome {
-            text-align: center;
+        .content {
             margin-bottom: 20px;
         }
 
-        .card-columns {
-            column-count: 1;
+        .card {
+            margin-bottom: 10px;
         }
 
-        @media (min-width: 576px) {
-            .card-columns {
-                column-count: 2;
-            }
+        .modal-dialog {
+            margin: 0;
         }
 
-        @media (min-width: 768px) {
-            .card-columns {
-                column-count: 3;
-            }
+        .modal-body {
+            padding: 1rem;
+        }
+
+        .modal-footer {
+            padding: 0.5rem;
+        }
+
+        .section-heading {
+            margin-bottom: 20px;
         }
     </style>
 </head>
 
 <body>
-    <?php include 'navbar.php'; ?>
-    <div class="container mt-5">
-        <div class="welcome">
-            <?php
-            $usuario = obtenerDetallesClientepersona($pdo, $_SESSION['clienteID']);
-
-            if ($usuario) {
-                echo "Bienvenido, " . htmlspecialchars($usuario['nombre']) . " " . htmlspecialchars($usuario['apellido_paterno']) . " " . htmlspecialchars($usuario['apellido_materno']);
-            } else {
-                echo "Usuario no encontrado.";
-            }
-            ?>
-
-            <a href="../includes/cerrarsesion.php">Cerrar sesión</a>
-        </div>
-
+    <?php include 'nav.php'; ?>
+    <div class="container mt-2">
         <h2>Vehículos en el Taller</h2>
         <div class="card-columns">
             <?php if (!empty($citas)) : ?>

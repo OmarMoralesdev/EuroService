@@ -1,5 +1,4 @@
 <?php
-
 require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
@@ -7,13 +6,12 @@ $pdo = $con->conectar();
 $showModal = false;
 $modalContent = '';
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $clienteID = $_POST['clienteID'];
     $activo = 'no';
 
     // Obtener personaID asociado con clienteID
-    $stmt = $pdo->prepare("SELECT personaID FROM CLIENTES WHERE clienteID = ?");
+    $stmt = $pdo->prepare("SELECT personaID FROM CLIENTES WHERE clienteID = ? and activo = 'si';");
     $stmt->execute([$clienteID]);
     $personaID = $stmt->fetchColumn();
 
@@ -22,8 +20,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         // Actualiza la base de datos
         $sql = "UPDATE CLIENTES SET activo = ? WHERE personaID = ?";
-
-        // Usa PDO para preparar la declaración
         $stmt = $pdo->prepare($sql);
 
         try {
@@ -31,34 +27,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$activo, $personaID]);
             $showModal = true;
             $modalContent = "
-                <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
-                    <div class='modal-dialog'>
+                <div class='modal fade' id='successModal' tabindex='-1' aria-labelledby='successModalLabel' aria-hidden='true'>
+                    <div class='modal-dialog modal-dialog-centered'>
                         <div class='modal-content'>
                             <div class='modal-header'>
-                                <h1 class='modal-title fs-5' id='staticBackdropLabel'>CLIENTE DESHABILITADO</h1>
+                                <h5 class='modal-title' id='successModalLabel'>Cliente Deshabilitado Exitosamente</h5>
                                 <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                             </div>
-                            <div class='modal-footer'>
-                                <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                            <div class='modal-body'>
+                                <p>El cliente ha sido deshabilitado exitosamente.</p>
                             </div>
                         </div>
                     </div>
                 </div>";
         } catch (PDOException $e) {
-            // Manejo de errores generales
             die("Error en la base de datos: " . $e->getMessage());
         }
     }
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>EDITAR DATOS</title>
+    <title>Eliminar Cliente</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         body {
@@ -66,43 +59,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #333;
         }
 
-        #lista {
-            list-style: none;
-            padding: 0;
-            margin: 0;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            max-height: 150px;
-            overflow-y: auto;
-        }
-
-        #lista li {
-            padding: 10px;
-            cursor: pointer;
-            background-color: #fff;
-            border-bottom: 1px solid #ddd;
-        }
-
-        #lista li:hover {
-            background-color: #f0f0f0;
-        }
-
-        #lista li:last-child {
-            border-bottom: none;
-        }
-
         .form-control {
             margin-bottom: 10px;
         }
     </style>
 </head>
-
 <body>
     <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
-        <div class="main p-3">
+        <div class="main p-2">
             <div class="container">
-                <h2>ELIMINAR CLIENTE</h2>
+                <h2>Eliminar Cliente</h2>
                 <div class="form-container">
                     <label for="campo">Selecciona un cliente:</label>
                     <form id="formCita" action="deshabilitar_client_view.php" method="POST" autocomplete="off">
@@ -128,19 +95,43 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Teléfono" readonly>
                         </div>
 
-                        <button type="submit" name="enviar" class="btn btn-danger w-100" data-bs-toggle="modal" data-bs-target="#staticBackdrop">Eliminar</button>
+                        <!-- Botón para mostrar el modal de confirmación -->
+                        <button type="button" class="btn btn-danger d-grid gap-2 col-6 mx-auto" id="btnEliminar">Eliminar</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
+    <!-- Modal de confirmación -->
+    <div class="modal fade" id="confirmacionModal" tabindex="-1" aria-labelledby="confirmacionModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="confirmacionModalLabel">Confirmar Eliminación</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <p>¿Estás seguro de que deseas eliminar al cliente <br> <span id="nombreCliente" style="font-weight: bold;"></span>?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="confirmarEliminar">Eliminar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modal de resultado -->
     <?php
     if ($showModal) {
         echo $modalContent;
         echo "<script>
-            var myModal = new bootstrap.Modal(document.getElementById('staticBackdrop'));
-            myModal.show();
+            var successModal = new bootstrap.Modal(document.getElementById('successModal'));
+            successModal.show();
+            setTimeout(function() {
+                successModal.hide();
+            }, 2000);
         </script>";
     }
     ?>
@@ -155,12 +146,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             this.classList.add('was-validated');
         });
 
+        if (window.history.replaceState) {
+            window.history.replaceState(null, null, window.location.href);
+        }
+
         document.getElementById('campo').addEventListener('input', function() {
             const searchTerm = this.value;
             const lista = document.getElementById('lista');
             lista.innerHTML = '';
             if (searchTerm.length > 0) {
-                fetch(`getClientes.php?search=${searchTerm}`)
+                fetch(`../Buscador/getClientes.php?search=${searchTerm}`)
                     .then(response => response.json())
                     .then(data => {
                         if (data.length > 0) {
@@ -174,6 +169,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     document.getElementById('apellido_materno').value = cliente.apellido_materno;
                                     document.getElementById('telefono').value = cliente.telefono;
                                     document.getElementById('correo').value = cliente.correo;
+
+                                    // Actualiza el nombre del cliente en el modal
+                                    document.getElementById('nombreCliente').innerText = `${cliente.nombre} ${cliente.apellido_paterno} ${cliente.apellido_materno}`;
                                     lista.style.display = 'none';
                                 };
                                 lista.appendChild(li);
@@ -187,10 +185,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 lista.style.display = 'none';
             }
         });
+
+        document.getElementById('btnEliminar').addEventListener('click', function() {
+            const confirmacionModal = new bootstrap.Modal(document.getElementById('confirmacionModal'));
+            confirmacionModal.show();
+        });
+
+        document.getElementById('confirmarEliminar').addEventListener('click', function() {
+            document.getElementById('formCita').submit();
+        });
     </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
-
 </html>
-        

@@ -64,7 +64,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $pdo = null;
 }
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -133,7 +132,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-    <div class="wrapper">
+<div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
             <div class="container">
@@ -141,15 +140,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <div class="form-container">
                     <form action="" method="post" id="formCita" novalidate>
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required>
+                            <input type="text" class="form-control" autocomplete="off" id="campo" name="campo" placeholder="Buscar cliente..." required>
                             <ul id="lista" class="list-group" style="display: none;"></ul>
                             <input type="hidden" id="clienteID" name="clienteID">
                             <div class="invalid-feedback">Debes seleccionar un cliente.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="ordenID">Seleccionar Orden:</label>
+                            <select id="ordenID" name="ordenID" class="form-control" required>
+                                <option value="">Seleccionar orden...</option>
+                            </select>
+                            <div class="invalid-feedback">Debes seleccionar una orden.</div>
+                           
                             <label for="cantidad_pagada">Cantidad Pagada:</label>
-                            <input type="text" id="cantidad_pagada" name="cantidad_pagada" class="form-control" required><br><br>
+                            <input type="text" id="cantidad_pagada" name="cantidad_pagada" class="form-control" readonly required><br><br>
                             <label for="receptor">Nombre del Receptor:</label>
                             <input type="text" id="receptor" name="receptor" class="form-control" value="<?php echo htmlspecialchars($nombreCompleto); ?>" readonly required><br><br>
-                            <input type="submit" value="Generar Recibo"class="btn btn-dark w-100">
+                            <input type="submit" value="Generar Recibo" class="btn btn-dark w-100">
                         </div>
                     </form>
                 </div>
@@ -167,11 +174,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <div class="recibo-section">
                                             <div class="recibo-label">Fecha:</div>
                                             <div class="recibo-field"><?php echo htmlspecialchars($fecha_recibo); ?></div>
-                                        </div>
-                                        <div class="recibo-section">
-                                            <div class="recibo-label">Cliente:</div>
-                                            <div class="recibo-field"><?php echo htmlspecialchars($cliente_nombre); ?></div>
-                                        </div>
+                                        </div>                    
                                         <div class="recibo-section">
                                             <div class="recibo-label">Cantidad Pagada:</div>
                                             <div class="recibo-field"><?php echo htmlspecialchars($cantidad_pagada_recibo); ?></div>
@@ -182,7 +185,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         </div>
                                         <div class="recibo-section">
                                             <div class="recibo-label">Firma:</div>
-                                            <div class="recibo-field"><?php echo htmlspecialchars($receptor); ?></div>
+                                            <div class="recibo-field"></div>
                                         </div>
                                     </div>
                                     <br>
@@ -197,6 +200,83 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     </div>
 
     <script>
+        document.getElementById("campo").addEventListener("keyup", getClientes);
+
+        function getClientes() {
+            let inputCampo = document.getElementById("campo").value;
+            let lista = document.getElementById("lista");
+
+            if (inputCampo.length > 0) {
+                let url = "getClientes.php";
+                let formData = new FormData();
+                formData.append("campo", inputCampo);
+
+                fetch(url, {
+                        method: "POST",
+                        body: formData
+                    })
+                    .then(response => response.json())
+                    .then(data => {
+                        lista.style.display = 'block';
+                        lista.innerHTML = "";
+                        data.forEach(cliente => {
+                            let li = document.createElement('li');
+                            li.textContent = `${cliente.nombre} ${cliente.apellido_paterno} ${cliente.apellido_materno} - ${cliente.telefono}`;
+                            li.onclick = () => mostrar(cliente);
+                            lista.appendChild(li);
+                        });
+                    })
+                    .catch(err => console.log(err));
+            } else {
+                lista.style.display = 'none';
+            }
+        }
+
+        function mostrar(cliente) {
+            document.getElementById("campo").value = `${cliente.nombre} ${cliente.apellido_paterno} ${cliente.apellido_materno}`;
+            document.getElementById("clienteID").value = cliente.clienteID;
+            cargarOrdenes(cliente.clienteID);
+            document.getElementById("lista").style.display = 'none';
+        }
+
+        function cargarOrdenes(clienteID) {
+            if (clienteID) {
+                fetch(`obtener_ordenes.php?clienteID=${clienteID}`)
+                    .then(response => {
+                        if (!response.ok) {
+                            throw new Error('Network response was not ok');
+                        }
+                        return response.json();
+                    })
+                    .then(data => {
+                        if (Array.isArray(data)) {
+                            let ordenSelect = document.getElementById('ordenID');
+                            ordenSelect.innerHTML = '<option value="">Seleccionar orden...</option>';
+                            data.forEach(orden => {
+                                let option = document.createElement('option');
+                                option.value = orden.ordenID;
+                                option.textContent = `Orden ID: ${orden.ordenID} - ${orden.marca} ${orden.modelo} - Total Estimado: ${orden.total_estimado}`;
+                                ordenSelect.appendChild(option);
+                            });
+
+                            // Agregar un listener para que cuando cambie la selección, se actualice la cantidad pagada
+                            ordenSelect.addEventListener('change', function() {
+                                const selectedOption = ordenSelect.options[ordenSelect.selectedIndex];
+                                if (selectedOption) {
+                                    document.getElementById('cantidad_pagada').value = selectedOption.textContent.split(' - Total Estimado: ')[1];
+                                }
+                            });
+                        } else {
+                            console.error('Error en la respuesta:', data.error);
+                        }
+                    })
+                    .catch(error => console.error('Error:', error));
+            } else {
+                document.getElementById('ordenID').innerHTML = '<option value="">Seleccionar orden...</option>';
+            }
+        }
+    </script>
+     <script>
         // Mostrar el modal de vista previa
         var modal = new bootstrap.Modal(document.getElementById('reciboModal'));
         var span = document.getElementsByClassName("close")[0];

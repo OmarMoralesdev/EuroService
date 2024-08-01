@@ -38,59 +38,60 @@ try {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-
+<<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte de Nómina Semanal</title>
 </head>
-
 <body>
-<div class="wrapper">
+    <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
             <div class="container">
                 <h2>REPORTE DE NÓMINA SEMANAL</h2>
                 <div class="form-container">
-                <form method="GET" action="" class="mb-4">
-                    <div class="form-row">
-                        <div class="form-group col-md-6 offset-md-3">
-                            <label for="week">Selecciona la semana:</label>
-                            <input type="week" id="week" name="week" class="form-control" value="<?php echo htmlspecialchars($selected_week); ?>">
+                    <form method="GET" action="" class="mb-4">
+                        <div class="form-row">
+                            <div class="form-group col-md-6 offset-md-3">
+                                <label for="week">Selecciona la semana:</label>
+                                <input type="week" id="week" name="week" class="form-control" value="<?php echo htmlspecialchars($selected_week); ?>">
+                            </div>
                         </div>
+                        <button type="submit" class="btn btn-primary btn-block">Ver Reporte</button>
+                    </form>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Fecha de Pago</th>
+                                    <th>Empleado</th>
+                                    <th>Faltas</th>
+                                    <th>Rebajas</th>
+                                    <th>Total</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($nomina as $n) : ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($n['fecha_de_pago']); ?></td>
+                                        <td><?php echo htmlspecialchars($n['alias']); ?></td>
+                                        <td><?php echo htmlspecialchars($n['faltas']); ?></td>
+                                        <td>$<?php echo number_format($n['rebajas'], 2); ?></td>
+                                        <td>$<?php echo number_format($n['total'], 2); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                <tr class="font-weight-bold">
+                                    <td colspan="4" class="text-right">Total:</td>
+                                    <td>$<?php echo number_format($total_nomina, 2); ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Ver Reporte</button>
-                </form>
-                <table class="table table-striped table-bordered">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Fecha de Pago</th>
-                            <th>Empleado</th>
-                            <th>Faltas</th>
-                            <th>Rebajas</th>
-                            <th>Total</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($nomina as $n) : ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($n['fecha_de_pago']); ?></td>
-                                <td><?php echo htmlspecialchars($n['alias']); ?></td>
-                                <td><?php echo htmlspecialchars($n['faltas']); ?></td>
-                                <td>$<?php echo number_format($n['rebajas'], 2); ?></td>
-                                <td>$<?php echo number_format($n['total'], 2); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                        <tr class="font-weight-bold">
-                            <td colspan="4" class="text-right">Total:</td>
-                            <td>$<?php echo number_format($total_nomina, 2); ?></td>
-                        </tr>
-                    </tbody>
-                </table>
+                </div>
             </div>
         </div>
-    </div>
 </body>
 
 </html>
