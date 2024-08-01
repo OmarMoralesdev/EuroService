@@ -23,6 +23,9 @@ body {
     padding: 0;
 }
 
+.btnn:hover {
+            transform: scale(1.01) translateY(-2px);
+        }
 a {
     text-decoration: none;
 }
@@ -207,6 +210,34 @@ h2 {
     font-family: 'chicago', sans-serif; /* Cambio de tipografía a chicago */
 }
 
+
+#lista {
+            display: none;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            max-height: 150px;
+            overflow-y: auto;
+        }
+
+        #lista li {
+            padding: 10px;
+            cursor: pointer;
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+        }
+
+        #lista li:hover {
+            background-color: #e2e2e2;
+        }
+
+        #lista li:last-child {
+            border-bottom: none;
+        }
+
+
     
 </style>
 <aside id="sidebar">
@@ -235,10 +266,10 @@ h2 {
     </a>
     <ul id="catalogo" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
         <li class="sidebar-item">
-            <a href="../Catalogo/" class="sidebar-link">CATEGORÍA</a>
+            <a href="../Catalogo/Categoria.php" class="sidebar-link">CATEGORÍA</a>
         </li>
         <li class="sidebar-item">
-            <a href="../Catalogo/" class="sidebar-link">INSUMOS</a>
+            <a href="../Catalogo/Insumos.php" class="sidebar-link">INSUMOS</a>
         </li>
     </ul>
 </li>
@@ -336,7 +367,7 @@ h2 {
                     <a href="../Empleados/cuentaempleado.php" class="sidebar-link">HABILITAR CUENTA</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Empleados/salario.php" class="sidebar-link">BUSCAR</a>
+                    <a href="../Empleados/buscar.php" class="sidebar-link">BUSCAR</a>
                 </li>
             </ul>
         </li>
@@ -356,6 +387,9 @@ h2 {
                 </li>
                 <li class="sidebar-item">
                     <a href="../Finanzas/Reporte de Nómina.php" class="sidebar-link">NOMINA</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="../Finanzas/formulario_recibo_pago.php" class="sidebar-link">RECIBO DE PAGO</a>
                 </li>
             </ul>
         </li>

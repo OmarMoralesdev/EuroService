@@ -1,29 +1,20 @@
 <?php
-require '../includes/db.php'; // Ajusta la ruta según tu estructura de carpetas
-
+require '../includes/db.php'; // Asegúrate de que la ruta es correcta
 $con = new Database();
 $pdo = $con->conectar();
 
-// Verificar si se ha enviado el campo de búsqueda
-$campo = filter_input(INPUT_POST, 'campo', FILTER_SANITIZE_STRING);
+$searchTerm = $_GET['search'] ?? '';
 
-if ($campo) {
-    $sql = "SELECT CLIENTES.clienteID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno 
-            FROM CLIENTES 
-            JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID 
-            WHERE CLIENTES.activo = 'si' and PERSONAS.nombre LIKE ? OR PERSONAS.apellido_paterno LIKE ? OR PERSONAS.apellido_materno LIKE ? 
-            ORDER BY PERSONAS.nombre ASC 
-            LIMIT 10";
-    $query = $pdo->prepare($sql);
-    $query->execute([$campo . '%', $campo . '%', $campo . '%']);
+$query = "SELECT clienteID, nombre, apellido_paterno, apellido_materno, telefono, correo 
+          FROM CLIENTES 
+          INNER JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID
+          WHERE CLIENTES.activo = 'si' 
+            AND (nombre LIKE ? OR apellido_paterno LIKE ? OR apellido_materno LIKE ?)";
 
-    $clientes = [];
-    while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
-        $clientes[] = $row;
-    }
+$stmt = $pdo->prepare($query);
+$likeTerm = '%' . $searchTerm . '%';
+$stmt->execute([$likeTerm, $likeTerm, $likeTerm]);
 
-    echo json_encode($clientes, JSON_UNESCAPED_UNICODE);
-} else {
-    echo json_encode([]);
-}
+$result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+echo json_encode($result);
 ?>

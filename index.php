@@ -194,10 +194,16 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
-                    <li class="nav-item">
-                        <button class="nav-link btn pulse" data-bs-toggle="modal" data-bs-target="#loginModal">INICIAR SESIÓN</button>
-                    </li>
-                </ul>
+    <li class="nav-item">
+        <a class="nav-link" href="#servicios">Servicios</a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="#ubi">Ubicación</a>
+    </li>
+    <li class="nav-item">
+        <button class="nav-link btn pulse" data-bs-toggle="modal" data-bs-target="#loginModal">INICIAR SESIÓN</button>
+    </li>
+</ul>
             </div>
         </div>
     </nav>
@@ -211,10 +217,11 @@
 
             
     
-    <div class="content">
+    <div id="servicios" class="content">
         <section class="features text-center text-light">
             <div class="container">
-                <h2 class="section-heading">NUESTROS SERVICIOS</h2>
+
+                <h2  class="section-heading">NUESTROS SERVICIOS</h2>
                 <hr class="bg-light">
                 <div class="row">
                     <div class="col-md-4">
@@ -270,7 +277,7 @@
                     <p>Teléfono: +1234567890</p>
                 </div>
             </div>
-            <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3598.18782262292!2d-103.41128942458826!3d25.598674315322345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x869c1e1a44a6e3ef%3A0x8b4f22350c0a407d!2sEURO%20SERVICE!5e0!3m2!1ses!2smx!4v1649918775186!5m2!1ses!2smx" width="100%" height="300" style="border:1px;" allowfullscreen="" loading="lazy"></iframe>
+            <iframe id="ubi" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3598.18782262292!2d-103.41128942458826!3d25.598674315322345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x869c1e1a44a6e3ef%3A0x8b4f22350c0a407d!2sEURO%20SERVICE!5e0!3m2!1ses!2smx!4v1649918775186!5m2!1ses!2smx" width="100%" height="300" style="border:1px;" allowfullscreen="" loading="lazy"></iframe>
         </div>
     </footer>
 
