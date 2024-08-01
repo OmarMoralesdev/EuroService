@@ -61,20 +61,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Location: crear_orden_sin_cita.php");
             exit();
         }
-
-        // Insertar orden de trabajo
-        $sqlOrden = "INSERT INTO ORDENES_TRABAJO (fecha_orden, costo_mano_obra, costo_refacciones, atencion, citaID, empleadoID, ubicacionID) VALUES (?, ?, ?, ?, ?, ?, ?)";
-        $stmtOrden = $pdo->prepare($sqlOrden);
-        $stmtOrden->execute([$fechaOrden, $costoManoObra, $costoRefacciones, $atencion, $citaID, $empleadoID, $ubicacionID]);
-        $ordenID = $pdo->lastInsertId();
-
-        // Insertar pago
-        $sqlPago = "INSERT INTO PAGOS (ordenID, fecha_pago, monto, tipo_pago, forma_de_pago) VALUES (?, ?, ?, 'anticipo', ?)";
-        $stmtPago = $pdo->prepare($sqlPago);
-        $stmtPago->execute([$ordenID, $fechaOrden, $anticipo, $formaDePago]);
-
         // Verificar el límite de vehículos en la ubicación
-        $sqlVerificarUbicacion = "SELECT vehiculos_maximos, vehiculos_actuales FROM UBICACIONES WHERE ubicacionID = ?";
+        $sqlVerificarUbicacion = "
+SELECT 
+    u.capacidad AS vehiculos_maximos, 
+    COUNT(v.vehiculoID) AS vehiculos_actuales 
+FROM 
+    UBICACIONES u
+    LEFT JOIN ORDENES_TRABAJO ot ON u.ubicacionID = ot.ubicacionID
+    LEFT JOIN CITAS c ON ot.citaID = c.citaID
+    LEFT JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
+WHERE 
+    u.ubicacionID = ?
+GROUP BY 
+    u.ubicacionID, u.capacidad
+";
+
         $stmtVerificarUbicacion = $pdo->prepare($sqlVerificarUbicacion);
         $stmtVerificarUbicacion->execute([$ubicacionID]);
         $ubicacion = $stmtVerificarUbicacion->fetch(PDO::FETCH_ASSOC);
@@ -90,11 +92,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             header("Location: crear_orden_sin_cita.php");
             exit();
         }
+        // Insertar orden de trabajo
+        $sqlOrden = "INSERT INTO ORDENES_TRABAJO (fecha_orden, costo_mano_obra, costo_refacciones, atencion, citaID, empleadoID, ubicacionID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $stmtOrden = $pdo->prepare($sqlOrden);
+        $stmtOrden->execute([$fechaOrden, $costoManoObra, $costoRefacciones, $atencion, $citaID, $empleadoID, $ubicacionID]);
+        $ordenID = $pdo->lastInsertId();
 
-        // Actualizar el conteo de vehículos en la ubicación
-        $sqlActualizarUbicacion = "UPDATE UBICACIONES SET vehiculos_actuales = vehiculos_actuales + 1 WHERE ubicacionID = ?";
-        $stmtActualizarUbicacion = $pdo->prepare($sqlActualizarUbicacion);
-        $stmtActualizarUbicacion->execute([$ubicacionID]);
+        // Insertar pago
+        realizarPago($pdo, $nuevaOrdenID, $fechaPago, $anticipo, $tipoPago, $formaDePago);
+        actualizarEstadoCita($pdo, $citaID, 'en proceso');
+
 
         $pdo->commit();
         $_SESSION['mensaje'] = "Cita y orden de trabajo creadas exitosamente.";
@@ -105,7 +112,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     header("Location: crear_orden_sin_cita.php");
     exit();
-    actualizarEstadoCita($pdo, $citaID, 'en proceso');
 } else {
     $_SESSION['error'] = "Método de solicitud no válido.";
     header("Location: crear_orden_sin_cita.php");

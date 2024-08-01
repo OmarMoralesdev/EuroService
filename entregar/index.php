@@ -41,6 +41,8 @@ session_start();
                                 </div>
                             </div>
                         </div>";
+                        unset($_SESSION['bien']);
+
                     }
                     ?>
                     <form action="proceso.php" method="POST">
