@@ -66,7 +66,7 @@ $pdo = null;
                     </form>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered">
-                            <thead class="thead-dark">
+                        <thead>
                                 <tr>
                                     <th>Nombre del Técnico</th>
                                     <th>Número de Órdenes</th>
