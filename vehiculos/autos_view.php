@@ -2,10 +2,6 @@
 require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
-<<<<<<< HEAD
-$errors = [];
-$success = '';
-=======
 session_start();
 $errors = [];
 $success = '';
@@ -13,22 +9,10 @@ $showModal = false;
 $showInspeccionForm = false;
 $vehiculoID = '';
 $continuidad = false;
->>>>>>> e470cba7adf3b246564cc3646dec9c32d46248bd
 
 
 // Comprobar si el formulario ha sido enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-<<<<<<< HEAD
-    $clienteID = $_POST['clienteID'];
-    $marca = trim($_POST['marca']);
-    $modelo = trim($_POST['modelo']);
-    $anio = trim($_POST['anio']);
-    $color = trim($_POST['color']);
-    $kilometraje = trim($_POST['kilometraje']);
-    $placas = trim($_POST['placas']);
-    $vin = trim($_POST['vin']);
-
-=======
     // Verificar si las claves existen en el array $_POST
     $clienteID = isset($_POST['clienteID']) ? $_POST['clienteID'] : '';
     $marca = isset($_POST['marca']) ? trim($_POST['marca']) : '';
@@ -45,7 +29,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     } else {
         $continuidad2 = "no";
     }
->>>>>>> e470cba7adf3b246564cc3646dec9c32d46248bd
     $currentYear = date('Y');
 
     if ($anio < 1886 || $anio > $currentYear) {
@@ -65,34 +48,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute([$clienteID, $marca, $modelo, $anio, $color, $kilometraje, $placas, $vin, $continuidad2]);
 
             if ($stmt->rowCount() > 0) {
-<<<<<<< HEAD
-                $success =
-                $showModal = true;
-                $modalContent = "
-                    <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
-                        <div class='modal-dialog'>
-                            <div class='modal-content'>
-                                <div class='modal-header'>
-                                    <h1 class='modal-title fs-5' id='staticBackdropLabel'>Vehículo registrado!</h1>
-                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                                </div>
-                                <div class='modal-body'>
-                                <h3>Datos:</h3>
-                                    MARCA: <strong>$marca</strong><br><br>
-                                    MODELO: <strong>$modelo</strong><br><br>
-                                    AÑO: <strong>$anio</strong><br><br>
-                                    VIN: <strong>$vin</strong><br><br>
-                                    Contraseña del cliente: <strong>$password</strong><br><hr>
-                                    Presiona siguiente para registrar su
-                                </div>
-                                <div class='modal-footer'>
-                                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                                    <a href='../CItas' type='button' class='btn btn-dark'>Siguiente</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>";
-=======
              
                 $_SESSION['vehiculo'] = $vehiculoID = $pdo->lastInsertId();
 
@@ -103,7 +58,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                     $_SESSION['bien'] = "Vehículo registrado exitosamente.";
                 }
->>>>>>> e470cba7adf3b246564cc3646dec9c32d46248bd
             } else {
                 $_SESSION['error'] = "Error: " . $pdo->errorInfo()[2];
             }
@@ -131,26 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-<<<<<<< HEAD
-<div class="wrapper">
-    <?php include '../includes/vabr.html'; ?>
-    <div class="main">
-        <div class="container">
-            <h2>REGISTRAR VEHÍCULO</h2>
-            <div class="form-container">
-                <br>
-                <form id="formCita" action="autos.php" method="POST" autocomplete="off" novalidate>
-                    <div class="mb-3">
-                        <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required>
-                        <ul id="lista" class="list-group" style="display: none;"></ul>
-                        <input type="hidden" id="clienteID" name="clienteID">
-                        <div class="invalid-feedback">Debes seleccionar un cliente.</div>
-                    </div>
-                    <div class="form-group">
-                        <label for="marca">Marca:</label>
-                        <input type="text" id="marca" name="marca" maxlength="30" class="form-control <?php echo isset($errors['marca']) ? 'is-invalid' : ''; ?>" placeholder="Introduce la marca del vehículo" value="<?php echo htmlspecialchars($marca ?? '', ENT_QUOTES); ?>" required>
-                        <div class="invalid-feedback"><?php echo $errors['marca'] ?? ''; ?></div>
-=======
     <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main">
@@ -195,7 +129,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="marca">Marca:</label>
                             <input type="text" id="marca" name="marca" maxlength="30" class="form-control <?php echo isset($errors['marca']) ? 'is-invalid' : ''; ?>" placeholder="Introduce la marca del vehículo" value="<?php echo htmlspecialchars($marca ?? '', ENT_QUOTES); ?>" required>
                             <div class="invalid-feedback"><?php echo $errors['marca'] ?? ''; ?></div>
->>>>>>> e470cba7adf3b246564cc3646dec9c32d46248bd
 
                             <label for="modelo">Modelo:</label>
                             <input type="text" id="modelo" name="modelo" maxlength="30" class="form-control <?php echo isset($errors['modelo']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el modelo del vehículo" value="<?php echo htmlspecialchars($modelo ?? '', ENT_QUOTES); ?>" required>
@@ -221,121 +154,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <input type="text" id="vin" name="vin" maxlength="20" class="form-control <?php echo isset($errors['vin']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el VIN del vehículo" value="<?php echo htmlspecialchars($vin ?? '', ENT_QUOTES); ?>" required>
                             <div class="invalid-feedback"><?php echo $errors['vin'] ?? ''; ?></div>
 
-<<<<<<< HEAD
-                        <br>
-                        <input type="submit" class="btn btn-dark" value="Registrar Vehículo">
-                    </div>
-                </form>
-                <?php if ($success): ?>
-                    <div class="alert alert-success mt-3"><?php echo $success; ?></div>
-                <?php endif; ?>
-                <?php if (isset($errors['general'])): ?>
-                    <div class="alert alert-danger mt-3"><?php echo $errors['general']; ?></div>
-                <?php endif; ?>
-            </div>
-        </div>
-    </div>
-    <script src="app.js"></script>
-    <script>
-        document.getElementById('formCita').addEventListener('submit', function(event) {
-            let valid = true;
-            const currentYear = new Date().getFullYear();
-
-                // Obtener valores del formulario
-                const marca = document.getElementById('marca').value.trim();
-                const modelo = document.getElementById('modelo').value.trim();
-                const anio = parseInt(document.getElementById('anio').value.trim(), 10);
-                const color = document.getElementById('color').value.trim();
-                const kilometraje = document.getElementById('kilometraje').value.trim();
-                const placas = document.getElementById('placas').value.trim();
-                const vin = document.getElementById('vin').value.trim();
-
-                // Validar marca
-                if (/\d/.test(marca)) {
-                    document.getElementById('marca').classList.add('is-invalid');
-                    valid = false;
-                } else {
-                    document.getElementById('marca').classList.remove('is-invalid');
-                }
-
-                // Validar año
-                if (anio < 1886 || anio > currentYear || anio.toString().length !== 4) {
-                    document.getElementById('anio').classList.add('is-invalid');
-                    valid = false;
-                } else {
-                    document.getElementById('anio').classList.remove('is-invalid');
-                }
-
-                // Validar kilometraje
-                if (!/^\d{1,8}$/.test(kilometraje)) {
-                    document.getElementById('kilometraje').classList.add('is-invalid');
-                    valid = false;
-                } else {
-                    document.getElementById('kilometraje').classList.remove('is-invalid');
-                }
-
-                // Validar color
-                if (/\d/.test(color)) {
-                    document.getElementById('color').classList.add('is-invalid');
-                    valid = false;
-                } else {
-                    document.getElementById('color').classList.remove('is-invalid');
-                }
-
-                // Validar placas
-                if (placas.length > 10) {
-                    document.getElementById('placas').classList.add('is-invalid');
-                    valid = false;
-                } else {
-                    document.getElementById('placas').classList.remove('is-invalid');
-                }
-
-                // Validar VIN
-                if (vin.length > 20) {
-                    document.getElementById('vin').classList.add('is-invalid');
-                    valid = false;
-                } else {
-                    document.getElementById('vin').classList.remove('is-invalid');
-                }
-
-            if (!valid) {
-                event.preventDefault();
-            }
-        });
-
-        // Lógica para el buscador de clientes
-        document.getElementById('campo').addEventListener('input', function() {
-            const query = this.value;
-            if (query.length < 3) {
-                document.getElementById('lista').style.display = 'none';
-                return;
-            }
-
-            fetch('buscar_view.php?query=' + query)
-                .then(response => response.json())
-                .then(data => {
-                    const lista = document.getElementById('lista');
-                    lista.innerHTML = '';
-                    if (data.length > 0) {
-                        data.forEach(cliente => {
-                            const item = document.createElement('li');
-                            item.classList.add('list-group-item');
-                            item.textContent = cliente.nombre;
-                            item.addEventListener('click', function() {
-                                document.getElementById('campo').value = cliente.nombre;
-                                document.getElementById('clienteID').value = cliente.id;
-                                lista.style.display = 'none';
-                            });
-                            lista.appendChild(item);
-                        });
-                        lista.style.display = 'block';
-                    } else {
-                        lista.style.display = 'none';
-                    }
-                });
-            });
-        </script>
-=======
                             <div class="form-check mt-2">
                                 <input class="form-check-input" type="checkbox" id="continuidad" name="continuidad" <?php echo $continuidad ? 'checked' : ''; ?>>
                                 <label class="form-check-label" for="continuidad">¿Tiene continuidad el vehiculo?</label>
@@ -487,7 +305,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
->>>>>>> e470cba7adf3b246564cc3646dec9c32d46248bd
 </body>
 
 </html>

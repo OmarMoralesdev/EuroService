@@ -11,21 +11,6 @@ $vehiculoID = '';
 $continuidad = false;
 
 
-<<<<<<< HEAD
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $clienteID = $_POST['clienteID'];
-    $marca = trim($_POST['marca']);
-    $modelo = trim($_POST['modelo']);
-    $anio = trim($_POST['anio']);
-    $color = trim($_POST['color']);
-    $kilometraje = trim($_POST['kilometraje']);
-    $placas = trim($_POST['placas']);
-    $vin = trim($_POST['vin']);
-
-    $verificar = "SELECT * FROM VEHICULOS WHERE vin = ?";
-    $stmtVerificar = $pdo->prepare($verificar);
-    $stmtVerificar->execute([$vin]);
-=======
 // Comprobar si el formulario ha sido enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Verificar si las claves existen en el array $_POST
@@ -54,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $verificar = "SELECT * FROM VEHICULOS WHERE vin = ?";
         $stmtVerificar = $pdo->prepare($verificar);
         $stmtVerificar->execute([$vin]);
->>>>>>> e470cba7adf3b246564cc3646dec9c32d46248bd
 
         if ($stmtVerificar->rowCount() > 0) {
             $_SESSION['error'] = "El vehículo ya está registrado.";
