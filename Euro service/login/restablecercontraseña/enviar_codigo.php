@@ -19,12 +19,12 @@ function enviarCorreoRecuperacion($emailDestino, $codigoRecuperacion) {
         $mail->isSMTP();
         $mail->Host = 'smtp.gmail.com'; // Cambia esto al servidor SMTP que estés usando
         $mail->SMTPAuth = true;
-        $mail->Username = 'euroservice339@gmail.com'; // Cambia esto a tu correo
-        $mail->Password = 'uguh ipf w rqqz ewjb'; // Cambia esto a tu contraseña
+        $mail->Username = ''; // Cambia esto a tu correo
+        $mail->Password = ''; // Cambia esto a tu contraseña
         $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
         $mail->Port = 587;
         // Remitente y destinatario
-        $mail->setFrom('euroservice339@gmail.com', 'EuroService');
+        $mail->setFrom('', 'EuroService');
         $mail->addAddress($emailDestino);
         // Contenido del correo
         $mail->isHTML(true);
