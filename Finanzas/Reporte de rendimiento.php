@@ -42,15 +42,12 @@ $pdo = null;
 ?>
 
 <!DOCTYPE html>
-<html lang="es">
-
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte de Rendimiento</title>
-    <style>
-    </style>
 </head>
-
 <body>
     <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
@@ -101,5 +98,5 @@ $pdo = null;
         </div>
     </div>
 </body>
-
 </html>
+

@@ -38,14 +38,13 @@ try {
 }
 ?>
 
-<!DOCTYPE html>
-<html lang="es">
-
+<<!DOCTYPE html>
+<html lang="en">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte de Nómina Semanal</title>
 </head>
-
 <body>
     <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
