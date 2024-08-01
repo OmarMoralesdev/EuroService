@@ -188,6 +188,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         $showModal = true;
                     }
                     try {
+                        $mail = new PHPMailer(true);
                         $mail->isSMTP();
                         $mail->Host = 'smtp.gmail.com';
                         $mail->SMTPAuth = true;
