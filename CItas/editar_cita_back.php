@@ -32,7 +32,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: seleccionar_cita.php");
             exit();
         }
-        
+
         $_SESSION['mensaje'] = $mensaje;
         header("Location: editar_cita_view.php");
         exit();
@@ -40,10 +40,21 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $citaID = filter_input(INPUT_POST, 'citaID', FILTER_SANITIZE_NUMBER_INT);
         $servicioSolicitado = filter_input(INPUT_POST, 'servicioSolicitado', FILTER_SANITIZE_STRING);
         $fechaCita = filter_input(INPUT_POST, 'fecha_cita', FILTER_SANITIZE_STRING);
-        $estado = filter_input(INPUT_POST, 'estado', FILTER_SANITIZE_STRING);
+        
+        $estado = isset($_POST['estado']) && $_POST['estado'] == 'cancelado';
+        if ($_POST['estado'] === 'cancelado') {
+            $sqlUpdate = "UPDATE CITAS SET estado = ? WHERE citaID = ?";
+            $queryUpdate = $pdo->prepare($sqlUpdate);
+            $resultUpdate = $queryUpdate->execute([$estado, $citaID]);
+            $_SESSION['bien'] = "Cita cancelada exitosamente";
+            header("Location: seleccionar_cita.php");
+            exit();
+        }
 
-        if (!$citaID || !$servicioSolicitado || !$fechaCita || !$estado) {
+        if (!$citaID || !$servicioSolicitado || !$fechaCita) {
             $_SESSION['error'] = "Error: Todos los campos son obligatorios.";
+            header("Location: editar_cita_view.php");
+            exit();
         } else {
             $fechaActual = new DateTime();
             $fechaCita = new DateTime($fechaCita);
@@ -79,33 +90,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $_SESSION['error'] =  "Error: La nueva fecha y hora de la cita solapan con otra cita existente en el intervalo de 30 minutos.";
                         header("Location: editar_cita_view.php");
                         exit();
-                        } else {
-                            // Actualizar la cita
-                            $sqlUpdate = "UPDATE CITAS SET servicio_solicitado = ?, fecha_cita = ?, estado = ? WHERE citaID = ?";
-                            $queryUpdate = $pdo->prepare($sqlUpdate);
-                            $resultUpdate = $queryUpdate->execute([$servicioSolicitado, $fechaCita->format('Y-m-d H:i:s'), $estado, $citaID]);
+                    } else {
+                        // Actualizar la cita
+                        $sqlUpdate = "UPDATE CITAS SET servicio_solicitado = ?, fecha_cita = ?  WHERE citaID = ?";
+                        $queryUpdate = $pdo->prepare($sqlUpdate);
+                        $resultUpdate = $queryUpdate->execute([$servicioSolicitado, $fechaCita->format('Y-m-d H:i:s'), $citaID]);
 
-                            if ($resultUpdate) {
-                                $mensaje = "Cita actualizada correctamente.";
-                                $sql = "SELECT * FROM CITAS WHERE citaID = ?";
-                                $query = $pdo->prepare($sql);
-                                $query->execute([$citaID]);
-                                $cita = $query->fetch(PDO::FETCH_ASSOC);
-                                $vehiculoID = $cita['vehiculoID'];
-                                $detalles = obtenerDetallesVehiculoyCliente($pdo, $vehiculoID);
-                                $_SESSION['cita'] = $cita;
-                                $_SESSION['mensaje'] = "Cita editada exitosamente.";
-                                header("Location: editar_cita_view.php");
-                                exit();
-                            } else {
-                                $mensaje = "Error al actualizar la cita.";
-                            }
+                        if ($resultUpdate) {
+                            $mensaje = "Cita actualizada correctamente.";
+                            $sql = "SELECT * FROM CITAS WHERE citaID = ?";
+                            $query = $pdo->prepare($sql);
+                            $query->execute([$citaID]);
+                            $cita = $query->fetch(PDO::FETCH_ASSOC);
+                            $vehiculoID = $cita['vehiculoID'];
+                            $detalles = obtenerDetallesVehiculoyCliente($pdo, $vehiculoID);
+                            $_SESSION['cita'] = $cita;
+                            $_SESSION['mensaje'] = "Cita editada exitosamente.";
+                            header("Location: editar_cita_view.php");
+                            exit();
+                        } else {
+                            $mensaje = "Error al actualizar la cita.";
                         }
                     }
                 }
             }
         }
     }
-
-
-?>
+}
