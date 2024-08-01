@@ -20,13 +20,13 @@ unset($_SESSION['mensaje']);
                 <h2>Registrar Cita y Crear Orden de Trabajo</h2>
                 <div class="form-container">
                     <form action="crear_orden_sin_cita2.php" method="post" id="formCita" novalidate autocomplete="off">
-                    <?php
-                      if (isset($_SESSION['error'])) {
-                        echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
-                        unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
-                    }
-                    if ($mensaje) {
-                        echo "
+                        <?php
+                        if (isset($_SESSION['error'])) {
+                            echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
+                            unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
+                        }
+                        if ($mensaje) {
+                            echo "
                         <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                             <div class='modal-dialog'>
                                 <div class='modal-content'>
@@ -43,8 +43,8 @@ unset($_SESSION['mensaje']);
                                 </div>
                             </div>
                         </div>";
-                    }
-                    ?>
+                        }
+                        ?>
                         <!-- Formulario de Cita -->
                         <div class="mb-3">
                             <label for="clienteID" class="form-label">Ingrese un cliente:</label>
@@ -105,23 +105,33 @@ unset($_SESSION['mensaje']);
                             <label for="ubicacionID" class="form-label">Ubicación ID:</label>
                             <select name="ubicacionID" class="form-control" required>
                                 <?php
-                                function ubicaciones($pdo)
+                                function obtenerUbicacionesActivas($pdo)
                                 {
                                     $sql = "SELECT * FROM UBICACIONES WHERE activo = 'si';";
                                     $stmt = $pdo->query($sql);
                                     return $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 }
-                                $filas = ubicaciones($pdo);
-                                if (empty($filas)) {
-                                    echo "<option value=''>No hay ubicaciones disponibles</option>";
-                                } else {
-                                    foreach ($filas as $resultado) {
-                                        echo "<option value=\"{$resultado['ubicacionID']}\">{$resultado['lugar']}</option>";
-                                    }
+                                $ubicaciones = obtenerUbicacionesActivas($pdo);
+                                foreach ($ubicaciones as $ubicacion) {
+                                    echo "<option value=\"{$ubicacion['ubicacionID']}\">{$ubicacion['lugar']}</option>";
                                 }
                                 ?>
                             </select>
                             <div class="invalid-feedback">Debes seleccionar una ubicación.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="anticipo" class="form-label">Anticipo:</label>
+                            <input type="number" step="0.01" class="form-control" id="anticipo" name="anticipo" required>
+                            <div class="invalid-feedback">Debes ingresar el anticipo.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="formadepago" class="form-label">Forma de pago:</label>
+                            <select name="formadepago" class="form-control" required>
+                                <option value="efectivo">Efectivo</option>
+                                <option value="tarjeta">Tarjeta</option>
+                                <option value="transferencia">Transferencia</option>
+                            </select>
+                            <div class="invalid-feedback">Debes seleccionar una forma de pago.</div>
                         </div>
                         <button type="submit" class="btn btn-dark w-100">Registrar Cita y Crear Orden de Trabajo</button>
                     </form>
@@ -129,13 +139,12 @@ unset($_SESSION['mensaje']);
             </div>
         </div>
     </div>
-    <script src="app.js"></script>
     <script>
-    $(document).ready(function () {
-        if ($('#staticBackdrop').length) {
-            $('#staticBackdrop').modal('show');
-        }
-    });
+        $(document).ready(function() {
+            if ($('#staticBackdrop').length) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
     </script>
 </body>
 
