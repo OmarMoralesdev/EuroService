@@ -47,50 +47,52 @@ try {
 </head>
 
 <body>
-<div class="wrapper">
+    <div class="wrapper">
         <?php include '../includes/vabr.html'; ?>
         <div class="main p-3">
             <div class="container">
                 <h2>REPORTE DE INGRESOS SEMANAL</h2>
                 <div class="form-container">
-                <form method="GET" action="" class="mb-4">
-                    <div class="form-row">
-                        <div class="form-group col-md-6 offset-md-3">
-                            <label for="week">Selecciona la semana:</label>
-                            <input type="week" id="week" name="week" class="form-control" value="<?php echo htmlspecialchars($selected_week); ?>">
+                    <form method="GET" action="" class="mb-4">
+                        <div class="form-row">
+                            <div class="form-group col-md-6 offset-md-3">
+                                <label for="week">Selecciona la semana:</label>
+                                <input type="week" id="week" name="week" class="form-control" value="<?php echo htmlspecialchars($selected_week); ?>">
+                            </div>
                         </div>
+                        <button type="submit" class="btn btn-primary btn-block">Ver Reporte</button>
+                    </form>
+                    <div class="table-responsive">
+                        <table class="table table-striped table-bordered">
+                            <thead class="thead-dark">
+                                <tr>
+                                    <th>Fecha de Pago</th>
+                                    <th>Monto</th>
+                                    <th>Tipo de Pago</th>
+                                    <th>Forma de Pago</th>
+                                    <th>ID de Orden</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <?php foreach ($ingresos as $ingreso) : ?>
+                                    <tr>
+                                        <td><?php echo htmlspecialchars($ingreso['fecha_pago']); ?></td>
+                                        <td>$<?php echo number_format($ingreso['monto'], 2); ?></td>
+                                        <td><?php echo htmlspecialchars($ingreso['tipo_pago']); ?></td>
+                                        <td><?php echo htmlspecialchars($ingreso['forma_de_pago']); ?></td>
+                                        <td><?php echo htmlspecialchars($ingreso['ordenID']); ?></td>
+                                    </tr>
+                                <?php endforeach; ?>
+                                <tr class="font-weight-bold">
+                                    <td colspan="4" class="text-right">Total:</td>
+                                    <td>$<?php echo number_format($total_ingresos, 2); ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
-                    <button type="submit" class="btn btn-primary btn-block">Ver Reporte</button>
-                </form>
-                <table class="table table-striped table-bordered">
-                    <thead class="thead-dark">
-                        <tr>
-                            <th>Fecha de Pago</th>
-                            <th>Monto</th>
-                            <th>Tipo de Pago</th>
-                            <th>Forma de Pago</th>
-                            <th>ID de Orden</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <?php foreach ($ingresos as $ingreso) : ?>
-                            <tr>
-                                <td><?php echo htmlspecialchars($ingreso['fecha_pago']); ?></td>
-                                <td>$<?php echo number_format($ingreso['monto'], 2); ?></td>
-                                <td><?php echo htmlspecialchars($ingreso['tipo_pago']); ?></td>
-                                <td><?php echo htmlspecialchars($ingreso['forma_de_pago']); ?></td>
-                                <td><?php echo htmlspecialchars($ingreso['ordenID']); ?></td>
-                            </tr>
-                        <?php endforeach; ?>
-                        <tr class="font-weight-bold">
-                            <td colspan="4" class="text-right">Total:</td>
-                            <td>$<?php echo number_format($total_ingresos, 2); ?></td>
-                        </tr>
-                    </tbody>
-                </table>
+                </div>
             </div>
         </div>
-    </div>
 </body>
 
 </html>
