@@ -55,7 +55,7 @@ session_start();
                     <form action="../CItas/registrar_cita.php" method="POST" autocomplete="off">
                         <div class="mb-3">
                             <input type="text" class="form-control" autocomplete="off" id="campo" name="campo" placeholder="Buscar cliente..." required>
-                            <ul id="lista" class="list-group" style="display: none;"></ul>
+                            <ul id="lista" class="list-group"></ul>
                             <input type="hidden" id="clienteID" name="clienteID">
                             <div class="invalid-feedback">Debes seleccionar un cliente.</div>
                         </div>

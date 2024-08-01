@@ -49,22 +49,45 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['personaID'] =  $personaID;
                 // Redireccionar según el rol
                 if ($role == 1) {
-                    header("Location: ../EuroService/Cliente/client.php");
+                    header("Location: ../EuroService/Cliente");
                     exit();
                 } elseif ($role == 2) {
                     header("Location: ../EuroService/general_views/admin.php");
                     exit();
                 } elseif ($role == 3) {
-                    header("Location: ../EuroService/general_views/dueño.php");
+                    header("Location: ../EuroService/dueño/dueño.php");
                     exit();
                 } else {
                     echo "Rol no reconocido.";
+             
+                    header("Location: ../EuroService");
+                    exit();
                 }
             } else {
                 echo "Contraseña incorrecta.";
+                header("Location: ../EuroService");
+                    exit();
             }
         } else {
-            echo "No se encontró el usuario.";
+            header("Location: ../EuroService");
+            exit();
+            
+            echo "<div class='modal' tabindex='-1'>";
+            echo "<div class='modal-dialog'>";
+            echo "<div class='modal-content'>";
+            echo "<div class='modal-header'>";
+            echo "<h5 class='modal-title'>Modal title</h5>";
+            echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
+            echo "</div>";
+            echo "<div class='modal-body'>";
+            echo "<p>Modal body text goes here.</p>";
+            echo "</div>";
+            echo "<div class='modal-footer'>";
+            echo "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Close</button>";
+            echo "</div>";
+            echo "</div>";
+            echo "</div>";
+            echo "</div>";
         }
     } catch (PDOException $e) {
         echo "Error en la consulta: " . $e->getMessage();

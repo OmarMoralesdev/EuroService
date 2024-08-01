@@ -48,6 +48,7 @@
                                     <th scope="col">VEHICULO</th>
                                     <th scope="col">SERVICIO SOLICITADO</th>
                                     <th scope="col">FECHA DE CITA</th>
+                                    <th scope="col">TIEMPO RESTANTE</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -57,12 +58,14 @@
                                 $pdo = $con->conectar();
 
                                 $stmt = $pdo->prepare("
-                                SELECT c.*, v.marca AS vehiculo 
+                                SELECT c.*, v.marca AS vehiculo, 
+                                    DATEDIFF(c.fecha_cita, CURDATE()) AS dias_restantes
                                 FROM CITAS c 
                                 JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
-                                WHERE c.estado='pendiente' 
+                                WHERE c.estado = 'pendiente' 
                                 ORDER BY c.fecha_cita ASC;
                                 ");
+
                                 $stmt->execute();
                                 $citas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
@@ -71,6 +74,7 @@
                                     echo '<td>' . $cita['vehiculo'] . '</td>';
                                     echo '<td>' . $cita['servicio_solicitado'] . '</td>';
                                     echo '<td>' . $cita['fecha_cita'] . '</td>';
+                                    echo '<td>' . $cita['dias_restantes'] . ' días</td>';
                                     echo '</tr>';
                                 }
                                 ?>

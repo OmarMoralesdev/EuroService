@@ -3,7 +3,6 @@ require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
 
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $clienteID = $_POST['clienteID'];
     echo "Selected Client ID: $clienteID";
@@ -18,6 +17,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $verificar = "SELECT * FROM VEHICULOS WHERE vin = ?";
     $stmtVerificar = $pdo->prepare($verificar);
     $stmtVerificar->execute([$vin]);
+
+    $currentYear = date('Y');
+
+    if ($anio < 1886 || $anio > $currentYear) {
+        $errors['anio'] = "El año debe estar entre 1886 y el año actual.";
+    }
 
     if ($stmtVerificar->rowCount() > 0) {
         echo "El vehículo ya está registrado.";

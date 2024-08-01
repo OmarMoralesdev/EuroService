@@ -2,72 +2,8 @@
 require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
-
 $errors = [];
 $success = '';
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    $clienteID = $_POST['clienteID'];
-    $marca = trim($_POST['marca']);
-    $modelo = trim($_POST['modelo']);
-    $anio = trim($_POST['anio']);
-    $color = trim($_POST['color']);
-    $kilometraje = trim($_POST['kilometraje']);
-    $placas = trim($_POST['placas']);
-    $vin = trim($_POST['vin']);
-
-    $currentYear = date('Y');
-
-    if ($anio < 1886 || $anio > $currentYear) {
-        $errors['anio'] = "El año debe estar entre 1886 y el año actual.";
-    }
-
-    if (empty($errors)) {
-        // Verificar si el VIN ya está registrado
-        $verificar = "SELECT * FROM VEHICULOS WHERE vin = ?";
-        $stmtVerificar = $pdo->prepare($verificar);
-        $stmtVerificar->execute([$vin]);
-
-        if ($stmtVerificar->rowCount() > 0) {
-            $errors['vin'] = "El vehículo ya está registrado.";
-        } else {
-            $sql = "INSERT INTO VEHICULOS (clienteID, marca, modelo, anio, color, kilometraje, placas, vin) VALUES (?, ?, ?, ?, ?, ?, ?, ?)";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([$clienteID, $marca, $modelo, $anio, $color, $kilometraje, $placas, $vin]);
-
-            if ($stmt->rowCount() > 0) {
-                $success =
-                $showModal = true;
-                $modalContent = "
-                    <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
-                        <div class='modal-dialog'>
-                            <div class='modal-content'>
-                                <div class='modal-header'>
-                                    <h1 class='modal-title fs-5' id='staticBackdropLabel'>Vehículo registrado!</h1>
-                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                                </div>
-                                <div class='modal-body'>
-                                <h3>Datos:</h3>
-                                    MARCA: <strong>$marca</strong><br><br>
-                                    MODELO: <strong>$modelo</strong><br><br>
-                                    AÑO: <strong>$anio</strong><br><br>
-                                    VIN: <strong>$vin</strong><br><br>
-                                    Contraseña del cliente: <strong>$password</strong><br><hr>
-                                    Presiona siguiente para registrar su
-                                </div>
-                                <div class='modal-footer'>
-                                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                                    <a href='../CItas' type='button' class='btn btn-dark'>Siguiente</a>
-                                </div>
-                            </div>
-                        </div>
-                    </div>";
-            } else {
-                $errors['general'] = "Error: " . $pdo->errorInfo()[2];
-            }
-        }
-    }
-}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -75,7 +11,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Vehículo</title>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
     <style>
         .is-invalid {
             border-color: #dc3545;
@@ -96,7 +31,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <form id="formCita" action="autos.php" method="POST" autocomplete="off" novalidate>
                     <div class="mb-3">
                         <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required>
-                        <ul id="lista" class="list-group" style="display: none;"></ul>
+                        <ul id="lista" class="list-group"></ul>
                         <input type="hidden" id="clienteID" name="clienteID">
                         <div class="invalid-feedback">Debes seleccionar un cliente.</div>
                     </div>
@@ -133,6 +68,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <input type="submit" class="btn btn-dark" value="Registrar Vehículo">
                     </div>
                 </form>
+
                 <?php if ($success): ?>
                     <div class="alert alert-success mt-3"><?php echo $success; ?></div>
                 <?php endif; ?>
@@ -140,6 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <div class="alert alert-danger mt-3"><?php echo $errors['general']; ?></div>
                 <?php endif; ?>
             </div>
+            
         </div>
     </div>
     <script src="app.js"></script>
@@ -218,7 +155,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 return;
             }
 
-            fetch('buscar_view.php?query=' + query)
+            fetch(`getClientes.php?search=${searchTerm}`)
                 .then(response => response.json())
                 .then(data => {
                     const lista = document.getElementById('lista');

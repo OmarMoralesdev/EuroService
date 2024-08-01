@@ -137,9 +137,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
             </body>
-
             </html>
-<?php
+<?php 
         }
     } else {
         echo "Cita no encontrada.";
