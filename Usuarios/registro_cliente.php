@@ -3,7 +3,9 @@ session_start();
 require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
-
+require '../vendor/autoload.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 $showModal = false;
 $showAlert = false;
 
