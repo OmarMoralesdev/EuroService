@@ -14,7 +14,7 @@ unset($_SESSION['mensaje']);
 
 <body class="Body_citas">
     <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?>
+        <?php include '../includes/vabr.php'; ?>
         <div class="main p-3">
             <div class="container">
                 <h2>Registrar Cita y Crear Orden de Trabajo</h2>

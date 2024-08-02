@@ -65,7 +65,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 <body>
     <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?>
+        <?php include '../includes/vabr.php'; ?>
         <div class="main p-2">
             <div class="container">
                 <h2>Eliminar Cliente</h2>

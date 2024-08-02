@@ -9,7 +9,7 @@
 
 <body>
 <div class="wrapper">
-    <?php include '../includes/vabr.html'; ?>
+    <?php include '../includes/vabr.php'; ?>
     <div class="main p-2">
         <div class="container">
             <h2>SELECCIONAR CITA PARA CREAR ORDEN DE TRABAJO</h2>

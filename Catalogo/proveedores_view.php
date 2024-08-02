@@ -125,7 +125,7 @@ if ($stmt->rowCount() > 0) {
 </head>
 <body>
     <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?>
+        <?php include '../includes/vabr.php'; ?>
         <div class="main p-3">
             <div class="container">
                 <h2 class="text-center">PROVEEDORES</h2>

@@ -86,7 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
 <body>
     <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?>
+        <?php include '../includes/vabr.php'; ?>
         <div class="main">
             <div class="container">
                 <h2>REGISTRAR VEHÍCULO</h2>

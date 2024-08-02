@@ -48,7 +48,7 @@ try {
 
 <body>
     <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?>
+        <?php include '../includes/vabr.php'; ?>
         <div class="main p-3">
             <div class="container">
                 <h2>REPORTE DE INGRESOS SEMANAL</h2>

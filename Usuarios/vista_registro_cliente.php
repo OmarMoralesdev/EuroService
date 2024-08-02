@@ -13,7 +13,7 @@ $pdo = $con->conectar();
 </head>
 <body>
     <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?> <!-- barra lateral -->
+        <?php include '../includes/vabr.php'; ?> <!-- barra lateral -->
         <div class="main p-3">
             <div class="container">
                 <h2>REGISTRAR CLIENTE</h2>
