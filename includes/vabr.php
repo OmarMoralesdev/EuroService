@@ -365,6 +365,9 @@ h2 {
                     <a href="../Empleados/registro_asistencia.php" class="sidebar-link">ASISTENCIA</a>
                 </li>
                 <li class="sidebar-item">
+                    <a href="../Empleados/justificar_falta.php" class="sidebar-link">JUSTIFICAR FALTA</a>
+                </li>
+                <li class="sidebar-item">
                     <a href="../Empleados/registro_empleado.php" class="sidebar-link">AGREGAR</a>
                 </li>
                 <li class="sidebar-item">
