@@ -75,10 +75,10 @@
                                     echo '<td>' . $cita['servicio_solicitado'] . '</td>';
                                     echo '<td>' . $cita['fecha_cita'] . '</td>';
 
-                                    // "Hoy" si los días restantes son 0
+                                    // Asignar tiempo restante basado en los días restantes
                                     $diasRestantes = $cita['dias_restantes'];
-                                    $tiempoRestante = ($diasRestantes == 0) ? 'Hoy' : $diasRestantes . ' días';
-                                    echo '<td>' . $tiempoRestante . '</td>';
+                                    $tiempoRestante = ($diasRestantes < 0) ? 'Atrasado' : (($diasRestantes == 0) ? 'Hoy' : $diasRestantes . ' días');
+                                    echo '<td >' . $tiempoRestante . '</td>';
 
                                     echo '</tr>';
                                 }
