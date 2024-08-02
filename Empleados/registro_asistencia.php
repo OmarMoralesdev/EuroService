@@ -105,7 +105,7 @@ session_start();
                 <label for="hora_salida" id="hs">Hora de Salida:</label>
                 <input type="time" id="hora_salida" name="hora_salida" class="form-control" required><br>
 
-                <input type="submit" value="Registrar">
+                <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Registrar</button>
             </form>
         </div>
         </div>

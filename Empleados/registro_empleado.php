@@ -94,7 +94,7 @@ session_start();
                                 <option value="administrativo">Administrativo</option>
                             </select>
                         </div>
-                        <button type="submit" class="btn btn-dark w-100">Registrar</button>
+                        <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Registrar</button>
                     </form>
                 </div>
             </div>

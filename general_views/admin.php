@@ -74,7 +74,12 @@
                                     echo '<td>' . $cita['vehiculo'] . '</td>';
                                     echo '<td>' . $cita['servicio_solicitado'] . '</td>';
                                     echo '<td>' . $cita['fecha_cita'] . '</td>';
-                                    echo '<td>' . $cita['dias_restantes'] . ' días</td>';
+
+                                    // "Hoy" si los días restantes son 0
+                                    $diasRestantes = $cita['dias_restantes'];
+                                    $tiempoRestante = ($diasRestantes == 0) ? 'Hoy' : $diasRestantes . ' días';
+                                    echo '<td>' . $tiempoRestante . '</td>';
+
                                     echo '</tr>';
                                 }
                                 ?>

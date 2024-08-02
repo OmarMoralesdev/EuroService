@@ -98,7 +98,7 @@ session_start();
                 <input type="password" id="password" name="password" class="form-control" required><br><br>
                 <label for="confirm_password">Confirmar Password:</label><br>
                 <input type="password" id="confirm_password" name="confirm_password" class="form-control" required><br><br>
-                <input type="submit" value="Registrar">
+                <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Registrar</button>
             </form>
         </div>
     </div>

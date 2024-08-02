@@ -43,7 +43,7 @@ $pdo = $con->conectar();
                     <form id="formCita" action="edit_user.php" method="POST" autocomplete="off">
                         <div class="mb-3" style="margin-bottom: 1px;">
                             <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente...">
-                            <ul id="lista" class="list-group"></ul>
+                            <ul id="lista" class="list-group lista"></ul>
                             <input type="hidden" id="clienteID" name="clienteID">
                             <div class="invalid-feedback">Debes seleccionar un cliente.</div><br>
                         </div>

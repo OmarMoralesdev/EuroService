@@ -54,16 +54,14 @@ session_start();
                     <form action="../CItas/registrar_cita.php" method="POST" autocomplete="off">
                         <div class="mb-3">
                             <input type="text" class="form-control" autocomplete="off" id="campo" name="campo" placeholder="Buscar cliente..." required>
-                            <ul id="lista" class="list-group"></ul>
+                            <ul id="lista" class="list-group lista"></ul>
                             <input type="hidden" id="clienteID" name="clienteID">
                             <div class="invalid-feedback">Debes seleccionar un cliente.</div>
                         </div>
                         <div class="mb-3">
                             <label for="vehiculoSeleccionado" class="form-label">Seleccione un vehículo:</label>
-                            <div class="position-relative">
                                 <input type="text" class="form-control" id="vehiculoSeleccionado" readonly>
-                                <ul id="lista-vehiculos" class="list-group position-absolute" style="display: none;"></ul>
-                            </div>
+                                <ul id="lista-vehiculos" class="list-group lista"></ul>
                             <input type="hidden" id="vehiculoID" name="vehiculoID">
                             <div class="invalid-feedback">Debes seleccionar un vehículo.</div>
                         </div>
@@ -78,7 +76,8 @@ session_start();
                             <input type="datetime-local" class="form-control" id="fecha_cita" name="fecha_cita" required>
                             <div class="invalid-feedback">Debes seleccionar la fecha y hora de la cita.</div>
                         </div>
-                        <button type="submit" class="btn btn-dark w-100">Registrar Cita</button>
+                        <br>
+                        <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Registrar Cita</button>
                     </form>
                 </div>
             </div>

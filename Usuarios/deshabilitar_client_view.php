@@ -75,7 +75,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <form id="formCita" action="deshabilitar_client_view.php" method="POST" autocomplete="off">
                         <div class="mb-3">
                             <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente...">
-                            <ul id="lista" class="list-group" style="display: none;"></ul>
+                            <ul id="lista" class="list-group lista" style="display: none;"></ul>
                             <input type="hidden" id="clienteID" name="clienteID">
                             <div class="invalid-feedback">Debes seleccionar un cliente.</div><br>
                         </div>
