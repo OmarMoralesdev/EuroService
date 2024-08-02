@@ -376,6 +376,9 @@ h2 {
                 <li class="sidebar-item">
                     <a href="../Empleados/buscar.php" class="sidebar-link">BUSCAR</a>
                 </li>
+                <li class="sidebar-item">
+                    <a href="../Finanzas/" class="sidebar-link">RENDIMIENTO</a>
+                </li>
             </ul>
         </li>
 
