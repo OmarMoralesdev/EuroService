@@ -59,7 +59,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="semana">Selecciona la semana:</label>
                             <input type="week" id="semana" name="semana" class="form-control" required>
                         </div>
-                        <button type="submit" class="btn btn-primary">Ver Reporte</button>
+<br>
+                        <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Ver reporte</button>
+
                     </form>
 
                     <?php if (!empty($resultado)) : ?>

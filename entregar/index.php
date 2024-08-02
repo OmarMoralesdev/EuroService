@@ -23,7 +23,7 @@ session_start();
                         echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
                         unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
                     }
-                    if ($_SESSION['bien']) {
+                    if (isset($_SESSION['bien'])) {
                         echo "
                         <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                             <div class='modal-dialog'>
@@ -70,7 +70,9 @@ session_start();
                             }
                             ?>
                         </select>
-                        <button type="submit">Registrar Entrega</button>
+                        <br>
+                        <br>
+                        <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Confirmar entrega</button>
                     </form>
                 </div>
             </div>
