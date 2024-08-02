@@ -98,6 +98,8 @@ GROUP BY
         $stmtOrden->execute([$fechaOrden, $costoManoObra, $costoRefacciones, $atencion, $citaID, $empleadoID, $ubicacionID]);
         $ordenID = $pdo->lastInsertId();
 
+        $fechaPago = date('Y-m-d');
+        $tipoPago = "anticipo";
         // Insertar pago
         realizarPago($pdo, $nuevaOrdenID, $fechaPago, $anticipo, $tipoPago, $formaDePago);
         actualizarEstadoCita($pdo, $citaID, 'en proceso');

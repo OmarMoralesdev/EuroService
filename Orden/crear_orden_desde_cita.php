@@ -56,6 +56,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $total_estimado = $costoManoObra + $costoRefacciones;
 
             try {
+                // Iniciar la transacción
+                $pdo->beginTransaction();
 
                 // Verificar si ya existe una orden de trabajo para esta cita
                 $sqlVerificarOrden = "SELECT * FROM ORDENES_TRABAJO WHERE citaID = ?";
@@ -88,29 +90,42 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 $ubicacion = $stmtVerificarUbicacion->fetch(PDO::FETCH_ASSOC);
 
                 if (!$ubicacion) {
+                    $pdo->rollBack();
                     $_SESSION['error'] = "Ubicación no encontrada.";
                     header("Location: crear_orden_sin_cita.php");
                     exit();
                 }
 
                 if ($ubicacion['vehiculos_actuales'] >= $ubicacion['vehiculos_maximos']) {
+                    $pdo->rollBack();
                     $_SESSION['error'] = "La ubicación ya está llena.";
                     header("Location: crear_orden_sin_cita.php");
                     exit();
                 }
-                $nuevaOrdenID = crearOrdenTrabajo($pdo, $fechaOrden, $costoManoObra, $costoRefacciones, $total_estimado, $atencion, $citaID, $empleado, $ubicacionID);
+                // Insertar orden de trabajo
+                $sqlOrden = "INSERT INTO ORDENES_TRABAJO (fecha_orden, costo_mano_obra, costo_refacciones, atencion, citaID, empleadoID, ubicacionID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+                $stmtOrden = $pdo->prepare($sqlOrden);
+                $stmtOrden->execute([$fechaOrden, $costoManoObra, $costoRefacciones, $atencion, $citaID, $empleado, $ubicacionID]);
+                $ordenID = $pdo->lastInsertId();
 
-
-                realizarPago($pdo, $nuevaOrdenID, $fechaPago, $anticipo, $tipoPago, $formaDePago);
-                // Actualizar el estado de la cita a 'completado'
+                $fechaPago = date('Y-m-d');
+                $tipoPago = "anticipo";
+                // Insertar pago
+                realizarPago($pdo, $ordenID, $fechaPago, $anticipo, $tipoPago, $formaDePago);
                 actualizarEstadoCita($pdo, $citaID, 'en proceso');
 
-                echo "Nueva orden de trabajo creada con ID: $nuevaOrdenID";
+                // Hacer commit
+                $pdo->commit();
+
+                echo "Nueva orden de trabajo creada con ID: $ordenID";
             } catch (Exception $e) {
+                // Rollback en caso de error
+                $pdo->rollBack();
                 echo "Error al crear la orden de trabajo: " . $e->getMessage();
             }
         } else {
-
+            // Manejo para cuando no se han enviado detalles adicionales del formulario
+        
 ?>
 
             <!DOCTYPE html>
@@ -189,13 +204,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <label for="ubicacionID" class="form-label">Ubicación ID:</label>
                                     <select name="ubicacionID" class="form-control" required>
                                         <?php
+                                        function obtenerUbicacionesActivas($pdo)
+                                        {
+                                            $sql = "SELECT * FROM UBICACIONES WHERE activo = 'si';";
+                                            $stmt = $pdo->query($sql);
+                                            return $stmt->fetchAll(PDO::FETCH_ASSOC);
+                                        }
                                         $ubicaciones = obtenerUbicacionesActivas($pdo);
-                                        if (empty($ubicaciones)) {
-                                            echo "<option value=''>No hay ubicaciones disponibles</option>";
-                                        } else {
-                                            foreach ($ubicaciones as $ubicacion) {
-                                                echo "<option value=\"{$ubicacion['ubicacionID']}\">{$ubicacion['lugar']}</option>";
-                                            }
+                                        foreach ($ubicaciones as $ubicacion) {
+                                            echo "<option value=\"{$ubicacion['ubicacionID']}\">{$ubicacion['lugar']}</option>";
                                         }
                                         ?>
                                     </select>
@@ -210,8 +227,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     </div>
                 </div>
             </body>
+
             </html>
-<?php 
+<?php
         }
     } else {
         echo "Cita no encontrada.";

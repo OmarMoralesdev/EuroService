@@ -23,7 +23,7 @@ session_start();
                         echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
                         unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
                     }
-                    if ($_SESSION['bien']) {
+                    if (isset($_SESSION['bien'])) {
                         echo "
                         <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                             <div class='modal-dialog'>

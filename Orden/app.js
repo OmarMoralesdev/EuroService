@@ -33,8 +33,8 @@ function getClientes() {
 function mostrar(cliente) {
     document.getElementById("campo").value = `${cliente.nombre} ${cliente.apellido_paterno} ${cliente.apellido_materno}`;
     document.getElementById("clienteID").value = cliente.clienteID;
-    lista.style.display = 'none';
     getVehiculos(cliente.clienteID);
+    lista.style.display = 'none';
 }
 
 function getVehiculos(clienteID) {
@@ -68,4 +68,5 @@ function getVehiculos(clienteID) {
 function seleccionarVehiculo(vehiculo) {
     document.getElementById("vehiculoSeleccionado").value = `${vehiculo.marca} ${vehiculo.modelo} (${vehiculo.anio})`;
     document.getElementById("vehiculoID").value = vehiculo.vehiculoID;
+    lista.style.display = 'none';
 }

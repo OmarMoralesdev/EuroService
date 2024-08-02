@@ -56,7 +56,8 @@ session_start();
                             ?>
                         </select>
                     </div>
-                    <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Buscar cita</button>
+                    <button type="submit" name="buscar" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Buscar Cita</button>
+             
 
                 </form>
             </div>

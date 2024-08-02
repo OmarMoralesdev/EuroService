@@ -23,12 +23,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $placas = isset($_POST['placas']) ? trim($_POST['placas']) : '';
     $vin = isset($_POST['vin']) ? trim($_POST['vin']) : '';
     $continuidad = isset($_POST['continuidad']) ? true : false;
-    $continuidad2 = "";
-    if ($continuidad) {
-        $continuidad2 = "si";
-    } else {
-        $continuidad2 = "no";
-    }
+    
     $currentYear = date('Y');
 
     if ($anio < 1886 || $anio > $currentYear) {
@@ -43,12 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         if ($stmtVerificar->rowCount() > 0) {
             $_SESSION['error'] = "El vehículo ya está registrado.";
         } else {
-            $sql = "INSERT INTO VEHICULOS (clienteID, marca, modelo, anio, color, kilometraje, placas, vin,continuidad,activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,'si')";
+            $sql = "INSERT INTO VEHICULOS (clienteID, marca, modelo, anio, color, kilometraje, placas, vin,activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?,'si')";
             $stmt = $pdo->prepare($sql);
-            $stmt->execute([$clienteID, $marca, $modelo, $anio, $color, $kilometraje, $placas, $vin, $continuidad2]);
+            $stmt->execute([$clienteID, $marca, $modelo, $anio, $color, $kilometraje, $placas, $vin]);
 
             if ($stmt->rowCount() > 0) {
-             
+
                 $_SESSION['vehiculo'] = $vehiculoID = $pdo->lastInsertId();
 
                 if (!$continuidad) {
