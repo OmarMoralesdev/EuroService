@@ -9,7 +9,7 @@ $conexion->conectar();
 // Inicializar la variable de búsqueda
 $buscar = isset($_POST['buscar']) ? $_POST['buscar'] : '';
 
-$consulta_empleados = "SELECT e.empleadoID, CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, e.alias, e.tipo, n.total
+$consulta_empleados = "SELECT e.empleadoID, CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, e.alias, e.tipo, p.telefono,p.correo  ,n.total
                     FROM EMPLEADOS e
                     INNER JOIN PERSONAS p ON e.personaID = p.personaID
                     LEFT JOIN NOMINAS n ON e.empleadoID = n.empleadoID";
@@ -47,7 +47,7 @@ $empleados = $conexion->seleccionar($consulta_empleados);
         <?php include '../dueño/vabr.html'; ?>
         <div class="main p-3">
             <div class="container">
-                <h2 class="text-center">EMPLEADOS</h2>
+                <h2 class="text-center">BUSCAR EMPLEADOS</h2>
                 <div class="form-container">
                     <!-- Formulario de búsqueda -->
                     <form action="<?php echo htmlspecialchars($_SERVER["PHP_SELF"]); ?>" method="POST" class="mb-3">
@@ -70,35 +70,13 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                                 echo "<p class='card-text'><strong>Alias:</strong> {$empleado->alias}</p>";
                                 echo "<p class='card-text'><strong>Tipo:</strong> {$empleado->tipo}</p>";
                                 echo "<p class='card-text'><strong>Salario:</strong> {$empleado->total}</p>";
+                                echo "<hr>";
+                                echo "<p class='card-text'><strong>Teléfono:</strong> {$empleado->telefono}</p>";
+                                echo "<p class='card-text'><strong>Correo:</strong> {$empleado->correo}</p>";
 
-                                echo "<button type='button' class='btn btn-dark btn-md ml-2'  style='width: 100% ;' data-bs-toggle='modal' data-bs-target='#modalRebajas{$empleado->empleadoID}'>REBAJAS</button>";
                                 echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
-
-                                // Modal para agregar rebajas
-                                echo "<div class='modal fade' id='modalRebajas{$empleado->empleadoID}' tabindex='-1' aria-labelledby='modalRebajas{$empleado->empleadoID}Label' aria-hidden='true'>";
-                                echo "<div class='modal-dialog'>";
-                                echo "<div class='modal-content'>";
-                                echo "<div class='modal-header'>";
-                                echo "<h5 class='modal-title' id='modalRebajas{$empleado->empleadoID}Label'>Agregar Rebajas para {$empleado->nombre_completo}</h5>";
-                                echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
-                                echo "</div>";
-                                echo "<div class='modal-body'>";
-                                echo "<form action='AddRebaja.php' method='post' id='formRebaja{$empleado->empleadoID}'>";
-                                echo "<div class='mb-3'>";
-                                echo "<label for='rebaja{$empleado->empleadoID}'>Cantidad de Rebaja:</label>";
-                                echo "<input type='number' class='form-control' id='rebaja{$empleado->empleadoID}' name='rebaja'>";
-                                echo "</div>";
-                                echo "<div class='modal-footer'>";
-                                echo "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>";
-                                echo "<button type='submit' class='btn btn-dark'>Guardar</button>";
-                                echo "</div>";
-                                echo "</form>";
-                                echo "</div>";
-                                echo "</div>";
-                                echo "</div>";
-                                echo "</div>";                                
                             }
                         } else {
                             echo "<p class='text-center'>No se encontraron empleados.</p>";

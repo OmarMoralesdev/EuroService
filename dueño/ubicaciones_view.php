@@ -19,15 +19,11 @@
 </head>
 <body>
 <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?>
+        <?php include '../dueño/vabr.html'; ?>
         <div class="main p-3">
         <div class="container">
             <h2 class="text-center">UBICACIONES DE VEHÍCULOS</h2>
                 <div class="form-container">
-            <div>
-                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addLocationModal">AÑADIR NUEVA UBICACIÓN</button>
-                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#enableLocationModal">HABILITAR UBICACIÓN</button>
-            </div>
             <div class="row mt-3">
                 <?php
                 include '../includes/db.php';
@@ -43,30 +39,27 @@
                                         GROUP BY u.ubicacionID, u.lugar, u.capacidad";
                 $ubicaciones = $conexion->seleccionar($consulta_ubicaciones);
                 
-                if (is_array($ubicaciones)) {
-                    foreach ($ubicaciones as $ubicacion) {
-                        $espacio_disponible = $ubicacion->capacidad - $ubicacion->cantidad_vehiculos;
-                        echo "<div class='col-md-4 mb-3'>";
-                        echo "<div class='card' style='width: 95%;'>";
-                        echo "<div class='card-body'>";
-                        echo "<h5 class='card-title'>UBICACIÓN: {$ubicacion->lugar}</h5>";
-                        echo "<hr>";
-                        echo "<p class='card-text'>CAPACIDAD: {$ubicacion->capacidad}</p>";
-                        echo "<p class='card-text'>OCUPADOS: {$ubicacion->cantidad_vehiculos}</p>";
-                        echo "<p class='card-text'>ESPACIO DISPONIBLE: {$espacio_disponible}</p>";
-                        echo "</div>"; // Cierre de card-body
+             if (is_array($ubicaciones)) {
+    foreach ($ubicaciones as $ubicacion) {
+        $espacio_disponible = $ubicacion->capacidad - $ubicacion->cantidad_vehiculos;
+        echo "<div class='col-md-4 mb-3'>";
+        echo "<div class='card' style='width: 95%;'>";
+        echo "<div class='card-body'>";
+        echo "<h5 class='card-title'>UBICACIÓN: {$ubicacion->lugar}</h5>";
+        echo "<hr>";
+        echo "<p class='card-text'>CAPACIDAD: {$ubicacion->capacidad}</p>";
+        echo "<p class='card-text'>OCUPADOS: {$ubicacion->cantidad_vehiculos}</p>";
+        echo "<p class='card-text'>ESPACIO DISPONIBLE: {$espacio_disponible}</p>";
+        echo "</div>"; // Cierre de card-body
 
-                        // Botones en un div separado para controlar la alineación
-                        echo "<div class='card-footer d-flex justify-content-between align-items-center'>";
-                        echo "<button type='button' class='btn btn-dark btn-md' style='width: 60%;' data-bs-toggle='modal' data-bs-target='#modal{$ubicacion->ubicacionID}'>VER VEHÍCULOS</button>";
-                        echo" ";
-                        echo "<button type='button' class='btn btn-dark btn-md ml-2' style='width: 19%;' data-bs-toggle='modal' data-bs-target='#renameModal{$ubicacion->ubicacionID}'><i class='lni lni-pencil'></i></button>";
-                        echo" ";    
-                        echo "<button type='button' class='btn btn-danger btn-md ml-2' style='width: 19%;' data-bs-toggle='modal' data-bs-target='#deleteModal{$ubicacion->ubicacionID}'><i class='lni lni-pause'></i></button>";
-                        echo "</div>"; // Cierre de card-footer
+        // Botones en un div separado para controlar la alineación
+        echo "<div class='card-footer d-flex justify-content-center'>";
+        echo "<button type='button' class='btn btn-dark btn-md' style='width: 80%;' data-bs-toggle='modal' data-bs-target='#modal{$ubicacion->ubicacionID}'>VER VEHÍCULOS</button>";
+        echo "</div>"; // Cierre de card-footer
 
-                        echo "</div>"; // Cierre de card
-                        echo "</div>";
+        echo "</div>"; // Cierre de card
+        echo "</div>";
+
 
                         
 
@@ -118,123 +111,10 @@
                         echo "</div>";
                         echo "</div>";
 
-                        // Modal para inhabilitar ubicación
-                        echo "<div class='modal fade' id='deleteModal{$ubicacion->ubicacionID}' tabindex='-1' aria-labelledby='deleteModalLabel{$ubicacion->ubicacionID}' aria-hidden='true'>";
-                        echo "<div class='modal-dialog'>";
-                        echo "<div class='modal-content'>";
-                        echo "<div class='modal-header'>";
-                        echo "<h5 class='modal-title' id='deleteModalLabel{$ubicacion->ubicacionID}'>Confirmar Inhabilitación</h5>";
-                        echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
-                        echo "</div>";
-                        echo "<div class='modal-body'>";
-                        echo "<p>¿Estás seguro de que deseas inhabilitar la ubicación <strong>{$ubicacion->lugar}</strong>?</p>";
-                        echo "</div>";
-                        echo "<div class='modal-footer'>";
-                        echo "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancelar</button>";
-                        echo "<a href='deleteLocation.php?id={$ubicacion->ubicacionID}' class='btn btn-danger'>Inhabilitar</a>";
-                        echo "</div>";
-                        echo "</div>";
-                        echo "</div>";
-                        echo "</div>";
-
-                         // Modal para editar nombre
-                         echo "<div class='modal fade' id='renameModal{$ubicacion->ubicacionID}' tabindex='-1' aria-labelledby='deleteModalLabel{$ubicacion->ubicacionID}' aria-hidden='true'>";
-                         echo "<div class='modal-dialog'>";
-                         echo "<div class='modal-content'>";
-                         echo "<div class='modal-header'>";
-                         echo "<h5 class='modal-title' id='deleteModalLabel{$ubicacion->ubicacionID}'>Confirmar Renombrar</h5>";
-                         echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
-                         echo "</div>";
-                         echo "<div class='modal-body'>";
-                         echo "<form action='renameLocation.php' method='POST'>";
-                         echo "<div class='mb-3'>";
-                         echo "<label for='lugarn' class='form-label'>Nuevo nombre de la ubicación </label>";
-                         echo "<input type='text' class='form-control' id='lugarn' name='lugarn' required>";
-                         echo "</div>";
-                         echo "</div>";
-                         echo "<div class='modal-footer'>";
-                         echo "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancelar</button>";
-                         echo "<input type='hidden' name='ubicacionID' value='{$ubicacion->ubicacionID}'>";
-                         echo "<button type='submit' class='btn btn-dark'>Renombrar</button>";
-                         echo "</div>";
-                         echo "</form>";
-                         echo "</div>";
-                         echo "</div>";
-                         echo "</div>";
                     }
                 }
                 $conexion->desconectar();
                 ?>
-            </div>
-        </div>
-    </div>
-
-    <!-- Modal para añadir una nueva ubicación -->
-    <div class='modal fade' id='addLocationModal' tabindex='-1' aria-labelledby='addLocationModalLabel' aria-hidden='true'>
-        <div class='modal-dialog'>
-            <div class='modal-content'>
-                <div class='modal-header'>
-                    <h5 class='modal-title' id='addLocationModalLabel'>Añadir Nueva Ubicación</h5>
-                    <button type='button' class='btn-close bg-dark' data-bs-dismiss='modal' aria-label='Close'></button>
-                </div>
-                <div class='modal-body'>
-                    <form action='addLocation.php' method='POST'>
-                        <div class='mb-3'>
-                            <label for='lugar' class='form-label'>Lugar</label>
-                            <input type='text' class='form-control' id='lugar' name='lugar' required>
-                        </div>
-                        <div class='mb-3'>
-                            <label for='capacidad' class='form-label'>Capacidad</label>
-                            <input type='number' class='form-control' id='capacidad' name='capacidad' required>
-                        </div>
-                        <div class='modal-footer'>
-                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                            <button type='submit' class='btn btn-dark'>Guardar</button> 
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-     <!-- Modal para habilitar una ubicación -->
-     <div class='modal fade' id='enableLocationModal' tabindex='-1' aria-labelledby='enableLocationModalLabel' aria-hidden='true'>
-        <div class='modal-dialog'>
-            <div class='modal-content'>
-                <div class='modal-header'>
-                    <h5 class='modal-title' id='enableLocationModalLabel'>Habilitar Ubicación</h5>
-                    <button type='button' class='btn-close bg-dark' data-bs-dismiss='modal' aria-label='Close'></button>
-                </div>
-                <div class='modal-body'>
-                    <form action='enableLocation.php' method='POST'>
-                        <div class='mb-3'>
-                            <label for='lugar' class='form-label'>Lugar</label>
-                            <select class="form-select" name="lugaru" id="lugaru" required>
-                            <option value="Selecciona la ubicación">Selecciona la ubicación</option>
-                            <?php
-                    include '../class/database.php';
-                    $conexion = new Database();
-                    $conexion->conectar();
-                    $consulta = "SELECT u.ubicacionID, u.lugar, u.capacidad, COUNT(v.vehiculoID) AS cantidad_vehiculos
-                                        FROM ubicaciones u
-                                        LEFT JOIN ordenes_trabajo ot ON u.ubicacionID = ot.ubicacionID
-                                        LEFT JOIN citas c ON ot.citaID = c.citaID
-                                        LEFT JOIN vehiculos v ON c.vehiculoID = v.vehiculoID
-                                        WHERE u.activo = 'no' and u.lugar != 'Dueño'
-                                        GROUP BY u.ubicacionID, u.lugar, u.capacidad";
-                    $desactivados = $conexion->seleccionar($consulta);
-                    foreach($desactivados as $desactivado) {
-                        echo "<option value='".$desactivado->ubicacionID."'>".$desactivado->lugar."</option>";
-                    }
-                    ?>
-                            </select>
-                        </div>
-                        <div class='modal-footer'>
-                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                            <button type='submit' class='btn btn-dark'>Guardar</button>
-                        </div>
-                    </form>
-                </div>
             </div>
         </div>
     </div>

@@ -60,7 +60,7 @@
 
     <div class="main">
         <div class="container">
-            <h2 style="text-align: center;">REPORTE FINANCIERO</h2>
+            <h2 style="text-align: center;">GRÁFICA FINANCIERA</h2>
             <div class="form-container">
                 <?php
                 // Conectar a la base de datos
@@ -135,19 +135,6 @@
                 $stmt = $pdo->query($sql);
 
                 if ($stmt->rowCount() > 0) {
-                    // Mostrar datos en una tabla
-                    echo "<table>";
-                    echo "<tr>
-                            <th>Mes</th>
-                            <th>Total Ingresos Mensuales</th>
-                            <th>Total Gastos Mensuales</th>
-                            <th>Total Ingresos Servicios</th>
-                            <th>Total Gasto Insumo</th>
-                            <th>Total Neto</th>
-                            <th>Total con Ingresos Servicios</th>
-                            <th>Total Gastos Totales</th>
-                          </tr>";
-
                     // Datos para gráficos
                     $data = [
                         'meses' => [],
@@ -161,17 +148,6 @@
                     ];
 
                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                        echo "<tr>";
-                        echo "<td>" . htmlspecialchars($row['mes']) . "</td>";
-                        echo "<td>" . number_format($row['total_ingresos_mensuales'], 2) . "</td>";
-                        echo "<td>" . number_format($row['total_gastos_mensuales'], 2) . "</td>";
-                        echo "<td>" . number_format($row['total_ingresos_servicios'], 2) . "</td>";
-                        echo "<td>" . number_format($row['total_gasto_insumo'], 2) . "</td>";
-                        echo "<td>" . number_format($row['total_neto'], 2) . "</td>";
-                        echo "<td>" . number_format($row['total_con_ingresos_servicios'], 2) . "</td>";
-                        echo "<td>" . number_format($row['total_gastos_totales'], 2) . "</td>";
-                        echo "</tr>";
-
                         // Recolectar datos para gráficos
                         $data['meses'][] = $row['mes'];
                         $data['ingresos'][] = (float)$row['total_ingresos_mensuales'];
@@ -187,6 +163,94 @@
                     echo "<p>No se encontraron resultados.</p>";
                 }
                 ?>
+
+                <!-- Contenedor para el gráfico -->
+                <div class="chart-container">
+                    <div class="chart-wrapper">
+                        <canvas id="financialChart"></canvas>
+                    </div>
+                </div>
+
+                <script>
+                    document.addEventListener('DOMContentLoaded', function() {
+                        // Datos provenientes de PHP
+                        var meses = <?php echo json_encode($data['meses']); ?>;
+                        var ingresos = <?php echo json_encode($data['ingresos']); ?>;
+                        var gastos = <?php echo json_encode($data['gastos']); ?>;
+                        var ingresos_servicios = <?php echo json_encode($data['ingresos_servicios']); ?>;
+                        var gasto_insumo = <?php echo json_encode($data['gasto_insumo']); ?>;
+                        var total_neto = <?php echo json_encode($data['total_neto']); ?>;
+                        var total_con_ingresos_servicios = <?php echo json_encode($data['total_con_ingresos_servicios']); ?>;
+                        var total_gastos_totales = <?php echo json_encode($data['total_gastos_totales']); ?>;
+
+                        // Crear gráfico
+                        var ctx = document.getElementById('financialChart').getContext('2d');
+                        new Chart(ctx, {
+                            type: 'bar', // Tipo de gráfico
+                            data: {
+                                labels: meses,
+                                datasets: [
+                                    {
+                                        label: 'Ingresos Mensuales',
+                                        data: ingresos,
+                                        backgroundColor: 'rgba(0, 128, 0, 0.7)', // Verde intenso
+                                        borderColor: 'rgba(0, 128, 0, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Gastos Mensuales',
+                                        data: gastos,
+                                        backgroundColor: 'rgba(255, 0, 0, 0.7)', // Rojo intenso
+                                        borderColor: 'rgba(255, 0, 0, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Ingresos Servicios',
+                                        data: ingresos_servicios,
+                                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                        borderColor: 'rgba(153, 102, 255, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Gasto Insumo',
+                                        data: gasto_insumo,
+                                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                                        borderColor: 'rgba(255, 159, 64, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Total Neto',
+                                        data: total_neto,
+                                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                                        borderColor: 'rgba(255, 206, 86, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Total con Ingresos Servicios',
+                                        data: total_con_ingresos_servicios,
+                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
+                                        borderColor: 'rgba(75, 192, 192, 1)',
+                                        borderWidth: 1
+                                    },
+                                    {
+                                        label: 'Total Gastos Totales',
+                                        data: total_gastos_totales,
+                                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                        borderColor: 'rgba(153, 102, 255, 1)',
+                                        borderWidth: 1
+                                    }
+                                ]
+                            },
+                            options: {
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                }
+                            }
+                        });
+                    });
+                </script>
             </div>
         </div>
     </div>
