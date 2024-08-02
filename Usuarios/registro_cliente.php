@@ -1,10 +1,11 @@
 <?php
 session_start();
 require '../includes/db.php';
-
 $con = new Database();
 $pdo = $con->conectar();
-
+require '../vendor/autoload.php';
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 $showModal = false;
 $showAlert = false;
 
@@ -162,8 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     
                     // Insertar un nuevo usuario exitosamente
                     $stmt_cuenta = $pdo->prepare("INSERT INTO cuentas (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
-                    $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID]);
-                    
+                    $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID,]);
                     if ($stmt_cuenta->rowCount() > 0) {
                         setModalContent('success', "
                         <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
@@ -186,6 +186,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </div>");
                         $showModal = true;
+                    }
+                    try {
+                        $mail = new PHPMailer(true);
+                        $mail->isSMTP();
+                        $mail->Host = 'smtp.gmail.com';
+                        $mail->SMTPAuth = true;
+                        $mail->Username = 'euroservice339@gmail.com';
+                        $mail->Password = '';
+                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                        $mail->Port = 587;
+                        
+                        $mail->setFrom('euroservice339@gmail.com', 'EuroService');
+                        $mail->addAddress($correo);
+                        
+                        $mail->isHTML(true);
+                        $mail->Subject = 'Creacion de cuenta';
+                        $mail->Body    = "Hola, <br><br>Tu cuenta ha sido creada con éxito. Tu usuario es: $username y tu contraseña es: $password";
+                        
+                        $mail->send();
+                    } catch (Exception $e) {
+                        echo "No se pudo enviar el mensaje. Error de correo: {$mail->ErrorInfo}";
                     }
                 }
             }

@@ -68,31 +68,39 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     header("Location: crear_orden_sin_cita.php");
                     exit();
                 }
+                $sqlVerificarUbicacion = "
+                SELECT 
+                    u.capacidad AS vehiculos_maximos, 
+                    COUNT(v.vehiculoID) AS vehiculos_actuales 
+                FROM 
+                    UBICACIONES u
+                    LEFT JOIN ORDENES_TRABAJO ot ON u.ubicacionID = ot.ubicacionID
+                    LEFT JOIN CITAS c ON ot.citaID = c.citaID
+                    LEFT JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
+                WHERE 
+                    u.ubicacionID = ?
+                GROUP BY 
+                    u.ubicacionID, u.capacidad
+                ";
 
-                $nuevaOrdenID = crearOrdenTrabajo($pdo, $fechaOrden, $costoManoObra, $costoRefacciones, $total_estimado, $atencion, $citaID, $empleado, $ubicacionID);
-
-                // Verificar el límite de vehículos en la ubicación
-                $sqlVerificarUbicacion = "SELECT vehiculos_maximos, vehiculos_actuales FROM UBICACIONES WHERE ubicacionID = ?";
                 $stmtVerificarUbicacion = $pdo->prepare($sqlVerificarUbicacion);
                 $stmtVerificarUbicacion->execute([$ubicacionID]);
                 $ubicacion = $stmtVerificarUbicacion->fetch(PDO::FETCH_ASSOC);
 
                 if (!$ubicacion) {
                     $_SESSION['error'] = "Ubicación no encontrada.";
-                    header("Location: crear_orden_desde_cita.php");
+                    header("Location: crear_orden_sin_cita.php");
                     exit();
                 }
 
                 if ($ubicacion['vehiculos_actuales'] >= $ubicacion['vehiculos_maximos']) {
                     $_SESSION['error'] = "La ubicación ya está llena.";
-                    header("Location: crear_orden_desde_cita.php");
+                    header("Location: crear_orden_sin_cita.php");
                     exit();
                 }
+                $nuevaOrdenID = crearOrdenTrabajo($pdo, $fechaOrden, $costoManoObra, $costoRefacciones, $total_estimado, $atencion, $citaID, $empleado, $ubicacionID);
 
-                // Actualizar el conteo de vehículos en la ubicación
-                $sqlActualizarUbicacion = "UPDATE UBICACIONES SET vehiculos_actuales = vehiculos_actuales + 1 WHERE ubicacionID = ?";
-                $stmtActualizarUbicacion = $pdo->prepare($sqlActualizarUbicacion);
-                $stmtActualizarUbicacion->execute([$ubicacionID]);
+
                 realizarPago($pdo, $nuevaOrdenID, $fechaPago, $anticipo, $tipoPago, $formaDePago);
                 // Actualizar el estado de la cita a 'completado'
                 actualizarEstadoCita($pdo, $citaID, 'en proceso');
