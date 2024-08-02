@@ -55,7 +55,7 @@
 </head>
 <body>
 <div class="wrapper">
-    <?php include '../dueño/vabr.html'; ?>
+    <?php include '../dueño/vabr.php'; ?>
     <?php require '../includes/db.php'; ?>
 
     <div class="main">

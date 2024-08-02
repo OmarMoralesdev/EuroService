@@ -41,7 +41,7 @@
 </head>
 <body>
     <div class="wrapper">
-        <?php include '../dueño/vabr.html'; ?>
+        <?php include '../dueño/vabr.php'; ?>
         <div class="main">
             <div class="container">
                 <h2 style="text-align: center;">INVENTARIO</h2>
