@@ -56,14 +56,6 @@ if ($countCitasGlobal >= 1) {
                                 header('Location: registro_asistencia.php'); 
                                 exit();
                                 break;
-                            case 'justificado':
-                                    $sql = "INSERT INTO Asistencia (empleadoID, asistencia, fecha, hora_entrada, hora_salida) VALUES (?, ?,?, ?, ?)";
-                                    $stmt = $pdo->prepare($sql);
-                                    $stmt->execute([$empleadoID, $asistencia, $fecha, $hora_entrada, $hora_salida]);
-                                    $_SESSION['bien'] = "Falta justificada registrada exitosamente";
-                                    header('Location: registro_asistencia.php'); 
-                                    exit();
-                                    break;
                         } 
                         break;
                     case ($diferencia_horas < 4):

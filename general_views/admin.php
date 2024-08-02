@@ -32,11 +32,14 @@
             padding-right: 20px;
             margin-right: 50px; 
         }
+        .atrasado {
+            color: red;
+        }
     </style>
 </head>
 <body>
     <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?>
+        <?php include '../includes/vabr.php'; ?>
         <div class="main">
             <div class="container">
                 <h2 style="text-align: center;">CITAS PENDIENTES</h2>
@@ -71,15 +74,17 @@
 
                                 foreach ($citas as $cita) {
                                     echo '<tr>';
-                                    echo '<td>' . $cita['vehiculo'] . '</td>';
-                                    echo '<td>' . $cita['servicio_solicitado'] . '</td>';
-                                    echo '<td>' . $cita['fecha_cita'] . '</td>';
-
-                                    // "Hoy" si los días restantes son 0
+                                    echo '<td>' . htmlspecialchars($cita['vehiculo']) . '</td>';
+                                    echo '<td>' . htmlspecialchars($cita['servicio_solicitado']) . '</td>';
+                                    echo '<td>' . htmlspecialchars($cita['fecha_cita']) . '</td>';
+                                
+                                    // Asignar tiempo restante basado en los días restantes
                                     $diasRestantes = $cita['dias_restantes'];
-                                    $tiempoRestante = ($diasRestantes == 0) ? 'Hoy' : $diasRestantes . ' días';
-                                    echo '<td>' . $tiempoRestante . '</td>';
-
+                                    $tiempoRestante = ($diasRestantes < 0) ? 'Atrasado' : (($diasRestantes == 0) ? 'Hoy' : $diasRestantes . ' días');
+                                    $claseTiempoRestante = ($diasRestantes < 0) ? 'atrasado' : '';
+                                
+                                    echo '<td class="' . $claseTiempoRestante . '">' . $tiempoRestante . '</td>';
+                                
                                     echo '</tr>';
                                 }
                                 ?>

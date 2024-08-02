@@ -12,7 +12,7 @@ session_start();
 
 <body>
     <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?>
+        <?php include '../includes/vabr.php'; ?>
         <div class="main p-3">
             <div class="container">
                 <h2>Registrar Nómina Automáticamente</h2>

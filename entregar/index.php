@@ -13,7 +13,7 @@ session_start();
 <body>
 
     <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?>
+        <?php include '../includes/vabr.php'; ?>
         <div class="main p-3">
             <div class="container">
                 <h2>Registrar Entrega de Orden de Trabajo</h2>
@@ -70,7 +70,9 @@ session_start();
                             }
                             ?>
                         </select>
-                        <button type="submit">Registrar Entrega</button>
+                        <br>
+                        <br>
+                        <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Confirmar entrega</button>
                     </form>
                 </div>
             </div>

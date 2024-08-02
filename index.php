@@ -63,6 +63,18 @@
             opacity: 40%;
         }
 
+        .bg-fixedd {
+            background-size: cover;
+            background-position: center center;
+            background-attachment: fixed;
+            height: 27rem;
+            width: 100%;
+            position: relative;
+            overflow-x: hidden;
+            margin-top: 50px;
+            opacity: 40%;
+        }
+
         .overlay {
             position: absolute;
             top: 0;
@@ -182,6 +194,24 @@
             background-color: #3c3c3c;
             color: #fff;
         }
+    /* Tamaño de texto en dispositivos móviles */
+    .fs-xs {
+      font-size: 80px; /* Tamaño para pantallas pequeñas */
+      font-weight: bold
+    }
+    
+    /* Tamaño de texto en pantallas grandes */
+    .fs-lg {
+        font-size: 180px; /* Tamaño para pantallas grandes */
+        font-weight: bold
+    }
+    .vh-75-lg {
+            height: 75vh;
+        }
+        /* Tamaño del contenedor para pantallas pequeñas */
+        .vh-40-sm {
+            height: 40vh;
+        }
 
     </style>
 </head>
@@ -209,9 +239,15 @@
     </nav>
     <div class="bg-fixed">
         <div class="overlay">
-            <div class="text-center text-light">
-                <p style="font-size: 180px; font-weight: bold;">EURO SERVICE</p>
-            </div>
+        <div class="text-center text-light">
+    <!-- Texto con tamaño pequeño para móviles y grande para pantallas de computadora -->
+    <p class="fs-xs d-block d-md-none">
+      EURO SERVICE
+    </p>
+    <p class="fs-lg d-none d-md-block">
+      EURO SERVICE
+    </p>
+  </div>
         </div>
     </div>
 
@@ -230,6 +266,7 @@
                             <h3>Reparación Completa</h3>
                             <p>Ofrecemos una amplia gama de servicios de reparación para su vehículo.</p>
                         </div>
+                        <br>
                     </div>
                     <div class="col-md-4">
                         <div class="feature-item">
@@ -237,6 +274,7 @@
                             <h3>Servicio de Mantenimiento</h3>
                             <p>Desde cambios de aceite hasta mantenimiento preventivo, lo tenemos cubierto.</p>
                         </div>
+                        <br>
                     </div>
                     <div class="col-md-4">
                         <div class="feature-item">
@@ -250,12 +288,15 @@
         </section>
     </div>
 
-    <div class="bg-fixed" style="background-image: url('../EuroService/img/FONDO LOGIN.jpg'); ">
-        <div class="overlay">
-            <div class="text-center text-light">
+    
+    <div class="containerr" style="">
+        <div class="bg-fixedd" style="background-image: url('../EuroService/img/FONDO LOGIN.jpg'); ">
+            <div class="overlay">
+                </div>
             </div>
         </div>
-    </div>
+
+    
     <footer class="text-center">
         <div class="container">
             <div class="row">
@@ -269,6 +310,7 @@
                         <a href="#" class="bi bi-facebook"></a>
                         <a href="#" class="bi bi-twitter"></a>
                         <a href="#" class="bi bi-instagram"></a>
+                        <hr>
                     </div>
                 </div>
                 <div class="col-md-4">

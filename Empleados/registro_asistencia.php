@@ -33,7 +33,7 @@ session_start();
 </head>
 <body>
 <div class="wrapper">
-    <?php include '../includes/vabr.html'; ?>
+    <?php include '../includes/vabr.php'; ?>
     <div class="main p-3">
         <div class="container">
             <h2>CONTROL DE ASISTENCIA</h2>
@@ -96,7 +96,6 @@ session_start();
                             <option value="">Selecciona una opción</option>
                             <option value="asistencia">Asistencia</option>
                             <option value="falta">Falta</option>
-                            <option value="justificado">Justificado</option>
                             </select><br>
 
                 <label for="hora_entrada" id="he">Hora de Entrada:</label>
@@ -124,16 +123,6 @@ session_start();
                 document.getElementById('hs').style.display = 'block';
                 break;
             case 'falta':
-                document.getElementById('hora_entrada').style.display = 'none';
-                document.getElementById('hora_salida').style.display = 'none';
-                document.getElementById('he').style.display = 'none';
-                document.getElementById('hs').style.display = 'none';
-                document.getElementById('hora_entrada').removeAttribute('required');
-                document.getElementById('hora_salida').removeAttribute('required');
-                document.getElementById('hora_entrada').value='00:00:00';
-                document.getElementById('hora_salida').value='00:00:00';
-                break;
-            case 'justificado':
                 document.getElementById('hora_entrada').style.display = 'none';
                 document.getElementById('hora_salida').style.display = 'none';
                 document.getElementById('he').style.display = 'none';

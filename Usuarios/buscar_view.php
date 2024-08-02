@@ -71,7 +71,7 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
 </head>
 <body>
     <div class="wrapper">
-        <?php include '../includes/vabr.html'; ?>
+        <?php include '../includes/vabr.php'; ?>
         <div class="main p-2">
             <div class="container">
                 <h2 class="text-center">BUSCAR CLIENTES</h2>
