@@ -1,66 +1,6 @@
 <?php
-require '../includes/db.php';
-$con = new Database();
-$pdo = $con->conectar();
 session_start();
-$errors = [];
-$success = '';
-$showModal = false;
-$showInspeccionForm = false;
-$vehiculoID = '';
-$continuidad = false;   
-
-
-// Comprobar si el formulario ha sido enviado
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Verificar si las claves existen en el array $_POST
-    $clienteID = isset($_POST['clienteID']) ? $_POST['clienteID'] : '';
-    $marca = isset($_POST['marca']) ? trim($_POST['marca']) : '';
-    $modelo = isset($_POST['modelo']) ? trim($_POST['modelo']) : '';
-    $anio = isset($_POST['anio']) ? trim($_POST['anio']) : '';
-    $color = isset($_POST['color']) ? trim($_POST['color']) : '';
-    $kilometraje = isset($_POST['kilometraje']) ? trim($_POST['kilometraje']) : '';
-    $placas = isset($_POST['placas']) ? trim($_POST['placas']) : '';
-    $vin = isset($_POST['vin']) ? trim($_POST['vin']) : '';
-    $continuidad = isset($_POST['continuidad']) ? true : false;
-    
-    $currentYear = date('Y');
-
-    if ($anio < 1886 || $anio > $currentYear) {
-        $_SESSION['error'] = "El año debe estar entre 1886 y el año actual.";
-    }
-
-    if (empty($errors)) {
-        $verificar = "SELECT * FROM VEHICULOS WHERE vin = ?";
-        $stmtVerificar = $pdo->prepare($verificar);
-        $stmtVerificar->execute([$vin]);
-
-        if ($stmtVerificar->rowCount() > 0) {
-            $_SESSION['error'] = "El vehículo ya está registrado.";
-        } else {
-            $sql = "INSERT INTO VEHICULOS (clienteID, marca, modelo, anio, color, kilometraje, placas, vin,activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?,'si')";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([$clienteID, $marca, $modelo, $anio, $color, $kilometraje, $placas, $vin]);
-
-            if ($stmt->rowCount() > 0) {
-
-                $_SESSION['vehiculo'] = $vehiculoID = $pdo->lastInsertId();
-
-                if (!$continuidad) {
-                    $showInspeccionForm = true;
-                } else {
-
-
-                    $_SESSION['bien'] = "Vehículo registrado exitosamente.";
-                }
-            } else {
-                $_SESSION['error'] = "Error: " . $pdo->errorInfo()[2];
-            }
-        }
-    }
-}
 ?>
-
 <!DOCTYPE html>
 <html lang="es">
 
@@ -132,7 +72,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
 
-                    <form id="formCita" action="" method="POST" autocomplete="off" novalidate>
+                    <form id="formCita" action="autos.php" method="POST" autocomplete="off" novalidate>
                         <div class="mb-3">
                             <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required>
                             <ul id="lista" class="list-group lista" style="display: none;"></ul>
@@ -168,72 +108,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="vin">VIN:</label>
                             <input type="text" id="vin" name="vin" maxlength="20" class="form-control <?php echo isset($errors['vin']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el VIN del vehículo" value="<?php echo htmlspecialchars($vin ?? '', ENT_QUOTES); ?>" required>
                             <div class="invalid-feedback"><?php echo $errors['vin'] ?? ''; ?></div>
-
-                            <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" id="continuidad" name="continuidad" <?php echo $continuidad ? 'checked' : ''; ?>>
-                                <label class="form-check-label" for="continuidad">¿Tiene continuidad el vehiculo?</label>
-                            </div>
-
                             <br>
                             <input type="submit" class="btn btn-dark" value="Registrar Vehículo">
                         </div>
                     </form>
 
-                    <!-- Formulario de Inspección -->
-                    <?php if ($showInspeccionForm) : ?>
-                        <div class="container mt-5">
-                            <h2>Registrar Inspección</h2>
-                            <form action="register_inspection.php" method="POST">
-                                <input type="hidden" name="vehiculoID" value="<?php echo htmlspecialchars($vehiculoID, ENT_QUOTES); ?>">
-                                <div class="form-group">
-                                    <label for="empleado" class="form-label">Empleado ID:</label>
-                                    <select name="empleadoID" class="form-control" required>
-                                        <?php
-                                        function obtenerEmpleadosDisponibles($pdo)
-                                        {
-                                            $sql = "SELECT EMPLEADOS.empleadoID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno 
-                                                    FROM EMPLEADOS 
-                                                    JOIN PERSONAS ON EMPLEADOS.personaID = PERSONAS.personaID";
-                                            $stmt = $pdo->query($sql);
-                                            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                        }
-                                        $empleados = obtenerEmpleadosDisponibles($pdo);
-                                        foreach ($empleados as $empleado) {
-                                            $nombreCompleto = "{$empleado['nombre']} {$empleado['apellido_paterno']} {$empleado['apellido_materno']}";
-                                            echo "<option value=\"{$empleado['empleadoID']}\">{$nombreCompleto}</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                    <label for="fechaSolicitud">Fecha de Solicitud:</label>
-                                    <input type="date" id="fechaSolicitud" name="fechaSolicitud" class="form-control" required>
-
-                                    <label for="ubicacionID" class="form-label">Ubicación ID:</label>
-                                    <select name="ubicacionID" class="form-control" required>
-                                        <?php
-                                        function obtenerUbicacionesActivas($pdo)
-                                        {
-                                            $sql = "SELECT * FROM UBICACIONES WHERE activo = 'si';";
-                                            $stmt = $pdo->query($sql);
-                                            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                        }
-                                        $ubicaciones = obtenerUbicacionesActivas($pdo);
-                                        foreach ($ubicaciones as $ubicacion) {
-                                            echo "<option value=\"{$ubicacion['ubicacionID']}\">{$ubicacion['lugar']}</option>";
-                                        }
-                                        ?>
-                                    </select>
-
-                                    <label for="formadepago" class="form-label">Forma de pago:</label>
-                                    <select name="formadepago" class="form-control" required>
-                                        <option value="efectivo">Efectivo</option>
-                                        <option value="tarjeta">Tarjeta</option>
-                                        <option value="transferencia">Transferencia</option>
-                                    </select><br>
-                                </div>
-                                <input type="submit" class="btn btn-dark" value="Registrar Inspección">
-                            </form>
-                        </div>
-                    <?php endif; ?>
 
                     <script>
         document.addEventListener('DOMContentLoaded', function () {

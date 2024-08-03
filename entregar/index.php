@@ -47,7 +47,7 @@ session_start();
                     ?>
                     <form action="proceso.php" method="POST">
                         <label for="ordenID">Selecciona una Orden de Trabajo:</label>
-                        <select name="ordenID" id="ordenID" required>
+                        <select name="ordenID" id="ordenID" class="form-control" required>
                             <?php
 
                             try {
