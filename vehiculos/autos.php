@@ -3,13 +3,6 @@ require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
 session_start();
-$errors = [];
-$success = '';
-$showModal = false;
-$showInspeccionForm = false;
-$vehiculoID = '';
-$continuidad = false;
-
 
 // Comprobar si el formulario ha sido enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
@@ -22,41 +15,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $kilometraje = isset($_POST['kilometraje']) ? trim($_POST['kilometraje']) : '';
     $placas = isset($_POST['placas']) ? trim($_POST['placas']) : '';
     $vin = isset($_POST['vin']) ? trim($_POST['vin']) : '';
-    $continuidad = isset($_POST['continuidad']) ? true : false;
-    
-    $currentYear = date('Y');
+    $anioactual = date('Y');
 
-    if ($anio < 1886 || $anio > $currentYear) {
+    if ($anio < 1886 || $anio > $anioactual) {
         $_SESSION['error'] = "El año debe estar entre 1886 y el año actual.";
     }
 
-    if (empty($errors)) {
-        $verificar = "SELECT * FROM VEHICULOS WHERE vin = ?";
-        $stmtVerificar = $pdo->prepare($verificar);
-        $stmtVerificar->execute([$vin]);
+    $verificar = "SELECT * FROM VEHICULOS WHERE vin = ?";
+    $stmtVerificar = $pdo->prepare($verificar);
+    $stmtVerificar->execute([$vin]);
 
-        if ($stmtVerificar->rowCount() > 0) {
-            $_SESSION['error'] = "El vehículo ya está registrado.";
+    if ($stmtVerificar->rowCount() > 0) {
+        $_SESSION['error'] = "El vehículo ya está registrado.";
+    } else {
+        $sql = "INSERT INTO VEHICULOS (clienteID, marca, modelo, anio, color, kilometraje, placas, vin,activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?,'si')";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$clienteID, $marca, $modelo, $anio, $color, $kilometraje, $placas, $vin]);
+
+        if ($stmt->rowCount() > 0) {
+            $_SESSION['bien'] = "Vehículo registrado exitosamente.";
         } else {
-            $sql = "INSERT INTO VEHICULOS (clienteID, marca, modelo, anio, color, kilometraje, placas, vin,activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?,'si')";
-            $stmt = $pdo->prepare($sql);
-            $stmt->execute([$clienteID, $marca, $modelo, $anio, $color, $kilometraje, $placas, $vin]);
-
-            if ($stmt->rowCount() > 0) {
-
-                $_SESSION['vehiculo'] = $vehiculoID = $pdo->lastInsertId();
-
-                if (!$continuidad) {
-                    $showInspeccionForm = true;
-                } else {
-
-
-                    $_SESSION['bien'] = "Vehículo registrado exitosamente.";
-                }
-            } else {
-                $_SESSION['error'] = "Error: " . $pdo->errorInfo()[2];
-            }
+            $_SESSION['error'] = "Error: " . $pdo->errorInfo()[2];
         }
     }
 }
-?>

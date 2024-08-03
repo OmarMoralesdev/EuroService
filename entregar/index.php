@@ -46,21 +46,9 @@ session_start();
                     }
                     ?>
                     <form action="proceso.php" method="POST">
-                        <div class="mb-3">
-                            <label for="ordenID" class="form-label">Selecciona una Orden de Trabajo:</label>
-                            <select name="ordenID" id="ordenID" class="form-select" required>
-                                <?php
-                                try {
-                                    require '../includes/db.php';
-                                    $con = new Database();
-                                    $pdo = $con->conectar();
-                                    // Obtener órdenes de trabajo pendientes basadas en el estado de la cita
-                                    $stmt = $pdo->query("
-                    SELECT ot.ordenID, ot.fecha_orden
-                    FROM ORDENES_TRABAJO ot
-                    INNER JOIN CITAS c ON ot.citaID = c.citaID
-                    WHERE c.estado = 'pendiente' or c.estado = 'en proceso'
-                ");
+                        <label for="ordenID">Selecciona una Orden de Trabajo:</label>
+                        <select name="ordenID" id="ordenID" class="form-control" required>
+                            <?php
 
                                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                                         echo "<option value=\"{$row['ordenID']}\">Orden {$row['ordenID']} - Fecha: {$row['fecha_orden']}</option>";
