@@ -8,7 +8,7 @@ $success = '';
 $showModal = false;
 $showInspeccionForm = false;
 $vehiculoID = '';
-$continuidad = false;
+$continuidad = false;   
 
 
 // Comprobar si el formulario ha sido enviado
@@ -112,6 +112,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         unset($_SESSION['bien']);
                     }
                     ?>
+
+<div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="miModalLabel">¿TIENE SEGUIMIENTO EL VEHICULO?</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Si el vehiculo es unicamente con un servicio de inspeccion selecciona <strong>SIN SEGUIMINTO<strong>
+                </div>
+                <div class="modal-footer">
+                    <a href="./inspeccion_view.php" type="button" class="btn btn-secondary">SIN SEGUIMINTO</a>
+                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">CON SEGUIMINTO</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
                     <form id="formCita" action="" method="POST" autocomplete="off" novalidate>
                         <div class="mb-3">
                             <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required>
@@ -215,6 +235,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         </div>
                     <?php endif; ?>
 
+                    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            var miModal = new bootstrap.Modal(document.getElementById('miModal'));
+            miModal.show();
+        });
+    </script>
 
 
                     <script src="app.js"></script>

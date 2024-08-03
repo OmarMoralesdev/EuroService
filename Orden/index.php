@@ -30,6 +30,7 @@ if (isset($_GET['tipoOrden'])) {
                         <select id="tipoOrden" name="tipoOrden" class="form-control" required>
                             <option value="conCita">Con Cita</option>
                             <option value="sinCita">Sin Cita</option>
+                            <option value="sinCita">Inspección</option>
                         </select><br>
                         <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Continuar</button>
 

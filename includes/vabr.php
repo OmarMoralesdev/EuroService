@@ -9,207 +9,208 @@
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap');
 
-body {
-    background-color: #232323;
-    font-family: 'Poppins', sans-serif;
-}
+        body {
+            background-color: #232323;
+            font-family: 'Poppins', sans-serif;
+        }
 
-::after,
-::before {
-    box-sizing: border-box;
-    margin: 0;
-    padding: 0;
-}
+        ::after,
+        ::before {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
 
-.btnn:hover {
+        .btnn:hover {
             transform: scale(1.01) translateY(-2px);
         }
-a {
-    text-decoration: none;
-}
 
-li {
-    list-style: none;
-}
+        a {
+            text-decoration: none;
+        }
 
-h1 {
-    font-weight: 600;
-    font-size: 1.5rem;
-}
+        li {
+            list-style: none;
+        }
 
-.wrapper {
-    display: flex;
-}
+        h1 {
+            font-weight: 600;
+            font-size: 1.5rem;
+        }
 
-.main {
-    min-height: 100vh;
-    width: 100%;
-    overflow: hidden;
-    transition: all 0.35s ease-in-out;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        .wrapper {
+            display: flex;
+        }
 
-#sidebar {
-    width: 70px;
-    min-width: 70px;
-    z-index: 1000;
-    transition: all .35s ease-in-out;
-    background-color: #000;
-    display: flex;
-    flex-direction: column;
-}
+        .main {
+            min-height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            transition: all 0.35s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-#sidebar.expand {
-    width: 260px;
-    min-width: 260px;
-}
+        #sidebar {
+        
+            width: 70px;  
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            background-color: #000;
+       
+            transition: all .35s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
 
-.toggle-btn {
-    background-color: transparent;
-    cursor: pointer;
-    border: 0;
-    padding: 1rem 1.5rem;
-}
+        #sidebar.expand {
+            width: 260px;
+        }
 
-.toggle-btn i {
-    font-size: 1.5rem;
-    color: #FFF;
-}
+        .toggle-btn {
+            background-color: transparent;
+            cursor: pointer;
+            border: 0;
+            padding: 1rem 1.5rem;
+        }
 
-.sidebar-logo {
-    margin: auto 0;
-    opacity: 0;
-    transition: opacity .35s;
-    overflow: hidden;
-}
+        .toggle-btn i {
+            font-size: 1.5rem;
+            color: #FFF;
+        }
 
-#sidebar.expand .sidebar-logo {
-    opacity: 1;
-    transition-delay: .35s;
-}
+        .sidebar-logo {
+            margin: auto 0;
+            opacity: 0;
+            transition: opacity .35s;
+            overflow: hidden;
+        }
 
-.sidebar-nav {
-    padding: 2rem 0;
-    flex: 1 1 auto;
-}
+        #sidebar.expand .sidebar-logo {
+            opacity: 1;
+            transition-delay: .35s;
+        }
 
-a.sidebar-link {
-    padding: .625rem 1.625rem;
-    color: #FFF;
-    display: block;
-    font-size: 0.9rem;
-    white-space: nowrap;
-    border-left: 3px solid transparent;
-    opacity: 1;
-    transition: opacity .35s;
-    overflow: hidden; /* Oculta el texto cuando el sidebar no está expandido */
-}
+        .sidebar-nav {
+            padding: 2rem 0;
+            flex: 1 1 auto;
+        }
 
-#sidebar.expand a.sidebar-link {
-    opacity: 1;
-    transition-delay: .35s;
-}
+        a.sidebar-link {
+            padding: .625rem 1.625rem;
+            color: #FFF;
+            display: block;
+            font-size: 0.9rem;
+            white-space: nowrap;
+            border-left: 3px solid transparent;
+            opacity: 1;
+            transition: opacity .35s;
+            overflow: hidden; /* Oculta el texto cuando el sidebar no está expandido */
+        }
 
-.sidebar-link i {
-    font-size: 1.1rem; /* Aumenta el tamaño del ícono si es necesario */
-    margin-right: .75rem; /* Espacio entre el ícono y el texto */
-    color: #FFF;
-    transition: opacity .35s;
- 
-}
+        #sidebar.expand a.sidebar-link {
+            opacity: 1;
+            transition-delay: .35s;
+        }
 
-/* Esconde el texto en los enlaces cuando el sidebar no está expandido */
-#sidebar:not(.expand) .sidebar-link span {
-    display: none;
-}
+        .sidebar-link i {
+            font-size: 1.1rem; /* Aumenta el tamaño del ícono si es necesario */
+            margin-right: .75rem; /* Espacio entre el ícono y el texto */
+            color: #FFF;
+            transition: opacity .35s;
+        }
 
-#sidebar:not(.expand) .sidebar-link i {
-    opacity: 1; /* Muestra los íconos cuando el sidebar no está expandido */
-}
+        /* Esconde el texto en los enlaces cuando el sidebar no está expandido */
+        #sidebar:not(.expand) .sidebar-link span {
+            display: none;
+        }
 
-/* Muestra el texto cuando el sidebar está expandido */
-#sidebar.expand .sidebar-link span {
-    display: inline;
-}
+        #sidebar:not(.expand) .sidebar-link i {
+            opacity: 1; /* Muestra los íconos cuando el sidebar no está expandido */
+        }
 
-#sidebar.expand .sidebar-link i {
-    opacity: 1;
-}
+        /* Muestra el texto cuando el sidebar está expandido */
+        #sidebar.expand .sidebar-link span {
+            display: inline;
+        }
 
-a.sidebar-link:hover {
-    background-color: rgb(32, 32, 32);
-    border-left: 3px solid #3b7ddd;
-}
+        #sidebar.expand .sidebar-link i {
+            opacity: 1;
+        }
 
-.sidebar-item {
-    position: relative;
-}
+        a.sidebar-link:hover {
+            background-color: rgb(32, 32, 32);
+            border-left: 3px solid #3b7ddd;
+        }
 
-#sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
-    position: absolute;
-    top: 0;
-    left: 70px;
-    background-color: #000;
-    padding: 0;
-    min-width: 15rem;
-    display: none;
-}
+        .sidebar-item {
+            position: relative;
+        }
 
-#sidebar:not(.expand) .sidebar-item:hover .has-dropdown+.sidebar-dropdown {
-    display: block;
-    max-height: 15em;
-    width: 100%;
-    opacity: .8;
-}
+        #sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
+            position: absolute;
+            top: 0;
+            left: 70px;
+            background-color: #000;
+            padding: 0;
+            min-width: 15rem;
+            display: none;
+        }
 
-#sidebar.expand .sidebar-link[data-bs-toggle="collapse"]::after {
-    border: solid;
-    border-width: 0 .075rem .075rem 0;
-    content: "";
-    display: inline-block;
-    padding: 2px;
-    position: absolute;
-    right: 1.5rem;
-    top: 1.4rem;
-    transform: rotate(-135deg);
-    transition: all .2s ease-out;
-}
+        #sidebar:not(.expand) .sidebar-item:hover .has-dropdown+.sidebar-dropdown {
+            display: block;
+            max-height: 15em;
+            width: 100%;
+            opacity: .8;
+        }
 
-#sidebar.expand .sidebar-link[data-bs-toggle="collapse"].collapsed::after {
-    transform: rotate(45deg);
-    transition: all .2s ease-out;
-}
+        #sidebar.expand .sidebar-link[data-bs-toggle="collapse"]::after {
+            border: solid;
+            border-width: 0 .075rem .075rem 0;
+            content: "";
+            display: inline-block;
+            padding: 2px;
+            position: absolute;
+            right: 1.5rem;
+            top: 1.4rem;
+            transform: rotate(-135deg);
+            transition: all .2s ease-out;
+        }
 
-/* contenedores de las vistas */
-.container {
-    width: 90%;
-    margin: auto;
-    background: linear-gradient(to right, #202020, #000000, #202020); /* degradado lateral de oscuro a menos oscuro */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* sombra para el contenedor principal */
-    padding: 20px; /* espacio interno para el contenedor principal */
-}
+        #sidebar.expand .sidebar-link[data-bs-toggle="collapse"].collapsed::after {
+            transform: rotate(45deg);
+            transition: all .2s ease-out;
+        }
 
-/* Contenedor interno del formulario */
-.form-container {
-    width: 100%;
-    padding: 20px; /* espacio interno para el contenido del formulario */
-    background-color: white;
-    border-radius: 10px;
-    box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* sombra más marcada */
-}
+        /* contenedores de las vistas */
+        .container {
+            width: 90%;
+            margin: auto;
+            background: linear-gradient(to right, #202020, #000000, #202020); /* degradado lateral de oscuro a menos oscuro */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* sombra para el contenedor principal */
+            padding: 20px; /* espacio interno para el contenedor principal */
+        }
 
-h2 {
-    color: #ffffff;
-    text-align: center;
-    text-transform: uppercase; /* título en mayúsculas */
-    font-family: 'chicago', sans-serif; /* Cambio de tipografía a chicago */
-}
+        /* Contenedor interno del formulario */
+        .form-container {
+            width: 100%;
+            padding: 20px; /* espacio interno para el contenido del formulario */
+            background-color: white;
+            border-radius: 10px;
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.3); /* sombra más marcada */
+        }
 
+        h2 {
+            color: #ffffff;
+            text-align: center;
+            text-transform: uppercase; /* título en mayúsculas */
+            font-family: 'chicago', sans-serif; /* Cambio de tipografía a chicago */
+        }
 
         .lista {
             display: none;
@@ -229,7 +230,7 @@ h2 {
             border-bottom: 1px solid #ddd;
         }
 
-       .lista li:hover {
+        .lista li:hover {
             background-color: #e2e2e2;
         }
 
@@ -237,9 +238,20 @@ h2 {
             border-bottom: none;
         }
 
+        /* Ajuste para móviles */
+        @media screen and (max-width: 768px) {
+            #sidebar {
+                width: 0;
+                height: 100%;  
+            overflow-x: hidden;
+            position: fixed;
+            }
 
-    
-</style>
+            #sidebar.expand {
+                width: 100%;
+            }
+        }
+    </style>
 <aside id="sidebar">
     <div class="d-flex">
         <button class="toggle-btn" type="button">
@@ -425,3 +437,39 @@ h2 {
         document.querySelector("#sidebar").classList.toggle("expand");
     });
 </script>
+
+<script>
+        function toggleSidebar() {
+            const sidebar = document.getElementById('sidebar');
+            sidebar.classList.toggle('expand');
+        }
+
+        // Variables para el seguimiento de los gestos de deslizamiento
+        let startX;
+
+        // Eventos táctiles para dispositivos móviles
+        document.addEventListener('touchstart', function(event) {
+            startX = event.touches[0].clientX;
+        });
+
+        document.addEventListener('touchmove', function(event) {
+            if (!startX) return;
+
+            let currentX = event.touches[0].clientX;
+            let diffX = startX - currentX;
+
+            // Si el deslizado es significativo, abre o cierra la barra lateral
+            if (diffX > 50) {
+                document.getElementById('sidebar').classList.remove('expand'); // Deslizar hacia la izquierda
+                startX = null; // Reiniciar startX
+            } else if (diffX < -50) {
+                document.getElementById('sidebar').classList.add('expand'); // Deslizar hacia la derecha
+                startX = null; // Reiniciar startX
+            }
+        });
+
+        // Reiniciar startX al final del toque
+        document.addEventListener('touchend', function() {
+            startX = null;
+        });
+    </script>
