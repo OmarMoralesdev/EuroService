@@ -289,7 +289,7 @@
     </div>
 
     
-    <div class="containerr" style="">
+    <div class="containerr">
         <div class="bg-fixedd" style="background-image: url('../EuroService/img/FONDO LOGIN.jpg'); ">
             <div class="overlay">
                 </div>
@@ -319,7 +319,7 @@
                     <p>Teléfono: +1234567890</p>
                 </div>
             </div>
-            <iframe id="ubi" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3598.18782262292!2d-103.41128942458826!3d25.598674315322345!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x869c1e1a44a6e3ef%3A0x8b4f22350c0a407d!2sEURO%20SERVICE!5e0!3m2!1ses!2smx!4v1649918775186!5m2!1ses!2smx" width="100%" height="300" style="border:1px;" allowfullscreen="" loading="lazy"></iframe>
+            <iframe id="ubi" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d661.048036986063!2d-103.40865896550226!3d25.59861614619652!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x868fdbbc87fdf615%3A0xe5e0fd19352eff0b!2sKike%20Mecanico!5e0!3m2!1sen!2smx!4v1722721714805!5m2!1sen!2smx" width="100%" height="300" style="border:1px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </footer>
 

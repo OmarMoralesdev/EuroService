@@ -8,15 +8,16 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Entrega</title>
+    <!-- Agregar Bootstrap CSS -->
+    <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
 <body>
-
     <div class="wrapper">
         <?php include '../includes/vabr.php'; ?>
-        <div class="main p-3">
+        <div class="main">
             <div class="container">
-                <h2>Registrar Entrega de Orden de Trabajo</h2>
+                <h2 class="mb-4">Registrar Entrega de Orden de Trabajo</h2>
                 <div class="form-container">
                     <?php
                     if (isset($_SESSION['error'])) {
@@ -29,7 +30,7 @@ session_start();
                             <div class='modal-dialog'>
                                 <div class='modal-content'>
                                     <div class='modal-header'>
-                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>¡Orden de Trabajo Registrada!</h1>
                                         <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                                     </div>
                                     <div class='modal-body'>
@@ -42,42 +43,43 @@ session_start();
                             </div>
                         </div>";
                         unset($_SESSION['bien']);
-
                     }
                     ?>
                     <form action="proceso.php" method="POST">
-                        <label for="ordenID">Selecciona una Orden de Trabajo:</label>
-                        <select name="ordenID" id="ordenID" required>
-                            <?php
+                        <div class="mb-3">
+                            <label for="ordenID" class="form-label">Selecciona una Orden de Trabajo:</label>
+                            <select name="ordenID" id="ordenID" class="form-select" required>
+                                <?php
+                                try {
+                                    require '../includes/db.php';
+                                    $con = new Database();
+                                    $pdo = $con->conectar();
+                                    // Obtener órdenes de trabajo pendientes basadas en el estado de la cita
+                                    $stmt = $pdo->query("
+                    SELECT ot.ordenID, ot.fecha_orden
+                    FROM ORDENES_TRABAJO ot
+                    INNER JOIN CITAS c ON ot.citaID = c.citaID
+                    WHERE c.estado = 'pendiente' or c.estado = 'en proceso'
+                ");
 
-                            try {
-                                require '../includes/db.php';
-                                $con = new Database();
-                                $pdo = $con->conectar();
-                                // Obtener órdenes de trabajo pendientes basadas en el estado de la cita
-                                $stmt = $pdo->query("
-                SELECT ot.ordenID, ot.fecha_orden
-                FROM ORDENES_TRABAJO ot
-                INNER JOIN CITAS c ON ot.citaID = c.citaID
-                WHERE c.estado = 'pendiente' or c.estado = 'en proceso'
-            ");
-
-                                while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                    echo "<option value=\"{$row['ordenID']}\">Orden {$row['ordenID']} - Fecha: {$row['fecha_orden']}</option>";
+                                    while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+                                        echo "<option value=\"{$row['ordenID']}\">Orden {$row['ordenID']} - Fecha: {$row['fecha_orden']}</option>";
+                                    }
+                                } catch (PDOException $e) {
+                                    echo "Error: " . $e->getMessage();
                                 }
-                            } catch (PDOException $e) {
-                                echo "Error: " . $e->getMessage();
-                            }
-                            ?>
-                        </select>
-                        <br>
-                        <br>
-                        <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Confirmar entrega</button>
+                                ?>
+                            </select>
+                        </div>
+                        <button type="submit" class="btn btn-dark d-grid gap-2 col-6 mx-auto">Confirmar entrega</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Agregar Bootstrap JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 </body>
 
 </html>

@@ -168,12 +168,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <label for="vin">VIN:</label>
                             <input type="text" id="vin" name="vin" maxlength="20" class="form-control <?php echo isset($errors['vin']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el VIN del vehículo" value="<?php echo htmlspecialchars($vin ?? '', ENT_QUOTES); ?>" required>
                             <div class="invalid-feedback"><?php echo $errors['vin'] ?? ''; ?></div>
-
-                            <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" id="continuidad" name="continuidad" <?php echo $continuidad ? 'checked' : ''; ?>>
-                                <label class="form-check-label" for="continuidad">¿Tiene continuidad el vehiculo?</label>
-                            </div>
-
                             <br>
                             <input type="submit" class="btn btn-dark" value="Registrar Vehículo">
                         </div>

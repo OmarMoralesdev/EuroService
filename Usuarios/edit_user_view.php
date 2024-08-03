@@ -70,7 +70,6 @@ $pdo = $con->conectar();
         </div>
     </div>
 
-    // Muestra el modal 
      <!-- MUESTRA EL MODAL DE EXITO -->
      <?php
     if (isset($_SESSION['modal'])) {

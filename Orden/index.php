@@ -3,10 +3,14 @@ if (isset($_GET['tipoOrden'])) {
     $tipoOrden = $_GET['tipoOrden'];
     if ($tipoOrden == 'conCita') {
         header('Location: seleccionar_cita.php');
-    } else {
+    } elseif ($tipoOrden == 'sinCita') {
         header('Location: crear_orden_sin_cita.php');
     }
+    elseif ($tipoOrden == 'inspeccion') {
+        header('Location: inspeccion_view.php');
+    }
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -30,7 +34,7 @@ if (isset($_GET['tipoOrden'])) {
                         <select id="tipoOrden" name="tipoOrden" class="form-control" required>
                             <option value="conCita">Con Cita</option>
                             <option value="sinCita">Sin Cita</option>
-                            <option value="sinCita">Inspección</option>
+                            <option value="inspeccion">Inspección</option>
                         </select><br>
                         <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Continuar</button>
 

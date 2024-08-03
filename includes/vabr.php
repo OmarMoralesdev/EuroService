@@ -50,18 +50,19 @@
             overflow: hidden;
             transition: all 0.35s ease-in-out;
             display: flex;
-            align-items: center;
-            justify-content: center;
+            flex-direction: row;
+            align-items: flex-start;
+            justify-content: space-between;
+            padding: 20px;
+            height: 10vh;
+            box-sizing: border-box;
         }
-
         #sidebar {
-        
             width: 70px;  
             z-index: 1000;
             top: 0;
             left: 0;
             background-color: #000;
-       
             transition: all .35s ease-in-out;
             display: flex;
             flex-direction: column;
@@ -188,7 +189,7 @@
 
         /* contenedores de las vistas */
         .container {
-            width: 90%;
+            width: 100%;
             margin: auto;
             background: linear-gradient(to right, #202020, #000000, #202020); /* degradado lateral de oscuro a menos oscuro */
             border-radius: 10px;
