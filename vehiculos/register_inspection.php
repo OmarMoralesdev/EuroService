@@ -1,26 +1,51 @@
 <?php
 require '../includes/db.php';
 session_start();
+$con = new Database();
+$pdo = $con->conectar();
 
-if (!isset($_SESSION['vehiculo'])) {
-       $_SESSION['error'] = 'Error: ID del vehículo no está definido en la sesión.';
-       header("Location: autos_view.php");
-       exit();
-}
 
-$vehiculoID = $_POST['vehiculoID'];
 $empleadoID = isset($_POST['empleadoID']) ? intval($_POST['empleadoID']) : null;
 $ubicacionID = isset($_POST['ubicacionID']) ? intval($_POST['ubicacionID']) : null;
 $formaDePago = isset($_POST['formaDePago']) ? trim($_POST['formaDePago']) : '';
+$clienteID = isset($_POST['clienteID']) ? $_POST['clienteID'] : '';
+$marca = isset($_POST['marca']) ? trim($_POST['marca']) : '';
+$modelo = isset($_POST['modelo']) ? trim($_POST['modelo']) : '';
+$anio = isset($_POST['anio']) ? trim($_POST['anio']) : '';
+$color = isset($_POST['color']) ? trim($_POST['color']) : '';
+$kilometraje = isset($_POST['kilometraje']) ? trim($_POST['kilometraje']) : '';
+$placas = isset($_POST['placas']) ? trim($_POST['placas']) : '';
+$vin = isset($_POST['vin']) ? trim($_POST['vin']) : '';
 
+$currentYear = date('Y');
+
+if ($anio < 1886 || $anio > $currentYear) {
+    $_SESSION['error'] = "El año debe estar entre 1886 y el año actual.";
+}
+
+if (empty($errors)) {
+    $verificar = "SELECT * FROM VEHICULOS WHERE vin = ?";
+    $stmtVerificar = $pdo->prepare($verificar);
+    $stmtVerificar->execute([$vin]);
+
+    if ($stmtVerificar->rowCount() > 0) {
+        $_SESSION['error'] = "El vehículo ya está registrado.";
+    } else {
+        $sql = "INSERT INTO VEHICULOS (clienteID, marca, modelo, anio, color, kilometraje, placas, vin,continuidad,activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,'si')";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$clienteID, $marca, $modelo, $anio, $color, $kilometraje, $placas, $vin, $continuidad2]);
+
+        if ($stmt->rowCount() > 0) {
+
+        }
+    }
+}
 if ($empleadoID === null || $ubicacionID === null || empty($formaDePago)) {
       $_SESSION['error'] = 'Error: Faltan datos necesarios.';
       header("Location: autos_view.php");
       exit();
 }
 
-$con = new Database();
-$pdo = $con->conectar();
 
 try {
     // Verificar si el vehiculoID existe
