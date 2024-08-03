@@ -132,9 +132,6 @@ function obtenerDetallesClientepersona($pdo, $clienteID)
 function realizarPago($pdo, $ordenID, $fechaPago, $monto, $tipoPago, $formaDePago)
 {
     try {
-        // Iniciar una transacción
-        $pdo->beginTransaction();
-        
         // Insertar el pago en la tabla PAGOS
         $sqlPago = "INSERT INTO PAGOS (ordenID, fecha_pago, monto, tipo_pago, forma_de_pago)
                     VALUES (:ordenID, :fechaPago, :monto, :tipoPago, :formaDePago)";
@@ -157,14 +154,11 @@ function realizarPago($pdo, $ordenID, $fechaPago, $monto, $tipoPago, $formaDePag
             ]);
         }
 
-        // Confirmar la transacción
-        $pdo->commit();
         echo "Pago realizado y anticipo actualizado con éxito.";
     } catch (PDOException $e) {
-        // Revertir la transacción en caso de error
-        $pdo->rollBack();
-        echo "Error al realizar el pago: " . $e->getMessage();
+        throw new Exception("Error al realizar el pago: " . $e->getMessage());
     }
 }
+
 
 

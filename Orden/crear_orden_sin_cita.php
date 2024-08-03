@@ -140,6 +140,7 @@ unset($_SESSION['mensaje']);
             </div>
         </div>
     </div>
+    <script src="app.js"></script>
     <script>
         $(document).ready(function() {
             if ($('#staticBackdrop').length) {
