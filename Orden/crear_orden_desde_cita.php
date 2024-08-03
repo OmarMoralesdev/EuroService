@@ -117,15 +117,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 // Hacer commit
                 $pdo->commit();
 
-                echo "Nueva orden de trabajo creada con ID: $ordenID";
+                $_SESSION['bien'] =  "Nueva orden de trabajo creada con ID: $ordenID";
+                header("Location: crear_orden_sin_cita.php");
+                exit();
             } catch (Exception $e) {
                 // Rollback en caso de error
                 $pdo->rollBack();
-                echo "Error al crear la orden de trabajo: " . $e->getMessage();
+                $_SESSION['error'] = "Error al crear la orden de trabajo: " . $e->getMessage();
+                header("Location: crear_orden_sin_cita.php");
+                exit();
             }
         } else {
             // Manejo para cuando no se han enviado detalles adicionales del formulario
-        
+
 ?>
 
             <!DOCTYPE html>
@@ -204,12 +208,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <label for="ubicacionID" class="form-label">Ubicación ID:</label>
                                     <select name="ubicacionID" class="form-control" required>
                                         <?php
-                                        function obtenerUbicacionesActivas($pdo)
-                                        {
-                                            $sql = "SELECT * FROM UBICACIONES WHERE activo = 'si';";
-                                            $stmt = $pdo->query($sql);
-                                            return $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                        }
+                                      
                                         $ubicaciones = obtenerUbicacionesActivas($pdo);
                                         foreach ($ubicaciones as $ubicacion) {
                                             echo "<option value=\"{$ubicacion['ubicacionID']}\">{$ubicacion['lugar']}</option>";

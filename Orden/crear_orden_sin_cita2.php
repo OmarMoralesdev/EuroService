@@ -101,7 +101,7 @@ GROUP BY
         $fechaPago = date('Y-m-d');
         $tipoPago = "anticipo";
         // Insertar pago
-        realizarPago($pdo, $nuevaOrdenID, $fechaPago, $anticipo, $tipoPago, $formaDePago);
+        realizarPago($pdo, $ordenID, $fechaPago, $anticipo, $tipoPago, $formaDePago);
         actualizarEstadoCita($pdo, $citaID, 'en proceso');
 
 
