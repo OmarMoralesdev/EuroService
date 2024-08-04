@@ -23,6 +23,10 @@ body {
     padding: 0;
 }
 
+.btnn:hover {
+    transform: scale(1.01) translateY(-2px);
+}
+
 a {
     text-decoration: none;
 }
@@ -40,29 +44,31 @@ h1 {
     display: flex;
 }
 
-.main {
-    min-height: 100vh;
-    width: 100%;
-    overflow: hidden;
-    transition: all 0.35s ease-in-out;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
+        .main {
+            min-height: 100vh;
+            width: 100%;
+            overflow: hidden;
+            transition: all 0.35s ease-in-out;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
 
-#sidebar {
-    width: 70px;
-    min-width: 70px;
-    z-index: 1000;
-    transition: all .35s ease-in-out;
-    background-color: #000;
-    display: flex;
-    flex-direction: column;
-}
+        #sidebar {
+        
+            width: 70px;  
+            z-index: 1000;
+            top: 0;
+            left: 0;
+            background-color: #000;
+       
+            transition: all .35s ease-in-out;
+            display: flex;
+            flex-direction: column;
+        }
 
 #sidebar.expand {
     width: 260px;
-    min-width: 260px;
 }
 
 .toggle-btn {
@@ -93,7 +99,6 @@ h1 {
     padding: 2rem 0;
     flex: 1 1 auto;
 }
-    
 
 a.sidebar-link {
     padding: .625rem 1.625rem;
@@ -146,7 +151,6 @@ a.sidebar-link:hover {
     position: relative;
 }
 
-/* Ajustes para los módulos con submódulos */
 #sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
     position: absolute;
     top: 0;
@@ -182,15 +186,15 @@ a.sidebar-link:hover {
     transition: all .2s ease-out;
 }
 
-/* contenedores de las vistas */
-.container {
-    width: 90%;
-    margin: auto;
-    background: linear-gradient(to right, #202020, #000000, #202020); /* degradado lateral de oscuro a menos oscuro */
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* sombra para el contenedor principal */
-    padding: 20px; /* espacio interno para el contenedor principal */
-}
+        /* contenedores de las vistas */
+        .container {
+            width: 90%;
+            margin: auto;
+            background: linear-gradient(to right, #202020, #000000, #202020); /* degradado lateral de oscuro a menos oscuro */
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* sombra para el contenedor principal */
+            padding: 20px; /* espacio interno para el contenedor principal */
+        }
 
 /* Contenedor interno del formulario */
 .form-container {
@@ -207,8 +211,65 @@ h2 {
     text-transform: uppercase; /* título en mayúsculas */
     font-family: 'chicago', sans-serif; /* Cambio de tipografía a chicago */
 }
-</style>
 
+.lista {
+    display: none;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    max-height: 150px;
+    overflow-y: auto;
+}
+
+.lista li {
+    padding: 10px;
+    cursor: pointer;
+    background-color: #fff;
+    border-bottom: 1px solid #ddd;
+}
+
+.lista li:hover {
+    background-color: #e2e2e2;
+}
+
+.lista li:last-child {
+    border-bottom: none;
+}
+.menu-icon {
+    position: fixed;
+   
+  
+    }
+/* Ajuste para móviles */
+@media screen and (max-width: 768px) {
+    #sidebar {
+        width: 0;
+        height: 100%;
+        overflow-x: hidden;
+        position: fixed;
+    }
+
+    #sidebar.expand {
+        width: 100%;
+    }
+
+    .menu-icon {
+        display: block;
+        font-size: 1.5rem;
+        color: #FFF;
+        padding: 1rem;
+        cursor: pointer;
+    }
+}
+
+    </style>
+       <header>
+        <div class="menu-icon" onclick="alternarSidebar()">
+        <i class="bi bi-arrow-bar-right"></i>
+        </div>
+    </header>
 <aside id="sidebar">
     <div class="d-flex">
         <button class="toggle-btn" type="button">
@@ -305,4 +366,58 @@ $(document).ready(function () {
         $('.main').toggleClass('expand');
     });
 });
+</script>
+<script>
+    function alternarSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('expand');
+    }
+
+    // Variables para el seguimiento de los gestos de deslizamiento
+    let inicioX;
+    let desplazamiento = false;
+
+    // Eventos táctiles para dispositivos móviles
+    document.addEventListener('touchstart', function(evento) {
+        inicioX = evento.touches[0].clientX;
+        desplazamiento = false; // Inicialmente no estamos desplazándonos
+    });
+
+    document.addEventListener('touchmove', function(evento) {
+        if (!inicioX) return;
+
+        let actualX = evento.touches[0].clientX;
+        let diferenciaX = inicioX - actualX;
+
+        // Verifica si estamos en un elemento con desplazamiento horizontal
+        let enElementoDesplazable = false;
+        let elemento = evento.target;
+        while (elemento) {
+            if (elemento.scrollWidth > elemento.clientWidth) {
+                enElementoDesplazable = true;
+                break;
+            }
+            elemento = elemento.parentElement;
+        }
+
+        if (enElementoDesplazable) {
+            desplazamiento = true; // Si estamos en un elemento desplazable, marcamos como desplazamiento
+        }
+
+        if (!desplazamiento) {
+            // Si no estamos desplazándonos, manejamos la apertura/cierre de la barra lateral
+            if (diferenciaX > 50) {
+                document.getElementById('sidebar').classList.remove('expand'); // Deslizar hacia la izquierda
+                inicioX = null; // Reiniciar inicioX
+            } else if (diferenciaX < -50) {
+                document.getElementById('sidebar').classList.add('expand'); // Deslizar hacia la derecha
+                inicioX = null; // Reiniciar inicioX
+            }
+        }
+    });
+
+    // Reiniciar inicioX al final del toque
+    document.addEventListener('touchend', function() {
+        inicioX = null;
+    });
 </script>
