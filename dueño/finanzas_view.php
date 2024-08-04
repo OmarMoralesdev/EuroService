@@ -136,7 +136,8 @@
 
                 if ($stmt->rowCount() > 0) {
                     // Mostrar datos en una tabla
-                    echo "<table>";
+                    echo "<div class='table-responsive'>";
+                    echo "<table class='table table-striped table-bordered'>";
                     echo "<tr>
                             <th>Mes</th>
                             <th>Total Ingresos Mensuales</th>
@@ -183,6 +184,7 @@
                         $data['total_gastos_totales'][] = (float)$row['total_gastos_totales'];
                     }
                     echo "</table>";
+                    echo "</div>";
                 } else {
                     echo "<p>No se encontraron resultados.</p>";
                 }
