@@ -39,6 +39,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $clienteID_param = $_POST['campo'];
     $cantidad_pagada = $_POST['cantidad_pagada'];
     $receptor = $_POST['receptor'];
+    $ordenID = $_POST['ordenID'];
+
+    $sql = "SELECT o.ordenID, c.servicio_solicitado
+    FROM ORDENES_TRABAJO o 
+    JOIN CITAS c ON o.citaID = c.citaID 
+    WHERE o.ordenID = ?";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([$ordenID]);
+    $citas = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+    foreach ($citas as $cita) {
+        $concepto = $cita['servicio_solicitado'];
+    }
 
     try {
         $stmt = $pdo->prepare("CALL generarReciboPago(:nombre_cliente, :cantidad_pagada, :receptor, @mensaje, @fecha_recibo, @cliente_nombre, @cantidad_pagada_recibo)");
@@ -132,7 +145,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 </head>
 
 <body>
-<div class="wrapper">
+    <div class="wrapper">
         <?php include '../includes/vabr.php'; ?>
         <div class="main p-3">
             <div class="container">
@@ -151,7 +164,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                 <option value="">Seleccionar orden...</option>
                             </select>
                             <div class="invalid-feedback">Debes seleccionar una orden.</div>
-                           
+
                             <label for="cantidad_pagada">Cantidad Pagada:</label>
                             <input type="text" id="cantidad_pagada" name="cantidad_pagada" class="form-control" readonly required><br><br>
                             <label for="receptor">Nombre del Receptor:</label>
@@ -174,7 +187,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         <div class="recibo-section">
                                             <div class="recibo-label">Fecha:</div>
                                             <div class="recibo-field"><?php echo htmlspecialchars($fecha_recibo); ?></div>
-                                        </div>                    
+                                        </div>
                                         <div class="recibo-section">
                                             <div class="recibo-label">Cantidad Pagada:</div>
                                             <div class="recibo-field"><?php echo htmlspecialchars($cantidad_pagada_recibo); ?></div>
@@ -189,7 +202,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         </div>
                                     </div>
                                     <br>
-                                    <a href="recibo_preview.php?cliente_nombre=<?php echo urlencode($cliente_nombre); ?>&cantidad_pagada_recibo=<?php echo urlencode($cantidad_pagada_recibo); ?>&fecha_recibo=<?php echo urlencode($fecha_recibo); ?>&receptor=<?php echo urlencode($receptor); ?>" class="btn btn-dark w-100" target="_blank">Descargar PDF</a>
+                                    <a href="recibo_preview.php?cliente_nombre=<?php echo urlencode($cliente_nombre); ?>&cantidad_pagada_recibo=<?php echo urlencode($cantidad_pagada_recibo); ?>&fecha_recibo=<?php echo urlencode($fecha_recibo); ?>&receptor=<?php echo urlencode($receptor); ?>&concepto=<?php echo urlencode(htmlspecialchars($concepto)); ?>" class="btn btn-dark w-100" target="_blank">Descargar PDF</a>
                                 </div>
                             </div>
                         </div>
@@ -276,7 +289,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             }
         }
     </script>
-     <script>
+    <script>
         // Mostrar el modal de vista previa
         var modal = new bootstrap.Modal(document.getElementById('reciboModal'));
         var span = document.getElementsByClassName("close")[0];

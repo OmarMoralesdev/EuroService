@@ -10,7 +10,7 @@ if (isset($_GET['clienteID'])) {
     function obtenerOrdenesTrabajo($pdo, $clienteID)
     {
         try {
-            $sql = "SELECT o.ordenID, o.fecha_orden, o.total_estimado, v.marca, v.modelo 
+            $sql = "SELECT o.ordenID, o.fecha_orden, o.total_estimado, v.marca, v.modelo,c.servicio_solicitado
                     FROM ORDENES_TRABAJO o 
                     JOIN CITAS c ON o.citaID = c.citaID 
                     JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID 
