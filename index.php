@@ -5,7 +5,9 @@
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
+    <script src="https://prod.spline.design/zeRcBAs5kDEz5vVH/scene.splinecode" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EURO SERVICE</title>
@@ -212,10 +214,16 @@
         .vh-40-sm {
             height: 40vh;
         }
+        .spline-container {
+            width: 100%;
+            height: 68vh; /* Ajusta la altura según sea necesario */
+            margin-top: 40px;
 
-    </style>
+        }
+        </style>
+
+
 </head>
-<body>
     <nav class="navbar navbar-expand-lg navbar-dark height: 65vh">
         <div class="container-fluid">
             <p class="navbar-brand">EURO SERVICE</p>
@@ -238,31 +246,37 @@
         </div>
     </nav>
     <div class="bg-fixed">
+       
+        
         <div class="overlay">
-        <div class="text-center text-light">
-    <!-- Texto con tamaño pequeño para móviles y grande para pantallas de computadora -->
-    <p class="fs-xs d-block d-md-none">
-      EURO SERVICE
-    </p>
-    <p class="fs-lg d-none d-md-block">
-      EURO SERVICE
-    </p>
-  </div>
+            <div class="text-center text-light">
+                <!-- Texto con tamaño pequeño para móviles y grande para pantallas de computadora -->
+                <p class="fs-xs d-block d-md-none">
+                    EURO SERVICE
+                </p>
+                <p class="fs-lg d-none d-md-block">
+                    EURO SERVICE
+                </p>
+            </div>
         </div>
-    </div>
+        <div class="spline-container">
+            <script type="module"  src="https://unpkg.com/@splinetool/viewer@1.9.5/build/spline-viewer.js"></script>
+                  <spline-viewer url="https://prod.spline.design/zeRcBAs5kDEz5vVH/scene.splinecode"></spline-viewer>
+                </div>
+</div>
 
+
+
+<div id="servicios" class="content">
+    <section class="features text-center text-light">
+        <div class="container">
             
-    
-    <div id="servicios" class="content">
-        <section class="features text-center text-light">
-            <div class="container">
-
-                <h2  class="section-heading">NUESTROS SERVICIOS</h2>
-                <hr class="bg-light">
-                <div class="row">
-                    <div class="col-md-4">
-                        <div class="feature-item">
-                            <i class="lni lni-car"></i>
+            <h2  class="section-heading">NUESTROS SERVICIOS</h2>
+            <hr class="bg-light">
+            <div class="row">
+                <div class="col-md-4">
+                    <div class="feature-item">
+                        <i class="lni lni-car"></i>
                             <h3>Reparación Completa</h3>
                             <p>Ofrecemos una amplia gama de servicios de reparación para su vehículo.</p>
                         </div>
@@ -296,7 +310,7 @@
             </div>
         </div>
 
-    
+      
     <footer class="text-center">
         <div class="container">
             <div class="row">
