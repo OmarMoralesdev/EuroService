@@ -146,7 +146,7 @@ function realizarPago($pdo, $ordenID, $fechaPago, $monto, $tipoPago, $formaDePag
 
         // Actualizar el campo anticipo en la tabla ORDENES_TRABAJO
         if ($tipoPago == 'anticipo') {
-            $sqlUpdateAnticipo = "UPDATE ORDENES_TRABAJO SET anticipo = anticipo + :monto WHERE ordenID = :ordenID";
+            $sqlUpdateAnticipo = "UPDATE ORDENES_TRABAJO SET anticipo = :monto WHERE ordenID = :ordenID";
             $stmtUpdate = $pdo->prepare($sqlUpdateAnticipo);
             $stmtUpdate->execute([
                 ':monto' => $monto,

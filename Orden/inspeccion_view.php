@@ -59,12 +59,18 @@ session_start();
 
                     <form id="formInspeccion" action="" method="POST" autocomplete="off" novalidate>
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required>
-                            <ul id="lista" class="list-group lista" style="display: none;"></ul>
+                            <input type="text" class="form-control" autocomplete="off" id="campo" name="campo" placeholder="Buscar cliente..." required>
+                            <ul id="lista" class="list-group lista"></ul>
                             <input type="hidden" id="clienteID" name="clienteID">
                             <div class="invalid-feedback">Debes seleccionar un cliente.</div>
                         </div>
-
+                        <div class="mb-3">
+                            <label for="vehiculoSeleccionado" class="form-label">Seleccione un vehículo:</label>
+                            <input type="text" class="form-control" id="vehiculoSeleccionado" readonly>
+                            <ul id="lista-vehiculos" class="list-group lista"></ul>
+                            <input type="hidden" id="vehiculoID" name="vehiculoID">
+                            <div class="invalid-feedback">Debes seleccionar un vehículo.</div>
+                        </div>
                         <div class="mb-3">
                             <label for="empleado" class="form-label">Empleado:</label>
                             <select name="empleadoID" id="empleado" class="form-control" required>

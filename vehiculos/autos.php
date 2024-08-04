@@ -19,6 +19,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($anio < 1886 || $anio > $anioactual) {
         $_SESSION['error'] = "El año debe estar entre 1886 y el año actual.";
+        header("Location: autos_view.php");
+        exit();
     }
 
     $verificar = "SELECT * FROM VEHICULOS WHERE vin = ?";
@@ -27,6 +29,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     if ($stmtVerificar->rowCount() > 0) {
         $_SESSION['error'] = "El vehículo ya está registrado.";
+        header("Location: autos_view.php");
+        exit();
     } else {
         $sql = "INSERT INTO VEHICULOS (clienteID, marca, modelo, anio, color, kilometraje, placas, vin,activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?,'si')";
         $stmt = $pdo->prepare($sql);
@@ -34,8 +38,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->rowCount() > 0) {
             $_SESSION['bien'] = "Vehículo registrado exitosamente.";
+            header("Location: autos_view.php");
+            exit();
         } else {
             $_SESSION['error'] = "Error: " . $pdo->errorInfo()[2];
+            header("Location: autos_view.php");
+            exit();
         }
     }
 }
