@@ -73,7 +73,7 @@ try {
                                     <th>Monto</th>
                                     <th>Tipo de Pago</th>
                                     <th>Forma de Pago</th>
-                                    <th>ID de Orden</th>
+                                    <th>Folio</th>
                                 </tr>
                             </thead>
                             <tbody>
