@@ -439,7 +439,7 @@ h2 {
                 </li>
             </ul>
         </li>
-    </ul>
+    </ul><br>
     <div class="sidebar-footer">
         <a href="../includes/cerrarsesion.php" class="sidebar-link">  
             <i class="lni lni-exit"></i>
