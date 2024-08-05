@@ -202,7 +202,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                                         </div>
                                     </div>
                                     <br>
-                                    <a href="recibo_preview.php?cliente_nombre=<?php echo urlencode($cliente_nombre); ?>&cantidad_pagada_recibo=<?php echo urlencode($cantidad_pagada_recibo); ?>&fecha_recibo=<?php echo urlencode($fecha_recibo); ?>&receptor=<?php echo urlencode($receptor); ?>&concepto=<?php echo urlencode(htmlspecialchars($concepto)); ?>" class="btn btn-dark w-100" target="_blank">Descargar PDF</a>
+                                    <a href="recibo_preview.php?ordenID=<?php echo urlencode($ordenID); ?>&cliente_nombre=<?php echo urlencode($cliente_nombre); ?>&cantidad_pagada_recibo=<?php echo urlencode($cantidad_pagada_recibo); ?>&fecha_recibo=<?php echo urlencode($fecha_recibo); ?>&receptor=<?php echo urlencode($receptor); ?>&concepto=<?php echo urlencode(htmlspecialchars($concepto)); ?>" class="btn btn-dark w-100" target="_blank">Descargar PDF</a>
+                                
                                 </div>
                             </div>
                         </div>

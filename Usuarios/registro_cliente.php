@@ -8,37 +8,48 @@ use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 $showModal = false;
 $showAlert = false;
-
+// Generar contraseña aleatoria de 10 caracteres de longitud con letras y números aleatorios (mayúsculas y minúsculas) 
 function generateRandomPassword($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
     $charactersLength = strlen($characters);
+    // Inicializar la contraseña aleatoria
     $randomPassword = '';
+    // Generar una contraseña aleatoria de la longitud especificada con caracteres aleatorios de la lista de caracteres
     for ($i = 0; $i < $length; $i++) {
+        // Agregar un carácter aleatorio de la lista de caracteres a la contraseña aleatoria 
         $randomPassword .= $characters[random_int(0, $charactersLength - 1)];
     }
+    // Devolver la contraseña aleatoria generada
     return $randomPassword;
 }
 
+// Generar un nombre de usuario único para un cliente
 function generarUsernameParaCliente($pdo, $personaID) {
     $sql = "SELECT nombre, apellido_paterno FROM personas WHERE personaID = :personaID";
     $stmt = $pdo->prepare($sql);
+    // Ejecutar la consulta con el ID de la persona
     $stmt->execute(['personaID' => $personaID]);
     
+    // Obtener la fila de la consulta
     if ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
+        // Obtener la primera letra del nombre en mayúscula
         $firstLetter = strtoupper(substr($row['nombre'], 0, 1));
+        // Crear un nombre de usuario base con la primera letra del nombre y el apellido paterno en minúscula
         $baseUsername = $firstLetter . strtolower($row['apellido_paterno']);
-        
+        // Inicializar el nombre de usuario con el nombre de usuario base
         $username = $baseUsername;
+        // Inicializar el contador
         $counter = 1;
         
+        // Verificar si el nombre de usuario ya existe en la base de datos
         while (usernameExists($pdo, $username)) {
             $username = $baseUsername . $counter;
             $counter++;
-        }
-        
+        }                
+        // Devolver el nombre de usuario generado
         return $username;
     }
-    
+    // Devolver nulo si no se pudo obtener el nombre y apellido de la persona
     return null;
 }
 
@@ -58,7 +69,7 @@ function setAlertContent($type, $message) {
     ];
 }
 
-// Verificar si existe el usuario
+// Verificar si existe el usuario en la base de datos por nombre de usuario 
 function usernameExists($pdo, $username) {
     $sql = "SELECT COUNT(*) FROM cuentas WHERE username = :username";
     $stmt = $pdo->prepare($sql);
@@ -66,6 +77,7 @@ function usernameExists($pdo, $username) {
     return $stmt->fetchColumn() > 0;
 }
 
+// Verificar si el correo o el teléfono ya existen en la base de datos
 function checkDuplicate($pdo, $correo, $telefono, $personaID) {
     $sql = "SELECT COUNT(*) FROM PERSONAS WHERE (correo = :correo OR telefono = :telefono) AND personaID <> :personaID";
     $stmt = $pdo->prepare($sql);
@@ -74,9 +86,11 @@ function checkDuplicate($pdo, $correo, $telefono, $personaID) {
         'telefono' => $telefono,
         'personaID' => $personaID
     ]);
+    // Devolver verdadero si el correo o el teléfono ya existen en la base de datos
     return $stmt->fetchColumn() > 0;
 }
 
+// Verificar si el correo ya existe en la base de datos
 function checkEmailDuplicate($pdo, $correo) {
     $sql = "SELECT COUNT(*) FROM PERSONAS WHERE correo = :correo";
     $stmt = $pdo->prepare($sql);
@@ -84,6 +98,7 @@ function checkEmailDuplicate($pdo, $correo) {
     return $stmt->fetchColumn() > 0;
 }
 
+// Verificar si el teléfono ya existe en la base de datos
 function checkPhoneDuplicate($pdo, $telefono) {
     $sql = "SELECT COUNT(*) FROM PERSONAS WHERE telefono = :telefono";
     $stmt = $pdo->prepare($sql);
@@ -91,6 +106,7 @@ function checkPhoneDuplicate($pdo, $telefono) {
     return $stmt->fetchColumn() > 0;
 }
 
+// Verificar si se envió un formulario
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     try {
         $nombre = trim($_POST['nombre']);
@@ -101,10 +117,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         
         // Validar datos desde la aplicación
         if (
+            // Validar que el nombre solo contenga letras y espacios
             preg_match('/^[a-zA-Z\s]+$/', $nombre) &&
+            // Validar que el apellido paterno y materno solo contengan letras y espacios
             preg_match('/^[a-zA-Z\s]+$/', $apellido_paterno) &&
+            // Validar que el correo sea un correo electrónico válido
             preg_match('/^[a-zA-Z\s]+$/', $apellido_materno) &&
+            // Validar que el teléfono sea un número de 10 dígitos
             filter_var($correo, FILTER_VALIDATE_EMAIL) &&
+            // Validar que el teléfono sea un número de 10 dígitos
             preg_match('/^\d{10}$/', $telefono)
         ) {
             // Verificar si el correo ya existe
@@ -128,33 +149,49 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header('Location: vista_registro_cliente.php');
                 exit();
             }
-
+            // Insertar un nuevo cliente
             $password = generateRandomPassword();
+            // Hash de la contraseña
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
+            // Rol del usuario
             $role = 'cliente';
             
+            // Insertar un nuevo cliente
             $stmt_persona = $pdo->prepare("INSERT INTO personas (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
+            // Ejecutar la consulta con los datos del cliente
             $stmt_persona->execute([$nombre, $apellido_paterno, $apellido_materno, $correo, $telefono]);
             
+            // Verificar si se insertó un nuevo cliente
             if ($stmt_persona->rowCount() > 0) {
+                // Obtener el ID de la persona recién insertada
                 $personaID = $pdo->lastInsertId();
+                // Generar un nombre de usuario único para el cliente
                 $username = generarUsernameParaCliente($pdo, $personaID);
                 
+                // Verificar si se pudo generar un nombre de usuario único
                 if ($username === null) {
+                    // Lanzar una excepción si no se pudo generar un nombre de usuario único
                     throw new Exception('No se pudo generar un nombre de usuario único.');
                 }
                 
                 // Insertar un nuevo cliente y activo
                 $activo = 'si';
                 $stmt_cliente = $pdo->prepare("INSERT INTO clientes (personaID, activo) VALUES (?, ?)");
+                // Ejecutar la consulta con el ID de la persona y el estado activo
                 $stmt_cliente->execute([$personaID, $activo]);
                 
+                // Verificar si se insertó un nuevo cliente
                 if ($stmt_cliente->rowCount() > 0) {
+                    // Obtener el ID del cliente recién insertado
                     $clienteID = $pdo->lastInsertId();
                     
+                    // Obtener el ID del rol del usuario
                     $stmt_rol = $pdo->prepare("SELECT rolID FROM roles WHERE nombre_rol = ?");
+                    // Ejecutar la consulta con el nombre del rol
                     $stmt_rol->execute([$role]);
+                    // Obtener la fila del rol
                     $rol = $stmt_rol->fetch();
+                    // Obtener el ID del rol
                     $rolID = $rol['rolID'];
                     
                     // Contenido de validaciones
@@ -211,6 +248,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
         }
+        // Mostrar una alerta si los datos no son válidos
     } catch (Exception $e) {
         setAlertContent('error', "
             <div class='alert alert-danger alert-dismissible fade show' role='alert'>

@@ -55,17 +55,17 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
             margin-bottom: 0.25rem;
         }
         .pagination .page-link {
-            color: white; /* Texto blanco para mejor contraste */
-            background-color: black; /* Fondo negro */
-            border-color: black; /* Borde negro */
+            color: white; 
+            background-color: black;
+            border-color: black; 
         }
         .pagination .page-link:hover {
-            border-color: black; /* Borde negro */
-            background-color: #252525; /* Fondo gris oscuro al pasar el mouse */
+            border-color: black; 
+            background-color: #252525;
         }
         .pagination .page-item.active .page-link {
-            background-color: #252525; /* Fondo gris oscuro para el elemento activo */
-            border-color: #000; /* Borde negro para el elemento activo */
+            background-color: #252525;
+            border-color: #000; 
         }
     </style>
 </head>
@@ -87,6 +87,7 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
                     <!-- Mostrar resultados de clientes -->
                     <div class="row mt-4">
                         <?php
+                        // si existe clinete- tajeta con todos los datos de los clientes
                         if (!empty($clientes)) {
                             foreach ($clientes as $cliente) {
                                 echo "<div class='col-md-4 mb-3'>";
@@ -101,6 +102,7 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
                                 echo "</div>";
                             }
                         } else {
+                            // si no se encuentra ningun cliente
                             echo "<p class='text-center'>No se encontraron clientes.</p>";
                         }
                         ?>
@@ -108,25 +110,40 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
 
                     <!-- Paginación -->
                     <nav aria-label="Page navigation example">
-                        <ul class="pagination justify-content-center mt-4">
-                            <?php if ($pagina_actual > 1): ?>
-                                <li class="page-item">
-                                    <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] . '?pagina=' . ($pagina_actual - 1) . '&buscar=' . urlencode($buscar); ?>">Anterior</a>
-                                </li>
-                            <?php endif; ?>
+    <ul class="pagination justify-content-center mt-4">
+        <?php 
+        // Verifica si la página actual es mayor que 1
+        // Esto permite mostrar el enlace a la página anterior solo si no estamos en la primera página
+        if ($pagina_actual > 1): ?>
+            <li class="page-item">
+                <!-- Enlace para la página anterior -->
+                <!-- Construye la URL para la página anterior y mantiene el término de búsqueda -->
+                <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] . '?pagina=' . ($pagina_actual - 1) . '&buscar=' . urlencode($buscar); ?>">Anterior</a>
+            </li>
+        <?php endif; ?>
 
-                            <?php for ($i = 1; $i <= $total_paginas; $i++): ?>
-                                <li class="page-item <?php echo ($pagina_actual === $i) ? 'active' : ''; ?>">
-                                    <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] . '?pagina=' . $i . '&buscar=' . urlencode($buscar); ?>"><?php echo $i; ?></a>
-                                </li>
-                            <?php endfor; ?>
+        <?php 
+        // Bucle para generar enlaces a todas las páginas disponibles
+        // Muestra cada número de página como un enlace
+        for ($i = 1; $i <= $total_paginas; $i++): ?>
+            <li class="page-item <?php echo ($pagina_actual === $i) ? 'active' : ''; ?>">
+                <!-- Enlace a la página actual -->
+                <!-- Marca la página actual con la clase 'active' para destacarla -->
+                <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] . '?pagina=' . $i . '&buscar=' . urlencode($buscar); ?>"><?php echo $i; ?></a>
+            </li>
+        <?php endfor; ?>
 
-                            <?php if ($pagina_actual < $total_paginas): ?>
-                                <li class="page-item">
-                                    <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] . '?pagina=' . ($pagina_actual + 1) . '&buscar=' . urlencode($buscar); ?>">Siguiente</a>
-                                </li>
-                            <?php endif; ?>
-                        </ul>
+        <?php 
+        // Verifica si la página actual es menor que el número total de páginas
+        // Esto permite mostrar el enlace a la página siguiente solo si no estamos en la última página
+        if ($pagina_actual < $total_paginas): ?>
+            <li class="page-item">
+                <!-- Enlace para la página siguiente -->
+                <!-- Construye la URL para la página siguiente y mantiene el término de búsqueda -->
+                <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] . '?pagina=' . ($pagina_actual + 1) . '&buscar=' . urlencode($buscar); ?>">Siguiente</a>
+            </li>
+        <?php endif; ?>
+    </ul>
                     </nav>
                 </div>
             </div>

@@ -20,6 +20,7 @@ function setAlertContent($type, $message) {
     ];
 }
 
+// Verificar si se envió un formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $clienteID = $_POST['clienteID'];
     $correo = $_POST['correo'];

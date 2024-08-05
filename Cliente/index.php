@@ -99,6 +99,59 @@ try {
         .section-heading {
             margin-bottom: 20px;
         }
+        
+        .help-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #b3b3b3; /* Color de fondo del ícono */
+    color: black;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.help-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.help-modal-content {
+    background-color: #222;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
     </style>
 </head>
 <body>
@@ -214,6 +267,49 @@ try {
             </div>
         </section>
     </div>
+    <!-- Modal de Ayuda -->
+    <div class="help-modal" id="helpModal">
+        <div class="help-modal-content">
+            <span class="close" id="closeHelpModal">&times;</span>
+            <h5>¿Cómo se usa?</h5>
+            <HR>
+            
+
+        <P >MIS VEHICULOS  <br>
+            En esta ventana se mostrarán todos tus vehículos actualmente registados en el sistema de EURO SERVICE 
+            <HR>
+            CITAS PENDIENTES <br>
+            En esta ventana se mostrarán todas tus citas que tienes pendientes la cual cuenta con tu vehículo, temporizador indicando  el tiempo restante y el servicio que se realizará para el día de tu cita <HR>
+            HISTORIAL <br>
+            En esta ventana se mostrarán todas tus citas que has tenido en el pasado, mostrando la fecha de la cita, el vehículo que se utilizó, el servicio que se realizó y el estado de la cita.
+            <HR>
+
+
+        </P>
+
+           </div>
+    </div>
+    <!-- Ícono de Ayuda -->
+    <div class="help-icon" id="helpIcon">
+        ?
+    </div>
+
+    <script>
+        // Funcionalidad del modal de ayuda
+        document.getElementById('helpIcon').addEventListener('click', function() {
+            document.getElementById('helpModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeHelpModal').addEventListener('click', function() {
+            document.getElementById('helpModal').style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target === document.getElementById('helpModal')) {
+                document.getElementById('helpModal').style.display = 'none';
+            }
+        });
+    </script>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-7F4f4IqIv8CH3f7MWNTdfEBe1Xn0hf5oC5exxB3L+ZVMEhhL4lmFJ58vXKQG9mCz" crossorigin="anonymous"></script>
 </body>

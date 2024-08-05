@@ -13,6 +13,7 @@ $cantidad_pagada_recibo = $_GET['cantidad_pagada_recibo'] ?? '';
 $fecha_recibo = $_GET['fecha_recibo'] ?? '';
 $receptor = $_GET['receptor'] ?? '';
 $concepto = $_GET['concepto'] ?? '';
+$orden = $_GET['ordenID'] ?? '';
 if (empty($cliente_nombre) || empty($cantidad_pagada_recibo) || empty($fecha_recibo) || empty($receptor)) {
     die("Error: datos incompletos para generar el recibo.");
 }
@@ -28,39 +29,45 @@ $pdf->SetSubject('Recibo de Pago');
 // Añadir una página
 $pdf->AddPage();
 
-// Título
-$pdf->SetFont('helvetica', 'B', 20);
-$pdf->Cell(0, 15, 'RECIBO DE PAGO', 0, 1, 'C');
+// Contenido HTML
+$html = <<<EOD
+<h1 style="text-align: center;">RECIBO DE PAGO</h1>
+<table border="0" cellpadding="5">
+    <tr>
+        <td><strong>Fecha:</strong></td>
+        <td>{$fecha_recibo}</td>
+    </tr>
+    <tr>
+        <td><strong>No.{$orden}:</strong></td>
+        <td>8</td>
+    </tr>
+    <tr>
+        <td><strong>Recibí de:</strong></td>
+        <td>{$cliente_nombre}</td>
+    </tr>
+    <tr>
+        <td><strong>Cantidad:</strong></td>
+        <td>{$cantidad_pagada_recibo}</td>
+    </tr>
+    <tr>
+        <td><strong>Concepto:</strong></td>
+        <td>{$concepto}</td>
+    </tr>
+    <tr>
+        <td><strong>Firma:</strong></td>
+        <td>___________________________</td>
+    </tr>
+    <tr>
+        <td><strong>Recibido por:</strong></td>
+        <td>{$receptor}</td>
+    </tr>
+</table>
+<br>
+<p style="text-align: center;">SERVICIO ESPECIALIZADO BERLANGA ANGEL</p>
+EOD;
 
-// Detalles del recibo
-$pdf->SetFont('helvetica', '', 12);
-$pdf->Cell(30, 10, 'Fecha:', 0, 0);
-$pdf->Cell(0, 10, $fecha_recibo, 0, 1);
-
-$pdf->Cell(30, 10, 'No.:', 0, 0);
-$pdf->Cell(0, 10, '8', 0, 1);
-
-$pdf->Cell(30, 10, 'Recibí de:', 0, 0);
-$pdf->Cell(0, 10, $cliente_nombre, 0, 1);
-
-$pdf->Cell(30, 10, 'Cantidad:', 0, 0);
-$pdf->Cell(0, 10, $cantidad_pagada_recibo , 0, 1);
-
-$pdf->Cell(30, 10, 'Concepto:', 0, 0);
-$pdf->Cell(0, 10, $concepto, 0, 1);
-
-// Firma
-$pdf->Ln(20);
-$pdf->Cell(30, 10, 'Firma:', 0, 0);
-$pdf->Cell(0, 10, '______________________', 0, 1);
-
-
-$pdf->Cell(30, 10, 'Recibido por:', 0, 0);
-$pdf->Cell(0, 10, $receptor , 0, 1);
-
-// Nombre de la empresa
-$pdf->Ln(10);
-$pdf->Cell(0, 10, 'SERVICIO ESPECIALIZADO BERLANGA ANGEL', 0, 1, 'C');
+// Escribir el HTML en el PDF
+$pdf->writeHTML($html, true, false, true, false, '');
 
 // Output
 $pdf->Output('recibo_pago.pdf', 'D');

@@ -6,6 +6,7 @@ $pdo = $con->conectar();
 $showModal = false;
 $modalContent = '';
 
+// Verificar si se envió un formulario
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $clienteID = $_POST['clienteID'];
     $activo = 'no';
@@ -15,6 +16,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmt->execute([$clienteID]);
     $personaID = $stmt->fetchColumn();
 
+    // Verificar si el cliente existe
     if (!$personaID) {
         die("Error: Cliente no encontrado.");
     } else {
@@ -135,20 +137,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
     ?>
 
+
     <script>
+        // Muestra la lista de clientes al escribir en el campo
         document.getElementById('formCita').addEventListener('submit', function(event) {
+            // Verifica si se seleccionó un cliente
             if (!document.getElementById('clienteID').value) {
+                // Evita que se envíe el formulario
                 event.preventDefault();
+                // Detiene la propagación del evento
                 event.stopPropagation();
+                // Muestra el mensaje de error
                 document.getElementById('campo').classList.add('is-invalid');
             }
+            // Agrega la clase 'was-validated' a los elementos del formulario
             this.classList.add('was-validated');
         });
 
+        // Limpia la URL al recargar la página
         if (window.history.replaceState) {
+            // Evita que se muestre la URL con los datos del formulario
             window.history.replaceState(null, null, window.location.href);
         }
-
+        // Muestra la lista de clientes al escribir en el campo
         document.getElementById('campo').addEventListener('input', function() {
             const searchTerm = this.value;
             const lista = document.getElementById('lista');
@@ -173,10 +184,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     document.getElementById('nombreCliente').innerText = `${cliente.nombre} ${cliente.apellido_paterno} ${cliente.apellido_materno}`;
                                     lista.style.display = 'none';
                                 };
+                                // Agrega el elemento a la lista
                                 lista.appendChild(li);
                             });
+                            // Muestra la lista de clientes
                             lista.style.display = 'block';
                         } else {
+                            // Oculta la lista si no hay resultados
                             lista.style.display = 'none';
                         }
                     });
@@ -184,12 +198,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 lista.style.display = 'none';
             }
         });
-
+        // Muestra el modal de confirmación al hacer clic en el botón
         document.getElementById('btnEliminar').addEventListener('click', function() {
             const confirmacionModal = new bootstrap.Modal(document.getElementById('confirmacionModal'));
             confirmacionModal.show();
         });
-
+        // Envía el formulario al confirmar la eliminación
         document.getElementById('confirmarEliminar').addEventListener('click', function() {
             document.getElementById('formCita').submit();
         });

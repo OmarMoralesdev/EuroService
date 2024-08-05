@@ -35,6 +35,60 @@
         .atrasado {
             color: red;
         }
+        
+        .help-icon {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background-color: #b3b3b3; /* Color de fondo del ícono */
+    color: black;
+    border-radius: 50%;
+    width: 30px;
+    height: 30px;
+    text-align: center;
+    line-height: 30px;
+    font-size: 20px;
+    cursor: pointer;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+}
+
+.help-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.5);
+    z-index: 1000;
+    justify-content: center;
+    align-items: center;
+}
+
+.help-modal-content {
+    background-color: #222;
+    color: #fff;
+    padding: 20px;
+    border-radius: 10px;
+    width: 80%;
+    max-width: 600px;
+}
+
+.close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+}
+
+.close:hover,
+.close:focus {
+    color: #fff;
+    text-decoration: none;
+    cursor: pointer;
+}
+
     </style>
 </head>
 <body>
@@ -95,5 +149,49 @@
             </div>
         </div>
     </div>
+          <!-- Modal de Ayuda -->
+          <div class="help-modal" id="helpModal">
+        <div class="help-modal-content">
+            <span class="close" id="closeHelpModal">&times;</span>
+            <h5>¿Cómo se usa?</h5>
+            <HR>
+            <p> PROVEEDORES <br>
+            En esta ventana se mostrará un listado con todos los proveedores y sus respectivos datos de contacto.
+            <HR>ENTREGADOS <br>
+            En esta ventana en la cual registrarás los servicios a los vehículos totalmente completados y entregados a los clientes.
+            <HR>INVENTARIO <br>
+            Este modulo cuenta con 2 submodulos con funciones específicas<br> CATEGORÍA: Muestra una tabla con el nombre de la categoría, cuenta con los productos, su respectivo proveedor y precio <br><br> INSUMOS: Se muestrá un listado con todos los insumos y sus respectivos datos, adicional a esto tendrás un contador con la cantidad de productos con existencia.
+<hr>CITAS <br>
+Este modulo cuenta con 2 submodulos con funciones específicas<br> REGISTRAR: Muestra una tabla en la cual puedes buscar a los empleados mediante un buscador para registrarles una cita unicamente seleccionando su vehículo, servicio y fecha de la cita<br><br> EDITAR: Se muestrá un listado con todas las citas pendietes en la cual puedes modificar losy sus respectivos datos, adicional a esto tendrás un contador con la cantidad de productos con existencia.
+<HR>
+ORDEN <HR>
+CLIENTES <HR>
+VEHICULOS <HR>
+EMPLEADOS <HR>
+FINANZAS Y PAGOS 
+</p>
+        </div>
+    </div>
+    <!-- Ícono de Ayuda -->
+    <div class="help-icon" id="helpIcon">
+        ?
+    </div>
+
+    <script>
+        // Funcionalidad del modal de ayuda
+        document.getElementById('helpIcon').addEventListener('click', function() {
+            document.getElementById('helpModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeHelpModal').addEventListener('click', function() {
+            document.getElementById('helpModal').style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target === document.getElementById('helpModal')) {
+                document.getElementById('helpModal').style.display = 'none';
+            }
+        });
+        </script>
 </body>
 </html>

@@ -220,6 +220,8 @@
             margin-top: 40px;
 
         }
+
+
         </style>
 
 
@@ -232,6 +234,9 @@
             </button>
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="info.php">¿Cómo se usa?</a>
+                    </li>
     <li class="nav-item">
         <a class="nav-link" href="#servicios">Servicios</a>
     </li>
@@ -259,10 +264,6 @@
                 </p>
             </div>
         </div>
-        <div class="spline-container">
-            <script type="module"  src="https://unpkg.com/@splinetool/viewer@1.9.5/build/spline-viewer.js"></script>
-                  <spline-viewer url="https://prod.spline.design/zeRcBAs5kDEz5vVH/scene.splinecode"></spline-viewer>
-                </div>
 </div>
 
 
@@ -360,6 +361,7 @@
                 </div>
             </div>
         </div>
+        
     </div>
 </body>
 
