@@ -242,12 +242,14 @@
                                 ]
                             },
                             options: {
-                                scales: {
-                                    y: {
-                                        beginAtZero: true
-                                    }
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true
+                                        }
+                                    },
+                                    responsive: true,
+                                    maintainAspectRatio: false,
                                 }
-                            }
                         });
                     });
                 </script>
