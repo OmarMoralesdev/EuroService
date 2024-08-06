@@ -9,10 +9,9 @@ $conexion->conectar();
 // Inicializar la variable de búsqueda
 $buscar = isset($_POST['buscar']) ? $_POST['buscar'] : '';
 
-$consulta_empleados = "SELECT e.empleadoID, CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, e.alias, e.tipo, n.total
+$consulta_empleados = "SELECT e.empleadoID, CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, e.alias, e.tipo, (e.salario_diario*5) as total
                     FROM EMPLEADOS e
-                    INNER JOIN PERSONAS p ON e.personaID = p.personaID
-                    LEFT JOIN NOMINAS n ON e.empleadoID = n.empleadoID";
+                    INNER JOIN PERSONAS p ON e.personaID = p.personaID";
 
 // Agregar filtro si hay criterio de búsqueda
 if (!empty($buscar)) {

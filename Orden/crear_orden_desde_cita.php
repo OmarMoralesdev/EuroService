@@ -48,7 +48,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class='modal-dialog'>
                             <div class='modal-content'>
                                 <div class='modal-header'>
-                                    <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
+                                    <h1 class='modal-title fs-5' id='staticBackdropLabel'>Orden registrada!</h1>
                                     <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                                 </div>
                                 <div class='modal-body'>
@@ -89,7 +89,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <option value="transferencia">Transferencia</option>
                     </select><br>
 
-                    <label for="empleado" class="form-label">Empleado ID:</label>
+                    <label for="empleado" class="form-label">Empleado:</label>
                     <select name="empleado" class="form-control" required>
                         <?php
                         $empleados = obtenerEmpleadosDisponibles($pdo);
@@ -100,7 +100,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         ?>
                     </select><br>
 
-                    <label for="ubicacionID" class="form-label">Ubicación ID:</label>
+                    <label for="ubicacionID" class="form-label">Ubicación:</label>
                     <select name="ubicacionID" class="form-control" required>
                         <?php
                         $ubicaciones = obtenerUbicacionesActivas($pdo);

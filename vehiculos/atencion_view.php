@@ -80,9 +80,7 @@
                         citas.servicio_solicitado as OPERACIÓN_EFECTUAR
                         From vehiculos join citas On citas.vehiculoID=vehiculos.vehiculoID join ordenes_trabajo On
                         ordenes_trabajo.citaID=citas.citaID inner join pagos On pagos.ordenID = ordenes_trabajo.OrdenID
-                        inner join Entregados On entregados.PagoID = Pagos.PagoID
-                        where ordenes_trabajo.atencion='muy urgente' and citas.estado='pendiente' and 
-                        pagos.tipo_pago ='anticipo'";
+                        where ordenes_trabajo.atencion='muy urgente' and citas.estado !='completado'";
                         
                         $tabla = $conexion->seleccionar($consultita);
 
@@ -101,6 +99,9 @@
                                 echo "</tr>";
                             }
                             echo "</tbody></table>";
+                        }else 
+                        {
+                            echo "No hay vehículos que requieran atención muy urgente.";
                         }
                         echo "</div>";
                         echo "<div class='modal-footer'>";
@@ -121,9 +122,7 @@
                         citas.servicio_solicitado as OPERACIÓN_EFECTUAR
                         From vehiculos join citas On citas.vehiculoID=vehiculos.vehiculoID join ordenes_trabajo On
                         ordenes_trabajo.citaID=citas.citaID inner join pagos On pagos.ordenID = ordenes_trabajo.OrdenID
-                        inner join Entregados On entregados.PagoID = Pagos.PagoID
-                        where ordenes_trabajo.atencion='urgente' and citas.estado='pendiente' and 
-                        pagos.tipo_pago ='anticipo'";
+                        where ordenes_trabajo.atencion='urgente' and citas.estado !='completado';";
                         
                         $tabla = $conexion->seleccionar($consultita);
 
@@ -142,6 +141,9 @@
                                 echo "</tr>";
                             }
                             echo "</tbody></table>";
+                        } else 
+                        {
+                            echo "No hay vehículos que requieran atención urgente.";
                         }
                         echo "</div>";
                         echo "<div class='modal-footer'>";
@@ -162,9 +164,7 @@
                         citas.servicio_solicitado as OPERACIÓN_EFECTUAR
                         From vehiculos join citas On citas.vehiculoID=vehiculos.vehiculoID join ordenes_trabajo On
                         ordenes_trabajo.citaID=citas.citaID inner join pagos On pagos.ordenID = ordenes_trabajo.OrdenID
-                        inner join Entregados On entregados.PagoID = Pagos.PagoID
-                        where ordenes_trabajo.atencion='no urgente' and citas.estado='pendiente' and 
-                        pagos.tipo_pago ='anticipo';
+                        where ordenes_trabajo.atencion='no urgente' and citas.estado !='completado';
                      ";
                         
                         $tabla = $conexion->seleccionar($consultita);
@@ -184,6 +184,9 @@
                                 echo "</tr>";
                             }
                             echo "</tbody></table>";
+                        } else 
+                        {
+                            echo "No hay vehículos que requieran atención no urgente.";
                         }
                         echo "</div>";
                         echo "<div class='modal-footer'>";

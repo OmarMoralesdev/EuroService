@@ -118,6 +118,7 @@
                                         } else {
                                             echo "<div class='alert alert-danger' role='alert'>Por favor, complete todos los campos.</div>";
                                         }
+                                        
                                     } elseif (isset($_POST['incrementar'])) {
                                         $insumo_proveedorID = $_POST['insumo_proveedorID'];
                                         $stmt = $pdo->prepare("UPDATE inventarios SET cantidad_stock = cantidad_stock + 1 WHERE insumo_proveedorID = :insumo_proveedorID");
@@ -238,6 +239,7 @@
         </div>
     </div>
 
+    
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
     <script>

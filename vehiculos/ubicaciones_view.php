@@ -24,10 +24,7 @@
         <div class="container">
             <h2 class="text-center">UBICACIONES DE VEHÍCULOS</h2>
                 <div class="form-container">
-            <div>
-                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addLocationModal">AÑADIR NUEVA UBICACIÓN</button>
-                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#enableLocationModal">HABILITAR UBICACIÓN</button>
-            </div>
+        
             <div class="row mt-3">
                 <?php
                 include '../includes/db.php';
@@ -55,20 +52,18 @@
                         echo "<p class='card-text'>OCUPADOS: {$ubicacion->cantidad_vehiculos}</p>";
                         echo "<p class='card-text'>ESPACIO DISPONIBLE: {$espacio_disponible}</p>";
                         echo "</div>"; // Cierre de card-body
+// Botones en un div separado para controlar la alineación
+                      // Botones en un div separado para controlar la alineación
+echo "<div class='card-footer d-flex flex-wrap justify-content-between align-items-center'>";
+echo "<button type='button' class='btn btn-dark btn-md mb-2 me-2 flex-fill' style='min-width: 150px;' data-bs-toggle='modal' data-bs-target='#modal{$ubicacion->ubicacionID}'>VER VEHÍCULOS</button>";
+echo "<button type='button' class='btn btn-dark btn-md mb-2 me-2 flex-fill' style='min-width: 80px;' data-bs-toggle='modal' data-bs-target='#renameModal{$ubicacion->ubicacionID}'><i class='lni lni-pencil'></i></button>";
+echo "<button type='button' class='btn btn-danger btn-md mb-2 flex-fill' style='min-width: 80px;' data-bs-toggle='modal' data-bs-target='#deleteModal{$ubicacion->ubicacionID}'><i class='lni lni-pause'></i></button>";
+echo "</div>"; // Cierre de card-footer
 
-                        // Botones en un div separado para controlar la alineación
-                        echo "<div class='card-footer d-flex justify-content-between align-items-center'>";
-                        echo "<button type='button' class='btn btn-dark btn-md' style='width: 60%;' data-bs-toggle='modal' data-bs-target='#modal{$ubicacion->ubicacionID}'>VER VEHÍCULOS</button>";
-                        echo" ";
-                        echo "<button type='button' class='btn btn-dark btn-md ml-2' style='width: 19%;' data-bs-toggle='modal' data-bs-target='#renameModal{$ubicacion->ubicacionID}'><i class='lni lni-pencil'></i></button>";
-                        echo" ";    
-                        echo "<button type='button' class='btn btn-danger btn-md ml-2' style='width: 19%;' data-bs-toggle='modal' data-bs-target='#deleteModal{$ubicacion->ubicacionID}'><i class='lni lni-pause'></i></button>";
-                        echo "</div>"; // Cierre de card-footer
+echo "</div>"; // Cierre de card
+echo "</div>";
+   
 
-                        echo "</div>"; // Cierre de card
-                        echo "</div>";
-
-                        
 
                         // Modal para mostrar vehículos
                         echo "<div class='modal fade' id='modal{$ubicacion->ubicacionID}' tabindex='-1' aria-labelledby='modalLabel{$ubicacion->ubicacionID}' aria-hidden='true'>";
@@ -166,7 +161,10 @@
                 $conexion->desconectar();
                 ?>
             </div>
-        </div>
+            <div class="d-flex flex-column flex-md-row gap-2">
+    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addLocationModal">AÑADIR NUEVA UBICACIÓN</button>
+    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#enableLocationModal">HABILITAR UBICACIÓN</button>
+</div></div>
     </div>
 
     <!-- Modal para añadir una nueva ubicación -->

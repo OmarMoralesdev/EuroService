@@ -11,12 +11,10 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Inspección</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <style>
         .is-invalid {
             border-color: #dc3545;
         }
-
         .invalid-feedback {
             display: block;
         }
@@ -101,14 +99,19 @@ session_start();
                             <label for="ubicacionID" class="form-label">Ubicación de Vehículo:</label>
                             <select name="ubicacionID" id="ubicacionID" class="form-control" required>
                                 <?php
+                                // Función para obtener las ubicaciones activas en la base de datos
                                 function obtenerUbicacionesActivas($pdo)
                                 {
+                                    // Seleccionar todas las ubicaciones activas
                                     $sql = "SELECT * FROM UBICACIONES WHERE activo = 'si';";
                                     $stmt = $pdo->query($sql);
+                                    // Retornar todas las ubicaciones activas en un array asociativo
                                     return $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 }
+                                // Obtener todas las ubicaciones activas en la base de datos y mostrarlas en un select HTML
                                 $ubicaciones = obtenerUbicacionesActivas($pdo);
                                 foreach ($ubicaciones as $ubicacion) {
+                                    // Mostrar cada ubicación en un option del select HTML 
                                     echo "<option value=\"{$ubicacion['ubicacionID']}\">{$ubicacion['lugar']}</option>";
                                 }
                                 ?>
@@ -125,18 +128,18 @@ session_start();
                             <div class="invalid-feedback">Debes seleccionar una forma de pago.</div>
                         </div>
 
-                        <input type="submit" class="btn btn-dark" value="Registrar Inspección">
+                        <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Registrar Inspección</button>
                     </form>
                 </div>
             </div>
         </div>
     </div>
 
-    <!-- Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+
     <script src="app.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            // Código JS para manejar la interacción con el usuario y AJAX
             const modalSuccess = new bootstrap.Modal(document.getElementById('modalSuccess'));
             if (document.getElementById('modalSuccess')) {
                 modalSuccess.show();

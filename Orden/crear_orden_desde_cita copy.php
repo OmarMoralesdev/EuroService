@@ -84,7 +84,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $pdo->commit();
 
-        $_SESSION['bien'] = "Nueva orden de trabajo creada con ID: $ordenID";
+        $_SESSION['bien'] = "Orden $ordenID  de trabajo creada" ;
         header("Location: crear_orden_desde_cita.php");
         exit();
     } catch (Exception $e) {
