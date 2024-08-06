@@ -42,14 +42,17 @@ session_start();
                             <div class='modal-dialog'>
                                 <div class='modal-content'>
                                     <div class='modal-header'>
-                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Vehículo registrado!</h1>
                                         <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                                     </div>
                                     <div class='modal-body'>
-                                        <div class='alert alert-success' role='alert'>{$_SESSION['bien']}</div>
+                                    <div class='alert alert-success' role='alert'>{$_SESSION['bien']}</div>
+                                        Presiona siguiente para agendar su cita
                                     </div>
                                     <div class='modal-footer'>
                                         <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                        <a href='../CItas/index.php' type='button' class='btn btn-dark'>Siguiente</a>
+
                                     </div>
                                 </div>
                             </div>
@@ -61,14 +64,19 @@ session_start();
 
 
 
-<input type="radio" class="btn-check" name="options-base" id="option1" autocomplete="off" checked>
-<label class="btn" for="option1">CON SEGUIMINETO</label>
 
+<div class="d-flex flex-column flex-md-row gap-2">
+    
+    
+    <input type="radio" class="btn-check" name="options-base" id="option1" autocomplete="off" checked>
+    <label class="btn" for="option1">CON SEGUIMIENTO</label>
+    
+    
+    <input type="radio" class="btn-check" name="options-base" id="option2" autocomplete="off"  >
+    <label class="btn" for="option2">SIN SEGUIMIENTO</label>
 
-<input type="radio" class="btn-check" name="options-base" id="option2" autocomplete="off"  >
-<label class="btn" for="option2">SIN SEGUIMINTO</label>
+</div>
 
-<br>
 
 <br>
 
@@ -121,7 +129,7 @@ session_start();
                             <input type="text" id="vin" name="vin" maxlength="20" class="form-control <?php echo isset($errors['vin']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el VIN del vehículo" value="<?php echo htmlspecialchars($vin ?? '', ENT_QUOTES); ?>" required>
                             <div class="invalid-feedback"><?php echo $errors['vin'] ?? ''; ?></div>
                             <br>
-                            <input type="submit" class="btn btn-dark" value="Registrar Vehículo">
+                        <button type="submit"  value="Registrar Vehículo" class="btn btn-dark btnn d-grid gap-2 col-6 mx-auto">Registrar</button>
                         </div>
                     </form>
 

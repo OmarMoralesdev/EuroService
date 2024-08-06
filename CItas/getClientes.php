@@ -16,12 +16,15 @@ if ($campo) {
     $query->execute([$campo . '%', $campo . '%', $campo . '%']);
 
     $clientes = [];
+    // Recorrer los resultados
     while ($row = $query->fetch(PDO::FETCH_ASSOC)) {
+        // Agregar los resultados al arreglo
         $clientes[] = $row;
     }
-
+    // Enviar los resultados en formato JSON al frontend para ser procesados por JavaScript y renderizados en la vista  
     echo json_encode($clientes, JSON_UNESCAPED_UNICODE);
 } else {
+    // Si no se ha enviado un campo de búsqueda, enviar un arreglo vacío
     echo json_encode([]);
 }
 ?>

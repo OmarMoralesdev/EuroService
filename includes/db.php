@@ -159,6 +159,20 @@ function realizarPago($pdo, $ordenID, $fechaPago, $monto, $tipoPago, $formaDePag
         throw new Exception("Error al realizar el pago: " . $e->getMessage());
     }
 }
+function listarordenes($pdo) {
+    $stmt = $pdo->query("
+        SELECT ot.ordenID, ot.fecha_orden
+        FROM ORDENES_TRABAJO ot
+        INNER JOIN CITAS c ON ot.citaID = c.citaID
+        WHERE c.estado = 'pendiente' OR c.estado = 'en proceso'
+    ");
+    
+    $ordenes = $stmt->fetchAll(PDO::FETCH_ASSOC);
+    
+    return $ordenes;
+}
+
+
 
 
 

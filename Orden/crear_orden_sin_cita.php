@@ -50,7 +50,7 @@ unset($_SESSION['mensaje']);
                         <div class="mb-3">
                             <label for="clienteID" class="form-label">Ingrese un cliente:</label>
                             <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required>
-                            <ul id="lista" class="list-group" style="display: none;"></ul>
+                            <ul id="lista" class="list-group lista" style="display: none;"></ul>
                             <input type="hidden" id="clienteID" name="clienteID">
                             <div class="invalid-feedback">Debes seleccionar un cliente.</div>
                         </div>
@@ -79,7 +79,7 @@ unset($_SESSION['mensaje']);
                             <div class="invalid-feedback">Debes ingresar el costo de las refacciones.</div>
                         </div>
                         <div class="mb-3">
-                            <label for="empleado" class="form-label">Empleado ID:</label>
+                            <label for="empleado" class="form-label">Empleado:</label>
                             <select name="empleado" class="form-control" required>
                                 <?php
                                 require '../includes/db.php';
@@ -103,7 +103,7 @@ unset($_SESSION['mensaje']);
                             <div class="invalid-feedback">Debes seleccionar un empleado.</div>
                         </div>
                         <div class="mb-3">
-                            <label for="ubicacionID" class="form-label">Ubicación ID:</label>
+                            <label for="ubicacionID" class="form-label">Ubicación:</label>
                             <select name="ubicacionID" class="form-control" required>
                                 <?php
                                 function obtenerUbicacionesActivas($pdo)
@@ -134,7 +134,7 @@ unset($_SESSION['mensaje']);
                             </select>
                             <div class="invalid-feedback">Debes seleccionar una forma de pago.</div>
                         </div>
-                        <button type="submit" class="btn btn-dark w-100">Registrar Cita y Crear Orden de Trabajo</button>
+                        <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Registrar Cita y Crear Orden de Trabajo</button>
                     </form>
                 </div>
             </div>

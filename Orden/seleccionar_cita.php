@@ -86,7 +86,6 @@
             const tarjeta = document.createElement('div');
             tarjeta.classList.add('tarjeta');
             tarjeta.innerHTML = `
-                <p><strong>Cita ID:</strong> ${cita.citaID}</p>
                 <p><strong>Vehículo:</strong> ${cita.marca} ${cita.modelo} ${cita.anio}</p>
                 <p><strong>Cliente:</strong> ${cita.nombre} ${cita.apellido_paterno} ${cita.apellido_materno}</p>
                 <p><strong>Servicio:</strong> ${cita.servicio_solicitado}</p>

@@ -1,17 +1,39 @@
+<?php
+session_start();
+
+// Suponiendo que tienes una lógica de validación aquí
+// Si los datos son incorrectos, configurar el mensaje de alerta en la sesión
+if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    $username = $_POST['username'];
+    $password = $_POST['password'];
+
+    // Ejemplo de lógica de validación
+    // Comparar los datos con los valores correctos
+    if ($username !== 'correct_username' || $password !== 'correct_password') {
+        // Configurar el mensaje de alerta en la sesión
+        $_SESSION['alert'] = ['message' => 'Usuario o contraseña incorrectos.'];
+        // Redireccionar a la misma página para mostrar el mensaje de alerta
+        header('Location: ' . $_SERVER['PHP_SELF']);
+        exit;
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
 <head>
+    <!-- Meta tags, links, stylesheets -->
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
-    <script src="https://prod.spline.design/zeRcBAs5kDEz5vVH/scene.splinecode" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>EURO SERVICE</title>
     <style>
+        /* Styles */
         body {
             background-color: #000;
             margin: 0;
@@ -196,37 +218,48 @@
             background-color: #3c3c3c;
             color: #fff;
         }
-    /* Tamaño de texto en dispositivos móviles */
-    .fs-xs {
-      font-size: 80px; /* Tamaño para pantallas pequeñas */
-      font-weight: bold
-    }
     
-    /* Tamaño de texto en pantallas grandes */
-    .fs-lg {
-        font-size: 180px; /* Tamaño para pantallas grandes */
-        font-weight: bold
-    }
-    .vh-75-lg {
+        /* Tamaño de texto en dispositivos móviles */
+        .fs-xs {
+            font-size: 80px; /* Tamaño para pantallas pequeñas */
+            font-weight: bold
+        }
+    
+        /* Tamaño de texto en pantallas grandes */
+        .fs-lg {
+            font-size: 180px; /* Tamaño para pantallas grandes */
+            font-weight: bold
+        }
+
+        .vh-75-lg {
             height: 75vh;
         }
+
         /* Tamaño del contenedor para pantallas pequeñas */
         .vh-40-sm {
             height: 40vh;
         }
+
         .spline-container {
             width: 100%;
             height: 68vh; /* Ajusta la altura según sea necesario */
             margin-top: 40px;
-
         }
+    </style>
 
-
-        </style>
-
-
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            // Abrir el modal automáticamente si hay una alerta en la sesión
+            <?php if (isset($_SESSION['alert'])): ?>
+                var myModal = new bootstrap.Modal(document.getElementById('loginModal'), {});
+                myModal.show();
+            <?php endif; ?>
+        });
+    </script>
 </head>
-    <nav class="navbar navbar-expand-lg navbar-dark height: 65vh">
+
+<body>
+    <nav class="navbar navbar-expand-lg navbar-dark" >
         <div class="container-fluid">
             <p class="navbar-brand">EURO SERVICE</p>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -235,24 +268,20 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="info.php">¿Cómo se usa?</a>
+                        <a class="nav-link" href="#servicios">Servicios</a>
                     </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#servicios">Servicios</a>
-    </li>
-    <li class="nav-item">
-        <a class="nav-link" href="#ubi">Ubicación</a>
-    </li>
-    <li class="nav-item">
-        <button class="nav-link btn pulse" data-bs-toggle="modal" data-bs-target="#loginModal">INICIAR SESIÓN</button>
-    </li>
-</ul>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#ubi">Ubicación</a>
+                    </li>
+                    <li class="nav-item">
+                        <button class="nav-link btn pulse" data-bs-toggle="modal" data-bs-target="#loginModal">INICIAR SESIÓN</button>
+                    </li>
+                </ul>
             </div>
         </div>
     </nav>
-    <div class="bg-fixed">
-       
-        
+
+    <div class="bg-fixed" style="background-image: url('path/to/your/image.jpg');">
         <div class="overlay">
             <div class="text-center text-light">
                 <!-- Texto con tamaño pequeño para móviles y grande para pantallas de computadora -->
@@ -264,20 +293,17 @@
                 </p>
             </div>
         </div>
-</div>
+    </div>
 
-
-
-<div id="servicios" class="content">
-    <section class="features text-center text-light">
-        <div class="container">
-            
-            <h2  class="section-heading">NUESTROS SERVICIOS</h2>
-            <hr class="bg-light">
-            <div class="row">
-                <div class="col-md-4">
-                    <div class="feature-item">
-                        <i class="lni lni-car"></i>
+    <div id="servicios" class="content">
+        <section class="features text-center text-light">
+            <div class="container">
+                <h2 class="section-heading">NUESTROS SERVICIOS</h2>
+                <hr class="bg-light">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="feature-item">
+                            <i class="lni lni-car"></i>
                             <h3>Reparación Completa</h3>
                             <p>Ofrecemos una amplia gama de servicios de reparación para su vehículo.</p>
                         </div>
@@ -303,15 +329,12 @@
         </section>
     </div>
 
-    
     <div class="containerr">
-        <div class="bg-fixedd" style="background-image: url('../EuroService/img/FONDO LOGIN.jpg'); ">
-            <div class="overlay">
-                </div>
-            </div>
+        <div class="bg-fixedd" style="background-image: url('../EuroService/img/FONDO LOGIN.jpg');">
+            <div class="overlay"></div>
         </div>
+    </div>
 
-      
     <footer class="text-center">
         <div class="container">
             <div class="row">
@@ -346,7 +369,12 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="login.php" method="POST" >
+                    <?php if (isset($_SESSION['alert'])): ?>
+                        <div class="alert alert-danger" role="alert">
+                            <?php echo $_SESSION['alert']['message']; unset($_SESSION['alert']); ?>
+                        </div>
+                    <?php endif; ?>
+                    <form action="" method="POST">
                         <div class="mb-3">
                             <label for="username" class="form-label">Usuario</label>
                             <input type="text" class="form-control" name="username" id="username" required>
@@ -355,13 +383,12 @@
                             <label for="password" class="form-label">Contraseña</label>
                             <input type="password" class="form-control" name="password" id="password" required>
                         </div>
-                        <hr> 
+                        <hr>
                         <button type="submit" class="btn btn-light w-100">Iniciar Sesión</button>
                     </form>
                 </div>
             </div>
         </div>
-        
     </div>
 </body>
 

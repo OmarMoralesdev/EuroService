@@ -128,7 +128,7 @@ session_start();
                             <div class="invalid-feedback">Debes seleccionar una forma de pago.</div>
                         </div>
 
-                        <input type="submit" class="btn btn-dark" value="Registrar Inspección">
+                        <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Registrar Inspección</button>
                     </form>
                 </div>
             </div>
