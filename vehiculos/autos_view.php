@@ -24,13 +24,18 @@ session_start();
         <?php include '../includes/vabr.php'; ?>
         <div class="main">
             <div class="container">
+
                 <h2>REGISTRAR VEHÍCULO</h2>
                 <div class="form-container">
+                    
                     <?php
+                    // Mostrar mensajes de error o éxito en la operación de registro de vehículo si los hay en la sesión de usuario actual
                     if (isset($_SESSION['error'])) {
+                        // Mostrar mensaje de error en un div con clase 'alert alert-danger' 
                         echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
                         unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
                     }
+                    // Mostrar mensaje de éxito en un div con clase 'alert alert-success'
                     if (isset($_SESSION['bien'])) {
                         echo "
                         <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
@@ -53,24 +58,29 @@ session_start();
                     }
                     ?>
 
-<div class="modal fade" id="miModal" tabindex="-1" aria-labelledby="miModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="miModalLabel">¿TIENE SEGUIMIENTO EL VEHICULO?</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    Si el vehiculo es unicamente con un servicio de inspeccion selecciona <strong>SIN SEGUIMINTO<strong>
-                </div>
-                <div class="modal-footer">
-                    <a href="./inspeccion_view.php" type="button" class="btn btn-secondary">SIN SEGUIMINTO</a>
-                    <button type="button" class="btn btn-dark" data-bs-dismiss="modal">CON SEGUIMINTO</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
+
+
+<input type="radio" class="btn-check" name="options-base" id="option1" autocomplete="off" checked>
+<label class="btn" for="option1">CON SEGUIMINETO</label>
+
+
+<input type="radio" class="btn-check" name="options-base" id="option2" autocomplete="off"  >
+<label class="btn" for="option2">SIN SEGUIMINTO</label>
+
+<br>
+
+<br>
+
+<script>
+        document.getElementById('option2').addEventListener('change', function() {
+            if (this.checked) {
+                window.location.href = './inspeccion_view.php'
+; // Reemplaza con la URL deseada
+            }
+        });
+    </script>
+    
 
                     <form id="formCita" action="autos.php" method="POST" autocomplete="off" novalidate>
                         <div class="mb-3">
@@ -81,8 +91,10 @@ session_start();
                         </div>
                         <div class="form-group">
                             <!-- Campos del formulario -->
+
+                            <!--  El campo tiene un máximo de 30 caracteres y muestra un texto guía cuando está vacío. Si hay un error, se aplica una clase adicional para mostrar el estado inválido. El valor del campo se muestra de forma segura y es obligatorio. Si hay un mensaje de error asociado, se muestra debajo del campo. -->
                             <label for="marca">Marca:</label>
-                            <input type="text" id="marca" name="marca" maxlength="30" class="form-control <?php echo isset($errors['marca']) ? 'is-invalid' : ''; ?>" placeholder="Introduce la marca del vehículo" value="<?php echo htmlspecialchars($marca ?? '', ENT_QUOTES); ?>" required>
+                            <input type="text" id="marca" name="marca" maxlength="30" class="form-control <?php echo isset($errors['marca']) ? 'is-invalid' : ''; ?>" placeholder="Introduce la marca del vehículo" value="<?php  echo htmlspecialchars($marca ?? '', ENT_QUOTES); ?>"  required>
                             <div class="invalid-feedback"><?php echo $errors['marca'] ?? ''; ?></div>
 
                             <label for="modelo">Modelo:</label>
@@ -90,7 +102,7 @@ session_start();
                             <div class="invalid-feedback"><?php echo $errors['modelo'] ?? ''; ?></div>
 
                             <label for="anio">Año:</label>
-                            <input type="number" id="anio" name="anio" min="1886" max="<?= date('Y') ?>" maxlength="4" class="form-control <?php echo isset($errors['anio']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el año del vehículo" value="<?php echo htmlspecialchars($anio ?? '', ENT_QUOTES); ?>" required>
+                            <input type="number" id="anio" name="anio" min="1886" max="<?= date('Y') ?>"  class="form-control <?php echo isset($errors['anio']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el año del vehículo" value="<?php echo htmlspecialchars($anio ?? '', ENT_QUOTES); ?>" required>
                             <div class="invalid-feedback"><?php echo $errors['anio'] ?? ''; ?></div>
 
                             <label for="color">Color:</label>
@@ -204,6 +216,11 @@ session_start();
                                 $('#staticBackdrop').modal('show');
                             }
                         });
+
+                             //unicamente un modal a la vez
+        if (window.history.replaceState) {
+                window.history.replaceState(null, null, window.location.href);
+            }
                     </script>
                 </div>
             </div>

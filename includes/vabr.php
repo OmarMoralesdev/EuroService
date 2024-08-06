@@ -68,7 +68,7 @@ h1 {
         }
 
 #sidebar.expand {
-    width: 260px;
+    width: 295px;
 }
 
 .toggle-btn {
@@ -407,7 +407,7 @@ h2 {
                     <a href="../Empleados/buscar.php" class="sidebar-link">BUSCAR</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Finanzas/" class="sidebar-link">RENDIMIENTO</a>
+                    <a href="../Finanzas/Reporte de rendimiento.php" class="sidebar-link">RENDIMIENTO</a>
                 </li>
             </ul>
         </li>

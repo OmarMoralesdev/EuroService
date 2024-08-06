@@ -62,7 +62,8 @@ $pdo = null;
                                 <input type="week" id="semana" name="semana" class="form-control" value="<?php echo htmlspecialchars($semana_seleccionada); ?>">
                             </div>
                         </div>
-                        <button type="submit" class="btn btn-primary btn-block">Ver Reporte</button>
+                        <br>
+                        <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Ver Reporte</button>
                     </form>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered">

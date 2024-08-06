@@ -31,9 +31,9 @@ if (empty($errors)) {
     if ($stmtVerificar->rowCount() > 0) {
         $_SESSION['error'] = "El vehículo ya está registrado.";
     } else {
-        $sql = "INSERT INTO VEHICULOS (clienteID, marca, modelo, anio, color, kilometraje, placas, vin,continuidad,activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?,'si')";
+        $sql = "INSERT INTO VEHICULOS (clienteID, marca, modelo, anio, color, kilometraje, placas, vin,continuidad,activo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'no','si')";
         $stmt = $pdo->prepare($sql);
-        $stmt->execute([$clienteID, $marca, $modelo, $anio, $color, $kilometraje, $placas, $vin, $continuidad2]);
+        $stmt->execute([$clienteID, $marca, $modelo, $anio, $color, $kilometraje, $placas, $vin, $continuidad,$activo]);
 
         if ($stmt->rowCount() > 0) {
 
@@ -42,7 +42,7 @@ if (empty($errors)) {
 }
 if ($empleadoID === null || $ubicacionID === null || empty($formaDePago)) {
       $_SESSION['error'] = 'Error: Faltan datos necesarios.';
-      header("Location: autos_view.php");
+      header("Location: inspeccion_view.php");
       exit();
 }
 
@@ -56,7 +56,7 @@ try {
 
     if ($vehiculoCount == 0) {
           $_SESSION['error'] = 'Error: El vehículo no está registrado en la base de datos.';
-          header("Location: autos_view.php");
+          header("Location: inspeccion_view.php");
           exit();
     }
 
@@ -77,12 +77,12 @@ try {
     realizarPago($pdo, $ordenID, date('Y-m-d'), $anticipo, "anticipo", $formaDePago);
 
     $_SESSION['bien'] = "Cita y orden de trabajo registradas exitosamente.";
-    header("Location: autos_view.php");
+    header("Location: inspeccion_view.php");
     exit();
 
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
-    header("Location: autos_view.php");
+    header("Location: inspeccion_view.php");
     exit();
 }
 

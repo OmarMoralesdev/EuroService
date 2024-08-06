@@ -19,6 +19,30 @@ session_start();
         .invalid-feedback {
             display: block;
         }
+        .tooltip {
+            position: relative;
+            display: inline-block;
+        }
+        .tooltip .tooltiptext {
+            visibility: hidden;
+            width: 120px;
+            background-color: black;
+            color: #fff;
+            text-align: center;
+            border-radius: 5px;
+            padding: 5px;
+            position: absolute;
+            z-index: 1;
+            bottom: 125%; /* Ajusta la posición */
+            left: 50%;
+            margin-left: -60px;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        .tooltip:hover .tooltiptext {
+            visibility: visible;
+            opacity: 1;
+        }
     </style>
 </head>
 
@@ -27,7 +51,7 @@ session_start();
         <?php include '../includes/vabr.php'; ?>
         <div class="main">
             <div class="container">
-                <h2>REGISTRAR VEHÍCULO</h2>
+                <h2>REGISTRAR VEHÍCULO - INSPECCIÓN</h2>
                 <div class="form-container">
                     <?php
                     if (isset($_SESSION['error'])) {
@@ -57,7 +81,25 @@ session_start();
                     ?>
 
 
-                    <form id="formCita" action="" method="POST" autocomplete="off" novalidate>
+<input type="radio" class="btn-check" name="options-base" id="option1" autocomplete="off" >
+<label class="btn" for="option1">CON SEGUIMINETO</label>
+
+
+<input type="radio" class="btn-check"  name="options-base" id="option2" autocomplete="off" checked>
+<label class="btn" for="option2">SIN SEGUIMINTO</label>
+
+<br>
+<br>
+<script>
+        document.getElementById('option1').addEventListener('change', function() {
+            if (this.checked) {
+                window.location.href = './autos_view.php'; // Reemplaza con la URL deseada
+            }
+        });
+
+    </script>
+
+                    <form id="formCita" action="register_inspection.php" method="POST" autocomplete="off" novalidate>
                         <div class="mb-3">
                             <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required>
                             <ul id="lista" class="list-group lista" style="display: none;"></ul>
