@@ -457,42 +457,56 @@ h2 {
 </script>
 
 <script>
-        function toggleSidebar() {
-            const sidebar = document.getElementById('sidebar');
-            sidebar.classList.toggle('expand');
+    function alternarSidebar() {
+        const sidebar = document.getElementById('sidebar');
+        sidebar.classList.toggle('expand');
+    }
+
+    // Variables para el seguimiento de los gestos de deslizamiento
+    let inicioX;
+    let desplazamiento = false;
+
+    // Eventos táctiles para dispositivos móviles
+    document.addEventListener('touchstart', function(evento) {
+        inicioX = evento.touches[0].clientX;
+        desplazamiento = false; // Inicialmente no estamos desplazándonos
+    });
+
+    document.addEventListener('touchmove', function(evento) {
+        if (!inicioX) return;
+
+        let actualX = evento.touches[0].clientX;
+        let diferenciaX = inicioX - actualX;
+
+        // Verifica si estamos en un elemento con desplazamiento horizontal
+        let enElementoDesplazable = false;
+        let elemento = evento.target;
+        while (elemento) {
+            if (elemento.scrollWidth > elemento.clientWidth) {
+                enElementoDesplazable = true;
+                break;
+            }
+            elemento = elemento.parentElement;
         }
 
-        // Variables para el seguimiento de los gestos de deslizamiento
-        let startX;
+        if (enElementoDesplazable) {
+            desplazamiento = true; // Si estamos en un elemento desplazable, marcamos como desplazamiento
+        }
 
-        // Eventos táctiles para dispositivos móviles
-        document.addEventListener('touchstart', function(event) {
-            startX = event.touches[0].clientX;
-        });
-
-        document.addEventListener('touchmove', function(event) {
-            if (!startX) return;
-
-            let currentX = event.touches[0].clientX;
-            let diffX = startX - currentX;
-
-            // Si el deslizado es significativo, abre o cierra la barra lateral
-            if (diffX > 50) {
+        if (!desplazamiento) {
+            // Si no estamos desplazándonos, manejamos la apertura/cierre de la barra lateral
+            if (diferenciaX > 50) {
                 document.getElementById('sidebar').classList.remove('expand'); // Deslizar hacia la izquierda
-                startX = null; // Reiniciar startX
-            } else if (diffX < -50) {
+                inicioX = null; // Reiniciar inicioX
+            } else if (diferenciaX < -50) {
                 document.getElementById('sidebar').classList.add('expand'); // Deslizar hacia la derecha
-                startX = null; // Reiniciar startX
+                inicioX = null; // Reiniciar inicioX
             }
-        });
+        }
+    });
 
-        // Reiniciar startX al final del toque
-        document.addEventListener('touchend', function() {
-            startX = null;
-        });
-
-        function toggleSidebar() {
-    const sidebar = document.getElementById('sidebar');
-    sidebar.classList.toggle('expand');
-}
-    </script>
+    // Reiniciar inicioX al final del toque
+    document.addEventListener('touchend', function() {
+        inicioX = null;
+    });
+</script>

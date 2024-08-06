@@ -106,7 +106,7 @@ GROUP BY
 
 
         $pdo->commit();
-        $_SESSION['mensaje'] = "Cita y orden de trabajo creadas exitosamente.";
+        $_SESSION['bien'] = "Cita y orden de trabajo creadas exitosamente.";
     } catch (PDOException $e) {
         $pdo->rollBack();
         $_SESSION['error'] = "Error al crear la cita y orden de trabajo: " . $e->getMessage();

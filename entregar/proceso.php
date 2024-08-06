@@ -50,9 +50,9 @@ try {
     $stmtActualizarOrden->execute([$nuevaUbicacionID, $ordenID]);
 
     if ($stmtActualizarOrden->rowCount() > 0) {
-        $_SESSION['success'] = "Orden de trabajo movida exitosamente.";
+        $_SESSION['bien'] = "Orden de trabajo entregada exitosamente.";
     } else {
-        $_SESSION['error'] = "Error al mover la orden de trabajo.";
+        $_SESSION['error'] = "Error al entregada la orden de trabajo.";
     }
 
     header("Location: index.php");

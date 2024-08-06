@@ -8,13 +8,17 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Cita</title>
-</head>
-<style>
-    .form-group {
-        margin-bottom: 5px;
-    }
-</style>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <style>
+        .form-group {
+            margin-bottom: 5px;
+        }
 
+        .lista {
+            display: none;
+        }
+    </style>
+</head>
 
 <body class="Body_citas">
     <div class="wrapper">
@@ -51,7 +55,7 @@ session_start();
                     }
                     ?>
 
-                    <form action="../CItas/registrar_cita.php" method="POST" autocomplete="off">
+                    <form action="../Citas/registrar_cita.php" method="POST" autocomplete="off">
                         <div class="mb-3">
                             <input type="text" class="form-control" autocomplete="off" id="campo" name="campo" placeholder="Buscar cliente..." required>
                             <ul id="lista" class="list-group lista"></ul>
@@ -60,8 +64,8 @@ session_start();
                         </div>
                         <div class="mb-3">
                             <label for="vehiculoSeleccionado" class="form-label">Seleccione un vehículo:</label>
-                                <input type="text" class="form-control" id="vehiculoSeleccionado" readonly>
-                                <ul id="lista-vehiculos" class="list-group lista"></ul>
+                            <input type="text" class="form-control" id="vehiculoSeleccionado">
+                            <ul id="lista-vehiculos" class="list-group lista"></ul>
                             <input type="hidden" id="vehiculoID" name="vehiculoID">
                             <div class="invalid-feedback">Debes seleccionar un vehículo.</div>
                         </div>
@@ -112,15 +116,68 @@ session_start();
                     }
                 });
 
+                const campoInput = document.getElementById('campo');
+                const lista = document.getElementById('lista');
+                const clienteID = document.getElementById('clienteID');
+                const vehiculoInput = document.getElementById('vehiculoSeleccionado');
+                const listaVehiculos = document.getElementById('lista-vehiculos');
+                const vehiculoID = document.getElementById('vehiculoID');
+
+                campoInput.addEventListener('input', function() {
+                    if (campoInput.value.trim() !== '') {
+                        lista.style.display = 'block';
+                        src = "../Citas/app.js"
+                    } else {
+                        lista.style.display = 'none';
+                    }
+                });
+
+                lista.addEventListener('click', function(e) {
+                    if (e.target.tagName === 'LI') {
+                        campoInput.value = e.target.textContent;
+                        clienteID.value = e.target.getAttribute('data-id');
+                        lista.style.display = 'none';
+                    }
+                });
+
+                vehiculoInput.addEventListener('input', function() {
+                    if (vehiculoInput.value.trim() !== '') {
+                        listaVehiculos.style.display = 'block';
+                        lista.style.display = 'block';
+                        src = "../Citas/app.js"                    } else {
+                        listaVehiculos.style.display = 'none';
+                    }
+                });
+
+                listaVehiculos.addEventListener('click', function(e) {
+                    if (e.target.tagName === 'LI') {
+                        vehiculoInput.value = e.target.textContent;
+                        vehiculoID.value = e.target.getAttribute('data-id');
+                        listaVehiculos.style.display = 'none';
+                    }
+                });
+
+                campoInput.addEventListener('blur', function() {
+                    if (campoInput.value.trim() === '') {
+                        lista.style.display = 'none';
+                    }
+                });
+
+                vehiculoInput.addEventListener('blur', function() {
+                    if (vehiculoInput.value.trim() === '') {
+                        listaVehiculos.style.display = 'none';
+                    }
+                });
             });
         </script>
-            <script>
-        $(document).ready(function() {
-            if ($('#staticBackdrop').length) {
-                $('#staticBackdrop').modal('show');
-            }
-        });
-    </script>
+        <script>
+            $(document).ready(function() {
+                if ($('#staticBackdrop').length) {
+                    $('#staticBackdrop').modal('show');
+                }
+            });
+        </script>
+    </div>
 </body>
 
 </html>
