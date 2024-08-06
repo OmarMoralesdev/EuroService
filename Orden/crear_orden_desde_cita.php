@@ -75,6 +75,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <label for="anticipo">Anticipo:</label>
                     <input type="number" step="0.01" name="anticipo" class="form-control" required><br>
 
+                    <label for="atencion" class="form-label">Atencion:</label>
+                    <select name="atencion" class="form-control" required>
+                        <option value="no urgente">No urgente</option>
+                        <option value="urgente">Urgente</option>
+                        <option value="muy urgente">Muy urgente</option>
+                    </select><br>
+
                     <label for="formadepago" class="form-label">Forma de pago:</label>
                     <select name="formadepago" class="form-control" required>
                         <option value="efectivo">Efectivo</option>

@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $anticipo = $_POST['anticipo'];
     $formaDePago = $_POST['formadepago'];
     $fechaOrden = date('Y-m-d H:i:s');
-
+    $atencion = $_POST['atencion'];
     if ($costoManoObra < 0 || $costoRefacciones < 0) {
         $_SESSION['error'] = "No puedes ingresar números negativos.";
         header("Location: crear_orden_desde_cita.php?citaID=$citaID");
@@ -71,10 +71,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         $sqlOrden = "
             INSERT INTO ORDENES_TRABAJO (fecha_orden, costo_mano_obra, costo_refacciones, atencion, citaID, empleadoID, ubicacionID) 
-            VALUES (?, ?, ?, 'no urgente', ?, ?, ?)
+            VALUES (?, ?, ?, ?, ?, ?, ?)
         ";
         $stmtOrden = $pdo->prepare($sqlOrden);
-        $stmtOrden->execute([$fechaOrden, $costoManoObra, $costoRefacciones, $citaID, $empleado, $ubicacionID]);
+        $stmtOrden->execute([$fechaOrden, $costoManoObra, $costoRefacciones ,$atencion, $citaID, $empleado, $ubicacionID]);
         $ordenID = $pdo->lastInsertId();
 
         $fechaPago = date('Y-m-d');
