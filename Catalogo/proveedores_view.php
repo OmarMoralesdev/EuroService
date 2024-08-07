@@ -9,25 +9,25 @@ $errorMensaje = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre']) && isset($_POST['contacto'])) {
     $nombre = trim($_POST['nombre']);
     $contacto = trim($_POST['contacto']);
-echo "1";
+
     $errores = [];
     if (empty($nombre)) {
         $errores[] = "El nombre es requerido.";
     }
-    echo "1";
+  
     if (empty($contacto)) {
         $errores[] = "El contacto es requerido.";
     }
-    echo "1";
+ 
 
     if (empty($errores)) {
         $stmt = $pdo->prepare("SELECT * FROM PROVEEDORES WHERE nombre = ? OR contacto = ?");
-        echo "1";
+     
         $stmt->execute([$nombre, $contacto]);
-        echo "1";
+   
         if ($stmt->rowCount() > 0) {
             $errorMensaje = "El proveedor con este nombre o contacto ya existe.";
-            echo "1";
+         
         }  else {
             $stmt = $pdo->prepare("INSERT INTO PROVEEDORES (nombre, contacto) VALUES (?, ?)");
             echo "1";
