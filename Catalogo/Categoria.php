@@ -111,7 +111,7 @@
                     $categorias = $stmt->fetchAll(PDO::FETCH_OBJ);
 
                     // Consulta para obtener el total de categorías
-                    $total_categorias_query = "SELECT COUNT(*) AS total FROM categorias";
+                    $total_categorias_query = "SELECT COUNT(*) AS total FROM CATEGORIAS";
                     $stmt = $pdo->prepare($total_categorias_query);
                     $stmt->execute();
                     $total_categorias_result = $stmt->fetch(PDO::FETCH_OBJ);
@@ -146,9 +146,9 @@
                             echo "<div class='modal-body'>";
 
                             $consulta_insumos = "SELECT i.nombre AS insumo, p.nombre AS proveedor, ip.precio
-                                                FROM insumos i
-                                                JOIN insumo_proveedor ip ON i.insumoID = ip.insumoID
-                                                JOIN proveedores p ON ip.proveedorID = p.proveedorID
+                                                FROM INSUMOS i
+                                                JOIN INSUMO_PROVEEDOR ip ON i.insumoID = ip.insumoID
+                                                JOIN PROVEEDORES p ON ip.proveedorID = p.proveedorID
                                                 WHERE i.categoriaID = :categoriaID";
                             
                             $stmt = $pdo->prepare($consulta_insumos);
