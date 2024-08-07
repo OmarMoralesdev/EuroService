@@ -57,7 +57,7 @@
                         $alertType = 'danger';
                     } else {
                         
-                        $check_query = "SELECT COUNT(*) FROM categorias WHERE nombre = :nombre";
+                        $check_query = "SELECT COUNT(*) FROM CATEGORIAS WHERE nombre = :nombre";
                         $stmt = $pdo->prepare($check_query);
                         $stmt->bindValue(':nombre', $nombre, PDO::PARAM_STR);
                         $stmt->execute();
@@ -67,7 +67,7 @@
                             $alertMessage = 'La categoría ya existe';
                             $alertType = 'danger'; 
                         } else {
-                            $insert_query = "INSERT INTO categorias (nombre, descripcion) VALUES (:nombre, :descripcion)";
+                            $insert_query = "INSERT INTO CATEGORIAS (nombre, descripcion) VALUES (:nombre, :descripcion)";
                             $stmt = $pdo->prepare($insert_query);
                             $stmt->bindValue(':nombre', $nombre, PDO::PARAM_STR);
                             $stmt->bindValue(':descripcion', $descripcion, PDO::PARAM_STR);
@@ -101,7 +101,7 @@
 
                     // Consulta para obtener categorías
                     $consulta_categorias = "SELECT c.categoriaID, c.nombre AS categoria, c.descripcion
-                                            FROM categorias c
+                                            FROM CATEGORIAS c
                                             ORDER BY c.nombre ASC
                                             LIMIT :offset, :items_per_page";
                     $stmt = $pdo->prepare($consulta_categorias);

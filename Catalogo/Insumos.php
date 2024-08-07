@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INVENTARIO DE INSUMOS</title>
-    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <style>
         body {
             background-color: #B2B2B2;
@@ -121,7 +119,7 @@
                                         
                                     } elseif (isset($_POST['incrementar'])) {
                                         $insumo_proveedorID = $_POST['insumo_proveedorID'];
-                                        $stmt = $pdo->prepare("UPDATE inventarios SET cantidad_stock = cantidad_stock + 1 WHERE insumo_proveedorID = :insumo_proveedorID");
+                                        $stmt = $pdo->prepare("UPDATE INVENTARIOS SET cantidad_stock = cantidad_stock + 1 WHERE insumo_proveedorID = :insumo_proveedorID");
                                         $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
                                         $stmt->execute();
                                     } elseif (isset($_POST['disminuir'])) {
@@ -198,7 +196,7 @@
                             <select class="form-select" id="categoriaID" name="categoriaID" required>
                                 <option value="" selected disabled>Seleccione una categoría</option>
                                 <?php
-                                $stmt = $pdo->prepare("SELECT categoriaID, nombre FROM categorias ORDER BY nombre ASC");
+                                $stmt = $pdo->prepare("SELECT categoriaID, nombre FROM CATEGORIAS ORDER BY nombre ASC");
                                 $stmt->execute();
                                 $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($categorias as $categoria) {
@@ -212,7 +210,7 @@
                             <select class="form-select" id="proveedorID" name="proveedorID" required>
                                 <option value="" selected disabled>Seleccione un proveedor</option>
                                 <?php
-                                $stmt = $pdo->prepare("SELECT proveedorID, nombre FROM proveedores ORDER BY nombre ASC");
+                                $stmt = $pdo->prepare("SELECT proveedorID, nombre FROM PROVEEDORES ORDER BY nombre ASC");
                                 $stmt->execute();
                                 $proveedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($proveedores as $proveedor) {
@@ -240,8 +238,7 @@
     </div>
 
     
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    
     <script>
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
