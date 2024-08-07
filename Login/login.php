@@ -1,7 +1,7 @@
 <?php
 session_start();
 
-require '../EuroService/includes/db.php';
+require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
 
@@ -49,13 +49,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 $_SESSION['personaID'] =  $personaID;
                 // Redireccionar según el rol
                 if ($role == 1) {
-                    header("Location: ../EuroService/Cliente");
+                    header("Location: ../Cliente/index.php");
                     exit();
                 } elseif ($role == 2) {
-                    header("Location: ../EuroService/general_views/admin.php");
+                    header("Location: ../general_views/admin.php");
                     exit();
                 } elseif ($role == 3) {
-                    header("Location: ../EuroService/dueño/dueño.php");
+                    header("Location: ../dueño/dueño.php");
                     exit();
                 } else {
                     header("Location: ../EuroService/index.php/#navbarNav");
