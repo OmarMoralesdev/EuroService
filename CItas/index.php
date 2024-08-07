@@ -92,9 +92,12 @@ session_start();
             document.addEventListener('DOMContentLoaded', function() {
                 const dateInput = document.getElementById('fecha_cita');
                 const today = new Date();
-                const year = today.getFullYear();
-                const month = String(today.getMonth() + 1).padStart(2, '0');
-                const day = String(today.getDate()).padStart(2, '0');
+                const tomorrow = new Date(today);
+                tomorrow.setDate(today.getDate() + 1); // Día siguiente
+
+                const year = tomorrow.getFullYear();
+                const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+                const day = String(tomorrow.getDate()).padStart(2, '0');
                 const minDate = `${year}-${month}-${day}T09:00`;
                 const maxDate = `${year + 1}-${month}-${day}T17:00`;
 
@@ -107,65 +110,12 @@ session_start();
                     const selectedHour = selectedDate.getHours();
                     const selectedMinutes = selectedDate.getMinutes();
 
-                    if (selectedDate < today) {
-                        dateInput.setCustomValidity('No se puede seleccionar una fecha anterior a hoy.');
+                    if (selectedDate < tomorrow) {
+                        dateInput.setCustomValidity('La fecha debe ser al menos para el día siguiente.');
                     } else if (selectedHour < 9 || (selectedHour >= 17 && selectedMinutes > 0)) {
                         dateInput.setCustomValidity('La hora debe estar dentro del horario laboral (09:00 - 17:00).');
                     } else {
                         dateInput.setCustomValidity('');
-                    }
-                });
-
-                const campoInput = document.getElementById('campo');
-                const lista = document.getElementById('lista');
-                const clienteID = document.getElementById('clienteID');
-                const vehiculoInput = document.getElementById('vehiculoSeleccionado');
-                const listaVehiculos = document.getElementById('lista-vehiculos');
-                const vehiculoID = document.getElementById('vehiculoID');
-
-                campoInput.addEventListener('input', function() {
-                    if (campoInput.value.trim() !== '') {
-                        lista.style.display = 'block';
-                        src = "../Citas/app.js"
-                    } else {
-                        lista.style.display = 'none';
-                    }
-                });
-
-                lista.addEventListener('click', function(e) {
-                    if (e.target.tagName === 'LI') {
-                        campoInput.value = e.target.textContent;
-                        clienteID.value = e.target.getAttribute('data-id');
-                        lista.style.display = 'none';
-                    }
-                });
-
-                vehiculoInput.addEventListener('input', function() {
-                    if (vehiculoInput.value.trim() !== '') {
-                        listaVehiculos.style.display = 'block';
-                        lista.style.display = 'block';
-                        src = "../Citas/app.js"                    } else {
-                        listaVehiculos.style.display = 'none';
-                    }
-                });
-
-                listaVehiculos.addEventListener('click', function(e) {
-                    if (e.target.tagName === 'LI') {
-                        vehiculoInput.value = e.target.textContent;
-                        vehiculoID.value = e.target.getAttribute('data-id');
-                        listaVehiculos.style.display = 'none';
-                    }
-                });
-
-                campoInput.addEventListener('blur', function() {
-                    if (campoInput.value.trim() === '') {
-                        lista.style.display = 'none';
-                    }
-                });
-
-                vehiculoInput.addEventListener('blur', function() {
-                    if (vehiculoInput.value.trim() === '') {
-                        listaVehiculos.style.display = 'none';
                     }
                 });
             });

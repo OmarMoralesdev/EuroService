@@ -149,6 +149,7 @@ a.sidebar-link:hover {
 
 .sidebar-item {
     position: relative;
+    background-color: #000;
 }
 
 #sidebar:not(.expand) .sidebar-item .sidebar-dropdown {
@@ -266,7 +267,7 @@ h2 {
 
     </style>
        <header>
-        <div class="menu-icon" onclick="toggleSidebar()">
+        <div class="menu-icon" onclick="alternarSidebar()">
         <i class="bi bi-arrow-bar-right"></i>
         </div>
     </header>
@@ -439,6 +440,9 @@ h2 {
                 </li>
                 <li class="sidebar-item">
                     <a href="../Finanzas/gestion_pagoforms.php" class="sidebar-link">GESTION</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="../Empleados/nominas.php" class="sidebar-link">REGISTRAR NOMINAS</a>
                 </li>
             </ul>
         </li>

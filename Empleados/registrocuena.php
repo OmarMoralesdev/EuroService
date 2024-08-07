@@ -37,6 +37,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             exit();
         }
 
+        // Verificar si el username ya existe
+        $stmt_verificar_username = $pdo->prepare("SELECT COUNT(*) FROM CUENTAS WHERE username = ?");
+        $stmt_verificar_username->execute([$username]);
+        $username_existente = $stmt_verificar_username->fetchColumn();
+
+        if ($username_existente > 0) {
+            $_SESSION['error'] = "El nombre de usuario ya está registrado.";
+            header('Location: cuentaempleado.php');
+            exit();
+        }
+
         // Hashear la contraseña
         $hashed_password = password_hash($password, PASSWORD_BCRYPT);
         
@@ -53,11 +64,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         if ($stmt_cuenta->rowCount() > 0) {
             $_SESSION['bien'] = "Cuenta de administrador creada exitosamente";
             header('Location: cuentaempleado.php');
-        exit();
+            exit();
         } else {
-           $_SESSION['error'] = "Error al insertar en CUENTAS.";
-           header('Location: cuentaempleado.php');
-        exit();
+            $_SESSION['error'] = "Error al insertar en CUENTAS.";
+            header('Location: cuentaempleado.php');
+            exit();
         }
     } catch (PDOException $e) {
         $_SESSION['error'] = "Error de base de datos: " . $e->getMessage();
