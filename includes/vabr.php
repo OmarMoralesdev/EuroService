@@ -322,6 +322,9 @@ h2 {
                 <li class="sidebar-item">
                     <a href="../CItas/seleccionar_cita.php" class="sidebar-link">EDITAR</a>
                 </li>
+                <li class="sidebar-item">
+                    <a href="../CItas/seleccionar_citacopy.php" class="sidebar-link">CANCELAR</a>
+                </li>
             </ul>
         </li>
 

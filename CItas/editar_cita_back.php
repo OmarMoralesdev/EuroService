@@ -41,15 +41,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $servicioSolicitado = filter_input(INPUT_POST, 'servicioSolicitado', FILTER_SANITIZE_STRING);
         $fechaCita = filter_input(INPUT_POST, 'fecha_cita', FILTER_SANITIZE_STRING);
         
-        $estado = isset($_POST['estado']) && $_POST['estado'] == 'cancelado';
-        if ($_POST['estado'] === 'cancelado') {
-            $sqlUpdate = "UPDATE CITAS SET estado = ? WHERE citaID = ?";
-            $queryUpdate = $pdo->prepare($sqlUpdate);
-            $resultUpdate = $queryUpdate->execute([$estado, $citaID]);
-            $_SESSION['bien'] = "Cita cancelada exitosamente";
-            header("Location: seleccionar_cita.php");
-            exit();
-        }
+    
 
         if (!$citaID || !$servicioSolicitado || !$fechaCita) {
             $_SESSION['error'] = "Error: Todos los campos son obligatorios.";

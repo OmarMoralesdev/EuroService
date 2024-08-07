@@ -2,10 +2,11 @@
 
 class Database
 {
-    private $host = '127.0.0.1';
+    private $host = 'localhost';
     private $db_name = 'TALLER_EURO';
     private $username = 'root';
     private $password = '1234';
+    private $port = '3306';
     private $pdo;
 
     public function conectar()
@@ -13,7 +14,8 @@ class Database
         $this->pdo = null;
 
         try {
-            $this->pdo = new PDO('mysql:host=' . $this->host . ';dbname=' . $this->db_name, $this->username, $this->password);
+            $dsn = 'mysql:host=' . $this->host . ';port=' . $this->port . ';dbname=' . $this->db_name;
+            $this->pdo = new PDO($dsn, $this->username, $this->password);
             $this->pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
         } catch (PDOException $e) {
             echo 'Error de conexión: ' . $e->getMessage();

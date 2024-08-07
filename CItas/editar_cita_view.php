@@ -76,10 +76,6 @@ if ($cita) {
                                 <label for="fecha_cita" class="form-label">Fecha de la Cita:</label>
                                 <input type="datetime-local" class="form-control" id="fecha_cita" name="fecha_cita" value="<?php echo date('Y-m-d\TH:i', strtotime($cita['fecha_cita'])); ?>" required>
                             </div>
-                            <div class="form-check mt-2">
-                                <input class="form-check-input" type="checkbox" id="estado" name="estado" value="cancelado" <?php echo isset($_POST['estado']) ? 'checked' : ''; ?> data-bs-toggle="modal" data-bs-target="#cancelConfirmationModal">
-                                <label class="form-check-label" for="estado">Cancelar Cita</label>
-                            </div>
                             <button type="submit" name="actualizar" class="btn btn-dark w-100" onclick="return confirmCancel();">Guardar Cambios</button>
                         </form>
                     <?php else : ?>

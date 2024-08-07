@@ -79,7 +79,7 @@ if ($cita) {
                                 <input type="datetime-local" class="form-control" id="fecha_cita" value="<?php echo date('Y-m-d\TH:i', strtotime($cita['fecha_cita'])); ?>" readonly>
                             </div>
 
-                            <button type="button" class="btn btn-danger d-grid gap-2 col-6 mx-auto" id="btnEliminar">Eliminar</button>
+                            <button type="button" class="btn btn-danger d-grid gap-2 col-6 mx-auto" id="btnEliminar">Cancelar</button>
                         </form>
                     <?php else : ?>
                         <div class="alert alert-warning mt-3">No se encontraron detalles de la cita.</div>
@@ -98,8 +98,8 @@ if ($cita) {
                                 <p>¿Estás seguro de que deseas eliminar la cita?<br></p>
                             </div>
                             <div class="modal-footer">
-                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-                                <button type="button" class="btn btn-danger" id="confirmarEliminar">Eliminar</button>
+                                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                                <button type="button" class="btn btn-danger" id="confirmarEliminar">Cancelar</button>
                             </div>
                         </div>
                     </div>
