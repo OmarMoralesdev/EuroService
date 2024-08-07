@@ -78,9 +78,9 @@
                         echo "<div class='modal-body'>";
                         $consultita = "SELECT concat(VEHICULOS.marca,' ',VEHICULOS.modelo,' ',VEHICULOS.anio,' ',VEHICULOS.color) AS VEHICULO,
                         CITAS.servicio_solicitado as OPERACIÓN_EFECTUAR
-                        From VEHICULOS join CITAS On CITAS.vehiculoID=VEHICULO.vehiculoID join ORDENES_TRABAJO On
-                        ORDENES_TRABAJO.citaID=CITAS.citaID inner join PAGOS On PAGOS.ordenID = ORDENES_TRABAJO.ordenID
-                        where ORDENES_TRABAJO.atencion='muy urgente' and CITAS.estado !='completado'";
+                        From VEHICULOS join CITAS On CITAS.vehiculoID=VEHICULOS.vehiculoID join ORDENES_TRABAJO On
+                        ORDENES_TRABAJO.citaID=CITAS.citaID inner join PAGOS On PAGOS.ordenID =ORDENES_TRABAJO.ordenID
+                        where ORDENES_TRABAJO.atencion='muy urgente' and CITAS.estado !='completado';";
                         
                         $tabla = $conexion->seleccionar($consultita);
 
