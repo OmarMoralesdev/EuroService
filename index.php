@@ -374,7 +374,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <?php echo $_SESSION['alert']['message']; unset($_SESSION['alert']); ?>
                         </div>
                     <?php endif; ?>
-                    <form action="" method="POST">
+                    <form action="login.php" method="POST">
                         <div class="mb-3">
                             <label for="username" class="form-label">Usuario</label>
                             <input type="text" class="form-control" name="username" id="username" required>
