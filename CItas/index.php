@@ -87,7 +87,7 @@ session_start();
             </div>
         </div>
 
-        <script src="../Citas/app.js"></script>
+        <script src="app.js"></script>
         <script>
             document.addEventListener('DOMContentLoaded', function() {
                 const dateInput = document.getElementById('fecha_cita');

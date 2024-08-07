@@ -30,11 +30,11 @@
                 $conexion = new Database();
                 $conexion->conectar();
                 
-                $consulta_vehiculos = "SELECT concat(vehiculos.marca,' ',vehiculos.modelo,' ',vehiculos.color,' ',vehiculos.anio) as VEHICULOS,
-concat(personas.nombre,' ',personas.apellido_paterno,' ',personas.apellido_materno) as PROPIETARIO, personas.correo
-AS CORREO, personas.telefono as TELEFONO, vehiculos.vehiculoID
-FROM PERSONAS JOIN CLIENTES ON clientes.personaID = personas.personaID JOIN VEHICULOS ON
-vehiculos.clienteID = clientes.clienteID and vehiculos.activo = 'si'";
+                $consulta_vehiculos = "SELECT concat(VEHICULOS.marca,' ',VEHICULOS.modelo,' ',VEHICULOS.color,' ',VEHICULOS.anio) as VEHICULOS,
+concat(PERSONAS.nombre,' ',PERSONAS.apellido_paterno,' ',PERSONAS.apellido_materno) as PROPIETARIO, PERSONAS.correo
+AS CORREO, PERSONAS.telefono as TELEFONO, VEHICULOS.vehiculoID
+FROM PERSONAS JOIN CLIENTES ON CLIENTES.personaID = PERSONAS.personaID JOIN VEHICULOS ON
+VEHICULOS.clienteID = CLIENTES.clienteID and VEHICULOS.activo = 'si'";
                 $vehiculos = $conexion->seleccionar($consulta_vehiculos);
                 
                 if (is_array($vehiculos)) {
@@ -132,10 +132,10 @@ vehiculos.clienteID = clientes.clienteID and vehiculos.activo = 'si'";
                     $conexion = new Database();
                     $conexion->conectar();
                     $consulta = "SELECT u.ubicacionID, u.lugar, u.capacidad, COUNT(v.vehiculoID) AS cantidad_vehiculos
-                                        FROM ubicaciones u
-                                        LEFT JOIN ordenes_trabajo ot ON u.ubicacionID = ot.ubicacionID
-                                        LEFT JOIN citas c ON ot.citaID = c.citaID
-                                        LEFT JOIN vehiculos v ON c.vehiculoID = v.vehiculoID
+                                        FROM UBICACIONES U
+                                        LEFT JOIN OREDENES_TRABAJO ot ON u.ubicacionID = ot.ubicacionID
+                                        LEFT JOIN CITAS c ON ot.citaID = c.citaID
+                                        LEFT JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
                                         WHERE u.activo = 'no' and u.lugar != 'Dueño'
                                         GROUP BY u.ubicacionID, u.lugar, u.capacidad";
                     $desactivados = $conexion->seleccionar($consulta);
