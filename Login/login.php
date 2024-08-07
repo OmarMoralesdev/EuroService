@@ -58,17 +58,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     header("Location: ../dueño/dueño.php");
                     exit();
                 } else {
-                    header("Location: ../index.php/#navbarNav");
+                    header("Location: ./index.php/#navbarNav");
                     exit();
                 }
             } else {
-                header("Location: ../index.php/#navbarNav");
+                header("Location: ./index.php/#navbarNav");
                     exit();
             }
         }
     } catch (PDOException $e) {
         echo "Error en la consulta: " . $e->getMessage();
-        header("Location: ../index.php/#navbarNav");
+        header("Location: ./index.php/#navbarNav");
         exit();
     }
 }
