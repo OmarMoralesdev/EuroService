@@ -32,10 +32,10 @@
                 $conexion->conectar();
                 
                 $consulta_ubicaciones = "SELECT u.ubicacionID, u.lugar, u.capacidad, COUNT(v.vehiculoID) AS cantidad_vehiculos
-                                        FROM ubicaciones u
-                                        LEFT JOIN ordenes_trabajo ot ON u.ubicacionID = ot.ubicacionID
-                                        LEFT JOIN citas c ON ot.citaID = c.citaID
-                                        LEFT JOIN vehiculos v ON c.vehiculoID = v.vehiculoID
+                                        FROM UBICACIONES u
+                                        LEFT JOIN ORDENES_TRABAJO ot ON u.ubicacionID = ot.ubicacionID
+                                        LEFT JOIN CITAS c ON ot.citaID = c.citaID
+                                        LEFT JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
                                         WHERE u.activo = 'si'
                                         GROUP BY u.ubicacionID, u.lugar, u.capacidad";
                 $ubicaciones = $conexion->seleccionar($consulta_ubicaciones);
@@ -77,13 +77,13 @@ echo "</div>";
                         $consulta = "SELECT DISTINCT 
                             CONCAT(vehiculos.marca, ' ', vehiculos.modelo, ' ', vehiculos.anio, ' - ', vehiculos.color) AS VEHICULO, 
                             CONCAT(personas.nombre, ' ', personas.apellido_paterno, ' ', personas.apellido_materno) AS PROPIETARIO
-                            FROM personas 
-                            INNER JOIN clientes ON clientes.personaID = personas.personaID 
-                            INNER JOIN vehiculos ON vehiculos.clienteID = clientes.clienteID 
-                            INNER JOIN citas ON citas.vehiculoID = vehiculos.vehiculoID 
-                            INNER JOIN ordenes_trabajo ON ordenes_trabajo.citaID = citas.citaID 
-                            INNER JOIN ubicaciones ON ordenes_trabajo.ubicacionID = ubicaciones.ubicacionID 
-                            WHERE ubicaciones.ubicacionID = {$ubicacion->ubicacionID} and ubicaciones.activo = 'si'";
+                            FROM PERSONAS 
+                            INNER JOIN CLIENTES ON CLIENTES.personaID = PERSONAS.personaID 
+                            INNER JOIN VEHICULOS ON VEHICULOS.clienteID = clientes.clienteID 
+                            INNER JOIN CITAS ON CITAS.vehiculoID = VEHICULOS.vehiculoID 
+                            INNER JOIN ORDENES_TRABAJO ON ORDENES_TRABAJO.citaID = CITAS.citaID 
+                            INNER JOIN UBICACIONES ON ORDENES_TRABAJO.ubicacionID = UBICACIONES.ubicacionID 
+                            WHERE UBICACIONES.ubicacionID = {$ubicacion->ubicacionID} and UBICACIONES.activo = 'si'";
                         
                         $tabla = $conexion->seleccionar($consulta);
 
@@ -214,10 +214,10 @@ echo "</div>";
                     $conexion = new Database();
                     $conexion->conectar();
                     $consulta = "SELECT u.ubicacionID, u.lugar, u.capacidad, COUNT(v.vehiculoID) AS cantidad_vehiculos
-                                        FROM ubicaciones u
-                                        LEFT JOIN ordenes_trabajo ot ON u.ubicacionID = ot.ubicacionID
-                                        LEFT JOIN citas c ON ot.citaID = c.citaID
-                                        LEFT JOIN vehiculos v ON c.vehiculoID = v.vehiculoID
+                                        FROM UBICACIONES u
+                                        LEFT JOIN ORDENES_TRABAJO ot ON u.ubicacionID = ot.ubicacionID
+                                        LEFT JOIN CITAS c ON ot.citaID = c.citaID
+                                        LEFT JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
                                         WHERE u.activo = 'no' and u.lugar != 'Dueño'
                                         GROUP BY u.ubicacionID, u.lugar, u.capacidad";
                     $desactivados = $conexion->seleccionar($consulta);

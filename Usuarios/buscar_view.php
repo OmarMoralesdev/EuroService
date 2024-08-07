@@ -15,8 +15,8 @@ $inicio = ($pagina_actual - 1) * $resultados_por_pagina;
 
 // Consulta SQL base para obtener clientes (con limit y offset para paginación)
 $consulta_clientes = "SELECT c.clienteID, CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, p.correo, p.telefono
-                      FROM clientes c
-                      INNER JOIN personas p ON c.personaID = p.personaID
+                      FROM CLIENTES c
+                      INNER JOIN PERSONAS p ON c.personaID = p.personaID
                       WHERE c.activo = 'si'";
 
 // Agregar filtro si hay criterio de búsqueda
@@ -30,7 +30,7 @@ $consulta_clientes .= " ORDER BY nombre_completo LIMIT $inicio, $resultados_por_
 $clientes = $conexion->seleccionar($consulta_clientes);
 
 // Contar el total de resultados para la paginación
-$total_clientes_query = "SELECT COUNT(*) AS total FROM clientes c INNER JOIN personas p ON c.personaID = p.personaID WHERE c.activo = 'si'";
+$total_clientes_query = "SELECT COUNT(*) AS total FROM CLIENTES c INNER JOIN PERSONAS p ON c.personaID = p.personaID WHERE c.activo = 'si'";
 if (!empty($buscar)) {
     $total_clientes_query .= " AND (p.nombre LIKE '%$buscar%' OR p.apellido_paterno LIKE '%$buscar%' OR p.apellido_materno LIKE '%$buscar%')";
 }

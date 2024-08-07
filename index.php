@@ -14,7 +14,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $_SESSION['alert'] = ['message' => 'Usuario o contraseña incorrectos.'];
         // Redireccionar a la misma página para mostrar el mensaje de alerta
         header('Location: ' . $_SERVER['PHP_SELF']);
-        exit;
+        exit; 
+        
     }
 }
 ?>

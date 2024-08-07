@@ -117,12 +117,12 @@
                                             echo "<div class='alert alert-danger' role='alert'>Por favor, complete todos los campos.</div>";
                                         }
                                         
-                                    } elseif (isset($_POST['incrementar'])) {
+                                    } elseif (isset($_POST['Agregar'])) {
                                         $insumo_proveedorID = $_POST['insumo_proveedorID'];
                                         $stmt = $pdo->prepare("UPDATE INVENTARIOS SET cantidad_stock = cantidad_stock + 1 WHERE insumo_proveedorID = :insumo_proveedorID");
                                         $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
                                         $stmt->execute();
-                                    } elseif (isset($_POST['disminuir'])) {
+                                    } elseif (isset($_POST['Restar'])) {
                                         $insumo_proveedorID = $_POST['insumo_proveedorID'];
                                         $stmt = $pdo->prepare("UPDATE INVENTARIOS SET cantidad_stock = cantidad_stock - 1 WHERE insumo_proveedorID = :insumo_proveedorID AND cantidad_stock > 0");
                                         $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);

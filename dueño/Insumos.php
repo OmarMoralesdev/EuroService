@@ -77,7 +77,7 @@
 
                                         if (!empty($nombre) && !empty($descripcion) && !empty($precio) && !empty($categoriaID) && !empty($cantidad_stock) && !empty($ubicacion) && !empty($proveedorID)) {
                                             // Insertar el insumo en la tabla de insumos
-                                            $stmt = $pdo->prepare("INSERT INTO insumos (nombre, descripcion, precio, categoriaID) VALUES (:nombre, :descripcion, :precio, :categoriaID)");
+                                            $stmt = $pdo->prepare("INSERT INTO INSUMO (nombre, descripcion, precio, categoriaID) VALUES (:nombre, :descripcion, :precio, :categoriaID)");
                                             $stmt->bindParam(':nombre', $nombre);
                                             $stmt->bindParam(':descripcion', $descripcion);
                                             $stmt->bindParam(':precio', $precio);
@@ -87,7 +87,7 @@
                                                 $insumoID = $pdo->lastInsertId();
 
                                                 // Insertar en la tabla insumo_proveedor
-                                                $stmt = $pdo->prepare("INSERT INTO insumo_proveedor (insumoID, proveedorID, precio) VALUES (:insumoID, :proveedorID, :precio)");
+                                                $stmt = $pdo->prepare("INSERT INTO INSUMO_PROVEEDOR (insumoID, proveedorID, precio) VALUES (:insumoID, :proveedorID, :precio)");
                                                 $stmt->bindParam(':insumoID', $insumoID);
                                                 $stmt->bindParam(':proveedorID', $proveedorID);
                                                 $stmt->bindParam(':precio', $precio);
@@ -96,7 +96,7 @@
                                                     $insumo_proveedorID = $pdo->lastInsertId();
 
                                                     // Insertar en la tabla inventarios
-                                                    $stmt = $pdo->prepare("INSERT INTO inventarios (insumo_proveedorID, ubicacion, cantidad_stock) VALUES (:insumo_proveedorID, :ubicacion, :cantidad_stock)");
+                                                    $stmt = $pdo->prepare("INSERT INTO INVENTARIOS (insumo_proveedorID, ubicacion, cantidad_stock) VALUES (:insumo_proveedorID, :ubicacion, :cantidad_stock)");
                                                     $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
                                                     $stmt->bindParam(':ubicacion', $ubicacion);
                                                     $stmt->bindParam(':cantidad_stock', $cantidad_stock);

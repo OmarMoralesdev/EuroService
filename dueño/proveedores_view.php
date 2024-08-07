@@ -19,13 +19,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre']) && isset($_
     }
 
     if (empty($errores)) {
-        $stmt = $pdo->prepare("SELECT * FROM proveedores WHERE nombre = ? OR contacto = ?");
+        $stmt = $pdo->prepare("SELECT * FROM PROVEEDORES WHERE nombre = ? OR contacto = ?");
         $stmt->execute([$nombre, $contacto]);
         if ($stmt->rowCount() > 0) {
             $errorMensaje = "El proveedor con este nombre o contacto ya existe.";
             
         } else {
-            $stmt = $pdo->prepare("INSERT INTO proveedores (nombre, contacto) VALUES (?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO PROVEEDORES (nombre, contacto) VALUES (?, ?)");
             $stmt->execute([$nombre, $contacto]);
             unset($_POST['nombre']);
             unset($_POST['contacto']);
