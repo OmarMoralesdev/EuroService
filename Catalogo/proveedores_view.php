@@ -19,12 +19,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre']) && isset($_
     }
 
     if (empty($errores)) {
-        $stmt = $pdo->prepare("SELECT * FROM proveedores WHERE nombre = ? OR contacto = ?");
+        $stmt = $pdo->prepare("SELECT * FROM PROVEEDORES WHERE nombre = ? OR contacto = ?");
         $stmt->execute([$nombre, $contacto]);
         if ($stmt->rowCount() > 0) {
             $errorMensaje = "El proveedor con este nombre o contacto ya existe.";
         } else {
-            $stmt = $pdo->prepare("INSERT INTO proveedores (nombre, contacto) VALUES (?, ?)");
+            $stmt = $pdo->prepare("INSERT INTO PROVEEDORES (nombre, contacto) VALUES (?, ?)");
             $stmt->execute([$nombre, $contacto]);
             unset($_POST['nombre']);
             unset($_POST['contacto']);
@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre']) && isset($_
 
 if (isset($_GET['ajax_search'])) {
     $search = $_GET['ajax_search'];
-    $stmt = $pdo->prepare("SELECT nombre, contacto FROM proveedores WHERE nombre LIKE ?");
+    $stmt = $pdo->prepare("SELECT nombre, contacto FROM PROVEEDORES WHERE nombre LIKE ?");
     $stmt->execute(["%$search%"]);
     $proveedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($proveedores);
@@ -48,10 +48,10 @@ if (isset($_GET['ajax_search'])) {
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $proveedores = [];
 if ($search) {
-    $stmt = $pdo->prepare("SELECT nombre, contacto FROM proveedores WHERE nombre LIKE ?");
+    $stmt = $pdo->prepare("SELECT nombre, contacto FROM PROVEEDORES WHERE nombre LIKE ?");
     $stmt->execute(["%$search%"]);
 } else {
-    $stmt = $pdo->query("SELECT nombre, contacto FROM proveedores");
+    $stmt = $pdo->query("SELECT nombre, contacto FROM PROVEEDORES");
 }
 
 if ($stmt->rowCount() > 0) {
@@ -101,14 +101,14 @@ if ($stmt->rowCount() > 0) {
             margin: auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 50%; /* Cambiado a un ancho más pequeño */
-            max-width: 400px; /* Añadido para limitar el ancho máximo */
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Añadido para un efecto de sombra */
+            width: 50%; 
+            max-width: 400px; 
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
         }
         .close {
             color: #aaa;
             float: right;
-            font-size: 24px; /* Reducido el tamaño de la fuente */
+            font-size: 24px; 
             font-weight: bold;
         }
         .close:hover,

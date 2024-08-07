@@ -80,7 +80,7 @@
 
                                         if (!empty($nombre) && !empty($descripcion) && !empty($precio) && !empty($categoriaID) && !empty($cantidad_stock) && !empty($ubicacion) && !empty($proveedorID)) {
                                             // Insertar el insumo en la tabla de insumos
-                                            $stmt = $pdo->prepare("INSERT INTO insumos (nombre, descripcion, precio, categoriaID) VALUES (:nombre, :descripcion, :precio, :categoriaID)");
+                                            $stmt = $pdo->prepare("INSERT INTO INSUMOS (nombre, descripcion, precio, categoriaID) VALUES (:nombre, :descripcion, :precio, :categoriaID)");
                                             $stmt->bindParam(':nombre', $nombre);
                                             $stmt->bindParam(':descripcion', $descripcion);
                                             $stmt->bindParam(':precio', $precio);
@@ -90,7 +90,7 @@
                                                 $insumoID = $pdo->lastInsertId();
 
                                                 // Insertar en la tabla insumo_proveedor
-                                                $stmt = $pdo->prepare("INSERT INTO insumo_proveedor (insumoID, proveedorID, precio) VALUES (:insumoID, :proveedorID, :precio)");
+                                                $stmt = $pdo->prepare("INSERT INTO INSUMO_PROVEEDOR (insumoID, proveedorID, precio) VALUES (:insumoID, :proveedorID, :precio)");
                                                 $stmt->bindParam(':insumoID', $insumoID);
                                                 $stmt->bindParam(':proveedorID', $proveedorID);
                                                 $stmt->bindParam(':precio', $precio);
@@ -99,7 +99,7 @@
                                                     $insumo_proveedorID = $pdo->lastInsertId();
 
                                                     // Insertar en la tabla inventarios
-                                                    $stmt = $pdo->prepare("INSERT INTO inventarios (insumo_proveedorID, ubicacion, cantidad_stock) VALUES (:insumo_proveedorID, :ubicacion, :cantidad_stock)");
+                                                    $stmt = $pdo->prepare("INSERT INTO INVENTARIOS (insumo_proveedorID, ubicacion, cantidad_stock) VALUES (:insumo_proveedorID, :ubicacion, :cantidad_stock)");
                                                     $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
                                                     $stmt->bindParam(':ubicacion', $ubicacion);
                                                     $stmt->bindParam(':cantidad_stock', $cantidad_stock);
@@ -126,7 +126,7 @@
                                         $stmt->execute();
                                     } elseif (isset($_POST['disminuir'])) {
                                         $insumo_proveedorID = $_POST['insumo_proveedorID'];
-                                        $stmt = $pdo->prepare("UPDATE inventarios SET cantidad_stock = cantidad_stock - 1 WHERE insumo_proveedorID = :insumo_proveedorID AND cantidad_stock > 0");
+                                        $stmt = $pdo->prepare("UPDATE INVENTARIOS SET cantidad_stock = cantidad_stock - 1 WHERE insumo_proveedorID = :insumo_proveedorID AND cantidad_stock > 0");
                                         $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
                                         $stmt->execute();
                                     }
@@ -134,11 +134,11 @@
 
                                 // Código para mostrar los insumos en la tabla
                                 $stmt = $pdo->prepare("
-                                    SELECT i.nombre, i.descripcion, i.precio, c.nombre AS categoria, inv.cantidad_stock, inv.ubicacion, inv.insumo_proveedorID
-                                    FROM insumos i
-                                    JOIN categorias c ON i.categoriaID = c.categoriaID
-                                    JOIN inventarios inv ON i.insumoID = inv.insumo_proveedorID
-                                    ORDER BY i.nombre ASC;
+                                    SELECT I.nombre, I.descripcion, I.precio, C.nombre AS categoria, INV.cantidad_stock, INV.ubicacion, INV.insumo_proveedorID
+                                    FROM INSUMOS I
+                                    JOIN CATEGORIAS C ON I.categoriaID = C.categoriaID
+                                    JOIN INVENTARIOS INV ON I.insumoID = INV.insumo_proveedorID
+                                    ORDER BY I.nombre ASC;
                                 ");
                                 $stmt->execute();
                                 $insumos = $stmt->fetchAll(PDO::FETCH_ASSOC);
