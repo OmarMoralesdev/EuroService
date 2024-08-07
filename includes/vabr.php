@@ -189,12 +189,13 @@ a.sidebar-link:hover {
 
         /* contenedores de las vistas */
         .container {
-            width: 90%;
+            width: 95%;
             margin: auto;
             background: linear-gradient(to right, #202020, #000000, #202020); /* degradado lateral de oscuro a menos oscuro */
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* sombra para el contenedor principal */
             padding: 20px; /* espacio interno para el contenedor principal */
+            padding-top: 4  0px;
         }
 
 /* Contenedor interno del formulario */
