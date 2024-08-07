@@ -9,25 +9,34 @@ $errorMensaje = "";
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre']) && isset($_POST['contacto'])) {
     $nombre = trim($_POST['nombre']);
     $contacto = trim($_POST['contacto']);
-
+echo "1";
     $errores = [];
     if (empty($nombre)) {
         $errores[] = "El nombre es requerido.";
     }
+    echo "1";
     if (empty($contacto)) {
         $errores[] = "El contacto es requerido.";
     }
+    echo "1";
 
     if (empty($errores)) {
         $stmt = $pdo->prepare("SELECT * FROM PROVEEDORES WHERE nombre = ? OR contacto = ?");
+        echo "1";
         $stmt->execute([$nombre, $contacto]);
+        echo "1";
         if ($stmt->rowCount() > 0) {
             $errorMensaje = "El proveedor con este nombre o contacto ya existe.";
-        } else {
+            echo "1";
+        }  else {
             $stmt = $pdo->prepare("INSERT INTO PROVEEDORES (nombre, contacto) VALUES (?, ?)");
+            echo "1";
             $stmt->execute([$nombre, $contacto]);
+            echo "1";
             unset($_POST['nombre']);
+            echo "1";
             unset($_POST['contacto']);
+            echo "1";
 
             header('Location: proveedores_view.php');
             exit();
@@ -38,23 +47,23 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre']) && isset($_
 }
 
 if (isset($_GET['ajax_search'])) {
-    $search = $_GET['ajax_search'];
-    $stmt = $pdo->prepare("SELECT nombre, contacto FROM PROVEEDORES WHERE nombre LIKE ?");
-    $stmt->execute(["%$search%"]);
-    $proveedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    echo json_encode($proveedores);
+    $search = $_GET['ajax_search'];echo "1";
+    $stmt = $pdo->prepare("SELECT nombre, contacto FROM PROVEEDORES WHERE nombre LIKE ?");echo "1";
+    $stmt->execute(["%$search%"]);echo "1";
+    $proveedores = $stmt->fetchAll(PDO::FETCH_ASSOC);echo "1";
+    echo json_encode($proveedores);echo "1";
     exit();
 }
-$search = isset($_GET['search']) ? $_GET['search'] : '';
-$proveedores = [];
+$search = isset($_GET['search']) ? $_GET['search'] : '';echo "1";
+$proveedores = [];echo "1";
 if ($search) {
-    $stmt = $pdo->prepare("SELECT nombre, contacto FROM PROVEEDORES WHERE nombre LIKE ?");
-    $stmt->execute(["%$search%"]);
+    $stmt = $pdo->prepare("SELECT nombre, contacto FROM PROVEEDORES WHERE nombre LIKE ?");echo "1";
+    $stmt->execute(["%$search%"]);echo "1";
 } else {
-    $stmt = $pdo->query("SELECT nombre, contacto FROM PROVEEDORES");
+    $stmt = $pdo->query("SELECT nombre, contacto FROM PROVEEDORES");echo "1";
 }
 
-if ($stmt->rowCount() > 0) {
+if ($stmt->rowCount() > 0) echo "1";{
     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
         $proveedores[] = $row;
     }

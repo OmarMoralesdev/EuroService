@@ -119,12 +119,12 @@
                                             echo "<div class='alert alert-danger' role='alert'>Por favor, complete todos los campos.</div>";
                                         }
                                         
-                                    } elseif (isset($_POST['incrementar'])) {
+                                    } elseif (isset($_POST['Agregar'])) {
                                         $insumo_proveedorID = $_POST['insumo_proveedorID'];
-                                        $stmt = $pdo->prepare("UPDATE inventarios SET cantidad_stock = cantidad_stock + 1 WHERE insumo_proveedorID = :insumo_proveedorID");
+                                        $stmt = $pdo->prepare("UPDATE INVENTARIOS SET cantidad_stock = cantidad_stock + 1 WHERE insumo_proveedorID = :insumo_proveedorID");
                                         $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
                                         $stmt->execute();
-                                    } elseif (isset($_POST['disminuir'])) {
+                                    } elseif (isset($_POST['Restar'])) {
                                         $insumo_proveedorID = $_POST['insumo_proveedorID'];
                                         $stmt = $pdo->prepare("UPDATE INVENTARIOS SET cantidad_stock = cantidad_stock - 1 WHERE insumo_proveedorID = :insumo_proveedorID AND cantidad_stock > 0");
                                         $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
@@ -198,7 +198,7 @@
                             <select class="form-select" id="categoriaID" name="categoriaID" required>
                                 <option value="" selected disabled>Seleccione una categoría</option>
                                 <?php
-                                $stmt = $pdo->prepare("SELECT categoriaID, nombre FROM categorias ORDER BY nombre ASC");
+                                $stmt = $pdo->prepare("SELECT categoriaID, nombre FROM CATEGORIAS ORDER BY nombre ASC");
                                 $stmt->execute();
                                 $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($categorias as $categoria) {
@@ -212,7 +212,7 @@
                             <select class="form-select" id="proveedorID" name="proveedorID" required>
                                 <option value="" selected disabled>Seleccione un proveedor</option>
                                 <?php
-                                $stmt = $pdo->prepare("SELECT proveedorID, nombre FROM proveedores ORDER BY nombre ASC");
+                                $stmt = $pdo->prepare("SELECT proveedorID, nombre FROM PROVEEDORES ORDER BY nombre ASC");
                                 $stmt->execute();
                                 $proveedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($proveedores as $proveedor) {
