@@ -4,8 +4,6 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INVENTARIO DE INSUMOS</title>
-    <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
     <style>
         body {
             background-color: #B2B2B2;
@@ -80,7 +78,7 @@
 
                                         if (!empty($nombre) && !empty($descripcion) && !empty($precio) && !empty($categoriaID) && !empty($cantidad_stock) && !empty($ubicacion) && !empty($proveedorID)) {
                                             // Insertar el insumo en la tabla de insumos
-                                            $stmt = $pdo->prepare("INSERT INTO insumos (nombre, descripcion, precio, categoriaID) VALUES (:nombre, :descripcion, :precio, :categoriaID)");
+                                            $stmt = $pdo->prepare("INSERT INTO INSUMOS (nombre, descripcion, precio, categoriaID) VALUES (:nombre, :descripcion, :precio, :categoriaID)");
                                             $stmt->bindParam(':nombre', $nombre);
                                             $stmt->bindParam(':descripcion', $descripcion);
                                             $stmt->bindParam(':precio', $precio);
@@ -90,7 +88,7 @@
                                                 $insumoID = $pdo->lastInsertId();
 
                                                 // Insertar en la tabla insumo_proveedor
-                                                $stmt = $pdo->prepare("INSERT INTO insumo_proveedor (insumoID, proveedorID, precio) VALUES (:insumoID, :proveedorID, :precio)");
+                                                $stmt = $pdo->prepare("INSERT INTO INSUMO_PROVEEDOR (insumoID, proveedorID, precio) VALUES (:insumoID, :proveedorID, :precio)");
                                                 $stmt->bindParam(':insumoID', $insumoID);
                                                 $stmt->bindParam(':proveedorID', $proveedorID);
                                                 $stmt->bindParam(':precio', $precio);
@@ -99,7 +97,7 @@
                                                     $insumo_proveedorID = $pdo->lastInsertId();
 
                                                     // Insertar en la tabla inventarios
-                                                    $stmt = $pdo->prepare("INSERT INTO inventarios (insumo_proveedorID, ubicacion, cantidad_stock) VALUES (:insumo_proveedorID, :ubicacion, :cantidad_stock)");
+                                                    $stmt = $pdo->prepare("INSERT INTO INVENTARIOS (insumo_proveedorID, ubicacion, cantidad_stock) VALUES (:insumo_proveedorID, :ubicacion, :cantidad_stock)");
                                                     $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
                                                     $stmt->bindParam(':ubicacion', $ubicacion);
                                                     $stmt->bindParam(':cantidad_stock', $cantidad_stock);
@@ -121,12 +119,12 @@
                                         
                                     } elseif (isset($_POST['incrementar'])) {
                                         $insumo_proveedorID = $_POST['insumo_proveedorID'];
-                                        $stmt = $pdo->prepare("UPDATE inventarios SET cantidad_stock = cantidad_stock + 1 WHERE insumo_proveedorID = :insumo_proveedorID");
+                                        $stmt = $pdo->prepare("UPDATE INVENTARIOS SET cantidad_stock = cantidad_stock + 1 WHERE insumo_proveedorID = :insumo_proveedorID");
                                         $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
                                         $stmt->execute();
                                     } elseif (isset($_POST['disminuir'])) {
                                         $insumo_proveedorID = $_POST['insumo_proveedorID'];
-                                        $stmt = $pdo->prepare("UPDATE inventarios SET cantidad_stock = cantidad_stock - 1 WHERE insumo_proveedorID = :insumo_proveedorID AND cantidad_stock > 0");
+                                        $stmt = $pdo->prepare("UPDATE INVENTARIOS SET cantidad_stock = cantidad_stock - 1 WHERE insumo_proveedorID = :insumo_proveedorID AND cantidad_stock > 0");
                                         $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
                                         $stmt->execute();
                                     }
@@ -134,11 +132,11 @@
 
                                 // Código para mostrar los insumos en la tabla
                                 $stmt = $pdo->prepare("
-                                    SELECT i.nombre, i.descripcion, i.precio, c.nombre AS categoria, inv.cantidad_stock, inv.ubicacion, inv.insumo_proveedorID
-                                    FROM insumos i
-                                    JOIN categorias c ON i.categoriaID = c.categoriaID
-                                    JOIN inventarios inv ON i.insumoID = inv.insumo_proveedorID
-                                    ORDER BY i.nombre ASC;
+                                    SELECT I.nombre, I.descripcion, I.precio, C.nombre AS categoria, INV.cantidad_stock, INV.ubicacion, INV.insumo_proveedorID
+                                    FROM INSUMOS I
+                                    JOIN CATEGORIAS C ON I.categoriaID = C.categoriaID
+                                    JOIN INVENTARIOS INV ON I.insumoID = INV.insumo_proveedorID
+                                    ORDER BY I.nombre ASC;
                                 ");
                                 $stmt->execute();
                                 $insumos = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -198,7 +196,7 @@
                             <select class="form-select" id="categoriaID" name="categoriaID" required>
                                 <option value="" selected disabled>Seleccione una categoría</option>
                                 <?php
-                                $stmt = $pdo->prepare("SELECT categoriaID, nombre FROM categorias ORDER BY nombre ASC");
+                                $stmt = $pdo->prepare("SELECT categoriaID, nombre FROM CATEGORIAS ORDER BY nombre ASC");
                                 $stmt->execute();
                                 $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($categorias as $categoria) {
@@ -212,7 +210,7 @@
                             <select class="form-select" id="proveedorID" name="proveedorID" required>
                                 <option value="" selected disabled>Seleccione un proveedor</option>
                                 <?php
-                                $stmt = $pdo->prepare("SELECT proveedorID, nombre FROM proveedores ORDER BY nombre ASC");
+                                $stmt = $pdo->prepare("SELECT proveedorID, nombre FROM PROVEEDORES ORDER BY nombre ASC");
                                 $stmt->execute();
                                 $proveedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 foreach ($proveedores as $proveedor) {
@@ -240,8 +238,7 @@
     </div>
 
     
-    <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
+    
     <script>
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
