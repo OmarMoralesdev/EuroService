@@ -42,9 +42,6 @@
                 </div>
                 <input type="submit" value="Iniciar sesión">
             </form>
-            <p class="mt-3">
-                <a href="./restablecercontraseña/solicitud_correo.html">¿Olvidaste tu contraseña?</a>
-            </p>
         </div>
         <?php
         session_start();
