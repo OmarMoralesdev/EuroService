@@ -58,7 +58,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     header("Location: ../dueño/dueño.php");
                     exit();
                 } else {
-                    header("Location: ../EuroService/index.php/#navbarNav");
+                    header("Location: ../index.php/#navbarNav");
                     exit();
                 }
             } else {
