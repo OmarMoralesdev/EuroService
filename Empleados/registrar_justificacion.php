@@ -15,7 +15,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     if ($empleadoID && $fecha) {
         try {
             // Preparar la consulta SQL con parámetros
-            $update = "UPDATE asistencia SET asistencia = 'justificado' WHERE empleadoID = :empleadoID AND fecha = :fecha";
+            $update = "UPDATE ASISTENCIA SET asistencia = 'justificado' WHERE empleadoID = :empleadoID AND fecha = :fecha";
             $stmt = $pdo->prepare($update);
 
             // Vincular los parámetros

@@ -21,7 +21,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $diferencia_horas = ($time_salida - $time_entrada) / 3600;
 
     // Validación: Verificar que no se registre una asistencia/falta/justificada al mismo empleado mas de una vez en un día
-$sqlVehiculo = "SELECT count(*) AS L FROM  asistencia WHERE empleadoID= ? AND fecha = ?";
+$sqlVehiculo = "SELECT count(*) AS L FROM  ASISTENCIA WHERE empleadoID= ? AND fecha = ?";
 $queryGlobal = $pdo->prepare($sqlVehiculo);
 $queryGlobal->execute([$empleadoID, $fecha]);
 
@@ -41,15 +41,15 @@ if ($countCitasGlobal >= 1) {
                         switch ($asistencia) 
                         {
                             case 'asistencia':
-                            $sql = "INSERT INTO Asistencia (empleadoID, asistencia, fecha, hora_entrada, hora_salida) VALUES (?, ?,?, ?, ?)";
+                            $sql = "INSERT INTO ASISTENCIA (empleadoID, asistencia, fecha, hora_entrada, hora_salida) VALUES (?, ?,?, ?, ?)";
                             $stmt = $pdo->prepare($sql);
                             $stmt->execute([$empleadoID, $asistencia, $fecha, $hora_entrada, $hora_salida]);
                             $_SESSION['bien'] ="Asistencia registrada exitosamente";
                             header('Location: registro_asistencia.php'); 
                             exit();
-                            break;
+                            break; 
                             case 'falta':
-                                $sql = "INSERT INTO Asistencia (empleadoID, asistencia, fecha, hora_entrada, hora_salida) VALUES (?, ?,?, ?, ?)";
+                                $sql = "INSERT INTO ASISTENCIA (empleadoID, asistencia, fecha, hora_entrada, hora_salida) VALUES (?, ?,?, ?, ?)";
                                 $stmt = $pdo->prepare($sql);
                                 $stmt->execute([$empleadoID, $asistencia, $fecha, $hora_entrada, $hora_salida]);
                                 $_SESSION['bien'] = "Falta registrada exitosamente";
