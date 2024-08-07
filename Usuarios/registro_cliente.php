@@ -157,7 +157,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $role = 'cliente';
             
             // Insertar un nuevo cliente
-            $stmt_persona = $pdo->prepare("INSERT INTO personas (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
+            $stmt_persona = $pdo->prepare("INSERT INTO PERSONAS (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
             // Ejecutar la consulta con los datos del cliente
             $stmt_persona->execute([$nombre, $apellido_paterno, $apellido_materno, $correo, $telefono]);
             
@@ -176,7 +176,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 
                 // Insertar un nuevo cliente y activo
                 $activo = 'si';
-                $stmt_cliente = $pdo->prepare("INSERT INTO clientes (personaID, activo) VALUES (?, ?)");
+                $stmt_cliente = $pdo->prepare("INSERT INTO CLIENTES (personaID, activo) VALUES (?, ?)");
                 // Ejecutar la consulta con el ID de la persona y el estado activo
                 $stmt_cliente->execute([$personaID, $activo]);
                 
@@ -199,7 +199,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $showAlert = false;
                     
                     // Insertar un nuevo usuario exitosamente
-                    $stmt_cuenta = $pdo->prepare("INSERT INTO cuentas (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
+                    $stmt_cuenta = $pdo->prepare("INSERT INTO CUENTAS (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
                     $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID,]);
                     if ($stmt_cuenta->rowCount() > 0) {
                         setModalContent('success', "

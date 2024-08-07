@@ -123,9 +123,9 @@ function obtenerDetallesVehiculoyCliente($pdo, $vehiculoID) {
 
 function obtenerDetallesClientepersona($pdo, $clienteID)
 {
-    $sql = "SELECT personas.nombre, personas.apellido_paterno, personas.apellido_materno
+    $sql = "SELECT PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
             FROM clientes 
-            JOIN personas ON clientes.personaID = personas.personaID WHERE clienteID = :clienteID";
+            JOIN PERSONAS ON clientes.personaID = PERSONAS.personaID WHERE clienteID = :clienteID";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':clienteID' => $clienteID]);
     return $stmt->fetch(PDO::FETCH_ASSOC);

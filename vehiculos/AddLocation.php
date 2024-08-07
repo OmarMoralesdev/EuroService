@@ -48,7 +48,7 @@ $modalContent = '';
         if($capacidad > 0 && $capacidad <= 40 ){
 
             // Insertar la ubicación en la base de datos
-            $consulta = "INSERT INTO ubicaciones (lugar, capacidad, activo) VALUES ('$lugar', $capacidad, 'si')";
+            $consulta = "INSERT INTO UBICACIONES (lugar, capacidad, activo) VALUES ('$lugar', $capacidad, 'si')";
             $conexion->ejecuta($consulta);
             
             $conexion->desconectar();

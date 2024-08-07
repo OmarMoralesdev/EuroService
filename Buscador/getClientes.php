@@ -5,11 +5,11 @@ $pdo = $con->conectar();
 
 $searchTerm = $_GET['search'] ?? '';
 
-$query = "SELECT clienteID, nombre, apellido_paterno, apellido_materno, telefono, correo 
+$query = "SELECT CLIENTES.clienteID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno, PERSONAS.telefono, PERSONAS.correo 
           FROM CLIENTES 
           INNER JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID
           WHERE CLIENTES.activo = 'si' 
-            AND (nombre LIKE ? OR apellido_paterno LIKE ? OR apellido_materno LIKE ?)";
+            AND (PERSONAS.nombre LIKE ? OR PERSONAS.apellido_paterno LIKE ? OR PERSONAS.apellido_materno LIKE ?)";
 
 $stmt = $pdo->prepare($query);
 $likeTerm = '%' . $searchTerm . '%';
