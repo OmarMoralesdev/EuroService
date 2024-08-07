@@ -106,9 +106,12 @@ if ($cita) {
                     document.addEventListener('DOMContentLoaded', function() {
                         const dateInput = document.getElementById('fecha_cita');
                         const today = new Date();
-                        const year = today.getFullYear();
-                        const month = String(today.getMonth() + 1).padStart(2, '0');
-                        const day = String(today.getDate()).padStart(2, '0');
+                        const tomorrow = new Date(today);
+                        tomorrow.setDate(today.getDate() + 1); // Día siguiente
+
+                        const year = tomorrow.getFullYear();
+                        const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+                        const day = String(tomorrow.getDate()).padStart(2, '0');
                         const minDate = `${year}-${month}-${day}T09:00`;
                         const maxDate = `${year + 1}-${month}-${day}T17:00`;
 
@@ -121,9 +124,8 @@ if ($cita) {
                             const selectedHour = selectedDate.getHours();
                             const selectedMinutes = selectedDate.getMinutes();
 
-                            // Verificar si la fecha seleccionada es anterior a hoy
-                            if (selectedDate < today) {
-                                dateInput.setCustomValidity('No se puede seleccionar una fecha anterior a hoy.');
+                            if (selectedDate < tomorrow) {
+                                dateInput.setCustomValidity('La fecha debe ser al menos para el día siguiente.');
                             } else if (selectedHour < 9 || (selectedHour >= 17 && selectedMinutes > 0)) {
                                 dateInput.setCustomValidity('La hora debe estar dentro del horario laboral (09:00 - 17:00).');
                             } else {
@@ -131,7 +133,6 @@ if ($cita) {
                             }
                         });
                     });
-
                     document.getElementById('confirmCancel').addEventListener('click', function() {
                         // Marca el checkbox como checked
                         document.getElementById('estado').checked = true;
@@ -144,7 +145,6 @@ if ($cita) {
                         // Desmarca el checkbox si el usuario elige no cancelar
                         document.getElementById('estado').checked = false;
                     });
-
                 </script>
                 <script>
                     $(document).ready(function() {
