@@ -7,7 +7,7 @@ $pdo = $con->conectar();
 $errorMensaje = "";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre']) && isset($_POST['contacto'])) {
-    $nombre = trim ($_POST['nombre']);
+    $nombre = trim($_POST['nombre']);
     $contacto = trim($_POST['contacto']);
 
     $errores = [];
@@ -23,7 +23,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre']) && isset($_
         $stmt->execute([$nombre, $contacto]);
         if ($stmt->rowCount() > 0) {
             $errorMensaje = "El proveedor con este nombre o contacto ya existe.";
-            
         } else {
             $stmt = $pdo->prepare("INSERT INTO proveedores (nombre, contacto) VALUES (?, ?)");
             $stmt->execute([$nombre, $contacto]);
@@ -36,7 +35,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre']) && isset($_
     } else {
         $errorMensaje = implode("", $errores);
     }
-    
 }
 
 if (isset($_GET['ajax_search'])) {
@@ -86,29 +84,31 @@ if ($stmt->rowCount() > 0) {
         .btn {
             box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
         }
-        .modal-content {
-            background-color: #fefefe;
-            margin: auto;
-            padding: 20px;
-            border: 1px solid #888;
-            width: 80%;
-        }
         .modal {
             display: none; 
             position: fixed; 
             z-index: 1; 
-            padding-top: 100px; 
+            padding-top: 50px; 
             left: 0;
             top: 0;
             width: 100%; 
             height: 100%; 
             overflow: auto; 
-            background-color: rgba(0,0,0,0.4); 
+            background-color: rgba(0, 0, 0, 0.4); 
+        }
+        .modal-content {
+            background-color: #fefefe;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #888;
+            width: 50%; /* Cambiado a un ancho más pequeño */
+            max-width: 400px; /* Añadido para limitar el ancho máximo */
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* Añadido para un efecto de sombra */
         }
         .close {
             color: #aaa;
             float: right;
-            font-size: 28px;
+            font-size: 24px; /* Reducido el tamaño de la fuente */
             font-weight: bold;
         }
         .close:hover,
@@ -159,10 +159,10 @@ if ($stmt->rowCount() > 0) {
                             <div class="alert" id="errorAlert"><?php echo htmlspecialchars($errorMensaje); ?></div>
                             <form action="" method="post">
                                 <label for="nombre">Nombre:</label><br>
-                                <input type="text" id="nombre" name="nombre" class="form-control" required><br>
+                                <input type="text" id="nombre" name="nombre" class="form-control" required style="width: 100%;"><br>
                                 <label for="contacto">Contacto:</label><br>
-                                <input type="text" id="contacto" name="contacto" class="form-control" required><br>
-                                <input type="submit" value="Registrar" class="btn btn-dark">
+                                <input type="text" id="contacto" name="contacto" class="form-control" required style="width: 100%;"><br>
+                                <input type="submit" value="Registrar" class="btn btn-dark" style="width: 100%;">
                             </form>
                         </div>
                     </div>
@@ -176,8 +176,8 @@ if ($stmt->rowCount() > 0) {
         var btn = document.getElementById("openModalBtn");
         var span = document.getElementsByClassName("close")[0];
         if (window.history.replaceState) {
-                window.history.replaceState(null, null, window.location.href);
-            }
+            window.history.replaceState(null, null, window.location.href);
+        }
 
         btn.onclick = function() {
             modal.style.display = "block";
