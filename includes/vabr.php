@@ -423,13 +423,13 @@ h2 {
             </a>
             <ul id="finanzas" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="../Finanzas/Reporte de Ingresos.php" class="sidebar-link">INGRESOS SEMANALES</a>
+                    <a href="../Finanzas/Reporte_de_Ingresos.php" class="sidebar-link">INGRESOS SEMANALES</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Finanzas/Reporte de Gastos.php" class="sidebar-link">GASTOS</a>
+                    <a href="../Finanzas/Reporte_de_Gastos.php" class="sidebar-link">GASTOS</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Finanzas/Reporte de Nómina.php" class="sidebar-link">NOMINA</a>
+                    <a href="../Finanzas/Reporte_de_Nomina.php" class="sidebar-link">NOMINA</a>
                 </li>
                 <li class="sidebar-item">
                     <a href="../Finanzas/formulario_recibo_pago.php" class="sidebar-link">RECIBO DE PAGO</a>

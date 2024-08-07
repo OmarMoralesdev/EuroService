@@ -5,7 +5,7 @@ class Database
     private $host = 'localhost';
     private $db_name = 'TALLER_EURO';
     private $username = 'root';
-    private $password = '1234';
+    private $password = '';
     private $port = '3306';
     private $pdo;
 
