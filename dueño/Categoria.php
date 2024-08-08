@@ -196,34 +196,6 @@
     </div>
 </div>
 
-<!-- Modal para añadir nueva categoría -->
-<div class='modal fade' id='addCategoryModal' tabindex='-1' aria-labelledby='addCategoryModalLabel' aria-hidden='true'>
-    <div class='modal-dialog'>
-        <div class='modal-content'>
-            <div class='modal-header'>
-                <h5 class='modal-title' id='addCategoryModalLabel'>Añadir Nueva Categoría</h5>
-                <button type='button' class='btn-close bg-dark' data-bs-dismiss='modal' aria-label='Close'></button>
-            </div>
-            <div class='modal-body'>
-                <form action='categoria.php' method='POST'>
-                    <div class='mb-3'>
-                        <label for='nombre' class='form-label'>Nombre</label>
-                        <input type='text' class='form-control' id='nombre' name='nombre' required>
-                    </div>
-                    <div class='mb-3'>
-                        <label for='descripcion' class='form-label'>Descripción</label>
-                        <textarea class='form-control' id='descripcion' name='descripcion' required></textarea>
-                    </div>
-                    <div class='modal-footer'>
-                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                        <button type='submit' class='btn btn-dark'>Guardar</button>
-                    </div>
-                </form>
-            </div>
-        </div>
-    </div>
-</div>
-
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.7/dist/umd/popper.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js"></script>
 <script>

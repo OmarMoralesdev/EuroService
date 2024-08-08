@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ubicaciones</title>
+    <title>Atención de vehículos</title>
 </head>
 <body>
 
@@ -76,13 +76,11 @@
                         echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
                         echo "</div>";
                         echo "<div class='modal-body'>";
-                        $consultita = "SELECT concat(vehiculos.marca,' ',vehiculos.modelo,' ',vehiculos.anio,' ',vehiculos.color) AS VEHICULO,
-                        citas.servicio_solicitado as OPERACIÓN_EFECTUAR
-                        From vehiculos join citas On citas.vehiculoID=vehiculos.vehiculoID join ordenes_trabajo On
-                        ordenes_trabajo.citaID=citas.citaID inner join pagos On pagos.ordenID = ordenes_trabajo.OrdenID
-                        inner join Entregados On entregados.PagoID = Pagos.PagoID
-                        where ordenes_trabajo.atencion='muy urgente' and citas.estado='pendiente' and 
-                        pagos.tipo_pago ='anticipo'";
+                        $consultita = "SELECT concat(VEHICULOS.marca,' ',VEHICULOS.modelo,' ',VEHICULOS.anio,' ',VEHICULOS.color) AS VEHICULO,
+                        CITAS.servicio_solicitado as OPERACIÓN_EFECTUAR
+                        From VEHICULOS join CITAS On CITAS.vehiculoID=VEHICULOS.vehiculoID join ORDENES_TRABAJO On
+                        ORDENES_TRABAJO.citaID=CITAS.citaID inner join PAGOS On PAGOS.ordenID =ORDENES_TRABAJO.ordenID
+                        where ORDENES_TRABAJO.atencion='muy urgente' and CITAS.estado !='completado';";
                         
                         $tabla = $conexion->seleccionar($consultita);
 
@@ -101,6 +99,9 @@
                                 echo "</tr>";
                             }
                             echo "</tbody></table>";
+                        }else 
+                        {
+                            echo "No hay vehículos que requieran atención muy urgente.";
                         }
                         echo "</div>";
                         echo "<div class='modal-footer'>";
@@ -117,13 +118,11 @@
                         echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
                         echo "</div>";
                         echo "<div class='modal-body'>";
-                        $consultita = "SELECT concat(vehiculos.marca,' ',vehiculos.modelo,' ',vehiculos.anio,' ',vehiculos.color) AS VEHICULO,
-                        citas.servicio_solicitado as OPERACIÓN_EFECTUAR
-                        From vehiculos join citas On citas.vehiculoID=vehiculos.vehiculoID join ordenes_trabajo On
-                        ordenes_trabajo.citaID=citas.citaID inner join pagos On pagos.ordenID = ordenes_trabajo.OrdenID
-                        inner join Entregados On entregados.PagoID = Pagos.PagoID
-                        where ordenes_trabajo.atencion='urgente' and citas.estado='pendiente' and 
-                        pagos.tipo_pago ='anticipo'";
+                        $consultita = "SELECT concat(VEHICULOS.marca,' ',VEHICULOS.modelo,' ',VEHICULOS.anio,' ',VEHICULOS.color) AS VEHICULO,
+                        CITAS.servicio_solicitado as OPERACIÓN_EFECTUAR
+                        From VEHICULOS join CITAS On CITAS.vehiculoID=VEHICULOS.vehiculoID join ORDENES_TRABAJO On
+                        ORDENES_TRABAJO.citaID=CITAS.citaID inner join PAGOS On PAGOS.ordenID =ORDENES_TRABAJO.ordenID
+                        where ORDENES_TRABAJO.atencion='urgente' and CITAS.estado !='completado';";
                         
                         $tabla = $conexion->seleccionar($consultita);
 
@@ -142,6 +141,9 @@
                                 echo "</tr>";
                             }
                             echo "</tbody></table>";
+                        } else 
+                        {
+                            echo "No hay vehículos que requieran atención urgente.";
                         }
                         echo "</div>";
                         echo "<div class='modal-footer'>";
@@ -158,13 +160,11 @@
                         echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
                         echo "</div>";
                         echo "<div class='modal-body'>";
-                        $consultita = "SELECT concat(vehiculos.marca,' ',vehiculos.modelo,' ',vehiculos.anio,' ',vehiculos.color) AS VEHICULO,
-                        citas.servicio_solicitado as OPERACIÓN_EFECTUAR
-                        From vehiculos join citas On citas.vehiculoID=vehiculos.vehiculoID join ordenes_trabajo On
-                        ordenes_trabajo.citaID=citas.citaID inner join pagos On pagos.ordenID = ordenes_trabajo.OrdenID
-                        inner join Entregados On entregados.PagoID = Pagos.PagoID
-                        where ordenes_trabajo.atencion='no urgente' and citas.estado='pendiente' and 
-                        pagos.tipo_pago ='anticipo';
+                        $consultita = "SELECT concat(VEHICULOS.marca,' ',VEHICULOS.modelo,' ',VEHICULOS.anio,' ',VEHICULOS.color) AS VEHICULO,
+                        CITAS.servicio_solicitado as OPERACIÓN_EFECTUAR
+                        From VEHICULOS join CITAS on CITAS.vehiculoID=VEHICULOS.vehiculoID join ORDENES_TRABAJO on
+                        ORDENES_TRABAJO.citaID=CITAS.citaID inner join PAGOS On PAGOS.ordenID = ORDENES_TRABAJO.ordenID
+                        where ORDENES_TRABAJO.atencion='no urgente' and CITAS.estado !='completado';
                      ";
                         
                         $tabla = $conexion->seleccionar($consultita);
@@ -184,6 +184,9 @@
                                 echo "</tr>";
                             }
                             echo "</tbody></table>";
+                        } else 
+                        {
+                            echo "No hay vehículos que requieran atención no urgente.";
                         }
                         echo "</div>";
                         echo "<div class='modal-footer'>";
