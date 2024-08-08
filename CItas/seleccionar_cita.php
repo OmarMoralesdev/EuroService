@@ -41,7 +41,7 @@ session_start();
 
                     }
                     ?>
-            <form method="post" action="editar_cita_back.php">
+            <form method="post" action="./editar_cita_back.php">
                     <div class="mb-3">
                         <label for="citaID" class="form-label">Seleccionar Cita:</label>
                         <select id="citaID" name="citaID" class="form-select" required>

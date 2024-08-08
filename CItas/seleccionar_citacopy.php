@@ -57,7 +57,7 @@ function obtenerCitaPorID($pdo, $citaID) {
                         unset($_SESSION['bien']);
                     }
                     ?>
-                    <form method="post" action="">
+                    <form method="post" action="seleccionar_citacopy.php">
                         <div class="mb-3">
                             <label for="citaID" class="form-label">Seleccionar Cita:</label>
                             <select id="citaID" name="citaID" class="form-select" required>
