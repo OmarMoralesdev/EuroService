@@ -150,11 +150,11 @@
                                     echo '<td>' . $insumo['ubicacion'] . '</td>';
                                     echo '<td>' . $insumo['cantidad_stock'] . '</td>';
                                     echo '<td class="stock-buttons">';
-                                    echo '<form action="" method="POST" style="display:inline-block;">';
+                                    echo '<form action="Insumos.php" method="POST" style="display:inline-block;">';
                                     echo '<input type="hidden" name="insumo_proveedorID" value="' . $insumo['insumo_proveedorID'] . '">';
                                     echo '<button type="submit" name="incrementar" class="btn btn-success btn-sm"><i class="lni lni-plus"></i></button>';
                                     echo '</form>';
-                                    echo '<form action="" method="POST" style="display:inline-block;">';
+                                    echo '<form action="Insumos.php" method="POST" style="display:inline-block;">';
                                     echo '<input type="hidden" name="insumo_proveedorID" value="' . $insumo['insumo_proveedorID'] . '">';
                                     echo '<button type="submit" name="disminuir" class="btn btn-danger btn-sm"><i class="lni lni-minus"></i></button>';
                                     echo '</form>';
