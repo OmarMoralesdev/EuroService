@@ -24,8 +24,8 @@ if ($empleadoID) {
 
     if ($empleado) {
         // Obtener las faltas del empleado
-        $sqlFaltas = "SELECT fecha, asistenciaID FROM asistencia
-                      WHERE empleadoID = :empleadoID AND asistencia = 'falta'";
+        $sqlFaltas = "SELECT fecha, asistenciaID FROM ASISTENCIA
+                      WHERE empleadoID = :empleadoID AND ASISTENCIA = 'falta'";
         $stmtFaltas = $pdo->prepare($sqlFaltas);
         $stmtFaltas->bindParam(':empleadoID', $empleadoID, PDO::PARAM_INT);
         $stmtFaltas->execute();
