@@ -204,27 +204,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmt_cuenta = $pdo->prepare("INSERT INTO CUENTAS (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
                     $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID]);
                     if ($stmt_cuenta->rowCount() > 0) {
-                        setModalContent('success', "
-                        <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
-                            <div class='modal-dialog'>
-                                <div class='modal-content'>
-                                    <div class='modal-header'>
-                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
-                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                                    </div>
-                                    <div class='modal-body'>
-                                        Cuenta del cliente: <strong>$username</strong><br><br>
-                                        Contraseña del cliente: <strong>$password</strong><br><hr>
-                                        Presiona siguiente para registrar su vehículo
-                                    </div>
-                                    <div class='modal-footer'>
-                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                                        <a href='../vehiculos/autos_view.php' type='button' class='btn btn-dark'>Siguiente</a>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>");
-                        $showModal = true;
                         try {
                             $mail = new PHPMailer(true);
                             $mail->isSMTP();
@@ -246,6 +225,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                         } catch (Exception $e) {
                             echo "No se pudo enviar el mensaje. Error de correo: {$mail->ErrorInfo}";
                         }
+                        setModalContent('success', "
+                        <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                            <div class='modal-dialog'>
+                                <div class='modal-content'>
+                                    <div class='modal-header'>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
+                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                    </div>
+                                    <div class='modal-body'>
+                                        Cuenta del cliente: <strong>$username</strong><br><br>
+                                        Contraseña del cliente: <strong>$password</strong><br><hr>
+                                        Presiona siguiente para registrar su vehículo
+                                    </div>
+                                    <div class='modal-footer'>
+                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                        <a href='../vehiculos/autos_view.php' type='button' class='btn btn-dark'>Siguiente</a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>");
+                        $showModal = true;
                     }          
                 }
             }
