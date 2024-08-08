@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 }
 
 function obtenerCitaPorID($pdo, $citaID) {
-    $stmt = $pdo->prepare('SELECT * FROM citas WHERE citaID = ?');
+    $stmt = $pdo->prepare('SELECT * FROM CITAS WHERE citaID = ?');
     $stmt->execute([$citaID]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
