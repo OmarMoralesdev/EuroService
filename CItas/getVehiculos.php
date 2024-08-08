@@ -8,7 +8,7 @@ $clienteID = filter_input(INPUT_POST, 'clienteID', FILTER_VALIDATE_INT);
 if ($clienteID) {
     $sql = "SELECT vehiculoID, marca, modelo, anio, color, kilometraje, placas, vin 
             FROM VEHICULOS 
-            WHERE clienteID = ?";
+            WHERE clienteID = ? and activo = 'si'";
     $query = $pdo->prepare($sql);
     $query->execute([$clienteID]);
 
