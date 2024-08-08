@@ -258,7 +258,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         error_log($e->getMessage()); // Registrar el error en el archivo de log
     }
     
-    header('Location: vista_registro_cliente.php');
+    header('Location: ./vista_registro_cliente.php');
     exit();
 }
 ?>

@@ -225,7 +225,7 @@
                 <button type='button' class='btn-close bg-dark' data-bs-dismiss='modal' aria-label='Close'></button>
             </div>
             <div class='modal-body'>
-                <form action='categoria.php' method='POST'>
+                <form action='Categoria.php' method='POST'>
                     <div class='mb-3'>
                         <label for='nombre' class='form-label'>Nombre</label>
                         <input type='text' class='form-control' id='nombre' name='nombre' required>
