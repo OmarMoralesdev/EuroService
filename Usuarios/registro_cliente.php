@@ -19,13 +19,13 @@ function generateRandomPassword($length = 10) {
         // Agregar un carácter aleatorio de la lista de caracteres a la contraseña aleatoria 
         $randomPassword .= $characters[random_int(0, $charactersLength - 1)];
     }
-    // Devolver la contraseña aleatoria generada
+    // Devolver la contraseña aleatoria generad
     return $randomPassword;
 }
 
 // Generar un nombre de usuario único para un cliente
 function generarUsernameParaCliente($pdo, $personaID) {
-    $sql = "SELECT nombre, apellido_paterno FROM personas WHERE personaID = :personaID";
+    $sql = "SELECT nombre, apellido_paterno FROM PERSONAS WHERE personaID = :personaID";
     $stmt = $pdo->prepare($sql);
     // Ejecutar la consulta con el ID de la persona
     $stmt->execute(['personaID' => $personaID]);
@@ -71,7 +71,7 @@ function setAlertContent($type, $message) {
 
 // Verificar si existe el usuario en la base de datos por nombre de usuario 
 function usernameExists($pdo, $username) {
-    $sql = "SELECT COUNT(*) FROM cuentas WHERE username = :username";
+    $sql = "SELECT COUNT(*) FROM CUENTAS WHERE username = :username";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['username' => $username]);
     return $stmt->fetchColumn() > 0;
