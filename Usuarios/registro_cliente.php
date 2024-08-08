@@ -204,24 +204,28 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmt_cuenta = $pdo->prepare("INSERT INTO CUENTAS (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
                     $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID]);
                     if ($stmt_cuenta->rowCount() > 0) {
+                        require '../vendor/autoload.php'; // Asegúrate de que la ruta sea correcta                
+                        $mail = new PHPMailer(true);
+                        
                         try {
-                            $mail = new PHPMailer(true);
+     // Para obtener detalles de depuración
                             $mail->isSMTP();
-                            $mail->Host = 'smtp.gmail.com';
-                            $mail->SMTPAuth = true;
-                            $mail->Username = 'euroservice339@gmail.com';
-                            $mail->Password = 'uguh ipf w rqqz ewjb';
+                            $mail->Host       = 'smtp.gmail.com';
+                            $mail->SMTPAuth   = true;
+                            $mail->Username   = 'euroservice339@gmail.com';
+                            $mail->Password   = 'uguh ipf w rqqz ewjb';
                             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                            $mail->Port = 587;
-                            
+                            $mail->Port       = 587;
+                        
                             $mail->setFrom('euroservice339@gmail.com', 'EuroService');
-                            $mail->addAddress($correo);
-                            
+                            $mail->addAddress($correo); // Reemplaza con un correo para pruebas
+                        
                             $mail->isHTML(true);
                             $mail->Subject = 'Creacion de cuenta';
                             $mail->Body    = "Hola, <br><br>Tu cuenta ha sido creada con éxito. Tu usuario es: $username y tu contraseña es: $password";
-                            
+                        
                             $mail->send();
+                            echo 'Mensaje enviado correctamente';
                         } catch (Exception $e) {
                             echo "No se pudo enviar el mensaje. Error de correo: {$mail->ErrorInfo}";
                         }
