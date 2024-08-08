@@ -1,4 +1,5 @@
 <?php
+
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
 
@@ -14,8 +15,8 @@ try {
     $mail->SMTPAuth   = true;                  // Habilitar autenticación SMTP
     $mail->Username   = 'euroservice339@gmail.com';   // Tu correo de Gmail
     $mail->Password   = 'uguh ipf w rqqz ewjb';       // Tu contraseña de Gmail o una contraseña de aplicaciones
-    $mail->SMTPSecure = 'tls';                 // Habilitar encriptación TLS
-    $mail->Port       = 587;                   // Puerto SMTP de Gmail para TLS
+    $mail->SMTPSecure = 'ssl';
+    $mail->Port       = 465;                // Puerto SMTP de Gmail para TLS
 
     // Configuración del remitente
     $mail->setFrom('euroservice339@gmail.com', 'EuroService');
