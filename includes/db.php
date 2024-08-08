@@ -48,11 +48,11 @@ class Database
 }
 
 function listarCitasPendientes($pdo) {
-    $sql = "SELECT citas.citaID, citas.vehiculoID, citas.servicio_solicitado, vehiculos.marca, vehiculos.modelo, vehiculos.anio, personas.nombre, personas.apellido_paterno, personas.apellido_materno
-            FROM citas 
-            JOIN vehiculos ON citas.vehiculoID = vehiculos.vehiculoID
-            JOIN clientes ON vehiculos.clienteID = clientes.clienteID
-            JOIN personas ON clientes.personaID = personas.personaID
+    $sql = "SELECT CITAS.citaID, CITAS.vehiculoID, CITAS.servicio_solicitado, VEHICULOS.marca, VEHICULOS.modelo, VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
+            FROM CITAS 
+            JOIN VEHICULOS ON CITAS.vehiculoID = VEHICULOS.vehiculoID
+            JOIN CLIENTES ON VEHICULOS.clienteID = CLIENTES.clienteID
+            JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID
             WHERE citas.estado = 'pendiente'";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
