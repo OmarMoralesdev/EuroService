@@ -25,7 +25,7 @@ $pdo = $con->conectar();
             unset($_SESSION['alert']);
         }
         ?>
-                    <form method="post" action="registro_cliente.php">
+                    <form method="post" action="./registro_cliente.php">
                     <div class="form-group">
                             <label for="nombre">Nombre:</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" required pattern="[a-zA-Z\s]+" title="Solo letras y espacios">
