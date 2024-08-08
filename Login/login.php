@@ -55,7 +55,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     header("Location: ../general_views/admin.php");
                     exit();
                 } elseif ($role == 3) {
-                    header("Location: ../dueño/dueño.php");
+                    header("Location: ../dueño/index.php");
                     exit();
                 } else {
                     header("Location: ./index.php");
