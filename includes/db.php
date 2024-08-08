@@ -53,7 +53,7 @@ function listarCitasPendientes($pdo) {
             JOIN VEHICULOS ON CITAS.vehiculoID = VEHICULOS.vehiculoID
             JOIN CLIENTES ON VEHICULOS.clienteID = CLIENTES.clienteID
             JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID
-            WHERE citas.estado = 'pendiente'";
+            WHERE CITAS.estado = 'pendiente'";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
