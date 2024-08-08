@@ -6,8 +6,10 @@ $pdo = $con->conectar();
 require '../vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
 $showModal = false;
 $showAlert = false;
+
 // Generar contraseña aleatoria de 10 caracteres de longitud con letras y números aleatorios (mayúsculas y minúsculas) 
 function generateRandomPassword($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -19,7 +21,7 @@ function generateRandomPassword($length = 10) {
         // Agregar un carácter aleatorio de la lista de caracteres a la contraseña aleatoria 
         $randomPassword .= $characters[random_int(0, $charactersLength - 1)];
     }
-    // Devolver la contraseña aleatoria generad
+    // Devolver la contraseña aleatoria generada
     return $randomPassword;
 }
 
@@ -157,8 +159,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $role = 'cliente';
             
             // Insertar un nuevo cliente
-            $stmt_persona = $pdo->prepare("INSERT INTO PERSONAS (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
-            // Ejecutar la consulta con los datos del cliente
+            $stmt_persona = $pdo->prepare("INSERT INTO PERSONAS (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");         
+               // Ejecutar la consulta con los datos del cliente
             $stmt_persona->execute([$nombre, $apellido_paterno, $apellido_materno, $correo, $telefono]);
             
             // Verificar si se insertó un nuevo cliente
@@ -186,7 +188,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $clienteID = $pdo->lastInsertId();
                     
                     // Obtener el ID del rol del usuario
-                    $stmt_rol = $pdo->prepare("SELECT rolID FROM roles WHERE nombre_rol = ?");
+                    $stmt_rol = $pdo->prepare("SELECT rolID FROM ROLES WHERE nombre_rol = ?");
                     // Ejecutar la consulta con el nombre del rol
                     $stmt_rol->execute([$role]);
                     // Obtener la fila del rol
@@ -200,7 +202,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     
                     // Insertar un nuevo usuario exitosamente
                     $stmt_cuenta = $pdo->prepare("INSERT INTO CUENTAS (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
-                    $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID,]);
+                    $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID]);
                     if ($stmt_cuenta->rowCount() > 0) {
                         setModalContent('success', "
                         <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
