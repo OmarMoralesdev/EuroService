@@ -111,10 +111,10 @@ function actualizarEstadoCita($pdo, $citaID, $nuevoEstado)
 }
 
 function obtenerDetallesVehiculoyCliente($pdo, $vehiculoID) {
-    $sql = "SELECT vehiculos.marca, vehiculos.modelo, vehiculos.anio, personas.nombre, personas.apellido_paterno, personas.apellido_materno
+    $sql = "SELECT VEHICULOS.marca, VEHICULOS.modelo, VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
             FROM vehiculos 
-            JOIN clientes ON vehiculos.clienteID = clientes.clienteID
-            JOIN personas ON clientes.personaID = personas.personaID
+            JOIN CLIENTES ON VEHICULOS.clienteID = CLIENTES.clienteID
+            JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID
             WHERE vehiculos.vehiculoID = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$vehiculoID]);
@@ -124,8 +124,8 @@ function obtenerDetallesVehiculoyCliente($pdo, $vehiculoID) {
 function obtenerDetallesClientepersona($pdo, $clienteID)
 {
     $sql = "SELECT PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
-            FROM clientes 
-            JOIN PERSONAS ON clientes.personaID = PERSONAS.personaID WHERE clienteID = :clienteID";
+            FROM CLIENTES 
+            JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID WHERE clienteID = :clienteID";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':clienteID' => $clienteID]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
