@@ -275,7 +275,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <a class="nav-link" href="#ubi">Ubicación</a>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link btn pulse" data-bs-toggle="modal" data-bs-target="#loginModal">INICIAR SESIÓN</button>
+                        <a href="./Login/index.php" class="nav-link btn pulse">INICIAR SESIÓN</a>
                     </li>
                 </ul>
             </div>
@@ -331,7 +331,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <div class="containerr">
-        <div class="bg-fixedd" style="background-image: url('../EuroService/img/FONDO LOGIN.jpg');">
+        <div class="bg-fixedd" style="background-image: url('../EuroService/img/FONDO_LOGIN.jpg');">
             <div class="overlay"></div>
         </div>
     </div>
@@ -361,36 +361,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <iframe id="ubi" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d661.048036986063!2d-103.40865896550226!3d25.59861614619652!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x868fdbbc87fdf615%3A0xe5e0fd19352eff0b!2sKike%20Mecanico!5e0!3m2!1sen!2smx!4v1722721714805!5m2!1sen!2smx" width="100%" height="300" style="border:1px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </footer>
-
-    <!-- Modal de Inicio de Sesión -->
-    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <?php if (isset($_SESSION['alert'])): ?>
-                        <div class="alert alert-danger" role="alert">
-                            <?php echo $_SESSION['alert']['message']; unset($_SESSION['alert']); ?>
-                        </div>
-                    <?php endif; ?>
-                    <form action="./Login/login.php" method="POST">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Usuario</label>
-                            <input type="text" class="form-control" name="username" id="username" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" name="password" id="password" required>
-                        </div>
-                        <hr>
-                        <button type="submit" class="btn btn-light w-100">Iniciar Sesión</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 </body>
 
 </html>
