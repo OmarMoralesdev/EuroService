@@ -6,6 +6,8 @@ session_start();
 
 <head>
     <meta charset="UTF-8">
+        <link rel="icon" type="image/x-icon" href="../img/incono.svg">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Cita</title>
     <style>
@@ -54,7 +56,7 @@ session_start();
                     }
                     ?>
 
-                    <form action="registrar_cita.php" method="POST" autocomplete="off">
+                    <form action="registrar_cita.php" method="POST" id="x" autocomplete="off">
                         <div class="mb-3">
                             <input type="text" class="form-control" autocomplete="off" id="campo" name="campo" placeholder="Buscar cliente..." required>
                             <ul id="lista" class="list-group lista"></ul>
@@ -174,6 +176,62 @@ session_start();
                 }
             });
         });
+    </script>
+        <script>
+            $(document).ready(function() {
+                if ($('#staticBackdrop').length) {
+                    $('#staticBackdrop').modal('show');
+                }
+            });
+
+            document.getElementById('x').addEventListener('submit', function(event) {
+                let valid = true;
+                const campo = document.getElementById('nombre').value;
+                // Validar cammpo
+                if (/\d/.test(campo)) {
+                    document.getElementById('campo').classList.add('is-invalid');
+                    valid = false;
+                } else {
+                    document.getElementById('campo').classList.remove('is-invalid');
+                }
+                if (!valid) {
+                    event.preventDefault();
+                }
+            });
+            function validarLetras(event) {
+                const input = event.target;
+                input.value = input.value.replace(/[^a-zA-Z]/g, '');
+            }
+            document.getElementById('campo').addEventListener('input', validarLetras);
+
+        </script>
+         <script>
+        $(document).ready(function() {
+            if ($('#staticBackdrop').length) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
+//oednietneeeeeeeeeeeeeee
+        document.getElementById('x').addEventListener('submit', function(event) {
+            let valid = true;
+            const campo = document.getElementById('nombre').value;
+            // Validar cammpo
+            if (/\d/.test(campo)) {
+                document.getElementById('campo').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('campo').classList.remove('is-invalid');
+            }
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+        function validarLetras(event) {
+            const input = event.target;
+            input.value = input.value.replace(/[^a-zA-Z]/g, '');
+        }
+        document.getElementById('campo').addEventListener('input', validarLetras);
+
     </script>
 </body>
 

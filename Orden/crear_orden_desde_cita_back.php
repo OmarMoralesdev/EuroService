@@ -51,7 +51,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Confirmar la transacción
         $pdo->commit();
       
-        $_SESSION['bien'] = "Orden de trabajo creada con éxito. ID de la orden: $ordenID";
+        $_SESSION['bien'] = "Orden de trabajo $ordenID creada con éxito.";
         header("Location: crear_orden_desde_cita.php");
         exit();
     } catch (Exception $e) {

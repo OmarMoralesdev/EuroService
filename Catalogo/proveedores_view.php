@@ -19,21 +19,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre']) && isset($_
         $errores[] = "El contacto es requerido.";
     }
  
-
     if (empty($errores)) {
         $stmt = $pdo->prepare("SELECT * FROM PROVEEDORES WHERE nombre = ? OR contacto = ?");
-     
         $stmt->execute([$nombre, $contacto]);
    
         if ($stmt->rowCount() > 0) {
             $errorMensaje = "El proveedor con este nombre o contacto ya existe.";
-         
-        }  else {
+        } else {
             $stmt = $pdo->prepare("INSERT INTO PROVEEDORES (nombre, contacto) VALUES (?, ?)");
             $stmt->execute([$nombre, $contacto]);
             unset($_POST['nombre']);
             unset($_POST['contacto']);
-
             header('Location: proveedores_view.php');
             exit();
         }
@@ -44,19 +40,35 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre']) && isset($_
 
 if (isset($_GET['ajax_search'])) {
     $search = $_GET['ajax_search'];
-    $stmt = $pdo->prepare("SELECT nombre, contacto FROM PROVEEDORES WHERE nombre LIKE ?");
+    $stmt = $pdo->prepare("SELECT p.nombre, p.contacto, GROUP_CONCAT(i.nombre SEPARATOR ', ') AS insumos
+                           FROM PROVEEDORES p
+                           LEFT JOIN INSUMO_PROVEEDOR ip ON p.proveedorID = ip.proveedorID
+                           LEFT JOIN INSUMOS i ON ip.insumoID = i.insumoID
+                           WHERE p.nombre LIKE ?
+                           GROUP BY p.proveedorID");
     $stmt->execute(["%$search%"]);
     $proveedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($proveedores);
     exit();
 }
+
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $proveedores = [];
 if ($search) {
-    $stmt = $pdo->prepare("SELECT nombre, contacto FROM PROVEEDORES WHERE nombre LIKE ?");
+    $stmt = $pdo->prepare("SELECT p.nombre, p.contacto, GROUP_CONCAT(i.nombre SEPARATOR ', ') AS insumos
+                           FROM PROVEEDORES p
+                           LEFT JOIN INSUMO_PROVEEDOR ip ON p.proveedorID = ip.proveedorID
+                           LEFT JOIN INSUMOS i ON ip.insumoID = i.insumoID
+                           WHERE p.nombre LIKE ?
+                           GROUP BY p.proveedorID");
     $stmt->execute(["%$search%"]);
 } else {
-    $stmt = $pdo->query("SELECT nombre, contacto FROM PROVEEDORES");
+    $stmt = $pdo->prepare("SELECT p.nombre, p.contacto, GROUP_CONCAT(i.nombre SEPARATOR ', ') AS insumos
+                           FROM PROVEEDORES p
+                           LEFT JOIN INSUMO_PROVEEDOR ip ON p.proveedorID = ip.proveedorID
+                           LEFT JOIN INSUMOS i ON ip.insumoID = i.insumoID
+                           GROUP BY p.proveedorID");
+    $stmt->execute();
 }
 
 if ($stmt->rowCount() > 0) {
@@ -70,6 +82,7 @@ if ($stmt->rowCount() > 0) {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="../img/incono.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Proveedores</title>
     <style>
@@ -83,36 +96,36 @@ if ($stmt->rowCount() > 0) {
             margin-bottom: 0.25rem;
         }
         input[type=text], input[type=email] {
-            color: black; 
+            color: black;
         }
         .btn {
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); 
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
         }
         .modal {
-            display: none; 
-            position: fixed; 
-            z-index: 1; 
-            padding-top: 50px; 
+            display: none;
+            position: fixed;
+            z-index: 1;
+            padding-top: 50px;
             left: 0;
             top: 0;
-            width: 100%; 
-            height: 100%; 
-            overflow: auto; 
-            background-color: rgba(0, 0, 0, 0.4); 
+            width: 100%;
+            height: 100%;
+            overflow: auto;
+            background-color: rgba(0, 0, 0, 0.4);
         }
         .modal-content {
             background-color: #fefefe;
             margin: auto;
             padding: 20px;
             border: 1px solid #888;
-            width: 50%; 
-            max-width: 400px; 
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); 
+            width: 50%;
+            max-width: 400px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         .close {
             color: #aaa;
             float: right;
-            font-size: 24px; 
+            font-size: 24px;
             font-weight: bold;
         }
         .close:hover,
@@ -146,8 +159,9 @@ if ($stmt->rowCount() > 0) {
                                 <div class='card' style='width: 100%;'>
                                     <div class='card-body'>
                                         <h5 class='card-title'><?php echo htmlspecialchars($proveedor['nombre']); ?></h5>
-                                        <hr>
                                         <p class='card-text'><strong>Contacto:</strong> <?php echo htmlspecialchars($proveedor['contacto']); ?></p>
+                                        <hr>
+                                        <p class='card-text'><strong>Vende:</strong> <?php echo htmlspecialchars($proveedor['insumos'] ? $proveedor['insumos'] : 'No disponible'); ?></p>
                                     </div>
                                 </div>
                             </div>
@@ -212,20 +226,18 @@ if ($stmt->rowCount() > 0) {
                         output += "<h5 class='card-title'>" + proveedores[i].nombre + "</h5>";
                         output += "<hr>";
                         output += "<p class='card-text'><strong>Contacto:</strong> " + proveedores[i].contacto + "</p>";
+                        output += "<hr>";
+                        output += "<p class='card-text'><strong>";
+                        output += "<p class='card-text'><strong>Vende:</strong> " + (proveedores[i].insumos ? proveedores[i].insumos : "No disponible") + "</p>";
                         output += "</div>";
                         output += "</div>";
                         output += "</div>";
                     }
                     document.getElementById('tablaProveedores').innerHTML = output;
                 }
-            }
+            };
             xhr.send();
         }
-
-        <?php if (!empty($errorMensaje)): ?>
-        document.getElementById("errorAlert").style.display = "block";
-        modal.style.display = "block";
-        <?php endif; ?>
     </script>
 </body>
 </html>

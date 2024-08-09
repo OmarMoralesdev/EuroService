@@ -357,7 +357,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="col-md-4">
                     <h5>Contacto</h5>
                     <p>Correo: contacto@eurosv.com</p>
-                    <p>Teléfono: +1234567890</p>
+                    <p>Teléfono: +52 871 460 1498</p>
                 </div>
             </div>
             <iframe id="ubi" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d661.048036986063!2d-103.40865896550226!3d25.59861614619652!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x868fdbbc87fdf615%3A0xe5e0fd19352eff0b!2sKike%20Mecanico!5e0!3m2!1sen!2smx!4v1722721714805!5m2!1sen!2smx" width="100%" height="300" style="border:1px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>

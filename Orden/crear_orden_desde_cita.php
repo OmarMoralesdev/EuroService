@@ -34,6 +34,8 @@ $citaID = isset($_SESSION['citaID']) ? $_SESSION['citaID'] : null;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../img/incono.svg">
+
     <title>Completar Detalles de Orden de Trabajo</title>
 </head>
 <body>
@@ -74,15 +76,12 @@ $citaID = isset($_SESSION['citaID']) ? $_SESSION['citaID'] : null;
 
                     <label for="costoManoObra">Costo Mano de Obra:</label>
                     <input type="number" step="0.01" id="costoManoObra" name="costoManoObra" min="0" class="form-control" required>
-                    <div class="form-text">Introduce el salario diario (no puede ser negativo).</div><br>
 
                     <label for="costoRefacciones">Costo de Refacciones:</label>
                     <input type="number" step="0.01" id="costoRefacciones" name="costoRefacciones" min="0" class="form-control" required>
-                    <div class="form-text">Introduce el salario diario (no puede ser negativo).</div><br>
 
                     <label for="anticipo">Anticipo:</label>
                     <input type="number" step="0.01" min="0" name="anticipo" class="form-control" required>
-                    <div class="form-text">Introduce el salario diario (no puede ser negativo).</div>
                     <br>
                  
 
