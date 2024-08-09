@@ -5,6 +5,12 @@ session_start();
 $con = new Database();
 $pdo = $con->conectar();
 
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session'])) {
+    // Eliminar la variable de sesión 'cita'
+    unset($_SESSION['cita']);
+    exit(); // Terminar la ejecución para no procesar el resto del script
+}
+
 $cita = isset($_SESSION['cita']) ? $_SESSION['cita'] : null;
 $mensaje = isset($_SESSION['mensaje']) ? $_SESSION['mensaje'] : "";
 unset($_SESSION['mensaje']); // Limpiar el mensaje después de mostrarlo
@@ -13,6 +19,8 @@ if ($cita) {
     $vehiculoID = $cita['vehiculoID'];
     $detalles = obtenerDetallesVehiculoyCliente($pdo, $vehiculoID);
 }
+
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -21,6 +29,9 @@ if ($cita) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Editar Cita</title>
+    <link rel="icon" type="image/x-icon" href="../img/incono.svg">
+    
+
     <link href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.0/css/bootstrap.min.css" rel="stylesheet">
 </head>
 
@@ -129,6 +140,25 @@ if ($cita) {
             </div>
         </div>
     </div>
+    <script>
+    // Al salir de la página, borrar la cita de la sesión
+    window.addEventListener('beforeunload', function(event) {
+        // Si el usuario está recargando la página, evitar la eliminación de la cita
+        if (event.persisted || (window.performance && window.performance.navigation.type == 1)) {
+            // Recarga de página detectada, no hacer nada
+        } else {
+            // Salida de la página detectada, eliminar la sesión del cita
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'eliminar_cita_session=true'
+            });
+        }
+    });
+</script>
+
 </body>
 
 </html>

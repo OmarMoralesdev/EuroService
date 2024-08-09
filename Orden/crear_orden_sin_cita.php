@@ -7,6 +7,8 @@ unset($_SESSION['mensaje']);
 <html lang="es">
 
 <head>
+<link rel="icon" type="image/x-icon" href="../img/incono.svg">
+
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Cita y Crear Orden de Trabajo</title>
@@ -72,19 +74,16 @@ unset($_SESSION['mensaje']);
                             <label for="costoManoObra" class="form-label">Costo de Mano de Obra:</label>
                             <input type="number" step="0.01" class="form-control" id="costoManoObra" name="costoManoObra" required>
                             <div class="invalid-feedback">Debes ingresar el costo de mano de obra.</div>
-                            <div class="form-text">Introduce el salario diario (no puede ser negativo).</div><br>
                         </div>
                         <div class="mb-3">
                             <label for="costoRefacciones" class="form-label">Costo de Refacciones:</label>
                             <input type="number" step="0.01" class="form-control" id="costoRefacciones" name="costoRefacciones" required>
                             <div class="invalid-feedback">Debes ingresar el costo de las refacciones.</div>
-                            <div class="form-text">Introduce el salario diario (no puede ser negativo).</div><br>
                         </div>
                         <div class="mb-3">
                             <label for="anticipo" class="form-label">Anticipo:</label>
                             <input type="number" step="0.01" class="form-control" id="anticipo" name="anticipo" required>
                             <div class="invalid-feedback">Debes ingresar el anticipo.</div>
-                            <div class="form-text">Introduce el salario diario (no puede ser negativo).</div><br>
                         </div>
                         <div class="mb-3">
                             <label for="empleado" class="form-label">Empleado:</label>

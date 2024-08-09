@@ -23,8 +23,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $_SESSION['citaID'] = $_POST['citaID'];
 }
 
-// Recuperar el citaID de la sesión si existe
-$citaID = isset($_SESSION['citaID']) ? $_SESSION['citaID'] : null;
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session'])) {
+    // Eliminar la variable de sesión 'citaID'
+    unset($_SESSION['citaID']);
+    exit(); // Terminar la ejecución para no procesar el resto del script
+}
 
 ?>
 
@@ -34,6 +37,8 @@ $citaID = isset($_SESSION['citaID']) ? $_SESSION['citaID'] : null;
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="icon" type="image/x-icon" href="../img/incono.svg">
+
     <title>Completar Detalles de Orden de Trabajo</title>
 </head>
 <body>
@@ -74,15 +79,12 @@ $citaID = isset($_SESSION['citaID']) ? $_SESSION['citaID'] : null;
 
                     <label for="costoManoObra">Costo Mano de Obra:</label>
                     <input type="number" step="0.01" id="costoManoObra" name="costoManoObra" min="0" class="form-control" required>
-                    <div class="form-text">Introduce el salario diario (no puede ser negativo).</div><br>
 
                     <label for="costoRefacciones">Costo de Refacciones:</label>
                     <input type="number" step="0.01" id="costoRefacciones" name="costoRefacciones" min="0" class="form-control" required>
-                    <div class="form-text">Introduce el salario diario (no puede ser negativo).</div><br>
 
                     <label for="anticipo">Anticipo:</label>
                     <input type="number" step="0.01" min="0" name="anticipo" class="form-control" required>
-                    <div class="form-text">Introduce el salario diario (no puede ser negativo).</div>
                     <br>
                  
 
@@ -127,13 +129,6 @@ $citaID = isset($_SESSION['citaID']) ? $_SESSION['citaID'] : null;
     </div>
 </div>
 <script>
-        $(document).ready(function() {
-            if ($('#staticBackdrop').length) {
-                $('#staticBackdrop').modal('show');
-            }
-        });
-    </script>
-    <script>
     // Al salir de la página, borrar la citaID de la sesión
     window.addEventListener('beforeunload', function(event) {
         // Si el usuario está recargando la página, evitar la eliminación del citaID
@@ -141,12 +136,17 @@ $citaID = isset($_SESSION['citaID']) ? $_SESSION['citaID'] : null;
             // Recarga de página detectada, no hacer nada
         } else {
             // Salida de la página detectada, eliminar la sesión del citaID
-            fetch('eliminar_cita_session.php', {
-                method: 'POST'
+            fetch(window.location.href, {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/x-www-form-urlencoded',
+                },
+                body: 'eliminar_cita_session=true'
             });
         }
     });
 </script>
+
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     function validateNonNegative(event) {
@@ -161,6 +161,13 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('costoRefacciones').addEventListener('input', validateNonNegative);
     document.getElementById('anticipo').addEventListener('input', validateNonNegative);
 });
+</script>
+<script>
+    $(document).ready(function() {
+        if ($('#staticBackdrop').length) {
+            $('#staticBackdrop').modal('show');
+        }
+    });
 </script>
 
 </body>

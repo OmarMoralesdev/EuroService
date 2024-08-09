@@ -22,6 +22,8 @@ $empleados = $conexion->seleccionar($consulta_empleados);
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="../img/incono.svg">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>FINANZAS EMPLEADOS</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
@@ -95,6 +97,9 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                                 echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
+
+
+
                                 // Modal para Rebajas
                                 echo "<div class='modal fade' id='modalRebajas{$empleado->empleadoID}' tabindex='-1' aria-labelledby='modalRebajasLabel' aria-hidden='true'>";
                                 echo "<div class='modal-dialog'>";
@@ -304,6 +309,52 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                 });
             });
         });
+    </script>
+
+<script>
+        $(document).ready(function() {
+            if ($('#staticBackdrop').length) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
+
+        document.getElementById('rebajaForm').addEventListener('submit', function(event) {
+            let valid = true;
+            const rebaja = parseFloat(document.getElementById('rebaja').value);
+            // Validar salario
+            if (isNaN(rebaja) || rebaja < 0) {
+                document.getElementById('rebaja').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('rebaja').classList.remove('is-invalid');
+            }
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+        function validarNumeros(event) {
+            const input = event.target;
+            input.value = input.value.replace(/[^0-9.]/g, '');
+        }
+
+        document.getElementById('rebaja').addEventListener('input', validarNumeros);
+
+
+        document.getElementById('rebaja').addEventListener('input', function(event) {
+            var value = parseFloat(event.target.value);
+            if (value < 0) {
+                event.target.value = '';
+                alert('El stock no puede ser negativo.');
+            }
+
+        document.getElementById('rebaja').addEventListener('input', function(event) {
+            var value = parseFloat(event.target.value);
+            if (value < 0) {
+                event.target.value = '';
+                alert('La rebaja no puede ser negativa.');
+            }
+        });
+    });
     </script>
 </body>
 </html>

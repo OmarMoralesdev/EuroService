@@ -11,20 +11,8 @@ $formaDePago = isset($_POST['formaDePago']) ? trim($_POST['formaDePago']) : '';
 $vehiculoID = filter_input(INPUT_POST, 'vehiculoID', FILTER_SANITIZE_NUMBER_INT);
 
 
-$currentYear = date('Y');
-
-if ($anio < 1886 || $anio > $currentYear) {
-    $_SESSION['error'] = "El año debe estar entre 1886 y el año actual.";
-    header("Location: inspeccion_view.php");
-    exit();
-}
 
 
-if ($empleadoID === null || $ubicacionID === null || empty($formaDePago)) {
-      $_SESSION['error'] = 'Error: Faltan datos necesarios.';
-      header("Location: inspeccion_view.php");
-      exit();
-}
 
 
 try {
@@ -53,10 +41,33 @@ try {
     $ordenID = $pdo->lastInsertId();
     $anticipo = 800 * 0.5;
 
-    // Insertar pago
-    realizarPago($pdo, $ordenID, date('Y-m-d'), $anticipo, "anticipo", $formaDePago);
+    $fechaPago = date('Y-m-d');
+    $tipoPago = "anticipo";
 
-    $_SESSION['bien'] = "Cita y orden de trabajo registradas exitosamente.";
+
+    try {
+        // Llamar al procedimiento almacenado para realizar el pago
+        $sql = "CALL realizarPago(:ordenID, :fechaPago, :monto, :tipoPago, :formaDePago)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':ordenID' => $ordenID,
+            ':fechaPago' => $fechaPago,
+            ':monto' => $anticipo,
+            ':tipoPago' => $tipoPago,
+            ':formaDePago' => $formaDePago,
+        ]);
+    
+        
+    } catch (PDOException $e) {
+        $_SESSION['error'] = ("Error al realizar el pago: " . $e->getMessage());
+        header("Location: inspeccion_view.php");
+        exit();
+      
+    }   
+
+
+    $pdo->commit();
+    $_SESSION['bien'] = "Ejecutado exitosamente.";
     header("Location: inspeccion_view.php");
     exit();
 

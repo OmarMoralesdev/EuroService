@@ -2,6 +2,8 @@
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="../img/incono.svg">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>INVENTARIO DE INSUMOS</title>
     <style>
@@ -76,7 +78,12 @@
                                         $ubicacion = trim($_POST['ubicacion']);
                                         $proveedorID = trim($_POST['proveedorID']);
 
-                                        if (!empty($nombre) && !empty($descripcion) && !empty($precio) && !empty($categoriaID) && !empty($cantidad_stock) && !empty($ubicacion) && !empty($proveedorID)) {
+                                        // Validar que el precio y la cantidad en stock sean positivos
+                                        if (!is_numeric($precio) || $precio <= 0) {
+                                            echo "<div class='alert alert-danger' role='alert'>El precio debe ser un número positivo.</div>";
+                                        } elseif (!is_numeric($cantidad_stock) || $cantidad_stock < 0) {
+                                            echo "<div class='alert alert-danger' role='alert'>La cantidad en stock no puede ser un número negativo.</div>";
+                                        } elseif (!empty($nombre) && !empty($descripcion) && !empty($precio) && !empty($categoriaID) && !empty($cantidad_stock) && !empty($ubicacion) && !empty($proveedorID)) {
                                             // Insertar el insumo en la tabla de insumos
                                             $stmt = $pdo->prepare("INSERT INTO INSUMOS (nombre, descripcion, precio, categoriaID) VALUES (:nombre, :descripcion, :precio, :categoriaID)");
                                             $stmt->bindParam(':nombre', $nombre);
@@ -178,18 +185,18 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="" method="POST">
+                    <form action="Insumos.php" id="x" method="POST">
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre</label>
                             <input type="text" class="form-control" id="nombre" name="nombre" required>
                         </div>
                         <div class="mb-3">
                             <label for="descripcion" class="form-label">Descripción</label>
-                            <textarea class="form-control" id="descripcion" name="descripcion" required></textarea>
+                            <textarea class="form-control" id="descripcion" name="descripcion" rows="3" required></textarea>
                         </div>
                         <div class="mb-3">
                             <label for="precio" class="form-label">Precio</label>
-                            <input type="number" step="0.01" class="form-control" id="precio" name="precio" required>
+                            <input type="number" class="form-control" id="precio" name="precio" step="0.01" required>
                         </div>
                         <div class="mb-3">
                             <label for="categoriaID" class="form-label">Categoría</label>
@@ -237,10 +244,82 @@
         </div>
     </div>
     
+    <!-- Incluye Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
     <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const form = document.querySelector('form');
+            form.addEventListener('submit', function (event) {
+                const precioInput = document.getElementById('precio');
+                const cantidadStockInput = document.getElementById('cantidad_stock');
+
+                if (parseFloat(precioInput.value) <= 0) {
+                    event.preventDefault(); // Evita el envío del formulario
+                    alert('El precio debe ser un número positivo.');
+                    precioInput.focus();
+                } else if (parseInt(cantidadStockInput.value, 10) < 0) {
+                    event.preventDefault(); // Evita el envío del formulario
+                    alert('La cantidad en stock no puede ser un número negativo.');
+                    cantidadStockInput.focus();
+                }
+            });
+        });
+
+        // Previene el envío del formulario en caso de errores
         if (window.history.replaceState) {
             window.history.replaceState(null, null, window.location.href);
         }
     </script>
+   <script>
+        $(document).ready(function() {
+            if ($('#staticBackdrop').length) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
+
+        document.getElementById('x').addEventListener('submit', function(event) {
+            let valid = true;
+
+            const cantidad_stock = parseFloat(document.getElementById('cantidad_stock').value);
+            const precio = parseFloat(document.getElementById('precio').value);
+
+            // Validar salario
+            if (isNaN(cantidad_stock) || cantidad_stock < 0) {
+                document.getElementById('cantidad_stock').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('cantidad_stock').classList.remove('is-invalid');
+            }
+
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+
+        function validarNumeros(event) {
+            const input = event.target;
+            input.value = input.value.replace(/[^0-9.]/g, '');
+        }
+
+        document.getElementById('precio').addEventListener('input', validarNumeros);
+        document.getElementById('cantidad_stock').addEventListener('input', validarNumeros);
+
+        document.getElementById('cantidad_stock').addEventListener('input', function(event) {
+            var value = parseFloat(event.target.value);
+            if (value < 0) {
+                event.target.value = '';
+                alert('El stock no puede ser negativo.');
+            }
+
+        document.getElementById('precio').addEventListener('input', function(event) {
+            var value = parseFloat(event.target.value);
+            if (value < 0) {
+                event.target.value = '';
+                alert('El salario precio no puede ser negativo.');
+            }
+        });
+    });
+    </script>
+
 </body>
 </html>

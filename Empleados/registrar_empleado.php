@@ -38,8 +38,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $personaID = $pdo->lastInsertId();
 
             // Insertar en EMPLEADOS
-            $stmt_empleado = $pdo->prepare("INSERT INTO EMPLEADOS (personaID, salario_diario, alias, tipo) VALUES (?, ?, ?)");
-            $stmt_empleado->execute([$personaID, $salario, $alias, $tipo]);
+            $stmt_empleado = $pdo->prepare("INSERT INTO EMPLEADOS (personaID, salario_diario, alias, tipo, activo) VALUES (?, ?, ?, ?, ?)");
+            $stmt_empleado->execute([$personaID, $salario, $alias, $tipo, 'si']);
 
             if ($stmt_empleado->rowCount() > 0) {
                 $_SESSION['bien'] = "Empleado agregado exitosamente.";

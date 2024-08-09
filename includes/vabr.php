@@ -49,7 +49,6 @@ h1 {
             width: 100%;
             overflow: hidden;
             transition: all 0.35s ease-in-out;
-            display: flex;
             align-items: center;
             justify-content: center;
         }
@@ -195,7 +194,7 @@ a.sidebar-link:hover {
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2); /* sombra para el contenedor principal */
             padding: 20px; /* espacio interno para el contenedor principal */
-            padding-top: 4  0px;
+            padding-top: 30px;
         }
 
 /* Contenedor interno del formulario */
