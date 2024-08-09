@@ -309,6 +309,9 @@ h2 {
         <li class="sidebar-item">
             <a href="../Catalogo/Insumos.php" class="sidebar-link">INSUMOS</a>
         </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link">COMPRAS</a>
+        </li>
     </ul>
 </li>
         <li class="sidebar-item">
