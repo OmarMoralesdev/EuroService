@@ -1,17 +1,15 @@
 <?php
-require '../includes/db.php'; // Ajusta la ruta según tu estructura de carpetas
-
+require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
 
-// Verificar si se ha enviado el campo de búsqueda
 $campo = filter_input(INPUT_POST, 'campo', FILTER_SANITIZE_STRING);
 
 if ($campo) {
-    $sql = "SELECT CLIENTES.clienteID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno 
+    $sql = "SELECT CLIENTES.clienteID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno, PERSONAS.telefono
             FROM CLIENTES 
             JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID 
-            WHERE PERSONAS.nombre LIKE ? OR PERSONAS.apellido_paterno LIKE ? OR PERSONAS.apellido_materno LIKE ? 
+            WHERE CLIENTES.activo = 'si' and PERSONAS.nombre LIKE ? OR PERSONAS.apellido_paterno LIKE ? OR PERSONAS.apellido_materno LIKE ? 
             ORDER BY PERSONAS.nombre ASC 
             LIMIT 10";
     $query = $pdo->prepare($sql);

@@ -20,13 +20,13 @@ unset($_SESSION['mensaje']);
                 <h2>Registrar Cita y Crear Orden de Trabajo</h2>
                 <div class="form-container">
                     <form action="crear_orden_sin_cita2.php" method="post" id="formCita" novalidate autocomplete="off">
-                    <?php
-                    if (isset($_SESSION['error'])) {
-                        echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
-                        unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
-                    }
-                    if (isset($_SESSION['bien'])) {
-                        echo "
+                        <?php
+                        if (isset($_SESSION['error'])) {
+                            echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
+                            unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
+                        }
+                        if (isset($_SESSION['bien'])) {
+                            echo "
                         <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                             <div class='modal-dialog'>
                                 <div class='modal-content'>
@@ -43,9 +43,9 @@ unset($_SESSION['mensaje']);
                                 </div>
                             </div>
                         </div>";
-                        unset($_SESSION['bien']);
-                    }
-                    ?>
+                            unset($_SESSION['bien']);
+                        }
+                        ?>
                         <!-- Formulario de Cita -->
                         <div class="mb-3">
                             <label for="clienteID" class="form-label">Ingrese un cliente:</label>
@@ -72,11 +72,19 @@ unset($_SESSION['mensaje']);
                             <label for="costoManoObra" class="form-label">Costo de Mano de Obra:</label>
                             <input type="number" step="0.01" class="form-control" id="costoManoObra" name="costoManoObra" required>
                             <div class="invalid-feedback">Debes ingresar el costo de mano de obra.</div>
+                            <div class="form-text">Introduce el salario diario (no puede ser negativo).</div><br>
                         </div>
                         <div class="mb-3">
                             <label for="costoRefacciones" class="form-label">Costo de Refacciones:</label>
                             <input type="number" step="0.01" class="form-control" id="costoRefacciones" name="costoRefacciones" required>
                             <div class="invalid-feedback">Debes ingresar el costo de las refacciones.</div>
+                            <div class="form-text">Introduce el salario diario (no puede ser negativo).</div><br>
+                        </div>
+                        <div class="mb-3">
+                            <label for="anticipo" class="form-label">Anticipo:</label>
+                            <input type="number" step="0.01" class="form-control" id="anticipo" name="anticipo" required>
+                            <div class="invalid-feedback">Debes ingresar el anticipo.</div>
+                            <div class="form-text">Introduce el salario diario (no puede ser negativo).</div><br>
                         </div>
                         <div class="mb-3">
                             <label for="empleado" class="form-label">Empleado:</label>
@@ -120,11 +128,7 @@ unset($_SESSION['mensaje']);
                             </select>
                             <div class="invalid-feedback">Debes seleccionar una ubicación.</div>
                         </div>
-                        <div class="mb-3">
-                            <label for="anticipo" class="form-label">Anticipo:</label>
-                            <input type="number" step="0.01" class="form-control" id="anticipo" name="anticipo" required>
-                            <div class="invalid-feedback">Debes ingresar el anticipo.</div>
-                        </div>
+                      
                         <div class="mb-3">
                             <label for="formadepago" class="form-label">Forma de pago:</label>
                             <select name="formadepago" class="form-control" required>
@@ -146,6 +150,50 @@ unset($_SESSION['mensaje']);
             if ($('#staticBackdrop').length) {
                 $('#staticBackdrop').modal('show');
             }
+        });
+    </script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            function validateNonNegative(event) {
+                var value = parseFloat(event.target.value);
+                if (value < 0) {
+                    event.target.value = '';
+                    alert('El valor no puede ser negativo.');
+                }
+            }
+
+            document.getElementById('costoManoObra').addEventListener('input', validateNonNegative);
+            document.getElementById('costoRefacciones').addEventListener('input', validateNonNegative);
+            document.getElementById('anticipo').addEventListener('input', validateNonNegative);
+        });
+    </script>
+    <script>
+        $(document).ready(function() {
+            $('form').on('submit', function(e) {
+                let isValid = true;
+
+                // Validar el campo del cliente
+                const clienteCampo = $('#campo').val().trim();
+                if (clienteCampo === '') {
+                    $('#campo').addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $('#campo').removeClass('is-invalid');
+                }
+
+                // Validar el campo del vehículo
+                const vehiculoCampo = $('#vehiculoSeleccionado').val().trim();
+                if (vehiculoCampo === '') {
+                    $('#vehiculoSeleccionado').addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $('#vehiculoSeleccionado').removeClass('is-invalid');
+                }
+
+                if (!isValid) {
+                    e.preventDefault(); // Prevenir el envío del formulario si hay errores
+                }
+            });
         });
     </script>
 </body>

@@ -85,6 +85,11 @@ session_start();
                             <input type="text" class="form-control" id="alias" name="alias" required>
                         </div>
                         <div class="mb-3">
+                            <label for="salario_diario" class="form-label">Salario diario:</label>
+                            <input type="number" class="form-control" id="salario_diario" name="salario" min="0" step="0.01" required>
+                            <div class="form-text">Introduce el salario diario (no puede ser negativo).</div>
+                        </div>
+                        <div class="mb-3">
                             <label for="tipo" class="form-label">Tipo:</label>
                             <select id="tipo" name="tipo" class="form-select" required>
                                 <option value="master">Master</option>
@@ -106,6 +111,15 @@ session_start();
             }
         });
     </script>
+    <script>
+document.getElementById('salario_diario').addEventListener('input', function(event) {
+    var value = parseFloat(event.target.value);
+    if (value < 0) {
+        event.target.value = '';
+        alert('El salario diario no puede ser negativo.');
+    }
+});
+</script>
 </body>
 
 </html>

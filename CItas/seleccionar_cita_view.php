@@ -8,7 +8,6 @@ session_start();
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Cita</title>
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
     <style>
         .form-group {
             margin-bottom: 5px;
@@ -55,7 +54,7 @@ session_start();
                     }
                     ?>
 
-                    <form action="../Citas/registrar_cita.php" method="POST" autocomplete="off">
+                    <form action="registrar_cita.php" method="POST" autocomplete="off">
                         <div class="mb-3">
                             <input type="text" class="form-control" autocomplete="off" id="campo" name="campo" placeholder="Buscar cliente..." required>
                             <ul id="lista" class="list-group lista"></ul>
@@ -64,7 +63,7 @@ session_start();
                         </div>
                         <div class="mb-3">
                             <label for="vehiculoSeleccionado" class="form-label">Seleccione un vehículo:</label>
-                            <input type="text" class="form-control" id="vehiculoSeleccionado">
+                            <input type="text" class="form-control" id="vehiculoSeleccionado" readonly>
                             <ul id="lista-vehiculos" class="list-group lista"></ul>
                             <input type="hidden" id="vehiculoID" name="vehiculoID">
                             <div class="invalid-feedback">Debes seleccionar un vehículo.</div>
@@ -127,7 +126,55 @@ session_start();
                 }
             });
         </script>
+
     </div>
+    <script>
+        $(document).ready(function() {
+            $('form').on('submit', function(e) {
+                let isValid = true;
+
+                // Validar el campo del cliente
+                const clienteCampo = $('#campo').val().trim();
+                if (clienteCampo === '') {
+                    $('#campo').addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $('#campo').removeClass('is-invalid');
+                }
+
+                // Validar el campo del vehículo
+                const vehiculoCampo = $('#vehiculoSeleccionado').val().trim();
+                if (vehiculoCampo === '') {
+                    $('#vehiculoSeleccionado').addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $('#vehiculoSeleccionado').removeClass('is-invalid');
+                }
+
+                // Validar el servicio solicitado
+                const servicioCampo = $('#servicioSolicitado').val().trim();
+                if (servicioCampo === '') {
+                    $('#servicioSolicitado').addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $('#servicioSolicitado').removeClass('is-invalid');
+                }
+
+                // Validar la fecha de la cita
+                const fechaCampo = $('#fecha_cita').val().trim();
+                if (fechaCampo === '') {
+                    $('#fecha_cita').addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $('#fecha_cita').removeClass('is-invalid');
+                }
+
+                if (!isValid) {
+                    e.preventDefault(); // Prevenir el envío del formulario si hay errores
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

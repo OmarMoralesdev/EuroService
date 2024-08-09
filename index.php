@@ -277,7 +277,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <a class="nav-link" href="#ubi">Ubicación</a>
                     </li>
                     <li class="nav-item">
-                        <a href="./Login/index.php" class="nav-link btn pulse">INICIAR SESIÓN</a>
+                        <button class="nav-link btn pulse" data-bs-toggle="modal" data-bs-target="#loginModal">INICIAR SESIÓN</button>
                     </li>
                 </ul>
             </div>
@@ -333,7 +333,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <div class="containerr">
-        <div class="bg-fixedd" style="background-image: url('../EuroService/img/FONDO_LOGIN.jpg');">
+        <div class="bg-fixedd" style="background-image: url('../EuroService/img/FONDO LOGIN.jpg');">
             <div class="overlay"></div>
         </div>
     </div>

@@ -11,7 +11,7 @@ $fechaCita = filter_input(INPUT_POST, 'fecha_cita', FILTER_SANITIZE_STRING);
 
 if (!$vehiculoID || !$servicioSolicitado || !$fechaCita) {
     $_SESSION['error'] = "Error: Todos los campos son obligatorios.";
-    header("Location: index.php");
+    header("Location: seleccionar_cita_view.php");
     exit();
 }
 
@@ -21,7 +21,7 @@ $fechaCita = new DateTime($fechaCita);
 // Validación: La fecha de la cita no debe estar en el pasado
 if ($fechaCita < $fechaActual) {
     $_SESSION['error'] = "Error: La fecha de la cita no puede estar en el pasado.";
-    header("Location: index.php");
+    header("Location: seleccionar_cita_view.php");
     exit();
 }
 
@@ -32,7 +32,7 @@ $horaFinLaboral = "17:00:00";
 
 if ($horaCita < $horaInicioLaboral || $horaCita > $horaFinLaboral) {
     $_SESSION['error'] = "Error: La cita debe programarse dentro del horario laboral (09:00 - 17:00).";
-    header("Location: index.php");
+    header("Location: seleccionar_cita_view.php");
     exit();
 }
 
@@ -50,7 +50,7 @@ $countCitasGlobal = $rowGlobal['countCitasGlobal'];
 
 if ($countCitasGlobal > 0) {
     $_SESSION['error'] = "Error: Ya hay una cita programada dentro del intervalo de 30 minutos. Por favor, selecciona otra fecha.";
-    header("Location: index.php");
+    header("Location: seleccionar_cita_view.php");
     exit();
 }
 
@@ -64,7 +64,7 @@ $countCitasPendientes = $rowVehiculoPendiente['countCitasPendientes'];
 
 if ($countCitasPendientes > 0) {
     $_SESSION['error'] = "Error: El vehículo ya tiene una cita pendiente. No se puede programar una nueva cita hasta que se libere la cita actual.";
-    header("Location: index.php");
+    header("Location: seleccionar_cita_view.php");
     exit();
 }
 
@@ -78,7 +78,7 @@ $countCitasVehiculo = $rowVehiculo['countCitasVehiculo'];
 
 if ($countCitasVehiculo > 0) {
     $_SESSION['error'] = "Error: El vehículo ya tiene una cita programada dentro del intervalo de 30 minutos.";
-    header("Location: index.php");
+    header("Location: seleccionar_cita_view.php");
     exit();
 }
 
@@ -90,11 +90,11 @@ $resultInsert = $queryInsert->execute([$vehiculoID, $servicioSolicitado, $fechaA
 
 if ($resultInsert) {
     $_SESSION['bien'] = "Cita registrada correctamente.";
-    header("Location: index.php");
+    header("Location: seleccionar_cita_view.php");
     exit();
 } else {
     $_SESSION['error'] = "Error al registrar la cita.";
-    header("Location: index.php");
+    header("Location: seleccionar_cita_view.php");
     exit();
 }
 ?>

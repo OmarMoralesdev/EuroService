@@ -6,8 +6,10 @@ $pdo = $con->conectar();
 require '../vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
 use PHPMailer\PHPMailer\Exception;
+
 $showModal = false;
 $showAlert = false;
+
 // Generar contraseña aleatoria de 10 caracteres de longitud con letras y números aleatorios (mayúsculas y minúsculas) 
 function generateRandomPassword($length = 10) {
     $characters = '0123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ';
@@ -25,7 +27,7 @@ function generateRandomPassword($length = 10) {
 
 // Generar un nombre de usuario único para un cliente
 function generarUsernameParaCliente($pdo, $personaID) {
-    $sql = "SELECT nombre, apellido_paterno FROM personas WHERE personaID = :personaID";
+    $sql = "SELECT nombre, apellido_paterno FROM PERSONAS WHERE personaID = :personaID";
     $stmt = $pdo->prepare($sql);
     // Ejecutar la consulta con el ID de la persona
     $stmt->execute(['personaID' => $personaID]);
@@ -71,7 +73,7 @@ function setAlertContent($type, $message) {
 
 // Verificar si existe el usuario en la base de datos por nombre de usuario 
 function usernameExists($pdo, $username) {
-    $sql = "SELECT COUNT(*) FROM cuentas WHERE username = :username";
+    $sql = "SELECT COUNT(*) FROM CUENTAS WHERE username = :username";
     $stmt = $pdo->prepare($sql);
     $stmt->execute(['username' => $username]);
     return $stmt->fetchColumn() > 0;
@@ -157,8 +159,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $role = 'cliente';
             
             // Insertar un nuevo cliente
-            $stmt_persona = $pdo->prepare("INSERT INTO PERSONAS (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
-            // Ejecutar la consulta con los datos del cliente
+            $stmt_persona = $pdo->prepare("INSERT INTO PERSONAS (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");         
+               // Ejecutar la consulta con los datos del cliente
             $stmt_persona->execute([$nombre, $apellido_paterno, $apellido_materno, $correo, $telefono]);
             
             // Verificar si se insertó un nuevo cliente
@@ -186,7 +188,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $clienteID = $pdo->lastInsertId();
                     
                     // Obtener el ID del rol del usuario
-                    $stmt_rol = $pdo->prepare("SELECT rolID FROM roles WHERE nombre_rol = ?");
+                    $stmt_rol = $pdo->prepare("SELECT rolID FROM ROLES WHERE nombre_rol = ?");
                     // Ejecutar la consulta con el nombre del rol
                     $stmt_rol->execute([$role]);
                     // Obtener la fila del rol
@@ -200,8 +202,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     
                     // Insertar un nuevo usuario exitosamente
                     $stmt_cuenta = $pdo->prepare("INSERT INTO CUENTAS (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
-                    $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID,]);
+                    $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID]);
                     if ($stmt_cuenta->rowCount() > 0) {
+                        require '../vendor/autoload.php'; // Asegúrate de que la ruta sea correcta                
+                        $mail = new PHPMailer(true);
+                        
+                        try {
+     // Para obtener detalles de depuración
+                            $mail->isSMTP();
+                            $mail->Host       = 'smtp.gmail.com';
+                            $mail->SMTPAuth   = true;
+                            $mail->Username   = 'euroservice339@gmail.com';
+                            $mail->Password   = 'uguh ipf w rqqz ewjb';
+                            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                            $mail->Port       = 587;
+                        
+                            $mail->setFrom('euroservice339@gmail.com', 'EuroService');
+                            $mail->addAddress($correo); // Reemplaza con un correo para pruebas
+                        
+                            $mail->isHTML(true);
+                            $mail->Subject = 'Creacion de cuenta';
+                            $mail->Body    = "Hola, <br><br>Tu cuenta ha sido creada con éxito. Tu usuario es: $username y tu contraseña es: $password";
+                        
+                            $mail->send();
+                            echo 'Mensaje enviado correctamente';
+                        } catch (Exception $e) {
+                            echo "No se pudo enviar el mensaje. Error de correo: {$mail->ErrorInfo}";
+                        }
                         setModalContent('success', "
                         <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                             <div class='modal-dialog'>
@@ -223,28 +250,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             </div>
                         </div>");
                         $showModal = true;
-                    }
-                    try {
-                        $mail = new PHPMailer(true);
-                        $mail->isSMTP();
-                        $mail->Host = 'smtp.gmail.com';
-                        $mail->SMTPAuth = true;
-                        $mail->Username = 'euroservice339@gmail.com';
-                        $mail->Password = '';
-                        $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-                        $mail->Port = 587;
-                        
-                        $mail->setFrom('euroservice339@gmail.com', 'EuroService');
-                        $mail->addAddress($correo);
-                        
-                        $mail->isHTML(true);
-                        $mail->Subject = 'Creacion de cuenta';
-                        $mail->Body    = "Hola, <br><br>Tu cuenta ha sido creada con éxito. Tu usuario es: $username y tu contraseña es: $password";
-                        
-                        $mail->send();
-                    } catch (Exception $e) {
-                        echo "No se pudo enviar el mensaje. Error de correo: {$mail->ErrorInfo}";
-                    }
+                    }          
                 }
             }
         }
@@ -258,7 +264,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         error_log($e->getMessage()); // Registrar el error en el archivo de log
     }
     
-    header('Location: vista_registro_cliente.php');
+    header('Location: ./vista_registro_cliente.php');
     exit();
 }
 ?>

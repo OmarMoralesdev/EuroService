@@ -5,7 +5,7 @@
     integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
     crossorigin="anonymous"></script>
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
-
+<link rel="icon" type="image/x-icon" href="../img/icon.svg">
 <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js"></script>
 <style>
@@ -309,6 +309,9 @@ h2 {
         <li class="sidebar-item">
             <a href="../Catalogo/Insumos.php" class="sidebar-link">INSUMOS</a>
         </li>
+        <li class="sidebar-item">
+            <a href="#" class="sidebar-link">COMPRAS</a>
+        </li>
     </ul>
 </li>
         <li class="sidebar-item">
@@ -319,7 +322,7 @@ h2 {
             </a>
             <ul id="citas" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="../CItas/index.php" class="sidebar-link">REGISTRAR</a>
+                    <a href="../CItas/seleccionar_cita_view.php" class="sidebar-link">REGISTRAR</a>
                 </li>
                 <li class="sidebar-item">
                     <a href="../CItas/seleccionar_cita.php" class="sidebar-link">EDITAR</a>
@@ -412,7 +415,7 @@ h2 {
                     <a href="../Empleados/buscar.php" class="sidebar-link">BUSCAR</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Finanzas/Reporte de rendimiento.php" class="sidebar-link">RENDIMIENTO</a>
+                    <a href="../Finanzas/Reporte_de_rendimiento.php" class="sidebar-link">RENDIMIENTO</a>
                 </li>
             </ul>
         </li>

@@ -19,7 +19,7 @@ session_start();
                 <div class="form-container">
                     <?php if (isset( $_SESSION['mensaje'])) : ?>
                         <div class="alert alert-<?php echo strpos( $_SESSION['mensaje'], 'ya ha sido registrada') !== false ? 'warning' : (strpos( $_SESSION['mensaje'], 'No hay registros') !== false ? 'danger' : 'success'); ?>" role="alert">
-                            <?php echo htmlspecialchars($_SESSION['mensaje']); ?>
+                            <?php echo htmlspecialchars($_SESSION['mensaje']);unset($_SESSION['mensaje'])?>
                         </div>
                     <?php endif; ?>
                     <form method="POST" action="./procesar_nomina.php">

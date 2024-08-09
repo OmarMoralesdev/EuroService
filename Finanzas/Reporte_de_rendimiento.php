@@ -6,10 +6,10 @@ $pdo = $con->conectar();
 
 try {
     // Obtener la semana seleccionada
-    $semana_seleccionada = isset($_GET['semana']) ? $_GET['semana'] : date('Y-\WW');
+    $semana_seleccionada = isset($_GET['semana']) ? $_GET['semana'] : date('Y-m-d');
 
     // Calcular las fechas de inicio y fin de la semana seleccionada
-    $inicio_semana = date('Y-m-d', strtotime($semana_seleccionada . '1 Monday this week'));
+    $inicio_semana = date('Y-m-d', strtotime($semana_seleccionada . ' 0 days')); 
     $fin_semana = date('Y-m-d', strtotime($inicio_semana . ' +6 days'));
 
     // Preparar la consulta SQL para obtener los datos del rendimiento de los técnicos
@@ -47,6 +47,18 @@ $pdo = null;
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte de Rendimiento</title>
+
+    <!-- Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <style>
+    .datepicker {
+        background-color: #f7f7f7;
+        border-radius: 5px;
+        padding: 15px;
+    }
+
+</style>
+
 </head>
 <body>
     <div class="wrapper">
@@ -59,7 +71,11 @@ $pdo = null;
                         <div class="form-row">
                             <div class="form-group col-md-6 offset-md-3">
                                 <label for="semana">Selecciona la semana:</label>
-                                <input type="week" id="semana" name="semana" class="form-control" value="<?php echo htmlspecialchars($semana_seleccionada); ?>">
+                                <div id="week-picker" class="input-group date">
+                                    <div class="form-control"><?php echo date('Y-m-d', strtotime($inicio_semana)) . ' - ' . date('Y-m-d', strtotime($fin_semana)); ?></div>
+                                    <input type="hidden" id="semana" name="semana" value="<?php echo htmlspecialchars($semana_seleccionada); ?>">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                </div>
                             </div>
                         </div>
                         <br>
@@ -98,6 +114,10 @@ $pdo = null;
             </div>
         </div>
     </div>
+
+
+    <!-- Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="../assets/js/weekpicker.js"></script>
 </body>
 </html>
-

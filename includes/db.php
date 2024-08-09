@@ -48,12 +48,12 @@ class Database
 }
 
 function listarCitasPendientes($pdo) {
-    $sql = "SELECT citas.citaID, citas.vehiculoID, citas.servicio_solicitado, vehiculos.marca, vehiculos.modelo, vehiculos.anio, personas.nombre, personas.apellido_paterno, personas.apellido_materno
-            FROM citas 
-            JOIN vehiculos ON citas.vehiculoID = vehiculos.vehiculoID
-            JOIN clientes ON vehiculos.clienteID = clientes.clienteID
-            JOIN personas ON clientes.personaID = personas.personaID
-            WHERE citas.estado = 'pendiente'";
+    $sql = "SELECT CITAS.citaID, CITAS.vehiculoID, CITAS.servicio_solicitado, VEHICULOS.marca, VEHICULOS.modelo, VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
+            FROM CITAS 
+            JOIN VEHICULOS ON CITAS.vehiculoID = VEHICULOS.vehiculoID
+            JOIN CLIENTES ON VEHICULOS.clienteID = CLIENTES.clienteID
+            JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID
+            WHERE CITAS.estado = 'pendiente'";
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -111,11 +111,11 @@ function actualizarEstadoCita($pdo, $citaID, $nuevoEstado)
 }
 
 function obtenerDetallesVehiculoyCliente($pdo, $vehiculoID) {
-    $sql = "SELECT vehiculos.marca, vehiculos.modelo, vehiculos.anio, personas.nombre, personas.apellido_paterno, personas.apellido_materno
-            FROM vehiculos 
-            JOIN clientes ON vehiculos.clienteID = clientes.clienteID
-            JOIN personas ON clientes.personaID = personas.personaID
-            WHERE vehiculos.vehiculoID = ?";
+    $sql = "SELECT VEHICULOS.marca, VEHICULOS.modelo, VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
+            FROM VEHICULOS 
+            JOIN CLIENTES ON VEHICULOS.clienteID = CLIENTES.clienteID
+            JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID
+            WHERE VEHICULOS.vehiculoID = ?";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([$vehiculoID]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -124,8 +124,8 @@ function obtenerDetallesVehiculoyCliente($pdo, $vehiculoID) {
 function obtenerDetallesClientepersona($pdo, $clienteID)
 {
     $sql = "SELECT PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
-            FROM clientes 
-            JOIN PERSONAS ON clientes.personaID = PERSONAS.personaID WHERE clienteID = :clienteID";
+            FROM CLIENTES 
+            JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID WHERE clienteID = :clienteID";
     $stmt = $pdo->prepare($sql);
     $stmt->execute([':clienteID' => $clienteID]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -134,32 +134,21 @@ function obtenerDetallesClientepersona($pdo, $clienteID)
 function realizarPago($pdo, $ordenID, $fechaPago, $monto, $tipoPago, $formaDePago)
 {
     try {
-        // Insertar el pago en la tabla PAGOS
-        $sqlPago = "INSERT INTO PAGOS (ordenID, fecha_pago, monto, tipo_pago, forma_de_pago)
-                    VALUES (:ordenID, :fechaPago, :monto, :tipoPago, :formaDePago)";
-        $stmtPago = $pdo->prepare($sqlPago);
-        $stmtPago->execute([
+        // Llamar al procedimiento almacenado para realizar el pago
+        $sql = "CALL realizarPago(:ordenID, :fechaPago, :monto, :tipoPago, :formaDePago)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
             ':ordenID' => $ordenID,
             ':fechaPago' => $fechaPago,
             ':monto' => $monto,
             ':tipoPago' => $tipoPago,
             ':formaDePago' => $formaDePago,
         ]);
-
-        // Actualizar el campo anticipo en la tabla ORDENES_TRABAJO
-        if ($tipoPago == 'anticipo') {
-            $sqlUpdateAnticipo = "UPDATE ORDENES_TRABAJO SET anticipo = :monto WHERE ordenID = :ordenID";
-            $stmtUpdate = $pdo->prepare($sqlUpdateAnticipo);
-            $stmtUpdate->execute([
-                ':monto' => $monto,
-                ':ordenID' => $ordenID,
-            ]);
-        }
-
+    
         echo "Pago realizado y anticipo actualizado con éxito.";
     } catch (PDOException $e) {
         throw new Exception("Error al realizar el pago: " . $e->getMessage());
-    }
+    }    
 }
 function listarordenes($pdo) {
     $stmt = $pdo->query("
@@ -173,8 +162,3 @@ function listarordenes($pdo) {
     
     return $ordenes;
 }
-
-
-
-
-

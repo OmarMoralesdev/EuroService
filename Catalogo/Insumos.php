@@ -116,13 +116,12 @@
                                         } else {
                                             echo "<div class='alert alert-danger' role='alert'>Por favor, complete todos los campos.</div>";
                                         }
-                                        
-                                    } elseif (isset($_POST['Agregar'])) {
+                                    } elseif (isset($_POST['incrementar'])) {
                                         $insumo_proveedorID = $_POST['insumo_proveedorID'];
                                         $stmt = $pdo->prepare("UPDATE INVENTARIOS SET cantidad_stock = cantidad_stock + 1 WHERE insumo_proveedorID = :insumo_proveedorID");
                                         $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
                                         $stmt->execute();
-                                    } elseif (isset($_POST['Restar'])) {
+                                    } elseif (isset($_POST['disminuir'])) {
                                         $insumo_proveedorID = $_POST['insumo_proveedorID'];
                                         $stmt = $pdo->prepare("UPDATE INVENTARIOS SET cantidad_stock = cantidad_stock - 1 WHERE insumo_proveedorID = :insumo_proveedorID AND cantidad_stock > 0");
                                         $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
@@ -135,7 +134,8 @@
                                     SELECT I.nombre, I.descripcion, I.precio, C.nombre AS categoria, INV.cantidad_stock, INV.ubicacion, INV.insumo_proveedorID
                                     FROM INSUMOS I
                                     JOIN CATEGORIAS C ON I.categoriaID = C.categoriaID
-                                    JOIN INVENTARIOS INV ON I.insumoID = INV.insumo_proveedorID
+                                    JOIN INSUMO_PROVEEDOR IP ON I.insumoID = IP.insumoID
+                                    JOIN INVENTARIOS INV ON IP.insumo_proveedorID = INV.insumo_proveedorID
                                     ORDER BY I.nombre ASC;
                                 ");
                                 $stmt->execute();
@@ -150,11 +150,11 @@
                                     echo '<td>' . $insumo['ubicacion'] . '</td>';
                                     echo '<td>' . $insumo['cantidad_stock'] . '</td>';
                                     echo '<td class="stock-buttons">';
-                                    echo '<form action="" method="POST" style="display:inline-block;">';
+                                    echo '<form action="Insumos.php" method="POST" style="display:inline-block;">';
                                     echo '<input type="hidden" name="insumo_proveedorID" value="' . $insumo['insumo_proveedorID'] . '">';
                                     echo '<button type="submit" name="incrementar" class="btn btn-success btn-sm"><i class="lni lni-plus"></i></button>';
                                     echo '</form>';
-                                    echo '<form action="" method="POST" style="display:inline-block;">';
+                                    echo '<form action="Insumos.php" method="POST" style="display:inline-block;">';
                                     echo '<input type="hidden" name="insumo_proveedorID" value="' . $insumo['insumo_proveedorID'] . '">';
                                     echo '<button type="submit" name="disminuir" class="btn btn-danger btn-sm"><i class="lni lni-minus"></i></button>';
                                     echo '</form>';
@@ -236,8 +236,6 @@
             </div>
         </div>
     </div>
-
-    
     
     <script>
         if (window.history.replaceState) {

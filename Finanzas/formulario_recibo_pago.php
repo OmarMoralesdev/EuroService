@@ -5,7 +5,7 @@ require_once '../vendor/autoload.php'; // Ajusta la ruta según donde tengas ins
 session_start();
 
 if (!isset($_SESSION['username']) || !isset($_SESSION['empleadoID'])) {
-    header('Location: login.php');
+    header('Location: ../Login/index.php');
     exit();
 }
 

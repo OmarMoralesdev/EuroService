@@ -6,11 +6,10 @@ $pdo = $con->conectar();
 
 try {
     // Obtener la semana seleccionada
-    $selected_week = isset($_GET['week']) ? $_GET['week'] : date('Y-\WW');
-
+    $semana_seleccionada = isset($_GET['semana']) ? $_GET['semana'] : date('Y-m-d');
     // Calcular las fechas de inicio y fin de la semana seleccionada
-    $week_start = date('Y-m-d', strtotime($selected_week));
-    $week_end = date('Y-m-d', strtotime($week_start . ' +6 days'));
+    $inicio_semana = date('Y-m-d', strtotime($semana_seleccionada));
+    $fin_semana = date('Y-m-d', strtotime($inicio_semana . ' +6 days'));
 
     // Consulta para obtener los detalles de las compras de la semana seleccionada
     $gastos_query = "
@@ -20,10 +19,10 @@ try {
         JOIN INSUMO_PROVEEDOR IP ON DC.insumo_proveedorID = IP.insumo_proveedorID
         JOIN INSUMOS I ON IP.insumoID = I.insumoID
         JOIN PROVEEDORES P ON IP.proveedorID = P.proveedorID
-        WHERE C.fecha_compra BETWEEN :week_start AND :week_end
+        WHERE C.fecha_compra BETWEEN :inicio_semana AND :fin_semana
     ";
     $stmt = $pdo->prepare($gastos_query);
-    $stmt->execute(['week_start' => $week_start, 'week_end' => $week_end]);
+    $stmt->execute(['inicio_semana' => $inicio_semana, 'fin_semana' => $fin_semana]);
     $gastos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Consulta para obtener el total de gastos de la semana seleccionada
@@ -31,10 +30,10 @@ try {
         SELECT SUM(DC.subtotal) as total_gastos
         FROM DETALLE_COMPRA DC
         JOIN COMPRAS C ON DC.compraID = C.compraID
-        WHERE C.fecha_compra BETWEEN :week_start AND :week_end
+        WHERE C.fecha_compra BETWEEN :inicio_semana AND :fin_semana
     ";
     $stmt_total = $pdo->prepare($total_gastos_query);
-    $stmt_total->execute(['week_start' => $week_start, 'week_end' => $week_end]);
+    $stmt_total->execute(['inicio_semana' => $inicio_semana, 'fin_semana' => $fin_semana]);
     $total_gastos = $stmt_total->fetch(PDO::FETCH_ASSOC)['total_gastos'];
 } catch (PDOException $e) {
     echo 'Error: ' . $e->getMessage();
@@ -43,11 +42,17 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte de Gastos Semanal</title>
+
+
+    <!-- Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 </head>
+
 <body>
     <div class="wrapper">
         <?php include '../includes/vabr.php'; ?>
@@ -58,8 +63,13 @@ try {
                     <form method="GET" action="" class="mb-4">
                         <div class="form-row">
                             <div class="form-group col-md-6 offset-md-3">
-                                <label for="week">Selecciona la semana:</label>
-                                <input type="week" id="week" name="week" class="form-control" value="<?php echo htmlspecialchars($selected_week); ?>">
+                                <div id="week-picker" class="input-group date">
+                                    <input type="text" class="form-control" readonly value="<?php echo date('Y-m-d', strtotime($inicio_semana)) . ' - ' . date('Y-m-d', strtotime($fin_semana)); ?>">
+                                    <input type="hidden" id="semana" name="semana" value="<?php echo htmlspecialchars($semana_seleccionada); ?>">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="glyphicon glyphicon-calendar"><i class="bi bi-calendar"></i></i></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <br>
@@ -69,7 +79,7 @@ try {
                     </form>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered">
-                        <thead>
+                            <thead>
                                 <tr>
                                     <th>Fecha de Compra</th>
                                     <th>Insumo</th>
@@ -100,6 +110,9 @@ try {
                 </div>
             </div>
         </div>
+        <!-- Datepicker JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <script src="../assets/js/weekpicker.js"></script>
 </body>
 
 </html>

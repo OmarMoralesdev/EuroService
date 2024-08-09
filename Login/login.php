@@ -4,6 +4,7 @@ session_start();
 require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
+
 if ($_SERVER["REQUEST_METHOD"] == "POST") { 
     $username = $_POST['username'];
     $password = $_POST['password'];
@@ -41,34 +42,39 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $_SESSION['empleadoID'] = $empleado['empleadoID'];
                 }
                 
-
                 $_SESSION['cuentaID'] = $cuentaID;
                 $_SESSION['username'] = $db_username;
                 $_SESSION['role'] = $role;
-                $_SESSION['personaID'] =  $personaID;
+                $_SESSION['personaID'] = $personaID;
+                
                 // Redireccionar según el rol
                 if ($role == 1) {
                     header("Location: ../Cliente/index.php");
                     exit();
-                    
                 } elseif ($role == 2) {
                     header("Location: ../general_views/admin.php");
                     exit();
                 } elseif ($role == 3) {
-                    header("Location: ../dueño/dueño.php");
+                    header("Location: ../dueño/index.php");
                     exit();
                 } else {
-                    header("Location: ../index.php/#navbarNav");
+                    header("Location: ./index.php");
                     exit();
                 }
             } else {
-                header("Location: ../index.php/#navbarNav");
-                    exit();
+                $_SESSION['alert'] = ['message' => '¡Datos inválidos, vuelve a intentarlo!'];
+                header("Location: ./index.php");
+                exit();
             }
+        } else {
+            $_SESSION['alert'] = ['message' => 'Datos inválidos, vuelve a intentarlo!'];
+            header("Location: ./index.php");
+            exit();
         }
     } catch (PDOException $e) {
-        echo "Error en la consulta: " . $e->getMessage();
-        header("Location: ../index.php/#navbarNav");
+        $_SESSION['alert'] = ['message' => 'Error en la consulta: ' . $e->getMessage()];
+        header("Location: ./index.php");
         exit();
     }
 }
+?>

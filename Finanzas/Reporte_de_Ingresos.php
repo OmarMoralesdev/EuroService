@@ -7,31 +7,30 @@ $pdo = $con->conectar();
 try {
 
     // Obtener la semana seleccionada
-    $selected_week = isset($_GET['week']) ? $_GET['week'] : date('Y-\WW');
-
+    $semana_seleccionada = isset($_GET['semana']) ? $_GET['semana'] : date('Y-m-d');
     // Calcular las fechas de inicio y fin de la semana seleccionada
-    $week_start = date('Y-m-d', strtotime($selected_week));
-    $week_end = date('Y-m-d', strtotime($week_start . ' +6 days'));
+    $inicio_semana = date('Y-m-d', strtotime($semana_seleccionada));
+    $fin_semana = date('Y-m-d', strtotime($inicio_semana . ' +6 days'));
 
     // Consulta para obtener los detalles de los ingresos de la semana seleccionada
     $ingresos_query = "
         SELECT P.fecha_pago, P.monto, P.tipo_pago, P.forma_de_pago, OT.ordenID
         FROM PAGOS P
         JOIN ORDENES_TRABAJO OT ON P.ordenID = OT.ordenID
-        WHERE P.fecha_pago BETWEEN :week_start AND :week_end
+        WHERE P.fecha_pago BETWEEN :inicio_semana AND :fin_semana
     ";
     $stmt = $pdo->prepare($ingresos_query);
-    $stmt->execute(['week_start' => $week_start, 'week_end' => $week_end]);
+    $stmt->execute(['inicio_semana' => $inicio_semana, 'fin_semana' => $fin_semana]);
     $ingresos = $stmt->fetchAll(PDO::FETCH_ASSOC);
 
     // Consulta para obtener el total de ingresos de la semana seleccionada
     $total_ingresos_query = "
         SELECT SUM(P.monto) as total_ingresos
         FROM PAGOS P
-        WHERE P.fecha_pago BETWEEN :week_start AND :week_end
+        WHERE P.fecha_pago BETWEEN :inicio_semana AND :fin_semana
     ";
     $stmt_total = $pdo->prepare($total_ingresos_query);
-    $stmt_total->execute(['week_start' => $week_start, 'week_end' => $week_end]);
+    $stmt_total->execute(['inicio_semana' => $inicio_semana, 'fin_semana' => $fin_semana]);
     $total_ingresos = $stmt_total->fetch(PDO::FETCH_ASSOC)['total_ingresos'];
 } catch (PDOException $e) {
     echo 'Error: ' . $e->getMessage();
@@ -44,6 +43,8 @@ try {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte de Ingresos Semanal</title>
+        <!-- Datepicker CSS -->
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
 </head>
 
 <body>
@@ -56,8 +57,13 @@ try {
                     <form method="GET" action="" class="mb-4">
                         <div class="form-row">
                             <div class="form-group col-md-6 offset-md-3">
-                                <label for="week">Selecciona la semana:</label>
-                                <input type="week" id="week" name="week" class="form-control" value="<?php echo htmlspecialchars($selected_week); ?>">
+                            <div id="week-picker" class="input-group date">
+                                    <input type="text" class="form-control" readonly value="<?php echo date('Y-m-d', strtotime($inicio_semana)) . ' - ' . date('Y-m-d', strtotime($fin_semana)); ?>">
+                                    <input type="hidden" id="semana" name="semana" value="<?php echo htmlspecialchars($semana_seleccionada); ?>">
+                                    <div class="input-group-append">
+                                        <span class="input-group-text"><i class="glyphicon glyphicon-calendar"><i class="bi bi-calendar"></i></i></span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                         <br>
@@ -96,6 +102,9 @@ try {
                 </div>
             </div>
         </div>
+          <!-- Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="../assets/js/weekpicker.js"></script>  
 </body>
 
 </html>

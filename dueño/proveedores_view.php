@@ -4,41 +4,6 @@ require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
 
-$errorMensaje = "";
-
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['nombre']) && isset($_POST['contacto'])) {
-    $nombre = trim ($_POST['nombre']);
-    $contacto = trim($_POST['contacto']);
-
-    $errores = [];
-    if (empty($nombre)) {
-        $errores[] = "El nombre es requerido.";
-    }
-    if (empty($contacto)) {
-        $errores[] = "El contacto es requerido.";
-    }
-
-    if (empty($errores)) {
-        $stmt = $pdo->prepare("SELECT * FROM PROVEEDORES WHERE nombre = ? OR contacto = ?");
-        $stmt->execute([$nombre, $contacto]);
-        if ($stmt->rowCount() > 0) {
-            $errorMensaje = "El proveedor con este nombre o contacto ya existe.";
-            
-        } else {
-            $stmt = $pdo->prepare("INSERT INTO PROVEEDORES (nombre, contacto) VALUES (?, ?)");
-            $stmt->execute([$nombre, $contacto]);
-            unset($_POST['nombre']);
-            unset($_POST['contacto']);
-
-            header('Location: proveedores_view.php');
-            exit();
-        }
-    } else {
-        $errorMensaje = implode("", $errores);
-    }
-    
-}
-
 if (isset($_GET['ajax_search'])) {
     $search = $_GET['ajax_search'];
     $stmt = $pdo->prepare("SELECT nombre, contacto FROM proveedores WHERE nombre LIKE ?");
@@ -150,22 +115,7 @@ if ($stmt->rowCount() > 0) {
                         <?php endforeach; ?>
                     </div>
                     <nav>
-                        <a href="#registrar" id="openModalBtn" class="btn btn-dark">Registrar nuevo Proveedor</a>
                     </nav>
-                    <div id="myModal" class="modal">
-                        <div class="modal-content">
-                            <span class="close">&times;</span>
-                            <h2>Registrar Proveedor</h2>
-                            <div class="alert" id="errorAlert"><?php echo htmlspecialchars($errorMensaje); ?></div>
-                            <form action="" method="post">
-                                <label for="nombre">Nombre:</label><br>
-                                <input type="text" id="nombre" name="nombre" class="form-control" required><br>
-                                <label for="contacto">Contacto:</label><br>
-                                <input type="text" id="contacto" name="contacto" class="form-control" required><br>
-                                <input type="submit" value="Registrar" class="btn btn-dark">
-                            </form>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>

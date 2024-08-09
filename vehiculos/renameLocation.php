@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $conexion->conectar();
 
     // Actualizar el nombre de la ubicación en la base de datos
-    $consulta = "UPDATE ubicaciones SET lugar = '$lugar' WHERE ubicacionID = $ubicacionID";
+    $consulta = "UPDATE UBICACIONES SET lugar = '$lugar' WHERE ubicacionID = $ubicacionID";
     $conexion->ejecuta($consulta);
 
     $conexion->desconectar();
