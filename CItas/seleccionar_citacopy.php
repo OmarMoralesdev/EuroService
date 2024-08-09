@@ -13,7 +13,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     exit();
 }
 
-function obtenerCitaPorID($pdo, $citaID) {
+function obtenerCitaPorID($pdo, $citaID)
+{
     $stmt = $pdo->prepare('SELECT * FROM CITAS WHERE citaID = ?');
     $stmt->execute([$citaID]);
     return $stmt->fetch(PDO::FETCH_ASSOC);
@@ -26,6 +27,52 @@ function obtenerCitaPorID($pdo, $citaID) {
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seleccionar Cita para Orden de Trabajo</title>
+    <style>
+        .tarjeta {
+            border: 1px solid #ccc;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 5px;
+        }
+
+        .paginacion {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            margin: 20px 0;
+        }
+
+        .paginacion a {
+            margin: 0 5px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-decoration: none;
+            color: #000;
+            font-size: 16px;
+        }
+
+        .paginacion a.activo {
+            background-color: #000;
+            color: #fff;
+        }
+
+        @media (max-width: 600px) {
+            .paginacion a {
+                margin: 0 2px;
+                padding: 8px;
+                font-size: 14px;
+            }
+        }
+
+        @media (max-width: 400px) {
+            .paginacion a {
+                margin: 0 1px;
+                padding: 6px;
+                font-size: 12px;
+            }
+        }
+    </style>
 </head>
 
 <body>
@@ -35,6 +82,9 @@ function obtenerCitaPorID($pdo, $citaID) {
             <div class="container">
                 <h2>SELECCIONAR CITA</h2>
                 <div class="form-container">
+                    <input type="text" id="buscar" class="form-control" placeholder="Buscar por vehículo..."><br>
+                    <div id="citas-contenedor"></div>
+                    <div class="paginacion" id="paginacion"></div>
                     <?php
                     if (isset($_SESSION['bien'])) {
                         echo "
@@ -57,31 +107,86 @@ function obtenerCitaPorID($pdo, $citaID) {
                         unset($_SESSION['bien']);
                     }
                     ?>
-                    <form method="post" action="seleccionar_citacopy.php">
-                        <div class="mb-3">
-                            <label for="citaID" class="form-label">Seleccionar Cita:</label>
-                            <select id="citaID" name="citaID" class="form-select" required>
-                                <?php
-                                $citas = listarCitasPendientes($pdo);
-                                foreach ($citas as $citaOption) {
-                                    echo "<option value=\"{$citaOption['citaID']}\">Cita ID: {$citaOption['citaID']} - Vehículo: {$citaOption['marca']} {$citaOption['modelo']} {$citaOption['anio']} - Cliente: {$citaOption['nombre']} {$citaOption['apellido_paterno']} {$citaOption['apellido_materno']} - Servicio: {$citaOption['servicio_solicitado']}</option>";
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <button type="submit" name="buscar" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Buscar Cita</button>
+                    <form id="formularioCita" action="" method="post" style="display:none;">
+                        <input type="hidden" id="citaIDSeleccionada" name="citaID">
                     </form>
                 </div>
             </div>
         </div>
-        <script>
-            $(document).ready(function() {
-                if ($('#staticBackdrop').length) {
-                    $('#staticBackdrop').modal('show');
-                }
-            });
-        </script>
-    </div>
 </body>
+<script>
+    let citas = <?php
+                $citas = listarCitasPendientes($pdo);
+                echo json_encode($citas);
+                ?>;
+    let paginaActual = 1;
+    const tarjetasPorPagina = 5;
+
+    function renderizarTarjetas(citas, pagina = 1) {
+        const inicio = (pagina - 1) * tarjetasPorPagina;
+        const fin = inicio + tarjetasPorPagina;
+        const citasPaginadas = citas.slice(inicio, fin);
+
+        const citasContenedor = document.getElementById('citas-contenedor');
+        citasContenedor.innerHTML = '';
+
+        citasPaginadas.forEach(cita => {
+            const tarjeta = document.createElement('div');
+            tarjeta.classList.add('tarjeta');
+            tarjeta.innerHTML = `
+                <p><strong>Vehículo:</strong> ${cita.marca} ${cita.modelo} ${cita.anio}</p>
+                <p><strong>Cliente:</strong> ${cita.nombre} ${cita.apellido_paterno} ${cita.apellido_materno}</p>
+                <p><strong>Servicio:</strong> ${cita.servicio_solicitado}</p>
+                <button onclick="seleccionarCita(${cita.citaID})" class="btn btn-dark w-100">Seleccionar</button>
+            `;
+            citasContenedor.appendChild(tarjeta);
+        });
+
+        renderizarPaginacion(citas.length, pagina);
+    }
+
+    function renderizarPaginacion(totalElementos, paginaActual) {
+        const totalPaginas = Math.ceil(totalElementos / tarjetasPorPagina);
+        const paginacionContenedor = document.getElementById('paginacion');
+        paginacionContenedor.innerHTML = '';
+
+        for (let i = 1; i <= totalPaginas; i++) {
+            const enlacePagina = document.createElement('a');
+            enlacePagina.innerText = i;
+            enlacePagina.href = '#';
+            if (i === paginaActual) {
+                enlacePagina.classList.add('activo');
+            }
+            enlacePagina.addEventListener('click', (e) => {
+                e.preventDefault();
+                renderizarTarjetas(citas, i);
+            });
+            paginacionContenedor.appendChild(enlacePagina);
+        }
+    }
+
+    function seleccionarCita(citaID) {
+        document.getElementById('citaIDSeleccionada').value = citaID;
+        document.getElementById('formularioCita').submit();
+    }
+
+    document.getElementById('buscar').addEventListener('input', function() {
+        const query = this.value.toLowerCase();
+        const citasFiltradas = citas.filter(cita =>
+            cita.marca.toLowerCase().includes(query) ||
+            cita.modelo.toLowerCase().includes(query)
+        );
+        renderizarTarjetas(citasFiltradas, 1);
+    });
+
+    renderizarTarjetas(citas, paginaActual);
+</script>
+<script>
+    $(document).ready(function() {
+        if ($('#staticBackdrop').length) {
+            $('#staticBackdrop').modal('show');
+        }
+    });
+</script>
 
 </html>
