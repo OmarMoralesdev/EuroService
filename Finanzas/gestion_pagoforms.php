@@ -5,37 +5,40 @@ require '../includes/db.php'; // Ajusta la ruta según tu estructura de carpetas
 $con = new Database();
 $pdo = $con->conectar();
 $resultado = []; // Inicializar como array vacío
+$mensaje_error = ''; // Variable para almacenar el mensaje de error
+$semana_seleccionada = ''; // Inicializar variable de la semana seleccionada
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    try {
-        // Obtener la semana desde el formulario
-        $semana = $_POST['semana'];
 
-        // Calcular la fecha de inicio (lunes) y la fecha de fin (domingo) de la semana seleccionada
-        $fecha_inicio = date('Y-m-d', strtotime($semana));
-        $fecha_fin = date('Y-m-d', strtotime($fecha_inicio . ' +6 days'));
+try {
+    // Obtener la semana desde el formulario
+    $semana_seleccionada = isset($_GET['semana']) ? $_GET['semana'] : date('Y-m-d');
 
-        // Preparar la consulta SQL para llamar al procedimiento almacenado
-        $sql = "CALL gestionPagosSemanal(:fecha_inicio, :fecha_fin)";
+    // Calcular las fechas de inicio y fin de la semana seleccionada
+    $inicio_semana = date('Y-m-d', strtotime($semana_seleccionada . ' 0 days'));
+    $fin_semana = date('Y-m-d', strtotime($inicio_semana . ' +6 days'));
 
-        // Preparar la sentencia
-        $stmt = $pdo->prepare($sql);
+    // Preparar la consulta SQL para llamar al procedimiento almacenado
+    $sql = "CALL gestionPagosSemanal(:fecha_inicio, :fecha_fin)";
 
-        // Bind de los parámetros
-        $stmt->bindParam(':fecha_inicio', $fecha_inicio);
-        $stmt->bindParam(':fecha_fin', $fecha_fin);
+    // Preparar la sentencia
+    $stmt = $pdo->prepare($sql);
 
-        // Ejecutar la sentencia
-        $stmt->execute();
+    // Bind de los parámetros
+    $stmt->bindParam(':fecha_inicio', $inicio_semana);
+    $stmt->bindParam(':fecha_fin', $fin_semana);
 
-        // Obtener los resultados
-        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-    } catch (PDOException $e) {
-        $mensaje_error = "Error: " . $e->getMessage();
-    }
+    // Ejecutar la sentencia
+    $stmt->execute();
+
+    // Obtener los resultados
+    $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+} catch (PDOException $e) {
+    $mensaje_error = "Error: " . $e->getMessage();
+} finally {
     // Cerrar la conexión
     $pdo = null;
 }
+
 ?>
 
 <!DOCTYPE html>
@@ -44,6 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <title>Gestión de Pagos Semanal</title>
 </head>
 
@@ -54,20 +58,25 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="container">
                 <h2>REPORTE DE GASTOS SEMANAL</h2>
                 <div class="form-container">
-                    <form method="post" action="">
+                    <form method="GET" action="">
                         <div class="form-group">
-                            <label for="semana">Selecciona la semana:</label>
-                            <input type="week" id="semana" name="semana" class="form-control" required>
+                            <div class="form-group col-md-6 offset-md-3">
+                                <label for="semana">Selecciona la semana:</label>
+                                <div id="week-picker" class="input-group date">
+                                    <div class="form-control"><?php echo date('Y-m-d', strtotime($inicio_semana)) . ' - ' . date('Y-m-d', strtotime($fin_semana)); ?></div>
+                                    <input type="hidden" id="semana" name="semana" value="<?php echo htmlspecialchars($semana_seleccionada); ?>">
+                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                </div>
+                            </div>
                         </div>
-<br>
+                        <br>
                         <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Ver reporte</button>
-
                     </form>
 
                     <?php if (!empty($resultado)) : ?>
                         <div class="table-responsive">
                             <table class="table table-striped table-bordered">
-                            <thead>
+                                <thead>
                                     <tr>
                                         <th>Recibo ID</th>
                                         <th>Fecha Recibo</th>
@@ -103,7 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 </tbody>
                             </table>
                         </div>
-                    <?php elseif (isset($mensaje_error)) : ?>
+                    <?php elseif ($mensaje_error) : ?>
                         <div class="alert alert-danger mt-4"><?= htmlspecialchars($mensaje_error); ?></div>
                     <?php else : ?>
                         <p class="mt-4">No se encontraron resultados.</p>
@@ -112,6 +121,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
+    <!-- Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <script src="../assets/js/weekpicker.js"></script>
 </body>
 
 </html>

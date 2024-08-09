@@ -32,7 +32,7 @@
 </head>
 <body>
 <div class="wrapper">
-    <?php include '../dueño/vabr.php'; ?>
+<?php include 'vabr.php'; ?>
     <div class="main p-3">
         <div class="container">
             <h2 class="text-center">Categorías de insumos</h2>
@@ -53,7 +53,7 @@
                         $alertType = 'danger';
                     } else {
                         
-                        $check_query = "SELECT COUNT(*) FROM categorias WHERE nombre = :nombre";
+                        $check_query = "SELECT COUNT(*) FROM CATEGORIAS WHERE nombre = :nombre";
                         $stmt = $pdo->prepare($check_query);
                         $stmt->bindValue(':nombre', $nombre, PDO::PARAM_STR);
                         $stmt->execute();
@@ -81,7 +81,7 @@
 
                     // Consulta para obtener categorías
                     $consulta_categorias = "SELECT c.categoriaID, c.nombre AS categoria, c.descripcion
-                                            FROM categorias c
+                                            FROM CATEGORIAS c
                                             ORDER BY c.nombre ASC
                                             LIMIT :offset, :items_per_page";
                     $stmt = $pdo->prepare($consulta_categorias);
@@ -91,7 +91,7 @@
                     $categorias = $stmt->fetchAll(PDO::FETCH_OBJ);
 
                     // Consulta para obtener el total de categorías
-                    $total_categorias_query = "SELECT COUNT(*) AS total FROM categorias";
+                    $total_categorias_query = "SELECT COUNT(*) AS total FROM CATEGORIAS";
                     $stmt = $pdo->prepare($total_categorias_query);
                     $stmt->execute();
                     $total_categorias_result = $stmt->fetch(PDO::FETCH_OBJ);
@@ -126,9 +126,9 @@
                             echo "<div class='modal-body'>";
 
                             $consulta_insumos = "SELECT i.nombre AS insumo, p.nombre AS proveedor, ip.precio
-                                                FROM insumos i
-                                                JOIN insumo_proveedor ip ON i.insumoID = ip.insumoID
-                                                JOIN proveedores p ON ip.proveedorID = p.proveedorID
+                                                FROM INSUMOS i
+                                                JOIN INSUMO_PROVEEDOR ip ON i.insumoID = ip.insumoID
+                                                JOIN PROVEEDORES p ON ip.proveedorID = p.proveedorID
                                                 WHERE i.categoriaID = :categoriaID";
                             
                             $stmt = $pdo->prepare($consulta_insumos);
