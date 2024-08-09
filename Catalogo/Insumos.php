@@ -59,7 +59,6 @@
                                     <th scope="col">CATEGORÍA</th>
                                     <th scope="col">UBICACIÓN</th>
                                     <th scope="col">CANTIDAD EN STOCK</th>
-                                    <th scope="col">ACCIONES</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -77,62 +76,85 @@
                                         $cantidad_stock = trim($_POST['cantidad_stock']);
                                         $ubicacion = trim($_POST['ubicacion']);
                                         $proveedorID = trim($_POST['proveedorID']);
-
-                                        // Validar que el precio y la cantidad en stock sean positivos
-                                        if (!is_numeric($precio) || $precio <= 0) {
-                                            echo "<div class='alert alert-danger' role='alert'>El precio debe ser un número positivo.</div>";
-                                        } elseif (!is_numeric($cantidad_stock) || $cantidad_stock < 0) {
-                                            echo "<div class='alert alert-danger' role='alert'>La cantidad en stock no puede ser un número negativo.</div>";
-                                        } elseif (!empty($nombre) && !empty($descripcion) && !empty($precio) && !empty($categoriaID) && !empty($cantidad_stock) && !empty($ubicacion) && !empty($proveedorID)) {
-                                            // Insertar el insumo en la tabla de insumos
-                                            $stmt = $pdo->prepare("INSERT INTO INSUMOS (nombre, descripcion, precio, categoriaID) VALUES (:nombre, :descripcion, :precio, :categoriaID)");
-                                            $stmt->bindParam(':nombre', $nombre);
-                                            $stmt->bindParam(':descripcion', $descripcion);
-                                            $stmt->bindParam(':precio', $precio);
-                                            $stmt->bindParam(':categoriaID', $categoriaID);
-
-                                            if ($stmt->execute()) {
-                                                $insumoID = $pdo->lastInsertId();
-
-                                                // Insertar en la tabla insumo_proveedor
-                                                $stmt = $pdo->prepare("INSERT INTO INSUMO_PROVEEDOR (insumoID, proveedorID, precio) VALUES (:insumoID, :proveedorID, :precio)");
-                                                $stmt->bindParam(':insumoID', $insumoID);
-                                                $stmt->bindParam(':proveedorID', $proveedorID);
+                                        
+                                        // Validar que todos los campos estén completos
+                                        if (!empty($nombre) && !empty($descripcion) && !empty($precio) && !empty($categoriaID) && !empty($cantidad_stock) && !empty($ubicacion) && !empty($proveedorID)) {
+                                            
+                                            try {
+                                                // Iniciar una transacción
+                                                $pdo->beginTransaction();
+                                                
+                                                // Insertar el insumo en la tabla de insumos
+                                                $stmt = $pdo->prepare("INSERT INTO INSUMOS (nombre, descripcion, precio, categoriaID) VALUES (:nombre, :descripcion, :precio, :categoriaID)");
+                                                $stmt->bindParam(':nombre', $nombre);
+                                                $stmt->bindParam(':descripcion', $descripcion);
                                                 $stmt->bindParam(':precio', $precio);
-
+                                                $stmt->bindParam(':categoriaID', $categoriaID);
+                                                
                                                 if ($stmt->execute()) {
-                                                    $insumo_proveedorID = $pdo->lastInsertId();
-
-                                                    // Insertar en la tabla inventarios
-                                                    $stmt = $pdo->prepare("INSERT INTO INVENTARIOS (insumo_proveedorID, ubicacion, cantidad_stock) VALUES (:insumo_proveedorID, :ubicacion, :cantidad_stock)");
-                                                    $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
-                                                    $stmt->bindParam(':ubicacion', $ubicacion);
-                                                    $stmt->bindParam(':cantidad_stock', $cantidad_stock);
-
+                                                    $insumoID = $pdo->lastInsertId();
+                                                    
+                                                    // Insertar en la tabla insumo_proveedor
+                                                    $stmt = $pdo->prepare("INSERT INTO INSUMO_PROVEEDOR (insumoID, proveedorID, precio) VALUES (:insumoID, :proveedorID, :precio)");
+                                                    $stmt->bindParam(':insumoID', $insumoID);
+                                                    $stmt->bindParam(':proveedorID', $proveedorID);
+                                                    $stmt->bindParam(':precio', $precio);
+                                                    
                                                     if ($stmt->execute()) {
-                                                        echo "<div class='alert alert-success' role='alert'>Insumo agregado exitosamente.</div>";
+                                                        $insumo_proveedorID = $pdo->lastInsertId();
+                                                        
+                                                        // Insertar en la tabla inventarios
+                                                        $stmt = $pdo->prepare("INSERT INTO INVENTARIOS (insumo_proveedorID, ubicacion, cantidad_stock) VALUES (:insumo_proveedorID, :ubicacion, :cantidad_stock)");
+                                                        $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
+                                                        $stmt->bindParam(':ubicacion', $ubicacion);
+                                                        $stmt->bindParam(':cantidad_stock', $cantidad_stock);
+                                                        
+                                                        if ($stmt->execute()) {
+                                                            
+                                                            // Insertar una compra en la tabla COMPRAS
+                                                            $stmt = $pdo->prepare("INSERT INTO COMPRAS (fecha_compra, tipo_compraID, total) VALUES (CURDATE(), 'administrativa', :total)");
+                                                            $total = $precio * $cantidad_stock;
+                                                            $stmt->bindParam(':total', $total);
+                                                            
+                                                            if ($stmt->execute()) {
+                                                                $compraID = $pdo->lastInsertId();
+                                                                
+                                                                // Insertar en la tabla DETALLE_COMPRA
+                                                                $stmt = $pdo->prepare("INSERT INTO DETALLE_COMPRA (compraID, insumo_proveedorID, cantidad, precio_unitario, subtotal) VALUES (:compraID, :insumo_proveedorID, :cantidad, :precio_unitario, :subtotal)");
+                                                                $stmt->bindParam(':compraID', $compraID);
+                                                                $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
+                                                                $stmt->bindParam(':cantidad', $cantidad_stock);
+                                                                $stmt->bindParam(':precio_unitario', $precio);
+                                                                $subtotal = $precio * $cantidad_stock;
+                                                                $stmt->bindParam(':subtotal', $subtotal);
+                                                                
+                                                                if ($stmt->execute()) {
+                                                                    // Confirmar la transacción
+                                                                    $pdo->commit();
+                                                                    echo "<div class='alert alert-success' role='alert'>Insumo y compra agregados exitosamente.</div>";
+                                                                } else {
+                                                                    throw new Exception('Error al agregar el detalle de la compra.');
+                                                                }
+                                                            } else {
+                                                                throw new Exception('Error al registrar la compra.');
+                                                            }
+                                                        } else {
+                                                            throw new Exception('Error al agregar el insumo al inventario.');
+                                                        }
                                                     } else {
-                                                        echo "<div class='alert alert-danger' role='alert'>Error al agregar el insumo al inventario.</div>";
+                                                        throw new Exception('Error al agregar el insumo y proveedor.');
                                                     }
                                                 } else {
-                                                    echo "<div class='alert alert-danger' role='alert'>Error al agregar el insumo y proveedor.</div>";
+                                                    throw new Exception('Error al agregar el insumo.');
                                                 }
-                                            } else {
-                                                echo "<div class='alert alert-danger' role='alert'>Error al agregar el insumo.</div>";
+                                            } catch (Exception $e) {
+                                                // Deshacer la transacción en caso de error
+                                                $pdo->rollBack();
+                                                echo "<div class='alert alert-danger' role='alert'>{$e->getMessage()}</div>";
                                             }
                                         } else {
                                             echo "<div class='alert alert-danger' role='alert'>Por favor, complete todos los campos.</div>";
                                         }
-                                    } elseif (isset($_POST['incrementar'])) {
-                                        $insumo_proveedorID = $_POST['insumo_proveedorID'];
-                                        $stmt = $pdo->prepare("UPDATE INVENTARIOS SET cantidad_stock = cantidad_stock + 1 WHERE insumo_proveedorID = :insumo_proveedorID");
-                                        $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
-                                        $stmt->execute();
-                                    } elseif (isset($_POST['disminuir'])) {
-                                        $insumo_proveedorID = $_POST['insumo_proveedorID'];
-                                        $stmt = $pdo->prepare("UPDATE INVENTARIOS SET cantidad_stock = cantidad_stock - 1 WHERE insumo_proveedorID = :insumo_proveedorID AND cantidad_stock > 0");
-                                        $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
-                                        $stmt->execute();
                                     }
                                 }
 
@@ -156,17 +178,6 @@
                                     echo '<td>' . $insumo['categoria'] . '</td>';
                                     echo '<td>' . $insumo['ubicacion'] . '</td>';
                                     echo '<td>' . $insumo['cantidad_stock'] . '</td>';
-                                    echo '<td class="stock-buttons">';
-                                    echo '<form action="Insumos.php" method="POST" style="display:inline-block;">';
-                                    echo '<input type="hidden" name="insumo_proveedorID" value="' . $insumo['insumo_proveedorID'] . '">';
-                                    echo '<button type="submit" name="incrementar" class="btn btn-success btn-sm"><i class="lni lni-plus"></i></button>';
-                                    echo '</form>';
-                                    echo '<form action="Insumos.php" method="POST" style="display:inline-block;">';
-                                    echo '<input type="hidden" name="insumo_proveedorID" value="' . $insumo['insumo_proveedorID'] . '">';
-                                    echo '<button type="submit" name="disminuir" class="btn btn-danger btn-sm"><i class="lni lni-minus"></i></button>';
-                                    echo '</form>';
-                                    echo '</td>';
-                                    echo '</tr>';
                                 }
                                 ?>
                             </tbody>
@@ -201,27 +212,14 @@
                         <div class="mb-3">
                             <label for="categoriaID" class="form-label">Categoría</label>
                             <select class="form-select" id="categoriaID" name="categoriaID" required>
-                                <option value="" selected disabled>Seleccione una categoría</option>
+                            
                                 <?php
-                                $stmt = $pdo->prepare("SELECT categoriaID, nombre FROM CATEGORIAS ORDER BY nombre ASC");
+                                $stmt = $pdo->prepare("SELECT categoriaID, nombre FROM CATEGORIAS");
                                 $stmt->execute();
                                 $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
                                 foreach ($categorias as $categoria) {
                                     echo '<option value="' . $categoria['categoriaID'] . '">' . $categoria['nombre'] . '</option>';
-                                }
-                                ?>
-                            </select>
-                        </div>
-                        <div class="mb-3">
-                            <label for="proveedorID" class="form-label">Proveedor</label>
-                            <select class="form-select" id="proveedorID" name="proveedorID" required>
-                                <option value="" selected disabled>Seleccione un proveedor</option>
-                                <?php
-                                $stmt = $pdo->prepare("SELECT proveedorID, nombre FROM PROVEEDORES ORDER BY nombre ASC");
-                                $stmt->execute();
-                                $proveedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
-                                foreach ($proveedores as $proveedor) {
-                                    echo '<option value="' . $proveedor['proveedorID'] . '">' . $proveedor['nombre'] . '</option>';
                                 }
                                 ?>
                             </select>
@@ -234,92 +232,29 @@
                             <label for="ubicacion" class="form-label">Ubicación</label>
                             <input type="text" class="form-control" id="ubicacion" name="ubicacion" required>
                         </div>
+                        <div class="mb-3">
+                            <label for="proveedorID" class="form-label">Proveedor</label>
+                            <select class="form-select" id="proveedorID" name="proveedorID" required>
+                                <!-- Opciones de proveedor desde la base de datos -->
+                                <?php
+                                $stmt = $pdo->prepare("SELECT proveedorID, nombre FROM PROVEEDORES");
+                                $stmt->execute();
+                                $proveedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
+
+                                foreach ($proveedores as $proveedor) {
+                                    echo '<option value="' . $proveedor['proveedorID'] . '">' . $proveedor['nombre'] . '</option>';
+                                }
+                                ?>
+                            </select>
+                        </div>
                         <div class="modal-footer">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
-                            <button type="submit" name="addInsumo" class="btn btn-dark">Agregar Insumo</button>
+                            <button type="submit" name="addInsumo" class="btn btn-primary">Agregar Insumo</button>
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
                         </div>
                     </form>
                 </div>
             </div>
         </div>
     </div>
-    
-    <!-- Incluye Bootstrap JS -->
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.3/dist/js/bootstrap.bundle.min.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            const form = document.querySelector('form');
-            form.addEventListener('submit', function (event) {
-                const precioInput = document.getElementById('precio');
-                const cantidadStockInput = document.getElementById('cantidad_stock');
-
-                if (parseFloat(precioInput.value) <= 0) {
-                    event.preventDefault(); // Evita el envío del formulario
-                    alert('El precio debe ser un número positivo.');
-                    precioInput.focus();
-                } else if (parseInt(cantidadStockInput.value, 10) < 0) {
-                    event.preventDefault(); // Evita el envío del formulario
-                    alert('La cantidad en stock no puede ser un número negativo.');
-                    cantidadStockInput.focus();
-                }
-            });
-        });
-
-        // Previene el envío del formulario en caso de errores
-        if (window.history.replaceState) {
-            window.history.replaceState(null, null, window.location.href);
-        }
-    </script>
-   <script>
-        $(document).ready(function() {
-            if ($('#staticBackdrop').length) {
-                $('#staticBackdrop').modal('show');
-            }
-        });
-
-        document.getElementById('x').addEventListener('submit', function(event) {
-            let valid = true;
-
-            const cantidad_stock = parseFloat(document.getElementById('cantidad_stock').value);
-            const precio = parseFloat(document.getElementById('precio').value);
-
-            // Validar salario
-            if (isNaN(cantidad_stock) || cantidad_stock < 0) {
-                document.getElementById('cantidad_stock').classList.add('is-invalid');
-                valid = false;
-            } else {
-                document.getElementById('cantidad_stock').classList.remove('is-invalid');
-            }
-
-            if (!valid) {
-                event.preventDefault();
-            }
-        });
-
-        function validarNumeros(event) {
-            const input = event.target;
-            input.value = input.value.replace(/[^0-9.]/g, '');
-        }
-
-        document.getElementById('precio').addEventListener('input', validarNumeros);
-        document.getElementById('cantidad_stock').addEventListener('input', validarNumeros);
-
-        document.getElementById('cantidad_stock').addEventListener('input', function(event) {
-            var value = parseFloat(event.target.value);
-            if (value < 0) {
-                event.target.value = '';
-                alert('El stock no puede ser negativo.');
-            }
-
-        document.getElementById('precio').addEventListener('input', function(event) {
-            var value = parseFloat(event.target.value);
-            if (value < 0) {
-                event.target.value = '';
-                alert('El salario precio no puede ser negativo.');
-            }
-        });
-    });
-    </script>
-
 </body>
 </html>
