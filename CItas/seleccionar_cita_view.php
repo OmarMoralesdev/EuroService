@@ -126,55 +126,55 @@ session_start();
                 }
             });
         </script>
-        
+
     </div>
     <script>
-$(document).ready(function() {
-    $('form').on('submit', function(e) {
-        let isValid = true;
-        
-        // Validar el campo del cliente
-        const clienteCampo = $('#campo').val().trim();
-        if (clienteCampo === '') {
-            $('#campo').addClass('is-invalid');
-            isValid = false;
-        } else {
-            $('#campo').removeClass('is-invalid');
-        }
-        
-        // Validar el campo del vehículo
-        const vehiculoCampo = $('#vehiculoSeleccionado').val().trim();
-        if (vehiculoCampo === '') {
-            $('#vehiculoSeleccionado').addClass('is-invalid');
-            isValid = false;
-        } else {
-            $('#vehiculoSeleccionado').removeClass('is-invalid');
-        }
-        
-        // Validar el servicio solicitado
-        const servicioCampo = $('#servicioSolicitado').val().trim();
-        if (servicioCampo === '') {
-            $('#servicioSolicitado').addClass('is-invalid');
-            isValid = false;
-        } else {
-            $('#servicioSolicitado').removeClass('is-invalid');
-        }
-        
-        // Validar la fecha de la cita
-        const fechaCampo = $('#fecha_cita').val().trim();
-        if (fechaCampo === '') {
-            $('#fecha_cita').addClass('is-invalid');
-            isValid = false;
-        } else {
-            $('#fecha_cita').removeClass('is-invalid');
-        }
-        
-        if (!isValid) {
-            e.preventDefault(); // Prevenir el envío del formulario si hay errores
-        }
-    });
-});
-</script>
+        $(document).ready(function() {
+            $('form').on('submit', function(e) {
+                let isValid = true;
+
+                // Validar el campo del cliente
+                const clienteCampo = $('#campo').val().trim();
+                if (clienteCampo === '') {
+                    $('#campo').addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $('#campo').removeClass('is-invalid');
+                }
+
+                // Validar el campo del vehículo
+                const vehiculoCampo = $('#vehiculoSeleccionado').val().trim();
+                if (vehiculoCampo === '') {
+                    $('#vehiculoSeleccionado').addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $('#vehiculoSeleccionado').removeClass('is-invalid');
+                }
+
+                // Validar el servicio solicitado
+                const servicioCampo = $('#servicioSolicitado').val().trim();
+                if (servicioCampo === '') {
+                    $('#servicioSolicitado').addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $('#servicioSolicitado').removeClass('is-invalid');
+                }
+
+                // Validar la fecha de la cita
+                const fechaCampo = $('#fecha_cita').val().trim();
+                if (fechaCampo === '') {
+                    $('#fecha_cita').addClass('is-invalid');
+                    isValid = false;
+                } else {
+                    $('#fecha_cita').removeClass('is-invalid');
+                }
+
+                if (!isValid) {
+                    e.preventDefault(); // Prevenir el envío del formulario si hay errores
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

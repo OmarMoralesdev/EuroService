@@ -19,6 +19,16 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $urgencia = "si";
     $atencion = "Muy Urgente";
 
+    if (
+        empty($vehiculoID) || empty($servicioSolicitado) || empty($costoManoObra) ||
+        empty($costoRefacciones) || empty($empleadoID) || empty($ubicacionID) ||
+        empty($anticipo) || empty($formaDePago)
+    ) {
+
+        $_SESSION['error'] = "Todos los campos son requeridos.";
+        header("Location: crear_orden_sin_cita.php");
+        exit();
+    }
     // Validación de datos
     if ($costoManoObra < 0 || $costoRefacciones < 0) {
         $_SESSION['error'] = "No puedes ingresar números negativos.";
