@@ -55,7 +55,7 @@ session_start();
                     }
                     ?>
 
-                    <form id="formInspeccion" action="" method="POST" autocomplete="off" novalidate>
+                    <form id="formInspeccion" action="soloinspeccion.php" method="POST" autocomplete="off" novalidate>
                         <div class="mb-3">
                             <input type="text" class="form-control" autocomplete="off" id="campo" name="campo" placeholder="Buscar cliente..." required>
                             <ul id="lista" class="list-group lista"></ul>
@@ -88,11 +88,6 @@ session_start();
                                 }
                                 ?>
                             </select>
-                        </div>
-
-                        <div class="mb-3">
-                            <label for="fechaSolicitud" class="form-label">Fecha de Solicitud:</label>
-                            <input type="date" id="fechaSolicitud" name="fechaSolicitud" class="form-control" required>
                         </div>
 
                         <div class="mb-3">
@@ -150,6 +145,14 @@ session_start();
             // Validación personalizada si es necesario
         });
     </script>
+    <script>
+    $(document).ready(function() {
+        if ($('#staticBackdrop').length) {
+            $('#staticBackdrop').modal('show');
+        }
+    });
+</script>
+
 </body>
 
 </html>

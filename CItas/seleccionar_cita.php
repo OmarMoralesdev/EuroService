@@ -1,6 +1,24 @@
 <?php
 session_start();
+require '../includes/db.php';
 
+$con = new Database();
+$pdo = $con->conectar();
+
+if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+    $citaID = $_POST['citaID'];
+    $_SESSION['cita'] = obtenerCitaPorID($pdo, $citaID); // Guarda la cita seleccionada en la sesión
+    $_SESSION['mensaje'] = "Cita seleccionada correctamente";
+    header('Location: editar_cita_view.php'); // Redirige a la página de edición
+    exit();
+}
+
+function obtenerCitaPorID($pdo, $citaID)
+{
+    $stmt = $pdo->prepare('SELECT * FROM CITAS WHERE citaID = ?');
+    $stmt->execute([$citaID]);
+    return $stmt->fetch(PDO::FETCH_ASSOC);
+}
 ?>
 <!DOCTYPE html>
 <html lang="es">
@@ -89,7 +107,7 @@ session_start();
                         unset($_SESSION['bien']);
                     }
                     ?>
-                    <form id="formularioCita" action="editar_cita_view.php" method="post" style="display:none;">
+                    <form id="formularioCita" action="" method="post" style="display:none;">
                         <input type="hidden" id="citaIDSeleccionada" name="citaID">
                     </form>
                 </div>
@@ -98,9 +116,6 @@ session_start();
 </body>
 <script>
   let citas = <?php
-        require '../includes/db.php';
-        $con = new Database();
-        $pdo = $con->conectar();
         $citas = listarCitasPendientes($pdo);
         echo json_encode($citas);
     ?>;

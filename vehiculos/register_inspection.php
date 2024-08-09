@@ -72,18 +72,38 @@ try {
     $stmtOrden->execute([date('Y-m-d'), 800, 0, 'Muy Urgente', $citaID, $empleadoID, $ubicacionID]);
     $ordenID = $pdo->lastInsertId();
     $anticipo = 800 * 0.5;
+    $fechaPago = date('Y-m-d');
+    $tipoPago = "anticipo";
 
-    // Insertar pago
-    realizarPago($pdo, $ordenID, date('Y-m-d'), $anticipo, "anticipo", $formaDePago);
 
-    $_SESSION['bien'] = "Cita y orden de trabajo registradas exitosamente.";
+    try {
+        // Llamar al procedimiento almacenado para realizar el pago
+        $sql = "CALL realizarPago(:ordenID, :fechaPago, :monto, :tipoPago, :formaDePago)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
+            ':ordenID' => $ordenID,
+            ':fechaPago' => $fechaPago,
+            ':monto' => $anticipo,
+            ':tipoPago' => $tipoPago,
+            ':formaDePago' => $formaDePago,
+        ]);
+    
+        
+    } catch (PDOException $e) {
+        $_SESSION['error'] = ("Error al realizar el pago: " . $e->getMessage());
+        header("Location: inspeccion_view.php");
+        exit();
+      
+    }   
+
+    $pdo->commit();
+    $_SESSION['bien'] = "Ejecutado exitosamente";
     header("Location: inspeccion_view.php");
     exit();
-
 } catch (PDOException $e) {
-    echo "Error: " . $e->getMessage();
-    header("Location: inspeccion_view.php");
-    exit();
+    $pdo->rollBack();
+    $_SESSION['error'] = "Error al crear la cita y orden de trabajo: " . $e->getMessage();
 }
 
-?>
+  
+
