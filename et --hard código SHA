@@ -1,0 +1,290 @@
+[33mcommit abdc7d994f78d86abd68648c7d007b8cb2554196[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mmain[m[33m, [m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m
+Author: JorgeLIV <23170082@uttcampus.edu.mx>
+Date:   Fri Aug 9 14:44:14 2024 -0600
+
+    registrar cliente jalando
+
+[33mcommit f6e28b6b0b4c8518c949f166ff5bd0777d697806[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Fri Aug 9 12:23:24 2024 -0600
+
+    ubicaciones bien
+
+[33mcommit c7b0621439a8d39cc22145e59bb8f981bf06d986[m
+Merge: 38069ee dbd27fa
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Fri Aug 9 12:12:27 2024 -0600
+
+    Merge branch 'main' of https://github.com/OmarMoralesdev/EuroService
+
+[33mcommit 38069ee3b0cbb91c5b0d930320ca61349e082c71[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Fri Aug 9 12:07:52 2024 -0600
+
+    cambios
+
+[33mcommit dbd27fa47dbf04931fdd73822375b6cb523f4cb3[m
+Author: JorgeLIV <23170082@uttcampus.edu.mx>
+Date:   Fri Aug 9 11:47:59 2024 -0600
+
+    a
+
+[33mcommit 0511f95f066a6bfb06fecf1315aef3c9878fa47a[m
+Merge: 9911801 2291fc9
+Author: JorgeLIV <23170082@uttcampus.edu.mx>
+Date:   Fri Aug 9 11:31:11 2024 -0600
+
+    Merge branch 'main' of https://github.com/OmarMoralesdev/EuroService
+
+[33mcommit 9911801e48277872baecc220617d8ccd88b511fc[m
+Author: JorgeLIV <23170082@uttcampus.edu.mx>
+Date:   Fri Aug 9 11:26:03 2024 -0600
+
+    validaciones, incono, q venden los proveedores
+
+[33mcommit 2291fc973b1b102d4a0f1e03903bad7570cea89f[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Fri Aug 9 10:27:19 2024 -0600
+
+    datepicker
+
+[33mcommit 97c1d5c82f02f1ce64f366b791f7302c8f52a1ba[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Fri Aug 9 08:43:33 2024 -0600
+
+    LINK BIEN
+
+[33mcommit da202d99b0cf4d3a0e54e4e64e916e5bdb5f99de[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Fri Aug 9 08:40:40 2024 -0600
+
+    CONSULTAS
+
+[33mcommit ea3bef2b8a17e4eab781ed9658e8d9ff5671e480[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Fri Aug 9 08:37:55 2024 -0600
+
+    links barra
+
+[33mcommit 18867269605e61293c58d28868a61ab0f065a371[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Fri Aug 9 08:35:09 2024 -0600
+
+    links de la barra
+
+[33mcommit fe948da2bce9abce061df6204e59b86686bd0775[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Fri Aug 9 08:31:02 2024 -0600
+
+    cambio de nombre a dueno
+
+[33mcommit 7618133d8ccf8d6d3f304d8ed51aabdb6d3e9ca7[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Fri Aug 9 08:06:26 2024 -0600
+
+    ordens jalando al 100
+
+[33mcommit a581363a5c1ace4ca180c123b747d45b9245b0cd[m
+Merge: b4a4ff4 7733577
+Author: JorgeLIV <23170082@uttcampus.edu.mx>
+Date:   Fri Aug 9 04:54:22 2024 -0600
+
+    Merge branch 'main' of https://github.com/OmarMoralesdev/EuroService
+
+[33mcommit b4a4ff40bfd38c2f7761b07d31beff831728673e[m
+Author: JorgeLIV <23170082@uttcampus.edu.mx>
+Date:   Fri Aug 9 04:52:54 2024 -0600
+
+    x
+
+[33mcommit 77335779afa6b19fc9ae2ff17623346a514b277e[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Fri Aug 9 04:15:41 2024 -0600
+
+    ci
+
+[33mcommit 005a9748625ab6ea61411f282f9ac3e660a5379e[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Fri Aug 9 03:43:52 2024 -0600
+
+    menue bonitos
+
+[33mcommit 82c4f5ca42b9340880636717c39be41d328b4a74[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Fri Aug 9 03:31:31 2024 -0600
+
+    cambios de verificaciones
+
+[33mcommit eb4985434e11528d488b0092963d9fc2f6f039bc[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Fri Aug 9 01:30:28 2024 -0600
+
+    icono
+
+[33mcommit 8831079d2d6f619fd6a992442bee610ef101ced2[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Fri Aug 9 01:09:19 2024 -0600
+
+    validacion empleados
+
+[33mcommit 2ab9dcaa5511d2f0b065bfeaa998fc95032d883b[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Fri Aug 9 00:13:50 2024 -0600
+
+    cambios imagenes
+
+[33mcommit 9bd967350d3cccffb1af8ee561487d39d35b2548[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Thu Aug 8 23:42:04 2024 -0600
+
+    br
+
+[33mcommit 44d42d738f5002d6a2194f9b5c1c2f503ae60459[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Thu Aug 8 23:27:31 2024 -0600
+
+    citas bien
+
+[33mcommit 19f846d43a08c34f1c24c56a5e3b45a40f91759d[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Thu Aug 8 23:08:36 2024 -0600
+
+    citas bien
+
+[33mcommit 58d215a9e3396fb12d76d409856e2a03323adffe[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Thu Aug 8 22:38:11 2024 -0600
+
+    cambios recibos de pago
+
+[33mcommit e84938bc6b097803e00908423afa8180a1070e9b[m
+Author: FH9CG <franciscohurtado336@gmail.com>
+Date:   Thu Aug 8 16:35:51 2024 -0600
+
+    Vehículos inactivos fuera del buscador
+
+[33mcommit 39d1108a5c0293b39d2348465748b5bd263ad1c5[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Thu Aug 8 14:07:35 2024 -0600
+
+    .
+
+[33mcommit a8ce08a4cf21f9285d28d34d691b35f9df953db0[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Thu Aug 8 13:58:41 2024 -0600
+
+    prueba email
+
+[33mcommit b77bc0a2d26ce09b5a23935a9b3426bd4416805a[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Thu Aug 8 13:31:57 2024 -0600
+
+    cambios servidor
+
+[33mcommit e967295e6a73377666ecdd51be4c795abcb38746[m
+Merge: 82eeac0 77cafa4
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Thu Aug 8 13:11:32 2024 -0600
+
+    Merge branch 'main' of https://github.com/OmarMoralesdev/EuroService
+
+[33mcommit 82eeac016f1c73442b7fc665c13be70b65473933[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Thu Aug 8 13:06:56 2024 -0600
+
+    CAmbio
+
+[33mcommit 77cafa4f6f55e51441549cd197a84b0b26c85d28[m
+Author: FH9CG <franciscohurtado336@gmail.com>
+Date:   Thu Aug 8 12:23:11 2024 -0600
+
+    Dueño
+
+[33mcommit 4d0275517ee118ce65bfdd9d856419c59792509f[m
+Merge: 8baf5e3 8d6acd1
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Thu Aug 8 02:02:17 2024 -0600
+
+    Merge branch 'main' of https://github.com/OmarMoralesdev/EuroService
+
+[33mcommit 8baf5e3b61c1caf024dde1166bef89ecdb7a967f[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Thu Aug 8 02:02:06 2024 -0600
+
+    cambios date picker
+
+[33mcommit 05f6d1b76fbbb484a0ce777efbd6ff375e872143[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Thu Aug 8 02:01:48 2024 -0600
+
+    cambio de date picker
+
+[33mcommit 8d6acd1a28a3085394db3f09dbccaf994648defd[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Wed Aug 7 23:47:22 2024 -0600
+
+    enviar correo
+
+[33mcommit d5cbdb7a886b4cbc279c2e3f1a16e884ad8f54bc[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Wed Aug 7 23:02:41 2024 -0600
+
+    citas bien
+
+[33mcommit 484c02cfaa1dfc82ebd326fcd9924ca2e1cde976[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Wed Aug 7 22:52:40 2024 -0600
+
+    redireccionamiento login
+
+[33mcommit 306cb0322d0b931d70cf581c2bb0fca613f1052d[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Wed Aug 7 22:46:22 2024 -0600
+
+    .
+
+[33mcommit 4191cb2c961b3e685f0571adda8ea870370ddfc1[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Wed Aug 7 22:44:58 2024 -0600
+
+    .
+
+[33mcommit c20cfac8cd05eb53a4bce322de8e31b631609df3[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Wed Aug 7 22:43:26 2024 -0600
+
+    correccion consulta
+
+[33mcommit f09155c74d01215cd8f9dc5bc3a247600d5ee1cf[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Wed Aug 7 22:39:44 2024 -0600
+
+    sleccionar cita
+
+[33mcommit a269c3dcd7d1b76123a068a6bd268f185c87a5fa[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Wed Aug 7 22:37:05 2024 -0600
+
+    rendimiento
+
+[33mcommit 991eb569ba0119c20d304e6cf7f926bfb896783e[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Wed Aug 7 22:30:10 2024 -0600
+
+    sleccionar citas
+
+[33mcommit 3335a4763b2bc3ddba3b56561dbd2c2ab1e6d94b[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Wed Aug 7 22:29:22 2024 -0600
+
+    seleccionar citas bien
+
+[33mcommit 3e8f685aa80a021a844e49cfd2637f08ccac81bb[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Wed Aug 7 22:18:48 2024 -0600
+
+    insumos jaalando
+
+[33mcommit 77ae3915bece1ba9cc1e49a867e2778a064d3626[m
+Author: OmarMoralesdev <matymv8288@gmail.com>
+Date:   Wed Aug 7 22
