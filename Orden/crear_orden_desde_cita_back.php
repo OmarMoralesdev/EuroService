@@ -45,9 +45,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtOrden->execute([$fechaOrden, $costoManoObra, $costoRefacciones, $atencion, $citaID, $empleado, $ubicacionID]);
         $ordenID = $pdo->lastInsertId();
         
-        realizarPago($pdo, $ordenID, $fechaPago, $anticipo, $tipoPago, $formaDePago);
+       
         // Esto ya se maneja en los triggers
+        try {
+            // Llamar al procedimiento almacenado para realizar el pago
+            $sql = "CALL realizarPago(:ordenID, :fechaPago, :monto, :tipoPago, :formaDePago)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                ':ordenID' => $ordenID,
+                ':fechaPago' => $fechaPago,
+                ':monto' => $anticipo,
+                ':tipoPago' => $tipoPago,
+                ':formaDePago' => $formaDePago,
+            ]);
 
+            
+        } catch (PDOException $e) {
+            $_SESSION['error'] = ("Error al realizar el pago: " . $e->getMessage());
+            header("Location: crear_orden_desde_cita.php");
+            exit();
+          
+        }   
         // Confirmar la transacción
         $pdo->commit();
       

@@ -60,48 +60,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $stmtCita->execute([$vehiculoID, $servicioSolicitado, $fechaSolicitud, $fechaCita, $urgencia]);
         $citaID = $pdo->lastInsertId();
 
-        // Verificar si ya existe una orden de trabajo para esta cita
-        $sqlVerificarOrden = "SELECT * FROM ORDENES_TRABAJO WHERE citaID = ?";
-        $stmtVerificarOrden = $pdo->prepare($sqlVerificarOrden);
-        $stmtVerificarOrden->execute([$citaID]);
-
-        if ($stmtVerificarOrden->rowCount() > 0) {
-            $pdo->rollBack();
-            $_SESSION['error'] = "Ya existe una orden de trabajo para esta cita.";
-            header("Location: crear_orden_sin_cita.php");
-            exit();
-        }
-        // Verificar el límite de vehículos en la ubicación
-        $sqlVerificarUbicacion = "
-SELECT 
-    u.capacidad AS vehiculos_maximos, 
-    COUNT(v.vehiculoID) AS vehiculos_actuales 
-FROM 
-    UBICACIONES u
-    LEFT JOIN ORDENES_TRABAJO ot ON u.ubicacionID = ot.ubicacionID
-    LEFT JOIN CITAS c ON ot.citaID = c.citaID
-    LEFT JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
-WHERE 
-    u.ubicacionID = ?
-GROUP BY 
-    u.ubicacionID, u.capacidad
-";
-
-        $stmtVerificarUbicacion = $pdo->prepare($sqlVerificarUbicacion);
-        $stmtVerificarUbicacion->execute([$ubicacionID]);
-        $ubicacion = $stmtVerificarUbicacion->fetch(PDO::FETCH_ASSOC);
-
-        if (!$ubicacion) {
-            $_SESSION['error'] = "Ubicación no encontrada.";
-            header("Location: crear_orden_sin_cita.php");
-            exit();
-        }
-
-        if ($ubicacion['vehiculos_actuales'] >= $ubicacion['vehiculos_maximos']) {
-            $_SESSION['error'] = "La ubicación ya está llena.";
-            header("Location: crear_orden_sin_cita.php");
-            exit();
-        }
+      
         // Insertar orden de trabajo
         $sqlOrden = "INSERT INTO ORDENES_TRABAJO (fecha_orden, costo_mano_obra, costo_refacciones, atencion, citaID, empleadoID, ubicacionID) VALUES (?, ?, ?, ?, ?, ?, ?)";
         $stmtOrden = $pdo->prepare($sqlOrden);
@@ -110,10 +69,26 @@ GROUP BY
 
         $fechaPago = date('Y-m-d');
         $tipoPago = "anticipo";
-        // Insertar pago
-        realizarPago($pdo, $ordenID, $fechaPago, $anticipo, $tipoPago, $formaDePago);
-        actualizarEstadoCita($pdo, $citaID, 'en proceso');
 
+        try {
+            // Llamar al procedimiento almacenado para realizar el pago
+            $sql = "CALL realizarPago(:ordenID, :fechaPago, :monto, :tipoPago, :formaDePago)";
+            $stmt = $pdo->prepare($sql);
+            $stmt->execute([
+                ':ordenID' => $ordenID,
+                ':fechaPago' => $fechaPago,
+                ':monto' => $anticipo,
+                ':tipoPago' => $tipoPago,
+                ':formaDePago' => $formaDePago,
+            ]);
+        
+            
+        } catch (PDOException $e) {
+            $_SESSION['error'] = ("Error al realizar el pago: " . $e->getMessage());
+            header("Location: crear_orden_sin_cita.php");
+            exit();
+          
+        }   
 
         $pdo->commit();
         $_SESSION['bien'] = "Cita y orden de trabajo creadas exitosamente.";

@@ -131,25 +131,6 @@ function obtenerDetallesClientepersona($pdo, $clienteID)
     return $stmt->fetch(PDO::FETCH_ASSOC);
 }
 
-function realizarPago($pdo, $ordenID, $fechaPago, $monto, $tipoPago, $formaDePago)
-{
-    try {
-        // Llamar al procedimiento almacenado para realizar el pago
-        $sql = "CALL realizarPago(:ordenID, :fechaPago, :monto, :tipoPago, :formaDePago)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            ':ordenID' => $ordenID,
-            ':fechaPago' => $fechaPago,
-            ':monto' => $monto,
-            ':tipoPago' => $tipoPago,
-            ':formaDePago' => $formaDePago,
-        ]);
-    
-        echo "Pago realizado y anticipo actualizado con éxito.";
-    } catch (PDOException $e) {
-        throw new Exception("Error al realizar el pago: " . $e->getMessage());
-    }    
-}
 function listarordenes($pdo) {
     $stmt = $pdo->query("
         SELECT ot.ordenID, ot.fecha_orden
