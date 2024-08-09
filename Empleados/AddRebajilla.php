@@ -10,19 +10,22 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($empleadoID && $rebaja !== null) {
         try {
-            $sql = "SELECT salario_diario FROM EMPLEADOS WHERE empleadoID = :empleadoID";
+            // Obtener el valor actual de rebajas
+            $sql = "SELECT rebajas FROM EMPLEADOS WHERE empleadoID = :empleadoID";
             $stmt = $pdo->prepare($sql);
             $stmt->bindValue(':empleadoID', $empleadoID);
             $stmt->execute();
             $empleado = $stmt->fetch(PDO::FETCH_ASSOC);
 
             if ($empleado) {
-                $salarioDiario = $empleado['salario_diario'];
-                $nuevoSalario = $salarioDiario - $rebaja / 5;
+                // Calcular la nueva cantidad de rebajas
+                $rebajasActuales = $empleado['rebajas'];
+                $nuevaRebaja = $rebajasActuales + $rebaja;
 
-                $sql = "UPDATE EMPLEADOS SET salario_diario = :nuevoSalario WHERE empleadoID = :empleadoID";
+                // Actualizar el campo rebajas
+                $sql = "UPDATE EMPLEADOS SET rebajas = :nuevaRebaja WHERE empleadoID = :empleadoID";
                 $stmt = $pdo->prepare($sql);
-                $stmt->bindValue(':nuevoSalario', $nuevoSalario);
+                $stmt->bindValue(':nuevaRebaja', $nuevaRebaja);
                 $stmt->bindValue(':empleadoID', $empleadoID);
                 $stmt->execute();
 

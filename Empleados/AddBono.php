@@ -6,9 +6,9 @@ $pdo = $conexion->conectar();
 
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $empleadoID = isset($_POST['empleadoID']) ? $_POST['empleadoID'] : null;
-    $rebaja = isset($_POST['rebaja']) ? $_POST['rebaja'] : null;
+    $bono = isset($_POST['bono']) ? $_POST['bono'] : null;
 
-    if ($empleadoID && $rebaja !== null) {
+    if ($empleadoID && $bono !== null) {
         try {
             $sql = "SELECT salario_diario FROM EMPLEADOS WHERE empleadoID = :empleadoID";
             $stmt = $pdo->prepare($sql);
@@ -18,7 +18,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($empleado) {
                 $salarioDiario = $empleado['salario_diario'];
-                $nuevoSalario = $salarioDiario - $rebaja / 5;
+                $nuevoSalario = $salarioDiario - $bono / 5;
 
                 $sql = "UPDATE EMPLEADOS SET salario_diario = :nuevoSalario WHERE empleadoID = :empleadoID";
                 $stmt = $pdo->prepare($sql);

@@ -26,9 +26,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <head>
     <!-- Meta tags, links, stylesheets -->
     <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
+    <link rel="icon" type="image/x-icon" href="./img/incono.svg">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js" integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="icon" href="">
     
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -275,7 +277,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <a class="nav-link" href="#ubi">Ubicación</a>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link btn pulse" data-bs-toggle="modal" data-bs-target="#loginModal">INICIAR SESIÓN</button>
+                        <a href="./Login/index.php" class="nav-link btn pulse">INICIAR SESIÓN</a>
                     </li>
                 </ul>
             </div>
@@ -331,7 +333,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <div class="containerr">
-        <div class="bg-fixedd" style="background-image: url('../EuroService/img/FONDO LOGIN.jpg');">
+        <div class="bg-fixedd" style="background-image: url('../EuroService/img/FONDO_LOGIN.jpg');">
             <div class="overlay"></div>
         </div>
     </div>
@@ -361,36 +363,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <iframe id="ubi" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d661.048036986063!2d-103.40865896550226!3d25.59861614619652!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x868fdbbc87fdf615%3A0xe5e0fd19352eff0b!2sKike%20Mecanico!5e0!3m2!1sen!2smx!4v1722721714805!5m2!1sen!2smx" width="100%" height="300" style="border:1px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </footer>
-
-    <!-- Modal de Inicio de Sesión -->
-    <div class="modal fade" id="loginModal" tabindex="-1" aria-labelledby="loginModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <?php if (isset($_SESSION['alert'])): ?>
-                        <div class="alert alert-danger" role="alert">
-                            <?php echo $_SESSION['alert']['message']; unset($_SESSION['alert']); ?>
-                        </div>
-                    <?php endif; ?>
-                    <form action="./Login/login.php" method="POST">
-                        <div class="mb-3">
-                            <label for="username" class="form-label">Usuario</label>
-                            <input type="text" class="form-control" name="username" id="username" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="password" class="form-label">Contraseña</label>
-                            <input type="password" class="form-control" name="password" id="password" required>
-                        </div>
-                        <hr>
-                        <button type="submit" class="btn btn-light w-100">Iniciar Sesión</button>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
 </body>
 
 </html>
