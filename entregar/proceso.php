@@ -13,7 +13,7 @@ try {
     }
 
     $ordenID = $_POST['ordenID'];
-    $nuevaUbicacionID = 5;
+    $nuevaUbicacionID = 4;
 
     // Consultar el total estimado de la orden
     $stmt = $pdo->prepare("SELECT total_estimado, ubicacionID FROM ORDENES_TRABAJO WHERE ordenID = ?");

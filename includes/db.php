@@ -134,32 +134,21 @@ function obtenerDetallesClientepersona($pdo, $clienteID)
 function realizarPago($pdo, $ordenID, $fechaPago, $monto, $tipoPago, $formaDePago)
 {
     try {
-        // Insertar el pago en la tabla PAGOS
-        $sqlPago = "INSERT INTO PAGOS (ordenID, fecha_pago, monto, tipo_pago, forma_de_pago)
-                    VALUES (:ordenID, :fechaPago, :monto, :tipoPago, :formaDePago)";
-        $stmtPago = $pdo->prepare($sqlPago);
-        $stmtPago->execute([
+        // Llamar al procedimiento almacenado para realizar el pago
+        $sql = "CALL realizarPago(:ordenID, :fechaPago, :monto, :tipoPago, :formaDePago)";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([
             ':ordenID' => $ordenID,
             ':fechaPago' => $fechaPago,
             ':monto' => $monto,
             ':tipoPago' => $tipoPago,
             ':formaDePago' => $formaDePago,
         ]);
-
-        // Actualizar el campo anticipo en la tabla ORDENES_TRABAJO
-        if ($tipoPago == 'anticipo') {
-            $sqlUpdateAnticipo = "UPDATE ORDENES_TRABAJO SET anticipo = :monto WHERE ordenID = :ordenID";
-            $stmtUpdate = $pdo->prepare($sqlUpdateAnticipo);
-            $stmtUpdate->execute([
-                ':monto' => $monto,
-                ':ordenID' => $ordenID,
-            ]);
-        }
-
+    
         echo "Pago realizado y anticipo actualizado con éxito.";
     } catch (PDOException $e) {
         throw new Exception("Error al realizar el pago: " . $e->getMessage());
-    }
+    }    
 }
 function listarordenes($pdo) {
     $stmt = $pdo->query("
@@ -173,8 +162,3 @@ function listarordenes($pdo) {
     
     return $ordenes;
 }
-
-
-
-
-
