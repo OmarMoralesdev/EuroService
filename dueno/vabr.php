@@ -276,12 +276,12 @@ h2 {
             <i class="lni lni-home"></i>
         </button>
         <div class="sidebar-logo">
-            <a href="../dueño/index.php">EURO SERVICE</a>
+            <a href="index.php">EURO SERVICE</a>
         </div>
     </div>
     <ul class="sidebar-nav">
         <li class="sidebar-item">
-            <a href="../dueño/proveedores_view.php" class="sidebar-link">
+            <a href="proveedores_view.php" class="sidebar-link">
                 <i class="lni lni-delivery"></i>
                 <span>PROOVEDORES</span>
             </a>
@@ -295,10 +295,10 @@ h2 {
             </a>
             <ul id="catalogo" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="../dueño/Categoria.php" class="sidebar-link">CATEGORÍA</a>
+                    <a href="Categoria.php" class="sidebar-link">CATEGORÍA</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../dueño/Insumos.php" class="sidebar-link">INSUMOS</a>
+                    <a href="Insumos.php" class="sidebar-link">INSUMOS</a>
                 </li>
             </ul>
         </li>
@@ -312,38 +312,38 @@ h2 {
             </a>
             <ul id="car" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="../dueño/atencion_view.php" class="sidebar-link">ATENCION</a>
+                    <a href="atencion_view.php" class="sidebar-link">ATENCION</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../dueño/ubicaciones_view.php" class="sidebar-link">UBICACIONES</a>
+                    <a href="ubicaciones_view.php" class="sidebar-link">UBICACIONES</a>
                 </li>
             </ul>
         </li>
 
 
         <li class="sidebar-item">
-            <a href="../dueño/pendientes.php" class="sidebar-link">
+            <a href="pendientes.php" class="sidebar-link">
                 <i class="lni lni-agenda"></i>
                 <span>CITAS PENDIENTES</span>
             </a>
         </li>
 
         <li class="sidebar-item">
-            <a href="../dueño/buscar_view.php" class="sidebar-link">
+            <a href="buscar_view.php" class="sidebar-link">
                 <i class="bi bi-people"></i>
                 <span>BUSCAR CLIENTES</span>
             </a>
         </li>
         
         <li class="sidebar-item">
-            <a href="../dueño/buscar.php" class="sidebar-link">
+            <a href="buscar.php" class="sidebar-link">
             <i class="lni lni-user"></i>
                 <span>BUSCAR EMPLEADOS</span>
             </a>
         </li>
 
         <li class="sidebar-item">
-            <a href="../dueño/finanzas_view.php" class="sidebar-link">
+            <a href="finanzas_view.php" class="sidebar-link">
                 <i class="lni lni-coin"></i>
                 <span>FINANZAS</span>
             </a>    
