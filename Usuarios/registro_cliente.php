@@ -123,9 +123,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             preg_match('/^[a-zA-Z\s]+$/', $nombre) &&
             // Validar que el apellido paterno y materno solo contengan letras y espacios
             preg_match('/^[a-zA-Z\s]+$/', $apellido_paterno) &&
-            // Validar que el correo sea un correo electrónico válido
             preg_match('/^[a-zA-Z\s]+$/', $apellido_materno) &&
-            // Validar que el teléfono sea un número de 10 dígitos
+            // Validar que el correo sea un correo electrónico válido
             filter_var($correo, FILTER_VALIDATE_EMAIL) &&
             // Validar que el teléfono sea un número de 10 dígitos
             preg_match('/^\d{10}$/', $telefono)
@@ -151,64 +150,42 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 header('Location: vista_registro_cliente.php');
                 exit();
             }
+            
             // Insertar un nuevo cliente
             $password = generateRandomPassword();
-            // Hash de la contraseña
             $hashed_password = password_hash($password, PASSWORD_DEFAULT);
-            // Rol del usuario
             $role = 'cliente';
             
-            // Insertar un nuevo cliente
-            $stmt_persona = $pdo->prepare("INSERT INTO PERSONAS (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");         
-               // Ejecutar la consulta con los datos del cliente
+            $stmt_persona = $pdo->prepare("INSERT INTO PERSONAS (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
             $stmt_persona->execute([$nombre, $apellido_paterno, $apellido_materno, $correo, $telefono]);
             
-            // Verificar si se insertó un nuevo cliente
             if ($stmt_persona->rowCount() > 0) {
-                // Obtener el ID de la persona recién insertada
                 $personaID = $pdo->lastInsertId();
-                // Generar un nombre de usuario único para el cliente
                 $username = generarUsernameParaCliente($pdo, $personaID);
                 
-                // Verificar si se pudo generar un nombre de usuario único
                 if ($username === null) {
-                    // Lanzar una excepción si no se pudo generar un nombre de usuario único
                     throw new Exception('No se pudo generar un nombre de usuario único.');
                 }
                 
-                // Insertar un nuevo cliente y activo
                 $activo = 'si';
                 $stmt_cliente = $pdo->prepare("INSERT INTO CLIENTES (personaID, activo) VALUES (?, ?)");
-                // Ejecutar la consulta con el ID de la persona y el estado activo
                 $stmt_cliente->execute([$personaID, $activo]);
                 
-                // Verificar si se insertó un nuevo cliente
                 if ($stmt_cliente->rowCount() > 0) {
-                    // Obtener el ID del cliente recién insertado
                     $clienteID = $pdo->lastInsertId();
-                    
-                    // Obtener el ID del rol del usuario
                     $stmt_rol = $pdo->prepare("SELECT rolID FROM ROLES WHERE nombre_rol = ?");
-                    // Ejecutar la consulta con el nombre del rol
                     $stmt_rol->execute([$role]);
-                    // Obtener la fila del rol
                     $rol = $stmt_rol->fetch();
-                    // Obtener el ID del rol
                     $rolID = $rol['rolID'];
                     
-                    // Contenido de validaciones
-                    $showModal = false;
-                    $showAlert = false;
-                    
-                    // Insertar un nuevo usuario exitosamente
                     $stmt_cuenta = $pdo->prepare("INSERT INTO CUENTAS (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
                     $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID]);
+                    
                     if ($stmt_cuenta->rowCount() > 0) {
-                        require '../vendor/autoload.php'; // Asegúrate de que la ruta sea correcta                
+                        require '../vendor/autoload.php';
                         $mail = new PHPMailer(true);
                         
                         try {
-     // Para obtener detalles de depuración
                             $mail->isSMTP();
                             $mail->Host       = 'smtp.gmail.com';
                             $mail->SMTPAuth   = true;
@@ -218,53 +195,81 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             $mail->Port       = 587;
                         
                             $mail->setFrom('euroservice339@gmail.com', 'EuroService');
-                            $mail->addAddress($correo); // Reemplaza con un correo para pruebas
+                            $mail->addAddress($correo);
                         
                             $mail->isHTML(true);
                             $mail->Subject = 'Creacion de cuenta';
-                            $mail->Body    = "Hola, <br><br>Tu cuenta ha sido creada con éxito. Tu usuario es: $username y tu contraseña es: $password";
-                        
+                            $mail->Body = "Hola {$nombre},<br><br>Tu cuenta ha sido creada con éxito. Tu usuario es: $username y tu contraseña es: $password.<br>.<br><br>Saludos,<br>El equipo de EuroService";
+
                             $mail->send();
-                            echo 'Mensaje enviado correctamente';
                         } catch (Exception $e) {
-                            echo "No se pudo enviar el mensaje. Error de correo: {$mail->ErrorInfo}";
+                            setAlertContent('error', "
+                                <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                                    <strong>Error:</strong> No se pudo enviar el correo. Detalles: {$mail->ErrorInfo}
+                                    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                                </div>");
+                            header('Location: vista_registro_cliente.php');
+                            exit();
                         }
+                        
                         setModalContent('success', "
-                        <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
-                            <div class='modal-dialog'>
-                                <div class='modal-content'>
-                                    <div class='modal-header'>
-                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
-                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                                    </div>
-                                    <div class='modal-body'>
-                                        Cuenta del cliente: <strong>$username</strong><br><br>
-                                        Contraseña del cliente: <strong>$password</strong><br><hr>
-                                        Presiona siguiente para registrar su vehículo
-                                    </div>
-                                    <div class='modal-footer'>
-                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                                        <a href='../vehiculos/autos_view.php' type='button' class='btn btn-dark'>Siguiente</a>
+                            <div class='modal fade' id='modalMessage' tabindex='-1' aria-labelledby='modalMessageLabel' aria-hidden='true'>
+                                <div class='modal-dialog'>
+                                    <div class='modal-content'>
+                                        <div class='modal-header'>
+                                            <h5 class='modal-title' id='modalMessageLabel'>Éxito</h5>
+                                            <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                        </div>
+                                        <div class='modal-body'>
+                                            <p>Cliente registrado exitosamente y se ha enviado un correo con los detalles de la cuenta.</p>
+                                        </div>
+                                        <div class='modal-footer'>
+                                            <button type='button' class='btn btn-primary' data-bs-dismiss='modal'>Aceptar</button>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div>");
+                    } else {
+                        // Mostrar alerta si la cuenta no fue registrada exitosamente
+                        setAlertContent('error', "
+                            <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                                <strong>Error:</strong> No se pudo registrar la cuenta del cliente.
+                                <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                            </div>");
+                    }
+                } else {
+                    // Mostrar alerta si el cliente no fue registrado exitosamente
+                    setAlertContent('error', "
+                        <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                            <strong>Error:</strong> No se pudo registrar el cliente.
+                            <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
                         </div>");
-                        $showModal = true;
-                    }          
                 }
+            } else {
+                // Mostrar alerta si la persona no fue registrada exitosamente
+                setAlertContent('error', "
+                    <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                        <strong>Error:</strong> No se pudo registrar la persona.
+                        <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                    </div>");
             }
+        } else {
+            // Mostrar alerta si los datos no son válidos
+            setAlertContent('error', "
+                <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                    <strong>Error:</strong> Los datos proporcionados no son válidos.
+                    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                </div>");
         }
-        // Mostrar una alerta si los datos no son válidos
     } catch (Exception $e) {
+        // Mostrar alerta si ocurre un error durante la operación
         setAlertContent('error', "
             <div class='alert alert-danger alert-dismissible fade show' role='alert'>
-                <strong>Error:</strong> Se produjo un error inesperado. Por favor, intente nuevamente.
+                <strong>Error:</strong> Ocurrió un problema al procesar su solicitud. Detalles: {$e->getMessage()}
                 <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
             </div>");
-        error_log($e->getMessage()); // Registrar el error en el archivo de log
     }
-    
-    header('Location: ./vista_registro_cliente.php');
+
+    header('Location: vista_registro_cliente.php');
     exit();
 }
-?>

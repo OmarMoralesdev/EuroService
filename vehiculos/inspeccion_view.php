@@ -9,6 +9,8 @@ session_start();
 
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="../img/incono.svg">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Vehículo</title>
     <style>
@@ -196,86 +198,119 @@ session_start();
 
                 <script src="app.js"></script>
                 <script>
-                    document.addEventListener('DOMContentLoaded', function() {
-                        const modalSuccess = new bootstrap.Modal(document.getElementById('modalSuccess'));
-                        if (document.getElementById('modalSuccess')) {
-                            modalSuccess.show();
-                        }
-                    });
+                        document.addEventListener('DOMContentLoaded', function() {
+                            const modalSuccess = new bootstrap.Modal(document.getElementById('modalSuccess'));
+                            if (document.getElementById('modalSuccess')) {
+                                modalSuccess.show();
+                            }
+                        });
 
-                    document.getElementById('formCita').addEventListener('submit', function(event) {
-                        let valid = true;
-                        const currentYear = new Date().getFullYear();
+                        document.getElementById('formCita').addEventListener('submit', function(event) {
+                            let valid = true;
+                            const currentYear = new Date().getFullYear();
 
-                        // Obtener valores del formulario
-                        const marca = document.getElementById('marca').value.trim();
-                        const modelo = document.getElementById('modelo').value.trim();
-                        const anio = parseInt(document.getElementById('anio').value.trim(), 10);
-                        const color = document.getElementById('color').value.trim();
-                        const kilometraje = document.getElementById('kilometraje').value.trim();
-                        const placas = document.getElementById('placas').value.trim();
-                        const vin = document.getElementById('vin').value.trim();
-                        const continuidad = document.getElementById('continuidad').checked;
+                            const marca = document.getElementById('marca').value.trim();
+                            const modelo = document.getElementById('modelo').value.trim();
+                            const anio = parseInt(document.getElementById('anio').value.trim(), 10);
+                            const color = document.getElementById('color').value.trim();
+                            const kilometraje = document.getElementById('kilometraje').value.trim();
+                            const placas = document.getElementById('placas').value.trim();
+                            const vin = document.getElementById('vin').value.trim();
 
-                        // Validar marca
-                        if (/\d/.test(marca)) {
-                            document.getElementById('marca').classList.add('is-invalid');
-                            valid = false;
-                        } else {
-                            document.getElementById('marca').classList.remove('is-invalid');
+                            // Validar marca
+                            if (/\d/.test(marca)) {
+                                document.getElementById('marca').classList.add('is-invalid');
+                                valid = false;
+                            } else {
+                                document.getElementById('marca').classList.remove('is-invalid');
+                            }
+
+                            if (/\d/.test(campo)) {
+                                document.getElementById('campo').classList.add('is-invalid');
+                                valid = false;
+                            } else {
+                                document.getElementById('campo').classList.remove('is-invalid');
+                            }
+
+                            // Validar color
+                            if (/\d/.test(color)) {
+                                document.getElementById('color').classList.add('is-invalid');
+                                valid = false;
+                            } else {
+                                document.getElementById('color').classList.remove('is-invalid');
+                            }
+
+
+                            // Validar kilometraje
+                            if (!/^\d+$/.test(kilometraje)) {
+                                document.getElementById('kilometraje').classList.add('is-invalid');
+                                valid = false;
+                            } else {
+                                document.getElementById('kilometraje').classList.remove('is-invalid');
+                            }
+
+                            // Validar año
+                            if (anio < 1886 && anio > currentYear && isNaN(anio) && anio.toString().length !== 4) {
+                                document.getElementById('anio').classList.add('is-invalid');
+                                valid = false;
+                            } else {
+                                document.getElementById('anio').classList.remove('is-invalid');
+                            }
+
+                            // Validar placas
+                            if (placas.length > 10) {
+                                document.getElementById('placas').classList.add('is-invalid');
+                                valid = false;
+                            } else {
+                                document.getElementById('placas').classList.remove('is-invalid');
+                            }
+
+                            // Validar VIN
+                            if (vin.length > 20) {
+                                document.getElementById('vin').classList.add('is-invalid');
+                                valid = false;
+                            } else {
+                                document.getElementById('vin').classList.remove('is-invalid');
+                            }
+
+                            if (!valid) {
+                                event.preventDefault();
+                            }
+                        });
+
+                        $(document).ready(function() {
+                            if ($('#staticBackdrop').length) {
+                                $('#staticBackdrop').modal('show');
+                            }
+
+                            if (window.history.replaceState) {
+                                window.history.replaceState(null, null, window.location.href);
+                            }
+                        });
+
+                        function validarLetras(event) {
+                            const input = event.target;
+                            input.value = input.value.replace(/[^a-zA-Z]/g, '');
                         }
 
-                        // Validar año
-                        if (anio < 1886 || anio > currentYear || anio.toString().length !== 4) {
-                            document.getElementById('anio').classList.add('is-invalid');
-                            valid = false;
-                        } else {
-                            document.getElementById('anio').classList.remove('is-invalid');
+                        function validarNumeros(event) {
+                            const input = event.target;
+                            input.value = input.value.replace(/[^0-9]/g, '');
                         }
 
-                        // Validar kilometraje
-                        if (!/^\d{1,8}$/.test(kilometraje)) {
-                            document.getElementById('kilometraje').classList.add('is-invalid');
-                            valid = false;
-                        } else {
-                            document.getElementById('kilometraje').classList.remove('is-invalid');
-                        }
-
-                        // Validar color
-                        if (/\d/.test(color)) {
-                            document.getElementById('color').classList.add('is-invalid');
-                            valid = false;
-                        } else {
-                            document.getElementById('color').classList.remove('is-invalid');
-                        }
-
-                        // Validar placas
-                        if (placas.length > 10) {
-                            document.getElementById('placas').classList.add('is-invalid');
-                            valid = false;
-                        } else {
-                            document.getElementById('placas').classList.remove('is-invalid');
-                        }
-
-                        // Validar VIN
-                        if (vin.length > 20) {
-                            document.getElementById('vin').classList.add('is-invalid');
-                            valid = false;
-                        } else {
-                            document.getElementById('vin').classList.remove('is-invalid');
-                        }
-
-                        if (!valid) {
-                            event.preventDefault();
-                        }
-                    });
-                </script>
-                <script>
-                    $(document).ready(function() {
-                        if ($('#staticBackdrop').length) {
-                            $('#staticBackdrop').modal('show');
-                        }
-                    });
+                        document.getElementById('campo').addEventListener('input', validarLetras);
+                        document.getElementById('marca').addEventListener('input', validarLetras);
+                        document.getElementById('color').addEventListener('input', validarLetras);
+                        document.getElementById('kilometraje').addEventListener('input', validarNumeros);
+                        document.getElementById('anio').addEventListener('input', validarNumeros);
+                    </script>
+                    
+                    <script>
+                        $(document).ready(function() {  
+                            if ($('#staticBackdrop').length) {
+                                $('#staticBackdrop').modal('show');
+                            }
+                        });
                 </script>
             </div>
         </div>

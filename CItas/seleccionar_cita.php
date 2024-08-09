@@ -25,6 +25,8 @@ function obtenerCitaPorID($pdo, $citaID)
 
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="../img/incono.svg">
+
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Seleccionar Cita para Orden de Trabajo</title>
     <style>
@@ -82,6 +84,7 @@ function obtenerCitaPorID($pdo, $citaID)
             <div class="container">
                 <h2>SELECCIONAR CITA</h2>
                 <div class="form-container">
+                    <form action="" id="x">
                     <input type="text" id="buscar" class="form-control" placeholder="Buscar por vehículo..."><br>
                     <div id="citas-contenedor"></div>
                     <div class="paginacion" id="paginacion"></div>
@@ -108,6 +111,8 @@ function obtenerCitaPorID($pdo, $citaID)
                     }
                     ?>
                     <form id="formularioCita" action="" method="post" style="display:none;">
+                    </form>
+                    <form id="formularioCita" action="editar_cita_view.php" method="post" style="display:none;">
                         <input type="hidden" id="citaIDSeleccionada" name="citaID">
                     </form>
                 </div>
@@ -188,5 +193,33 @@ function obtenerCitaPorID($pdo, $citaID)
         }
     });
 </script>
+<script>
+        $(document).ready(function() {
+            if ($('#staticBackdrop').length) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
+//oednietneeeeeeeeeeeeeee
+        document.getElementById('x').addEventListener('submit', function(event) {
+            let valid = true;
+            const buscar = document.getElementById('buscar').value;
+            // Validar cammpo
+            if (/\d/.test(buscar)) {
+                document.getElementById('buscar').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('buscar').classList.remove('is-invalid');
+            }
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+        function validarLetras(event) {
+            const input = event.target;
+            input.value = input.value.replace(/[^a-zA-Z]/g, '');
+        }
+        document.getElementById('buscar').addEventListener('input', validarLetras);
+
+    </script>
 
 </html>
