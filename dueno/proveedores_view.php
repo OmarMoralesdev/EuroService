@@ -6,7 +6,7 @@ $pdo = $con->conectar();
 
 if (isset($_GET['ajax_search'])) {
     $search = $_GET['ajax_search'];
-    $stmt = $pdo->prepare("SELECT nombre, contacto FROM proveedores WHERE nombre LIKE ?");
+    $stmt = $pdo->prepare("SELECT nombre, contacto FROM PROVEEDORES WHERE nombre LIKE ?");
     $stmt->execute(["%$search%"]);
     $proveedores = $stmt->fetchAll(PDO::FETCH_ASSOC);
     echo json_encode($proveedores);
@@ -15,10 +15,10 @@ if (isset($_GET['ajax_search'])) {
 $search = isset($_GET['search']) ? $_GET['search'] : '';
 $proveedores = [];
 if ($search) {
-    $stmt = $pdo->prepare("SELECT nombre, contacto FROM proveedores WHERE nombre LIKE ?");
+    $stmt = $pdo->prepare("SELECT nombre, contacto FROM PROVEEDORES WHERE nombre LIKE ?");
     $stmt->execute(["%$search%"]);
 } else {
-    $stmt = $pdo->query("SELECT nombre, contacto FROM proveedores");
+    $stmt = $pdo->query("SELECT nombre, contacto FROM PROVEEDORES");
 }
 
 if ($stmt->rowCount() > 0) {
