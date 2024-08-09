@@ -36,7 +36,7 @@
 </head>
 <body>
     <div class="wrapper">
-    <?php include '../dueño/vabr.php'; ?>
+    <?php include 'vabr.php'; ?>
         <div class="main">
             <div class="container">
                 <h2 style="text-align: center;">CITAS PENDIENTES</h2>

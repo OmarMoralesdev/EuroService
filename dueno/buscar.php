@@ -43,7 +43,7 @@ $empleados = $conexion->seleccionar($consulta_empleados);
 </head>
 <body>
     <div class="wrapper">
-        <?php include '../dueño/vabr.php'; ?>
+    <?php include 'vabr.php'; ?>
         <div class="main p-3">
             <div class="container">
                 <h2 class="text-center">EMPLEADOS</h2>
