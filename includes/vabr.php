@@ -284,7 +284,7 @@ h2 {
         <li class="sidebar-item">
             <a href="../Catalogo/proveedores_view.php" class="sidebar-link">
                 <i class="lni lni-delivery"></i>
-                <span>PROOVEDORES</span>
+                <span>PROVEEDORES</span>
             </a>
         </li>
             <li class="sidebar-item">
@@ -309,7 +309,7 @@ h2 {
             <a href="../Catalogo/Insumos.php" class="sidebar-link">INSUMOS</a>
         </li>
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link">COMPRAS</a>
+            <a href="../Catalogo/Compras.php" class="sidebar-link">COMPRAS</a>
         </li>
     </ul>
 </li>
