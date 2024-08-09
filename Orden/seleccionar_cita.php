@@ -65,6 +65,7 @@
     </div>
 </body>
 <script>
+    // Obtener las citas desde el servidor
     let citas = <?php
         require '../includes/db.php';
         $con = new Database();
@@ -72,6 +73,7 @@
         $citas = listarCitasPendientes($pdo);
         echo json_encode($citas);
     ?>;
+
     let paginaActual = 1;
     const tarjetasPorPagina = 5;
 
@@ -83,6 +85,7 @@
         const citasContenedor = document.getElementById('citas-contenedor');
         citasContenedor.innerHTML = '';
 
+        // Mostrar las citas paginadas
         citasPaginadas.forEach(cita => {
             const tarjeta = document.createElement('div');
             tarjeta.classList.add('tarjeta');
@@ -119,8 +122,8 @@
     }
 
     function seleccionarCita(citaID) {
-        document.getElementById('citaIDSeleccionada').value = citaID;
-        document.getElementById('formularioCita').submit();
+        document.getElementById('citaIDSeleccionada').value = citaID;  // Asignar la citaID seleccionada al campo oculto
+        document.getElementById('formularioCita').submit();  // Enviar el formulario para procesar la cita seleccionada
     }
 
     document.getElementById('buscar').addEventListener('input', function() {
@@ -129,9 +132,9 @@
             cita.marca.toLowerCase().includes(query) || 
             cita.modelo.toLowerCase().includes(query)
         );
-        renderizarTarjetas(citasFiltradas, 1);
+        renderizarTarjetas(citasFiltradas, 1);  // Renderizar las citas filtradas
     });
 
-    renderizarTarjetas(citas, paginaActual);
+    renderizarTarjetas(citas, paginaActual);  // Renderizar las citas inicialmente
 </script>
 </html>

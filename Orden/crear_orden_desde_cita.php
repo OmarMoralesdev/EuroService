@@ -18,9 +18,18 @@ function obtenerUbicacionesActivas($pdo) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['citaID'])) {
     // Almacenar la citaID en la sesión cuando se recibe por POST
     $_SESSION['citaID'] = $_POST['citaID'];
+}
+
+$citaID = isset($_SESSION['citaID']) ? $_SESSION['citaID'] : null;
+
+if (!$citaID) {
+    // Si no hay citaID en la sesión, mostrar un mensaje de error o redirigir
+    $_SESSION['error'] = 'No se ha seleccionado una cita válida.';
+    header('Location: seleccionar_cita.php'); // Cambia esto a la página de selección de cita
+    exit;
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session'])) {
@@ -31,14 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session
 
 ?>
 
-
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
-
     <title>Completar Detalles de Orden de Trabajo</title>
 </head>
 <body>
@@ -75,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session
                 }
                 ?>
                 <form action="crear_orden_desde_cita_back.php" method="post">
-                    <input type="hidden" name="citaID" value="<?php echo $citaID; ?>">
+                    <input type="hidden" name="citaID" value="<?php echo htmlspecialchars($citaID, ENT_QUOTES, 'UTF-8'); ?>">
 
                     <label for="costoManoObra">Costo Mano de Obra:</label>
                     <input type="number" step="0.01" id="costoManoObra" name="costoManoObra" min="0" class="form-control" required>
@@ -86,7 +93,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session
                     <label for="anticipo">Anticipo:</label>
                     <input type="number" step="0.01" min="0" name="anticipo" class="form-control" required>
                     <br>
-                 
 
                     <label for="atencion" class="form-label">Atencion:</label>
                     <select name="atencion" class="form-control" required>
@@ -131,7 +137,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session
 <script>
     // Al salir de la página, borrar la citaID de la sesión
     window.addEventListener('beforeunload', function(event) {
-        // Si el usuario está recargando la página, evitar la eliminación del citaID
         if (event.persisted || (window.performance && window.performance.navigation.type == 1)) {
             // Recarga de página detectada, no hacer nada
         } else {
