@@ -319,7 +319,7 @@ h2 {
             </a>
             <ul id="citas" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="../CItas/index.php" class="sidebar-link">REGISTRAR</a>
+                    <a href="../CItas/seleccionar_cita_view.php" class="sidebar-link">REGISTRAR</a>
                 </li>
                 <li class="sidebar-item">
                     <a href="../CItas/seleccionar_cita.php" class="sidebar-link">EDITAR</a>

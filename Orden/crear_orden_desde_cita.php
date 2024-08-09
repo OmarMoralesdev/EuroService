@@ -63,7 +63,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     unset($_SESSION['bien']);
                 }
                 ?>
-                <form action="crear_orden_desde_cita copy.php" method="post">
+                <form action="crear_orden_desde_cita_back.php" method="post">
                     <input type="hidden" name="citaID" value="<?php echo $citaID; ?>">
 
                     <label for="costoManoObra">Costo Mano de Obra:</label>
