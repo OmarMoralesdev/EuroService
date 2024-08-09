@@ -277,7 +277,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <a class="nav-link" href="#ubi">Ubicación</a>
                     </li>
                     <li class="nav-item">
-                        <button class="nav-link btn pulse" data-bs-toggle="modal" data-bs-target="#loginModal">INICIAR SESIÓN</button>
+                        <a href="./Login/index.php" class="nav-link btn pulse">INICIAR SESIÓN</a>
                     </li>
                 </ul>
             </div>
