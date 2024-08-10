@@ -6,11 +6,11 @@ $conexion->conectar();
 
 $buscar = isset($_POST['buscar']) ? $_POST['buscar'] : '';
 
-$consulta_empleados = "SELECT e.empleadoID, CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, e.alias, e.tipo, (e.salario_diario*5) as total, e.rebajas as rebajas, e.bonos as bonos
+$consulta_empleados = "SELECT e.empleadoID, CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, e.alias, e.tipo, n.total, (e.salario_diario*5) as total, e.rebajas as rebajas, e.bonos as bonos
                     FROM EMPLEADOS e
                     INNER JOIN PERSONAS p ON e.personaID = p.personaID
-                    where e.activo = 'si';";
-
+                    LEFT JOIN NOMINAS n ON e.empleadoID = n.empleadoID";
+                    
 if (!empty($buscar)) {
     $consulta_empleados .= " WHERE p.nombre LIKE '%$buscar%' OR p.apellido_paterno LIKE '%$buscar%' OR p.apellido_materno LIKE '%$buscar%' OR e.alias LIKE '%$buscar%'";
 }
