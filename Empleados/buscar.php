@@ -25,7 +25,7 @@ $empleados = $conexion->seleccionar($consulta_empleados);
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>FINANZAS EMPLEADOS</title>
+    <title>Buscar Empleados</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
     <style>
         .card-body {

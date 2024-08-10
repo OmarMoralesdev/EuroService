@@ -82,6 +82,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
 <head>
     <meta charset="UTF-8">
+    <link rel="icon" type="image/x-icon" href="../img/incono.svg">
     <title>Generar Recibo de Pago</title>
     <style>
         .recibo {
