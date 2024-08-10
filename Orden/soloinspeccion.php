@@ -4,16 +4,10 @@ session_start();
 $con = new Database();
 $pdo = $con->conectar();
 
-
 $empleadoID = isset($_POST['empleadoID']) ? intval($_POST['empleadoID']) : null;
 $ubicacionID = isset($_POST['ubicacionID']) ? intval($_POST['ubicacionID']) : null;
-$formaDePago = isset($_POST['formaDePago']) ? trim($_POST['formaDePago']) : '';
+$formaDePago = isset($_POST['formadepago']) ? trim($_POST['formadepago']) : '';
 $vehiculoID = filter_input(INPUT_POST, 'vehiculoID', FILTER_SANITIZE_NUMBER_INT);
-
-
-
-
-
 
 try {
     // Verificar si el vehiculoID existe
@@ -75,8 +69,8 @@ try {
     $pagoID = $pago['pagoID'];
 
     // Registrar la entrega usando el procedimiento almacenado
-    $stmt = $pdo->prepare("CALL registrar_entrega(?)");
-    $stmt->execute([$pagoID]);
+    $stmt = $pdo->prepare("CALL registrar_entrega(?,?)");
+    $stmt->execute([$pagoID, $formaDePago]);
 
     $nuevaUbicacionID = 4;
     // Actualizar la orden de trabajo con la nueva ubicación
