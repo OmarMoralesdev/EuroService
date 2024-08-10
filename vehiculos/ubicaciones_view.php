@@ -75,13 +75,13 @@ echo "</div>";
                         echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
                         echo "</div>";
                         echo "<div class='modal-body'>";
-                        
+                       
                         $consulta = "SELECT DISTINCT 
                             CONCAT(VEHICULOS.marca, ' ', VEHICULOS.modelo, ' ', VEHICULOS.anio, ' - ', VEHICULOS.color) AS VEHICULO, 
                             CONCAT(PERSONAS.nombre, ' ', PERSONAS.apellido_paterno, ' ', PERSONAS.apellido_materno) AS PROPIETARIO
                             FROM PERSONAS 
                             INNER JOIN CLIENTES ON CLIENTES.personaID = PERSONAS.personaID 
-                            INNER JOIN VEHICULOS ON VEHICULOS.clienteID = clientes.clienteID 
+                            INNER JOIN VEHICULOS ON VEHICULOS.clienteID = CLIENTES.clienteID 
                             INNER JOIN CITAS ON CITAS.vehiculoID = VEHICULOS.vehiculoID 
                             INNER JOIN ORDENES_TRABAJO ON ORDENES_TRABAJO.citaID = CITAS.citaID 
                             INNER JOIN UBICACIONES ON ORDENES_TRABAJO.ubicacionID = UBICACIONES.ubicacionID 
