@@ -1,9 +1,16 @@
 <?php
-// Verificar si el usuario está logueado
-if (!isset($_SESSION['clienteID'])) {
-    header("Location: ../login/login_view.php");
+
+if (session_status() == PHP_SESSION_NONE) {
+    session_start();
+}
+
+if (!isset($_SESSION['username']) || !isset($_SESSION['clienteID']) || $_SESSION['role'] != 1) {
+    // Redirige a la página de inicio de sesión si no es cliente
+    $_SESSION['error'] = 'Acceso no autorizado. Solo los clientes pueden acceder a esta página.';
+    header('Location: ../Login/index.php');
     exit();
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
