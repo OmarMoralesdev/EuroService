@@ -23,9 +23,9 @@ try {
     $vehiculoCount = $stmtVerificarVehiculo->fetchColumn();
 
     if ($vehiculoCount == 0) {
-          $_SESSION['error'] = 'Error: El vehículo no está registrado en la base de datos.';
-          header("Location: inspeccion_view.php");
-          exit();
+        $_SESSION['error'] = 'Error: El vehículo no está registrado en la base de datos.';
+        header("Location: inspeccion_view.php");
+        exit();
     }
 
     // Insertar cita
@@ -56,25 +56,43 @@ try {
             ':tipoPago' => $tipoPago,
             ':formaDePago' => $formaDePago,
         ]);
-    
-        
     } catch (PDOException $e) {
         $_SESSION['error'] = ("Error al realizar el pago: " . $e->getMessage());
         header("Location: inspeccion_view.php");
         exit();
-      
-    }   
+    }
+    // Consultar el pago asociado a la orden
+    $stmt = $pdo->prepare("SELECT pagoID FROM PAGOS WHERE ordenID = ?");
+    $stmt->execute([$ordenID]);
+    $pago = $stmt->fetch(PDO::FETCH_ASSOC);
 
+    if (!$pago) {
+        $_SESSION['error'] = "No se encontró un pago asociado a esta orden.";
+        header("Location: entregar.php");
+        exit();
+    }
 
-    $pdo->commit();
-    $_SESSION['bien'] = "Ejecutado exitosamente.";
+    $pagoID = $pago['pagoID'];
+
+    // Registrar la entrega usando el procedimiento almacenado
+    $stmt = $pdo->prepare("CALL registrar_entrega(?)");
+    $stmt->execute([$pagoID]);
+
+    $nuevaUbicacionID = 4;
+    // Actualizar la orden de trabajo con la nueva ubicación
+    $sqlActualizarOrden = "UPDATE ORDENES_TRABAJO SET ubicacionID = ? WHERE ordenID = ?";
+    $stmtActualizarOrden = $pdo->prepare($sqlActualizarOrden);
+    $stmtActualizarOrden->execute([$nuevaUbicacionID, $ordenID]);
+    $_SESSION['bien'] = "Ejecutado exitosamente";
     header("Location: inspeccion_view.php");
     exit();
 
+
+    $_SESSION['bien'] = "Ejecutado exitosamente.";
+    header("Location: inspeccion_view.php");
+    exit();
 } catch (PDOException $e) {
     echo "Error: " . $e->getMessage();
     header("Location: inspeccion_view.php");
     exit();
 }
-
-?>

@@ -149,8 +149,6 @@ session_start();
                                 }
                                 ?>
                             </select>
-                            <label for="fechaSolicitud">Fecha de Solicitud:</label>
-                            <input type="date" id="fechaSolicitud" name="fechaSolicitud" class="form-control" required>
 
                             <label for="ubicacionID" class="form-label">Ubicación de vehiculo:</label>
                             <select name="ubicacionID" class="form-control" required>
@@ -303,6 +301,7 @@ session_start();
                             }
                         });
                 </script>
+                
             </div>
         </div>
     </div>
