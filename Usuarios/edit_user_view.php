@@ -1,9 +1,3 @@
-<?php
-session_start();
-require '../includes/db.php';
-$con = new Database();
-$pdo = $con->conectar();
-?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -22,6 +16,14 @@ $pdo = $con->conectar();
             margin-bottom: 10px;
         }
         
+        .invalid-feedback {
+            display: none;
+            color: red;
+        }
+
+        .is-invalid ~ .invalid-feedback {
+            display: block;
+        }
     </style>
 </head>
 
@@ -33,13 +35,13 @@ $pdo = $con->conectar();
                 <h2>EDITAR DATOS</h2>
                 <!-- ALERTA DE ERRORES -->
                 <?php
-        if (isset($_SESSION['alert'])) {
-            echo $_SESSION['alert']['message'];
-            unset($_SESSION['alert']);
-        }
-        ?>
+                if (isset($_SESSION['alert'])) {
+                    echo $_SESSION['alert']['message'];
+                    unset($_SESSION['alert']);
+                }
+                ?>
                 <div class="form-container">
-                <label for="campo">Selecciona un cliente:</label>
+                    <label for="campo" id="x">Selecciona un cliente:</label>
                     <form id="formCita" action="edit_user.php" method="POST" autocomplete="off">
                         <div class="mb-3" style="margin-bottom: 1px;">
                             <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente...">
@@ -62,7 +64,8 @@ $pdo = $con->conectar();
                         </div>
                         <div class="form-group">
                             <label for="telefono_actual">Teléfono Actual: <span id="telefono_actual">No disponible</span></label><br>
-                            <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Nuevo número telefónico" required>
+                            <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Nuevo número telefónico" maxlength="10" required>
+                            <div class="invalid-feedback">Debes ingresar un número válido de hasta 10 dígitos.</div>
                         </div>
                         <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Editar</button>
                     </form>
@@ -71,8 +74,8 @@ $pdo = $con->conectar();
         </div>
     </div>
 
-     <!-- MUESTRA EL MODAL DE EXITO -->
-     <?php
+    <!-- MUESTRA EL MODAL DE EXITO -->
+    <?php
     if (isset($_SESSION['modal'])) {
         $modalContent = $_SESSION['modal'];
         echo $modalContent['message'];
@@ -139,5 +142,77 @@ $pdo = $con->conectar();
             }
         });
     </script>
+    
+    <script>
+        $(document).ready(function() {
+            if ($('#staticBackdrop').length) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
+
+        document.getElementById('formCita').addEventListener('submit', function(event) {
+            let valid = true;
+
+            const telefono = document.getElementById('telefono').value;
+
+            if (telefono.length > 10 || isNaN(telefono) || telefono < 0) {
+                document.getElementById('telefono').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('telefono').classList.remove('is-invalid');
+            }
+
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+    </script>
+
+<script>
+        $(document).ready(function() {
+            if ($('#staticBackdrop').length) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
+
+        document.getElementById('x').addEventListener('submit', function(event) {
+            let valid = true;
+
+            const campo = document.getElementById('campo').value;
+
+            // Validar nombre
+            if (/\d/.test(campo)) {
+                document.getElementById('campo').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('campo').classList.remove('is-invalid');
+            }
+
+            // Validar salario
+            if (isNaN(telefono) || telefono < 0) {
+                document.getElementById('telefono').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('telefono').classList.remove('is-invalid');
+            }
+
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+        function validarLetras(event) {
+    const input = event.target;
+    input.value = input.value.replace(/[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]/g, '');
+}
+
+        function validarNumeros(event) {
+            const input = event.target;
+            input.value = input.value.replace(/[^0-9.]/g, '');
+        }
+
+        document.getElementById('telefono').addEventListener('input', validarNumeros);
+        document.getElementById('campo').addEventListener('input', validarLetras);
+    </script>
+
 </body>
 </html>

@@ -91,12 +91,12 @@ try {
                                         $estado_pago = $fila['estado_pago'];
                                         $color_celda_estado = "";
 
-                                        if ($estado_pago == "#42ec00") {
-                                            $color_celda_estado = "#d4edda"; // Verde claro
-                                        } elseif ($estado_pago == "#ec9300") {
-                                            $color_celda_estado = "#fff3cd"; // Naranja claro
-                                        } elseif ($estado_pago == "#d4edda") {
-                                            $color_celda_estado = "#ec0000"; // Rojo claro
+                                        if ($estado_pago == 'verde') {
+                                            $color_celda_estado = "#28a745"; // Verde intenso
+                                        } elseif ($estado_pago == 'naranja') {
+                                            $color_celda_estado = "#ffc107"; // Naranja intenso
+                                        } elseif ($estado_pago == 'rojo') {
+                                            $color_celda_estado = "#dc3545"; // Rojo intenso
                                         }
                                         ?>
                                         <tr>

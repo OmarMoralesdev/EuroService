@@ -144,6 +144,7 @@ unset($_SESSION['mensaje']);
         </div>
     </div>
     <script src="app.js"></script>
+    
     <script>
         $(document).ready(function() {
             if ($('#staticBackdrop').length) {
@@ -151,48 +152,74 @@ unset($_SESSION['mensaje']);
             }
         });
     </script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            function validateNonNegative(event) {
-                var value = parseFloat(event.target.value);
-                if (value < 0) {
-                    event.target.value = '';
-                    alert('El valor no puede ser negativo.');
-                }
-            }
 
-            document.getElementById('costoManoObra').addEventListener('input', validateNonNegative);
-            document.getElementById('costoRefacciones').addEventListener('input', validateNonNegative);
-            document.getElementById('anticipo').addEventListener('input', validateNonNegative);
-        });
-    </script>
-    <script>
+
+<script>
         $(document).ready(function() {
-            $('form').on('submit', function(e) {
-                let isValid = true;
+            if ($('#staticBackdrop').length) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
 
-                // Validar el campo del cliente
-                const clienteCampo = $('#campo').val().trim();
-                if (clienteCampo === '') {
-                    $('#campo').addClass('is-invalid');
-                    isValid = false;
-                } else {
-                    $('#campo').removeClass('is-invalid');
-                }
+        document.getElementById('formCita').addEventListener('submit', function(event) {
+            let valid = true;
 
-                // Validar el campo del vehículo
-                const vehiculoCampo = $('#vehiculoSeleccionado').val().trim();
-                if (vehiculoCampo === '') {
-                    $('#vehiculoSeleccionado').addClass('is-invalid');
-                    isValid = false;
-                } else {
-                    $('#vehiculoSeleccionado').removeClass('is-invalid');
-                }
 
-                if (!isValid) {
-                    e.preventDefault(); // Prevenir el envío del formulario si hay errores
-                }
-            });
+            const campo = document.getElementById('campo').value;
+            const costoManoObra = document.getElementById('costoManoObra').value;
+            const costoRefacciones = document.getElementById('costoRefacciones').value;
+            const anticipo = parseFloat(document.getElementById('anticipo').value);
+
+            // Validar nombre
+            if (/\d/.test(nombre)) {
+                document.getElementById('campo').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('campo').classList.remove('is-invalid');
+            }
+            // Validar salario
+            if (isNaN(costoManoObra) || costoManoObra < 0) {
+                document.getElementById('costoManoObra').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('costoManoObra').classList.remove('is-invalid');
+            }
+            // Validar salario
+            if (isNaN(costoRefacciones) || costoRefacciones < 0) {
+                document.getElementById('costoRefacciones').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('costoRefacciones').classList.remove('is-invalid');
+            }
+            if (isNaN(anticipo) || anticipo < 0) {
+                document.getElementById('anticipo').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('anticipo').classList.remove('is-invalid');
+            }
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+        function validarLetras(event) {
+            const input = event.target;
+            input.value = input.value.replace(/[^a-zA-Z]/g, '');
+        }
+        function validarNumeros(event) {
+            const input = event.target;
+            input.value = input.value.replace(/[^0-9.]/g, '');
+        }
+        document.getElementById('campo').addEventListener('input', validarLetras);
+        document.getElementById('costoManoObra').addEventListener('input',  validarNumeros);
+        document.getElementById('costoRefacciones').addEventListener('input', validarNumeros);
+        document.getElementById('anticipo').addEventListener('input', validarNumeros);
+
+        document.getElementById('anticipo').addEventListener('input', function(event) {
+            var value = parseFloat(event.target.value);
+            if (value < 0) {
+                event.target.value = '';
+                alert('El  no puede ser negativo.');
+            }
         });
     </script>
 </body>

@@ -111,32 +111,25 @@ session_start();
                         <div class="form-group">
                             <!-- Campos del formulario -->
                             <label for="marca">Marca:</label>
-                            <input type="text" id="marca" name="marca" maxlength="30" class="form-control <?php echo isset($errors['marca']) ? 'is-invalid' : ''; ?>" placeholder="Introduce la marca del vehículo" value="<?php echo htmlspecialchars($marca ?? '', ENT_QUOTES); ?>" required>
-                            <div class="invalid-feedback"><?php echo $errors['marca'] ?? ''; ?></div>
+                            <input type="text" id="marca" name="marca" maxlength="30" class="form-control <?php echo isset($errors['marca']) ? 'is-invalid' : ''; ?>" placeholder="Introduce la marca del vehículo" required>
 
                             <label for="modelo">Modelo:</label>
-                            <input type="text" id="modelo" name="modelo" maxlength="30" class="form-control <?php echo isset($errors['modelo']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el modelo del vehículo" value="<?php echo htmlspecialchars($modelo ?? '', ENT_QUOTES); ?>" required>
-                            <div class="invalid-feedback"><?php echo $errors['modelo'] ?? ''; ?></div>
+                            <input type="text" id="modelo" name="modelo" maxlength="30" class="form-control <?php echo isset($errors['modelo']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el modelo del vehículo"  required>
 
                             <label for="anio">Año:</label>
-                            <input type="number" id="anio" name="anio" min="1886" max="<?= date('Y') ?>" maxlength="4" class="form-control <?php echo isset($errors['anio']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el año del vehículo" value="<?php echo htmlspecialchars($anio ?? '', ENT_QUOTES); ?>" required>
-                            <div class="invalid-feedback"><?php echo $errors['anio'] ?? ''; ?></div>
+                            <input type="number" id="anio" name="anio" min="1886" max="<?= date('Y') ?>" maxlength="4" class="form-control <?php echo isset($errors['anio']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el año del vehículo"  required>
 
                             <label for="color">Color:</label>
-                            <input type="text" id="color" name="color" maxlength="33" class="form-control <?php echo isset($errors['color']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el color del vehículo" value="<?php echo htmlspecialchars($color ?? '', ENT_QUOTES); ?>" required>
-                            <div class="invalid-feedback"><?php echo $errors['color'] ?? ''; ?></div>
+                            <input type="text" id="color" name="color" maxlength="33" class="form-control <?php echo isset($errors['color']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el color del vehículo"  required>
 
                             <label for="kilometraje">Kilometraje:</label>
-                            <input type="text" id="kilometraje" name="kilometraje" maxlength="8" class="form-control <?php echo isset($errors['kilometraje']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el kilometraje del vehículo" value="<?php echo htmlspecialchars($kilometraje ?? '', ENT_QUOTES); ?>" required>
-                            <div class="invalid-feedback"><?php echo $errors['kilometraje'] ?? ''; ?></div>
+                            <input type="text" id="kilometraje" name="kilometraje" maxlength="8" class="form-control <?php echo isset($errors['kilometraje']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el kilometraje del vehículo" required>
 
                             <label for="placas">Placas:</label>
-                            <input type="text" id="placas" name="placas" maxlength="10" class="form-control <?php echo isset($errors['placas']) ? 'is-invalid' : ''; ?>" placeholder="Introduce las placas del vehículo" value="<?php echo htmlspecialchars($placas ?? '', ENT_QUOTES); ?>" required>
-                            <div class="invalid-feedback"><?php echo $errors['placas'] ?? ''; ?></div>
+                            <input type="text" id="placas" name="placas" maxlength="10" class="form-control <?php echo isset($errors['placas']) ? 'is-invalid' : ''; ?>" placeholder="Introduce las placas del vehículo" required>
 
                             <label for="vin">VIN:</label>
-                            <input type="text" id="vin" name="vin" maxlength="20" class="form-control <?php echo isset($errors['vin']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el VIN del vehículo" value="<?php echo htmlspecialchars($vin ?? '', ENT_QUOTES); ?>" required>
-                            <div class="invalid-feedback"><?php echo $errors['vin'] ?? ''; ?></div>
+                            <input type="text" id="vin" name="vin" maxlength="20" class="form-control <?php echo isset($errors['vin']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el VIN del vehículo" required>
 
                             <label for="empleado" class="form-label">Empleado:</label>
                             <select name="empleadoID" class="form-control" required>
@@ -240,17 +233,15 @@ session_start();
                                 document.getElementById('color').classList.remove('is-invalid');
                             }
 
-
-                            // Validar kilometraje
-                            if (!/^\d+$/.test(kilometraje)) {
-                                document.getElementById('kilometraje').classList.add('is-invalid');
+                            if (kilometraje.length < 0) {
+                                document.getElementById('vin').classList.add('is-invalid');
                                 valid = false;
                             } else {
-                                document.getElementById('kilometraje').classList.remove('is-invalid');
+                                document.getElementById('vin').classList.remove('is-invalid');
                             }
 
                             // Validar año
-                            if (anio < 1886 && anio > currentYear && isNaN(anio) && anio.toString().length !== 4) {
+                            if (anio < 1886 || anio > currentYear || isNaN(anio) || anio.toString().length > 4 ) {
                                 document.getElementById('anio').classList.add('is-invalid');
                                 valid = false;
                             } else {
