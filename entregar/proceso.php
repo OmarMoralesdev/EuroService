@@ -8,7 +8,7 @@ try {
     // Verificar que ordenID esté definido en POST
     if (!isset($_POST['ordenID'])) {
         $_SESSION['error'] = "No se proporcionó un ID de orden.";
-        header("Location: index.php");
+        header("Location: entregar.php");
         exit();
     }
 
@@ -22,7 +22,7 @@ try {
 
     if (!$orden) {
         $_SESSION['error'] = "Orden no encontrada.";
-        header("Location: index.php");
+        header("Location: entregar.php");
         exit();
     }
 
@@ -33,7 +33,7 @@ try {
 
     if (!$pago) {
         $_SESSION['error'] = "No se encontró un pago asociado a esta orden.";
-        header("Location: index.php");
+        header("Location: entregar.php");
         exit();
     }
 
@@ -55,11 +55,11 @@ try {
         $_SESSION['error'] = "Error al entregada la orden de trabajo.";
     }
 
-    header("Location: index.php");
+    header("Location: entregar.php");
     exit();
 } catch (PDOException $e) {
     $_SESSION['error'] = "Error: " . $e->getMessage();
-    header("Location: index.php");
+    header("Location: entregar.php");
     exit();
 }
 ?>
