@@ -19,7 +19,7 @@ unset($_SESSION['mensaje']);
         <?php include '../includes/vabr.php'; ?>
         <div class="main p-3">
             <div class="container">
-                <h2>Registrar Cita y Crear Orden de Trabajo</h2>
+                <h2> Crear Orden de Trabajo SIN CITA</h2>
                 <div class="form-container">
                     <form action="crear_orden_sin_cita2.php" method="post" id="formCita" novalidate autocomplete="off">
                         <?php

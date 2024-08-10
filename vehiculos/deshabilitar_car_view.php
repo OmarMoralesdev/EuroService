@@ -24,7 +24,7 @@
         <?php include '../includes/vabr.php'; ?>
         <div class="main p-3">
         <div class="container">
-            <h2 class="text-center">VEHÍCULOS</h2>
+            <h2 class="text-center">ELIMINAR VEHÍCULOS</h2>
                 <div class="form-container">
             <div class="row mt-3">
                 <?php
