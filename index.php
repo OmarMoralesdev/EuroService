@@ -348,19 +348,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="col-md-4">
                     <h5>Síguenos</h5>
                     <div class="social-icons">
-                        <a href="#" class="bi bi-facebook"></a>
-                        <a href="#" class="bi bi-twitter"></a>
-                        <a href="#" class="bi bi-instagram"></a>
+                        <a href="https://www.tiktok.com/@euro.service?_t=8olIXbxXzJl&_r=1" class="lni lni-tiktok-alt"></a>
                         <hr>
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <h5>Contacto</h5>
-                    <p>Correo: contacto@eurosv.com</p>
+                    <p>Correo: euroservice339@gmail.com</p>
                     <p>Teléfono: +52 871 460 1498</p>
                 </div>
             </div>
-            <iframe id="ubi" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d661.048036986063!2d-103.40865896550226!3d25.59861614619652!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x868fdbbc87fdf615%3A0xe5e0fd19352eff0b!2sKike%20Mecanico!5e0!3m2!1sen!2smx!4v1722721714805!5m2!1sen!2smx" width="100%" height="300" style="border:1px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
+            <iframe id="ubi" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d1799.0938076611703!2d-103.40868459325407!3d25.598681205350616!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x868fda7cf05bb3b5%3A0xf8eb1cc81ece3fb6!2sC.%20Autoridades%20Civiles%205%2C%20Ejido%20la%20Uni%C3%B3n%2C%2027420%20Torre%C3%B3n%2C%20Coah.!5e0!3m2!1sen!2smx!4v1723314448051!5m2!1sen!2smx"width="100%" height="300" style="border:1px;" allowfullscreen="" loading="lazy" referrerpolicy="no-referrer-when-downgrade"></iframe>
         </div>
     </footer>
 </body>
