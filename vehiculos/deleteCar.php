@@ -7,7 +7,7 @@ if (isset($_GET['id'])) {
     $conexion = new Database();
     $conexion->conectar();
     
-    $consulta = "UPDATE `vehiculos` SET `activo` = 'no' WHERE `vehiculoID` = $vehiculoID";
+    $consulta = "UPDATE `VEHICULOS` SET `activo` = 'no' WHERE `vehiculoID` = $vehiculoID";
     $conexion->ejecuta($consulta);
     
     $conexion->desconectar();
