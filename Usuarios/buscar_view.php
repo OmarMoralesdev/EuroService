@@ -37,7 +37,9 @@ if (!empty($buscar)) {
 $total_clientes_result = $conexion->seleccionar($total_clientes_query);
 $total_clientes = $total_clientes_result[0]->total;
 $total_paginas = ceil($total_clientes / $resultados_por_pagina);
+
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -46,6 +48,7 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Clientes</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
     <style>
         .card-body {
             padding: 1rem;
@@ -92,6 +95,10 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
                         // si existe clinete- tajeta con todos los datos de los clientes
                         if (!empty($clientes)) {
                             foreach ($clientes as $cliente) {
+                                // Consulta para obtener vehículos del cliente
+                                $consulta_vehiculos = "SELECT * FROM VEHICULOS WHERE clienteID = {$cliente->clienteID}";
+                                $vehiculos = $conexion->seleccionar($consulta_vehiculos);
+
                                 echo "<div class='col-md-4 mb-3'>";
                                 echo "<div class='card' style='width: 100%;'>";
                                 echo "<div class='card-body'>";
@@ -99,6 +106,47 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
                                 echo "<hr>";
                                 echo "<p class='card-text'><strong>Correo:</strong> {$cliente->correo}</p>";
                                 echo "<p class='card-text'><strong>Teléfono:</strong> {$cliente->telefono}</p>";
+                                echo "<br>";
+                                echo "<div class='d-flex justify-content-center'>";
+                                echo "<button type='button' class='btn btn-dark btn-md ml-2' style='width: 60%;' data-bs-toggle='modal' data-bs-target='#modalCliente{$cliente->clienteID}'> Ver vehículos</button>";
+                                echo "</div>";
+                                echo "</div>";
+                                echo "</div>";
+                                echo "</div>";
+                                
+                                // Modal de vehículos
+                                echo "<div class='modal fade' id='modalCliente{$cliente->clienteID}' tabindex='-1' aria-labelledby='modalLabel{$cliente->clienteID}' aria-hidden='true'>";
+                                echo "<div class='modal-dialog modal-lg'>";
+                                echo "<div class='modal-content'>";
+                                echo "<div class='modal-header'>";
+                                echo "<h5 class='modal-title' id='modalLabel{$cliente->clienteID}'>Vehículos de {$cliente->nombre_completo}</h5>";
+                                echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
+                                echo "</div>";
+                                echo "<div class='modal-body'>";
+                                
+                                if (!empty($vehiculos)) {
+                                    echo "<table class='table'>";
+                                    echo "<thead><tr><th>Marca</th><th>Modelo</th><th>Año</th><th>Color</th><th>Kilometraje</th></tr></thead>";
+                                    echo "<tbody>";
+                                    foreach ($vehiculos as $vehiculo) {
+                                        echo "<tr>";
+                                        echo "<td>{$vehiculo->marca}</td>";
+                                        echo "<td>{$vehiculo->modelo}</td>";
+                                        echo "<td>{$vehiculo->anio}</td>";
+                                        echo "<td>{$vehiculo->color}</td>";
+                                        echo "<td>{$vehiculo->kilometraje}</td>";
+                                        echo "</tr>";
+                                    }
+                                    echo "</tbody>";
+                                    echo "</table>";
+                                } else {
+                                    echo "<p>No se encontraron vehículos para este cliente.</p>";
+                                }
+                                
+                                echo "</div>";
+                                echo "<div class='modal-footer'>";
+                                echo "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>";
+                                echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
@@ -112,45 +160,39 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
 
                     <!-- Paginación -->
                     <nav aria-label="Page navigation example">
-    <ul class="pagination justify-content-center mt-4">
-        <?php 
-        // Verifica si la página actual es mayor que 1
-        // Esto permite mostrar el enlace a la página anterior solo si no estamos en la primera página
-        if ($pagina_actual > 1): ?>
-            <li class="page-item">
-                <!-- Enlace para la página anterior -->
-                <!-- Construye la URL para la página anterior y mantiene el término de búsqueda -->
-                <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] . '?pagina=' . ($pagina_actual - 1) . '&buscar=' . urlencode($buscar); ?>">Anterior</a>
-            </li>
-        <?php endif; ?>
+                        <ul class="pagination justify-content-center mt-4">
+                            <?php 
+                            // Verifica si la página actual es mayor que 1
+                            if ($pagina_actual > 1): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] . '?pagina=' . ($pagina_actual - 1) . '&buscar=' . urlencode($buscar); ?>">Anterior</a>
+                                </li>
+                            <?php endif; ?>
 
-        <?php 
-        // Bucle para generar enlaces a todas las páginas disponibles
-        // Muestra cada número de página como un enlace
-        for ($i = 1; $i <= $total_paginas; $i++): ?>
-            <li class="page-item <?php echo ($pagina_actual === $i) ? 'active' : ''; ?>">
-                <!-- Enlace a la página actual -->
-                <!-- Marca la página actual con la clase 'active' para destacarla -->
-                <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] . '?pagina=' . $i . '&buscar=' . urlencode($buscar); ?>"><?php echo $i; ?></a>
-            </li>
-        <?php endfor; ?>
+                            <?php 
+                            // Bucle para generar enlaces a todas las páginas disponibles
+                            for ($i = 1; $i <= $total_paginas; $i++): ?>
+                                <li class="page-item <?php echo ($pagina_actual === $i) ? 'active' : ''; ?>">
+                                    <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] . '?pagina=' . $i . '&buscar=' . urlencode($buscar); ?>"><?php echo $i; ?></a>
+                                </li>
+                            <?php endfor; ?>
 
-        <?php 
-        // Verifica si la página actual es menor que el número total de páginas
-        // Esto permite mostrar el enlace a la página siguiente solo si no estamos en la última página
-        if ($pagina_actual < $total_paginas): ?>
-            <li class="page-item">
-                <!-- Enlace para la página siguiente -->
-                <!-- Construye la URL para la página siguiente y mantiene el término de búsqueda -->
-                <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] . '?pagina=' . ($pagina_actual + 1) . '&buscar=' . urlencode($buscar); ?>">Siguiente</a>
-            </li>
-        <?php endif; ?>
-    </ul>
+                            <?php 
+                            // Verifica si la página actual es menor que el número total de páginas
+                            if ($pagina_actual < $total_paginas): ?>
+                                <li class="page-item">
+                                    <a class="page-link" href="<?php echo $_SERVER['PHP_SELF'] . '?pagina=' . ($pagina_actual + 1) . '&buscar=' . urlencode($buscar); ?>">Siguiente</a>
+                                </li>
+                            <?php endif; ?>
+                        </ul>
                     </nav>
                 </div>
             </div>
         </div>
     </div>
+
+    <!-- Bootstrap JS (no olvidar incluir en el footer o justo antes del cierre del body) -->
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
 
