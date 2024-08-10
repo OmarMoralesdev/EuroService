@@ -40,7 +40,7 @@ session_start();
                             <div class='modal-dialog'>
                                 <div class='modal-content'>
                                     <div class='modal-header'>
-                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Cita registrada con exito!</h1>
                                         <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                                     </div>
                                     <div class='modal-body'>
@@ -233,6 +233,21 @@ session_start();
         document.getElementById('campo').addEventListener('input', validarLetras);
 
     </script>
+    <script>
+    $(document).ready(function() {
+        // Verifica si el modal está presente
+        if ($('#staticBackdrop').length) {
+            // Muestra el modal
+            $('#staticBackdrop').modal('show');
+
+            // Cierra el modal después de 2 segundos (2000 milisegundos)
+            setTimeout(function() {
+                $('#staticBackdrop').modal('hide');
+            }, 1000);
+        }
+    });
+</script>
+
 </body>
 
 </html>

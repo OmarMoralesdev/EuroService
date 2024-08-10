@@ -24,6 +24,12 @@
         .is-invalid ~ .invalid-feedback {
             display: block;
         }
+
+        .data {
+            background-color: #a2a2a2;
+            border-radius: 5px;
+            padding: 10px;
+        }
     </style>
 </head>
 
@@ -47,25 +53,33 @@
                             <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente...">
                             <ul id="lista" class="list-group lista"></ul>
                             <input type="hidden" id="clienteID" name="clienteID">
-                            <div class="invalid-feedback">Debes seleccionar un cliente.</div><br>
+                            <div class="invalid-feedback">Debes seleccionar un cliente.</div>
+                        </div>
+                        <div class="data">
+                            <h2> Datos actuales del cliente</h2>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" readonly>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" placeholder="Apellido paterno" readonly>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" placeholder="Apellido materno" readonly>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="correo_actual" name="correo_actual" placeholder="Correo actual" readonly>
+                            </div>
+                            <div class="form-group">
+                                <input type="text" class="form-control" id="telefono_actual" name="telefono_actual" placeholder="Teléfono actual" readonly>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="form-group">
+                            <input type="email" class="form-control" id="correo" name="correo" placeholder="Nuevo correo electrónico">
                         </div>
                         <div class="form-group">
-                            <input type="text" class="form-control" id="nombre" name="nombre" placeholder="Nombre" readonly>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" placeholder="Apellido paterno" readonly>
-                        </div>
-                        <div class="form-group">
-                            <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" placeholder="Apellido materno" readonly>
-                        </div>
-                        <div class="form-group">
-                            <label for="correo_actual">Correo Electrónico Actual: <span id="correo_actual">No disponible</span></label><br>
-                            <input type="email" class="form-control" id="correo" name="correo" placeholder="Nuevo correo electrónico" required>
-                        </div>
-                        <div class="form-group">
-                            <label for="telefono_actual">Teléfono Actual: <span id="telefono_actual">No disponible</span></label><br>
-                            <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Nuevo número telefónico" maxlength="10" required>
-                            <div class="invalid-feedback">Debes ingresar un número válido de hasta 10 dígitos.</div>
+                            <input type="text" class="form-control" id="telefono" name="telefono" placeholder="Nuevo número telefónico" pattern="\d*" title="Ingrese un número de teléfono válido" maxlength="15">
+                            <div class="invalid-feedback">Debes ingresar un número de teléfono válido.</div>
                         </div>
                         <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Editar</button>
                     </form>
@@ -97,17 +111,9 @@
 
         //unicamente un modal a la vez
         if (window.history.replaceState) {
-                window.history.replaceState(null, null, window.location.href);
-            }
+            window.history.replaceState(null, null, window.location.href);
+        }
 
-        document.getElementById('formCita').addEventListener('submit', function(event) {
-            if (!document.getElementById('clienteID').value) {
-                event.preventDefault();
-                event.stopPropagation();
-                document.getElementById('campo').classList.add('is-invalid');
-            }
-            this.classList.add('was-validated');
-        });
 
         document.getElementById('campo').addEventListener('input', function() {
             const searchTerm = this.value;
@@ -126,8 +132,8 @@
                                     document.getElementById('nombre').value = cliente.nombre;
                                     document.getElementById('apellido_paterno').value = cliente.apellido_paterno;
                                     document.getElementById('apellido_materno').value = cliente.apellido_materno;
-                                    document.getElementById('telefono_actual').innerText = cliente.telefono;
-                                    document.getElementById('correo_actual').innerText = cliente.correo;
+                                    document.getElementById('telefono_actual').value = cliente.telefono;
+                                    document.getElementById('correo_actual').value = cliente.correo;
                                     lista.style.display = 'none';
                                 };
                                 lista.appendChild(li);
@@ -142,7 +148,7 @@
             }
         });
     </script>
-    
+
     <script>
         $(document).ready(function() {
             if ($('#staticBackdrop').length) {
@@ -155,7 +161,7 @@
 
             const telefono = document.getElementById('telefono').value;
 
-            if (telefono.length > 10 || isNaN(telefono) || telefono < 0) {
+            if (telefono.length > 0 && telefono.length < 10) {
                 document.getElementById('telefono').classList.add('is-invalid');
                 valid = false;
             } else {
@@ -168,46 +174,15 @@
         });
     </script>
 
-<script>
-        $(document).ready(function() {
-            if ($('#staticBackdrop').length) {
-                $('#staticBackdrop').modal('show');
-            }
-        });
-
-        document.getElementById('x').addEventListener('submit', function(event) {
-            let valid = true;
-
-            const campo = document.getElementById('campo').value;
-
-            // Validar nombre
-            if (/\d/.test(campo)) {
-                document.getElementById('campo').classList.add('is-invalid');
-                valid = false;
-            } else {
-                document.getElementById('campo').classList.remove('is-invalid');
-            }
-
-            // Validar salario
-            if (isNaN(telefono) || telefono < 0) {
-                document.getElementById('telefono').classList.add('is-invalid');
-                valid = false;
-            } else {
-                document.getElementById('telefono').classList.remove('is-invalid');
-            }
-
-            if (!valid) {
-                event.preventDefault();
-            }
-        });
+    <script>
         function validarLetras(event) {
-    const input = event.target;
-    input.value = input.value.replace(/[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]/g, '');
-}
+            const input = event.target;
+            input.value = input.value.replace(/[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]/g, '');
+        }
 
         function validarNumeros(event) {
             const input = event.target;
-            input.value = input.value.replace(/[^0-9.]/g, '');
+            input.value = input.value.replace(/[^0-9]/g, '');
         }
 
         document.getElementById('telefono').addEventListener('input', validarNumeros);
