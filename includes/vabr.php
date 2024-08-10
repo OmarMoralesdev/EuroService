@@ -297,38 +297,14 @@ h2 {
         </div>
     </div>
     <ul class="sidebar-nav">
-        <li class="sidebar-item">
-            <a href="../Catalogo/proveedores_view.php" class="sidebar-link">
-                <i class="lni lni-delivery"></i>
-                <span>PROVEEDORES</span>
-            </a>
-        </li>
-            <li class="sidebar-item">
-                <a href="../entregar/entregar.php" class="sidebar-link">
-                    <i class="lni lni-checkmark-circle"></i>
-                    <span>ENTREGADOS</span>
-                </a>
-            </li>
+
+
+      
+
+          
      
         <!-- Sección de Catálogo ajustada -->
-<li class="sidebar-item">
-    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#catalogo"
-        aria-expanded="false" aria-controls="catalogo">
-        <i class="lni lni-dropbox"></i>
-        <span>INVENTARIO</span>
-    </a>
-    <ul id="catalogo" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
-        <li class="sidebar-item">
-            <a href="../Catalogo/Categoria.php" class="sidebar-link">CATEGORÍA</a>
-        </li>
-        <li class="sidebar-item">
-            <a href="../Catalogo/Insumos.php" class="sidebar-link">INSUMOS</a>
-        </li>
-        <li class="sidebar-item">
-            <a href="../Catalogo/Compras.php" class="sidebar-link">COMPRAS</a>
-        </li>
-    </ul>
-</li>
+
         <li class="sidebar-item">
             <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#citas"
                 aria-expanded="false" aria-controls="citas">
@@ -364,26 +340,42 @@ h2 {
              
             </ul>
         </li>
+
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#usuarios"
-                aria-expanded="false" aria-controls="usuarios">
-                <i class="bi bi-people"></i>
-                <span>CLIENTES</span>
+                <a href="../entregar/entregar.php" class="sidebar-link">
+                    <i class="lni lni-checkmark-circle"></i>
+                    <span>ENTREGAR</span>
+                </a>
+            </li>
+       
+
+            <li class="sidebar-item">
+            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
+                data-bs-target="#empleados" aria-expanded="false" aria-controls="empleados">
+                <i class="lni lni-user"></i> 
+                <span>EMPLEADOS</span>
             </a>
-            <ul id="usuarios" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+            <ul id="empleados" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="../Usuarios/vista_registro_cliente.php" class="sidebar-link">REGISTRAR</a>
+                    <a href="../Empleados/registro_asistencia.php" class="sidebar-link">ASISTENCIA</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Usuarios/edit_user_view.php" class="sidebar-link">EDITAR</a>
+                    <a href="../Empleados/justificar_falta.php" class="sidebar-link">JUSTIFICAR FALTA</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Usuarios/deshabilitar_client_view.php" class="sidebar-link">ELIMINAR</a>
+                    <a href="../Empleados/registro_empleado.php" class="sidebar-link">AGREGAR</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Usuarios/buscar_view.php" class="sidebar-link">BUSCAR</a>
+                    <a href="../Empleados/cuentaempleado.php" class="sidebar-link">HABILITAR CUENTA</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="../Empleados/buscar.php" class="sidebar-link">BUSCAR EMPLEADO</a>
+                </li>
+                <li class="sidebar-item">
+                    <a href="../Finanzas/Reporte_de_rendimiento.php" class="sidebar-link">RENDIMIENTO</a>
                 </li>
             </ul>
+        </li>
 
         </li>
         <li class="sidebar-item">
@@ -407,33 +399,28 @@ h2 {
                 </li>
             </ul>
         </li>
+
         <li class="sidebar-item">
-            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse"
-                data-bs-target="#empleados" aria-expanded="false" aria-controls="empleados">
-                <i class="lni lni-user"></i> 
-                <span>EMPLEADOS</span>
+            <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#usuarios"
+                aria-expanded="false" aria-controls="usuarios">
+                <i class="bi bi-people"></i>
+                <span>CLIENTES</span>
             </a>
-            <ul id="empleados" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+            <ul id="usuarios" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="../Empleados/registro_asistencia.php" class="sidebar-link">ASISTENCIA</a>
+                    <a href="../Usuarios/vista_registro_cliente.php" class="sidebar-link">REGISTRAR</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Empleados/justificar_falta.php" class="sidebar-link">JUSTIFICAR FALTA</a>
+                    <a href="../Usuarios/edit_user_view.php" class="sidebar-link">EDITAR</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Empleados/registro_empleado.php" class="sidebar-link">AGREGAR</a>
+                    <a href="../Usuarios/deshabilitar_client_view.php" class="sidebar-link">ELIMINAR</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Empleados/cuentaempleado.php" class="sidebar-link">HABILITAR CUENTA</a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="../Empleados/buscar.php" class="sidebar-link">BUSCAR</a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="../Finanzas/Reporte_de_rendimiento.php" class="sidebar-link">RENDIMIENTO</a>
+                    <a href="../Usuarios/buscar_view.php" class="sidebar-link">BUSCAR CLIENTE</a>
                 </li>
             </ul>
-        </li>
+      
 
         <li class="sidebar-item">
             <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#finanzas"
@@ -464,6 +451,33 @@ h2 {
                     <a href="../Empleados/nominas.php" class="sidebar-link">REGISTRAR NOMINAS</a>
                 </li>
             </ul>
+
+            <li class="sidebar-item">
+    <a href="#" class="sidebar-link collapsed has-dropdown" data-bs-toggle="collapse" data-bs-target="#catalogo"
+        aria-expanded="false" aria-controls="catalogo">
+        <i class="lni lni-dropbox"></i>
+        <span>INVENTARIO</span>
+    </a>
+    <ul id="catalogo" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
+        <li class="sidebar-item">
+            <a href="../Catalogo/Categoria.php" class="sidebar-link">CATEGORÍA</a>
+        </li>
+        <li class="sidebar-item">
+            <a href="../Catalogo/Insumos.php" class="sidebar-link">INSUMOS</a>
+        </li>
+        <li class="sidebar-item">
+            <a href="../Catalogo/Compras.php" class="sidebar-link">COMPRAS</a>
+        </li>
+    </ul>
+</li>
+
+
+            <li class="sidebar-item">
+            <a href="../Catalogo/proveedores_view.php" class="sidebar-link">
+                <i class="lni lni-delivery"></i>
+                <span>PROVEEDORES</span>
+            </a>
+        </li>
         </li>
     </ul><br>
     <div class="sidebar-footer">

@@ -84,11 +84,11 @@ session_start();
 
 
 <input type="radio" class="btn-check" name="options-base" id="option1" autocomplete="off" >
-<label class="btn" for="option1">CON SEGUIMINETO</label>
+<label class="btn" for="option1">CON SEGUIMIENTO</label>
 
 
 <input type="radio" class="btn-check"  name="options-base" id="option2" autocomplete="off" checked>
-<label class="btn" for="option2">SIN SEGUIMINTO</label>
+<label class="btn" for="option2">SIN SEGUIMIENTO</label>
 
 <br>
 <br>
