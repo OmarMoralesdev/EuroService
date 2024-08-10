@@ -25,7 +25,7 @@ function obtenerCitaPorID($pdo, $citaID)
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Seleccionar Cita para Orden de Trabajo</title>
+    <title>Seleccionar Cita </title>
     <style>
         .tarjeta { 
             border: 1px solid #ccc; 
@@ -73,7 +73,7 @@ function obtenerCitaPorID($pdo, $citaID)
     <?php include '../includes/vabr.php'; ?>
     <div class="main p-2">
         <div class="container">
-            <h2>SELECCIONAR CITA PARA CREAR ORDEN DE TRABAJO</h2>
+            <h2>SELECCIONAR CITA PARA EDITAR</h2>
             <div class="form-container">
                 <input type="text" id="buscar" class="form-control" placeholder="Buscar por vehículo..."><br>
                 <div id="citas-contenedor"></div>

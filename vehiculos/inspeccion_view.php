@@ -12,7 +12,7 @@ session_start();
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Registrar Vehículo</title>
+    <title>Registrar Vehículo - Inspeccion</title>
     <style>
         .is-invalid {
             border-color: #dc3545;
