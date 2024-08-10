@@ -27,10 +27,10 @@ $pdo = $con->conectar();
             unset($_SESSION['alert']);
         }
         ?>
-                    <form method="post" action="./registro_cliente.php">
+                    <form method="post" id="x" action="./registro_cliente.php">
                     <div class="form-group">
                             <label for="nombre">Nombre:</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" required pattern="[a-zA-Z\s]+" title="Solo letras y espacios">
+                            <input type="text" class="form-control" id="nombre"  maxlength="10" name="nombre" required pattern="[a-zA-Z\s]+" title="Solo letras y espacios">
                         </div>
                         <div class="form-group">
                             <label for="apellido_paterno">Apellido Paterno:</label>
@@ -79,6 +79,73 @@ $pdo = $con->conectar();
                 myModal.show();
             }
         });
+    </script>
+    
+    <script>
+        $(document).ready(function() {
+            if ($('#staticBackdrop').length) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
+
+        document.getElementById('x').addEventListener('submit', function(event) {
+            let valid = true;
+
+            const nombre = document.getElementById('nombre').value;
+            const apellido_paterno = document.getElementById('apellido_paterno').value;
+            const apellido_materno = document.getElementById('apellido_materno').value;
+            const telefono = parseFloat(document.getElementById('telefono').value);
+
+            // Validar nombre
+            if (/\d/.test(nombre)) {
+                document.getElementById('nombre').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('nombre').classList.remove('is-invalid');
+            }
+
+            // Validar apellido paterno
+            if (/\d/.test(apellido_paterno)) {
+                document.getElementById('apellido_paterno').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('apellido_paterno').classList.remove('is-invalid');
+            }
+
+            // Validar apellido materno
+            if (/\d/.test(apellido_materno)) {
+                document.getElementById('apellido_materno').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('apellido_materno').classList.remove('is-invalid');
+            }
+
+            // Validar salario
+            if (isNaN(telefono) || telefono < 0) {
+                document.getElementById('telefono').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('telefono').classList.remove('is-invalid');
+            }
+
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+        function validarLetras(event) {
+    const input = event.target;
+    input.value = input.value.replace(/[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]/g, '');
+}
+
+        function validarNumeros(event) {
+            const input = event.target;
+            input.value = input.value.replace(/[^0-9.]/g, '');
+        }
+
+        document.getElementById('nombre').addEventListener('input', validarLetras);
+        document.getElementById('apellido_paterno').addEventListener('input', validarLetras);
+        document.getElementById('apellido_materno').addEventListener('input', validarLetras);
+        document.getElementById('telefono').addEventListener('input', validarNumeros);
     </script>
 </body>
 </html>

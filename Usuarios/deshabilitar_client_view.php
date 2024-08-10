@@ -210,5 +210,38 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             document.getElementById('formCita').submit();
         });
     </script>
+
+    
+<script>
+        $(document).ready(function() {
+            if ($('#staticBackdrop').length) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
+
+        document.getElementById('formCita').addEventListener('submit', function(event) {
+            let valid = true;
+
+            const campo = document.getElementById('campo').value;
+
+            // Validar nombre
+            if (/\d/.test(campo)) {
+                document.getElementById('campo').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('campo').classList.remove('is-invalid');
+            }
+
+            if (!valid) {
+                event.preventDefault();
+            }
+        });
+        function validarLetras(event) {
+    const input = event.target;
+    input.value = input.value.replace(/[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]/g, '');
+}
+        document.getElementById('campo').addEventListener('input', validarLetras);
+    </script>
+    
 </body>
 </html>
