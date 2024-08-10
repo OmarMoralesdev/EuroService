@@ -52,7 +52,7 @@ if ($cita) {
                             <div class='modal-dialog'>
                                 <div class='modal-content'>
                                     <div class='modal-header'>
-                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Se ha editado la cita!</h1>
                                         <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                                     </div>
                                     <div class='modal-body'>
@@ -80,7 +80,7 @@ if ($cita) {
                             </div>
                             <div class="mb-3">
                                 <label for="servicioSolicitado" class="form-label">Servicio Solicitado:</label>
-                                <input type="text" class="form-control" id="servicioSolicitado" name="servicioSolicitado" value="<?php echo htmlspecialchars($cita['servicio_solicitado']); ?>" required>
+                                <input type="text" class="form-control" id="servicioSolicitado" name="servicioSolicitado" value="<?php echo htmlspecialchars($cita['servicio_solicitado']); ?>" readonly>
                             </div>
                             <div class="mb-3">
                                 <label for="fecha_cita" class="form-label">Fecha de la Cita:</label>
