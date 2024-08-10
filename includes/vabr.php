@@ -1,12 +1,3 @@
-<?php
-session_start();
-
-if (!isset($_SESSION['username']) || !isset($_SESSION['empleadoID'])) {
-    $_SESSION['error'] = 'Acceso no autorizado';
-    header('Location: ../Login/index.php');
-    exit();
-}
-?>
 
 <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />
 <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"
@@ -298,7 +289,7 @@ h2 {
             </a>
         </li>
             <li class="sidebar-item">
-                <a href="../entregar/index.php" class="sidebar-link">
+                <a href="../entregar/entregar.php" class="sidebar-link">
                     <i class="lni lni-checkmark-circle"></i>
                     <span>ENTREGADOS</span>
                 </a>
@@ -353,7 +344,7 @@ h2 {
             </a>
             <ul id="orden" class="sidebar-dropdown list-unstyled collapse" data-bs-parent="#sidebar">
                 <li class="sidebar-item">
-                    <a href="../Orden/index.php" class="sidebar-link">REGISTRAR ORDEN</a>
+                    <a href="../Orden/seleccionar.php" class="sidebar-link">REGISTRAR ORDEN</a>
                 </li>
              
             </ul>
