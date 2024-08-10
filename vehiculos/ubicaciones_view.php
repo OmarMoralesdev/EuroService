@@ -178,7 +178,7 @@ echo "</div>";
                     <button type='button' class='btn-close bg-dark' data-bs-dismiss='modal' aria-label='Close'></button>
                 </div>
                 <div class='modal-body'>
-                    <form action='addLocation.php' method='POST'>
+                    <form action='AddLocation.php' method='POST'>
                         <div class='mb-3'>
                             <label for='lugar' class='form-label'>Lugar</label>
                             <input type='text' class='form-control' id='lugar' name='lugar' required>

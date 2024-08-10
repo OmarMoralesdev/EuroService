@@ -13,7 +13,7 @@ $modalContent = '';
     $conn = $conexion->conectar();
 
     // Verificar si el lugar ya existe en la base de datos
-    $consulta_nombre = "SELECT COUNT(*) as count FROM ubicaciones WHERE lugar = :lugar";
+    $consulta_nombre = "SELECT COUNT(*) as count FROM UBICACIONES WHERE lugar = :lugar";
     // Preparar la consulta
     $stmt_nombre = $conn->prepare($consulta_nombre);
     // Asignar valores a los parámetros
