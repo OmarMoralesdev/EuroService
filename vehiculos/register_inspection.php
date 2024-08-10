@@ -7,7 +7,7 @@ $pdo = $con->conectar();
 
 $empleadoID = isset($_POST['empleadoID']) ? intval($_POST['empleadoID']) : null;
 $ubicacionID = isset($_POST['ubicacionID']) ? intval($_POST['ubicacionID']) : null;
-$formaDePago = isset($_POST['formaDePago']) ? trim($_POST['formaDePago']) : '';
+$formaDePago = isset($_POST['formadepago']) ? trim($_POST['formadepago']) : '';
 $clienteID = isset($_POST['clienteID']) ? $_POST['clienteID'] : '';
 $marca = isset($_POST['marca']) ? trim($_POST['marca']) : '';
 $modelo = isset($_POST['modelo']) ? trim($_POST['modelo']) : '';
@@ -74,8 +74,8 @@ if ($stmt->rowCount() > 0) {
         $pagoID = $pago['pagoID'];
 
         // Registrar la entrega usando el procedimiento almacenado
-        $stmt = $pdo->prepare("CALL registrar_entrega(?)");
-        $stmt->execute([$pagoID]);
+        $stmt = $pdo->prepare("CALL registrar_entrega(?,?)");
+        $stmt->execute([$pagoID, $formaDePago]);
 
         $nuevaUbicacionID = 4;
         // Actualizar la orden de trabajo con la nueva ubicación
