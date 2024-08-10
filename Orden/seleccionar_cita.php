@@ -54,35 +54,35 @@
         <div class="container">
             <h2>SELECCIONAR CITA PARA CREAR ORDEN DE TRABAJO</h2>
             <div class="form-container">
+            <?php
+                if (isset($_SESSION['error'])) {
+                    echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
+                    unset($_SESSION['error']);
+                }
+                if (isset($_SESSION['bien'])) {
+                    echo "
+                    <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                        <div class='modal-dialog'>
+                            <div class='modal-content'>
+                                <div class='modal-header'>
+                                    <h1 class='modal-title fs-5' id='staticBackdropLabel'>Orden registrada!</h1>
+                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                </div>
+                                <div class='modal-body'>
+                                    <div class='alert alert-success' role='alert'>{$_SESSION['bien']}</div>
+                                </div>
+                                <div class='modal-footer'>
+                                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>";
+                    unset($_SESSION['bien']);
+                }
+                ?>
                 <input type="text" id="buscar" class="form-control" placeholder="Buscar por vehículo..."><br>
                 <div id="citas-contenedor"></div>
                 <div class="paginacion" id="paginacion"></div>
-                <?php
-                    if (isset($_SESSION['error'])) {
-                        echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
-                        unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
-                    }
-                    if (isset($_SESSION['bien'])) {
-                        echo "
-                        <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
-                            <div class='modal-dialog'>
-                                <div class='modal-content'>
-                                    <div class='modal-header'>
-                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
-                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                                    </div>
-                                    <div class='modal-body'>
-                                        <div class='alert alert-success' role='alert'>{$_SESSION['bien']}</div>
-                                    </div>
-                                    <div class='modal-footer'>
-                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>";
-                    }
-                    unset($_SESSION['bien']);
-                    ?>
                 <form id="formularioCita" action="crear_orden_desde_cita.php" method="post" style="display:none;">
                     <input type="hidden" id="citaIDSeleccionada" name="citaID">
                 </form>
@@ -163,4 +163,14 @@
 
     renderizarTarjetas(citas, paginaActual);  // Renderizar las citas inicialmente
 </script>
+
+<!-- Mostrar modal si es necesario -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        if ($('#staticBackdrop').length) {
+            $('#staticBackdrop').modal('show');
+        }
+    });
+</script>
+
 </html>
