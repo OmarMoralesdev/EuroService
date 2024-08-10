@@ -3,7 +3,7 @@ include '../includes/db.php';
     $conexion = new Database();
     $conexion->conectar();
     extract($_POST);
-    $consulta = "UPDATE `ubicaciones` SET `activo` = 'si' WHERE `ubicacionID` = $lugaru";
+    $consulta = "UPDATE `UBICACIONES` SET `activo` = 'si' WHERE `ubicacionID` = $lugaru";
     $conexion->ejecuta($consulta);
     
     $conexion->desconectar();
