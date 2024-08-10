@@ -1,10 +1,3 @@
-<?php
-session_start();
-require '../includes/db.php';
-$con = new Database();
-$pdo = $con->conectar();
-?>
-
 <!DOCTYPE html>
 <html lang="es">
 
