@@ -54,12 +54,11 @@
         <div class="container">
             <h2>SELECCIONAR CITA PARA CREAR ORDEN DE TRABAJO</h2>
             <div class="form-container">
-                <form id="x">                <input type="text" id="buscar" class="form-control" placeholder="Buscar por vehículo..."><br>
+                <input type="text" id="buscar" class="form-control" placeholder="Buscar por vehículo..."><br>
                 <div id="citas-contenedor"></div>
                 <div class="paginacion" id="paginacion"></div>
                 <form id="formularioCita" action="crear_orden_desde_cita.php" method="post" style="display:none;">
                     <input type="hidden" id="citaIDSeleccionada" name="citaID">
-                </form>
                 </form>
             </div>
         </div>
@@ -68,9 +67,9 @@
 <script>
     // Obtener las citas desde el servidor
     let citas = <?php
-        require '../includes/db.php';
-        $con = new Database();
-        $pdo = $con->conectar();
+    require '../includes/db.php';
+    $con = new Database();
+    $pdo = $con->conectar();
         $citas = listarCitasPendientes($pdo);
         echo json_encode($citas);
     ?>;
@@ -138,37 +137,4 @@
 
     renderizarTarjetas(citas, paginaActual);  // Renderizar las citas inicialmente
 </script>
-<script>
-        $(document).ready(function() {
-            if ($('#staticBackdrop').length) {
-                $('#staticBackdrop').modal('show');
-            }
-        });
-
-        document.getElementById('x').addEventListener('submit', function(event) {
-            let valid = true;
-
-            const buscar = document.getElementById('buscar').value;
-
-            // Validar nombre
-            if (/\d/.test(buscar)) {
-                document.getElementById('buscar').classList.add('is-invalid');
-                valid = false;
-            } else {
-                document.getElementById('buscar').classList.remove('is-invalid');
-            }
-
-
-            if (!valid) {
-                event.preventDefault();
-            }
-        });
-
-        function validarLetras(event) {
-            const input = event.target;
-            input.value = input.value.replace(/[^a-zA-Z]/g, '');
-        }
-
-        document.getElementById('buscar').addEventListener('input', validarLetras);
-    </script>
 </html>

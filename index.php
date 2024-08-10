@@ -333,7 +333,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 
     <div class="containerr">
-        <div class="bg-fixedd" style="background-image: url('../EuroService/img/FONDO LOGIN.jpg');">
+        <div class="bg-fixedd" style="background-image: url('./img/FONDO_LOGIN.jpg');">
             <div class="overlay"></div>
         </div>
     </div>
