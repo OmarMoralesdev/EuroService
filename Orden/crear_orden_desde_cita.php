@@ -134,23 +134,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session
         </div>
     </div>
 </div>
-<script>
-    // Al salir de la página, borrar la citaID de la sesión
-    window.addEventListener('beforeunload', function(event) {
-        if (event.persisted || (window.performance && window.performance.navigation.type == 1)) {
-            // Recarga de página detectada, no hacer nada
-        } else {
-            // Salida de la página detectada, eliminar la sesión del citaID
-            fetch(window.location.href, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'eliminar_cita_session=true'
-            });
-        }
-    });
-</script>
+
 
 <script>
 document.addEventListener('DOMContentLoaded', function() {
@@ -168,7 +152,7 @@ document.addEventListener('DOMContentLoaded', function() {
 });
 </script>
 <script>
-    $(document).ready(function() {
+    document.addEventListener('DOMContentLoaded', function() {
         if ($('#staticBackdrop').length) {
             $('#staticBackdrop').modal('show');
         }
