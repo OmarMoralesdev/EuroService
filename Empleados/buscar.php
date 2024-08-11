@@ -11,9 +11,7 @@ $consulta_empleados = "SELECT DISTINCT e.empleadoID,
        e.alias, 
        e.tipo, 
        n.total, 
-       (e.salario_diario * 5) AS total_salario, 
-       n.bonos, 
-       n.rebajas
+       (e.salario_diario * 5) AS total_salario
 FROM EMPLEADOS e
 INNER JOIN PERSONAS p ON e.personaID = p.personaID
 LEFT JOIN NOMINAS n ON e.empleadoID = n.empleadoID
@@ -88,19 +86,14 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                                 echo "<p class='card-text'><strong>Alias:</strong> {$empleado->alias}</p>";
                                 echo "<p class='card-text'><strong>Tipo:</strong> {$empleado->tipo}</p>";
                                 echo "<HR>";
-                                echo "<p class='card-text'><strong>Salario semanal :</strong> {$empleado->total}</p> <br>";
+                                echo "<p class='card-text'><strong>Salario semanal :</strong> {$empleado->total_salario}</p> <br>";
                                 echo "<div class='btn-container mb-1'>"; // Añadido margen inferior
                                 echo "<button type='button' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#modalRebajas{$empleado->empleadoID}' data-empleado-id='{$empleado->empleadoID}'>BAJAR</button>";
                                 echo "<button type='button' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#modalAumento{$empleado->empleadoID}' data-empleado-id='{$empleado->empleadoID}'>AUMENTAR</button>";
                                 echo "</div>"; 
                                 echo "<HR>";
-                                echo "<p class='card-text'><strong>Bonos:</strong> {$empleado->bonos}</p>";
-                                echo "<p class='card-text'><strong>Rebajas:</strong> {$empleado->rebajas}</p>";
                                 echo "<div class='btn-container mb-1'>"; // Añadido margen inferior
-                                echo "<button type='button' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#modalRebaja{$empleado->empleadoID}' data-empleado-id='{$empleado->empleadoID}'>REBAJAS</button>";
-                                echo "<button type='button' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#modalBonos{$empleado->empleadoID}' data-empleado-id='{$empleado->empleadoID}'>BONOS</button>";
                                 echo "</div>"; 
-                                echo "<HR>";
                                 echo "<div class='mt-1 x'>";
                                 echo "<button type='button' class='btn btn-danger' data-bs-toggle='modal' data-bs-target='#modalDeshabilitar{$empleado->empleadoID}' data-empleado-id='{$empleado->empleadoID}'>ELIMINAR</button>";
                                 echo "</div>";
@@ -158,58 +151,6 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                                 echo "</div>";
                                 echo "</form>";
                                 echo "<div id='AumentoMessage{$empleado->empleadoID}' class='alert' style='display:none;'></div>";
-                                echo "</div>";
-                                echo "</div>";
-                                echo "</div>";
-
-                                // Modal para Bonos
-                                echo "<div class='modal fade' id='modalBonos{$empleado->empleadoID}' tabindex='-1' aria-labelledby='modalBonoLabel' aria-hidden='true'>";
-                                echo "<div class='modal-dialog'>";
-                                echo "<div class='modal-content'>";
-                                echo "<div class='modal-header'>";
-                                echo "<h5 class='modal-title' id='modalBonosLabel'>Agregar Bono al empleado</h5>";
-                                echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
-                                echo "</div>";
-                                echo "<form id='BonoForm{$empleado->empleadoID}' method='POST' action='AddBono.php'>";
-                                echo "<div class='modal-body'>";
-                                echo "<input type='hidden' name='empleadoID' value='{$empleado->empleadoID}'>";
-                                echo "<div class='mb-3'>";
-                                echo "<label for='bono' class='form-label'>Monto del Bonos</label>";
-                                echo "<input type='number' class='form-control' id='bono' name='bono' required>";
-                                echo "</div>";
-                                echo "</div>";
-                                echo "<div class='modal-footer'>";
-                                echo "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancelar</button>";
-                                echo "<button type='submit' class='btn btn-dark'>Aplicar Bono</button>";
-                                echo "</div>";
-                                echo "</form>";
-                                echo "<div id='BonoMessage{$empleado->empleadoID}' class='alert' style='display:none;'></div>";
-                                echo "</div>";
-                                echo "</div>";
-                                echo "</div>";
-
-                                // Modal para Rebajas
-                                echo "<div class='modal fade' id='modalRebaja{$empleado->empleadoID}' tabindex='-1' aria-labelledby='modalRebajaLabel' aria-hidden='true'>";
-                                echo "<div class='modal-dialog'>";
-                                echo "<div class='modal-content'>";
-                                echo "<div class='modal-header'>";
-                                echo "<h5 class='modal-title' id='modalRebajaLabel'>Agregar rebaja al empleado</h5>";
-                                echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
-                                echo "</div>";
-                                echo "<form id='RebajaForm{$empleado->empleadoID}' method='POST' action='AddRebajilla.php'>";
-                                echo "<div class='modal-body'>";
-                                echo "<input type='hidden' name='empleadoID' value='{$empleado->empleadoID}'>";
-                                echo "<div class='mb-3'>";
-                                echo "<label for='rebaja' class='form-label'>Monto de la Rebaja</label>";
-                                echo "<input type='number' class='form-control' id='rebaja' name='rebaja' required>";
-                                echo "</div>";
-                                echo "</div>";
-                                echo "<div class='modal-footer'>";
-                                echo "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancelar</button>";
-                                echo "<button type='submit' class='btn btn-dark'>Aplicar Rebaja</button>";
-                                echo "</div>";
-                                echo "</form>";
-                                echo "<div id='RebajaMessage{$empleado->empleadoID}' class='alert' style='display:none;'></div>";
                                 echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
