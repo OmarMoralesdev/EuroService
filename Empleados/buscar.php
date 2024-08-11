@@ -6,15 +6,25 @@ $conexion->conectar();
 
 $buscar = isset($_POST['buscar']) ? $_POST['buscar'] : '';
 
-$consulta_empleados = "SELECT e.empleadoID, CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, e.alias, e.tipo, n.total, (e.salario_diario*5) as total, n.bonos, n.rebajas
-                    FROM EMPLEADOS e
-                    INNER JOIN PERSONAS p ON e.personaID = p.personaID
-                    LEFT JOIN NOMINAS n ON e.empleadoID = n.empleadoID";
-                    
+$consulta_empleados = "SELECT DISTINCT e.empleadoID, 
+       CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, 
+       e.alias, 
+       e.tipo, 
+       n.total, 
+       (e.salario_diario * 5) AS total_salario, 
+       n.bonos, 
+       n.rebajas
+FROM EMPLEADOS e
+INNER JOIN PERSONAS p ON e.personaID = p.personaID
+LEFT JOIN NOMINAS n ON e.empleadoID = n.empleadoID
+WHERE e.activo = 'si'";
+
 if (!empty($buscar)) {
-    $consulta_empleados .= " WHERE p.nombre LIKE '%$buscar%' OR p.apellido_paterno LIKE '%$buscar%' OR p.apellido_materno LIKE '%$buscar%' OR e.alias LIKE '%$buscar%'";
+    $consulta_empleados .= " AND (p.nombre LIKE '%$buscar%' OR p.apellido_paterno LIKE '%$buscar%' OR p.apellido_materno LIKE '%$buscar%' OR e.alias LIKE '%$buscar%')";
 }
+
 $consulta_empleados .= " ORDER BY nombre_completo";
+
 
 $empleados = $conexion->seleccionar($consulta_empleados);
 ?>
