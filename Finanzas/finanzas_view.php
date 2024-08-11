@@ -68,8 +68,8 @@
                 $pdo = $con->conectar();
                 
                 // Consulta SQL
-                $sql = "
-                SELECT 
+                $sql = "       
+                  SELECT 
                     mes, 
                     SUM(total_ingresos_mensuales) AS total_ingresos_mensuales,
                     SUM(total_gastos_mensuales) AS total_gastos_mensuales,
@@ -89,8 +89,8 @@
                     WHERE p.fecha_pago >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
                     GROUP BY DATE_FORMAT(p.fecha_pago, '%Y-%m')
             
-                    UNION ALL
-            
+                    UNION ALL     
+
                     SELECT DATE_FORMAT(c.fecha_compra, '%Y-%m') AS mes,
                            0 AS total_ingresos_mensuales,
                            COALESCE(SUM(dc.subtotal), 0) AS total_gastos_mensuales,
@@ -143,7 +143,6 @@
                         'ingresos_servicios' => [],
                         'gasto_insumo' => [],
                         'total_neto' => [],
-                        'total_con_ingresos_servicios' => [],
                         'total_gastos_totales' => []
                     ];
 
@@ -155,7 +154,6 @@
                         $data['ingresos_servicios'][] = (float)$row['total_ingresos_servicios'];
                         $data['gasto_insumo'][] = (float)$row['total_gasto_insumo'];
                         $data['total_neto'][] = (float)$row['total_neto'];
-                        $data['total_con_ingresos_servicios'][] = (float)$row['total_con_ingresos_servicios'];
                         $data['total_gastos_totales'][] = (float)$row['total_gastos_totales'];
                     }
                     echo "</table>";
@@ -180,7 +178,6 @@
                         var ingresos_servicios = <?php echo json_encode($data['ingresos_servicios']); ?>;
                         var gasto_insumo = <?php echo json_encode($data['gasto_insumo']); ?>;
                         var total_neto = <?php echo json_encode($data['total_neto']); ?>;
-                        var total_con_ingresos_servicios = <?php echo json_encode($data['total_con_ingresos_servicios']); ?>;
                         var total_gastos_totales = <?php echo json_encode($data['total_gastos_totales']); ?>;
 
                         // Crear gráfico
@@ -225,13 +222,7 @@
                                         borderColor: 'rgba(255, 206, 86, 1)',
                                         borderWidth: 1
                                     },
-                                    {
-                                        label: 'Total con Ingresos Servicios',
-                                        data: total_con_ingresos_servicios,
-                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                        borderColor: 'rgba(75, 192, 192, 1)',
-                                        borderWidth: 1
-                                    },
+                                   
                                     {
                                         label: 'Total Gastos Totales',
                                         data: total_gastos_totales,

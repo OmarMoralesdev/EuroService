@@ -11,7 +11,7 @@ try {
         header("Location: entregar.php");
         exit();
     }
-
+    $formaDePago = isset($_POST['formadepago']) ? trim($_POST['formadepago']) : '';
     $ordenID = $_POST['ordenID'];
     $nuevaUbicacionID = 4;
 
@@ -26,23 +26,9 @@ try {
         exit();
     }
 
-    // Consultar el pago asociado a la orden
-    $stmt = $pdo->prepare("SELECT pagoID FROM PAGOS WHERE ordenID = ?");
-    $stmt->execute([$ordenID]);
-    $pago = $stmt->fetch(PDO::FETCH_ASSOC);
-
-    if (!$pago) {
-        $_SESSION['error'] = "No se encontró un pago asociado a esta orden.";
-        header("Location: entregar.php");
-        exit();
-    }
-
-    $pagoID = $pago['pagoID'];
-
     // Registrar la entrega usando el procedimiento almacenado
-    $stmt = $pdo->prepare("CALL registrar_entrega(?)");
-    $stmt->execute([$pagoID]);
-
+    $stmt = $pdo->prepare("CALL registrar_entrega(?,?)");
+    $stmt->execute([$ordenID, $formaDePago]);
 
     // Actualizar la orden de trabajo con la nueva ubicación
     $sqlActualizarOrden = "UPDATE ORDENES_TRABAJO SET ubicacionID = ? WHERE ordenID = ?";
@@ -52,7 +38,7 @@ try {
     if ($stmtActualizarOrden->rowCount() > 0) {
         $_SESSION['bien'] = "Orden de trabajo entregada exitosamente.";
     } else {
-        $_SESSION['error'] = "Error al entregada la orden de trabajo.";
+        $_SESSION['error'] = "Error al entregar la orden de trabajo.";
     }
 
     header("Location: entregar.php");
