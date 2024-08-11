@@ -129,8 +129,8 @@ session_start();
             const alias = document.getElementById('alias').value;
             const salario_diario = parseFloat(document.getElementById('salario_diario').value);
 
-            // Validar nombre
-            if (/\d/.test(nombre)) {
+           // Validar nombre
+           if (/\d/.test(nombre)) {
                 document.getElementById('nombre').classList.add('is-invalid');
                 valid = false;
             } else {
@@ -174,10 +174,12 @@ session_start();
             }
         });
 
-        function validarLetras(event) {
-            const input = event.target;
-            input.value = input.value.replace(/[^a-zA-Z]/g, '');
-        }
+       
+    function validarLetras(event) {
+        const input = event.target;
+        input.value = input.value.replace(/[^a-zA-ZáéíóúüñÁÉÍÓÚÜÑ ]/g, '');
+    }
+
 
         function validarNumeros(event) {
             const input = event.target;
