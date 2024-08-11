@@ -70,34 +70,10 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                                 echo "<p class='card-text'><strong>Tipo:</strong> {$empleado->tipo}</p>";
                                 echo "<p class='card-text'><strong>Salario:</strong> {$empleado->total}</p>";
 
-                                echo "<button type='button' class='btn btn-dark btn-md ml-2'  style='width: 100% ;' data-bs-toggle='modal' data-bs-target='#modalRebajas{$empleado->empleadoID}'>REBAJAS</button>";
                                 echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
-
-                                // Modal para agregar rebajas
-                                echo "<div class='modal fade' id='modalRebajas{$empleado->empleadoID}' tabindex='-1' aria-labelledby='modalRebajas{$empleado->empleadoID}Label' aria-hidden='true'>";
-                                echo "<div class='modal-dialog'>";
-                                echo "<div class='modal-content'>";
-                                echo "<div class='modal-header'>";
-                                echo "<h5 class='modal-title' id='modalRebajas{$empleado->empleadoID}Label'>Agregar Rebajas para {$empleado->nombre_completo}</h5>";
-                                echo "<button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>";
-                                echo "</div>";
-                                echo "<div class='modal-body'>";
-                                echo "<form action='AddRebaja.php' method='post' id='formRebaja{$empleado->empleadoID}'>";
-                                echo "<div class='mb-3'>";
-                                echo "<label for='rebaja{$empleado->empleadoID}'>Cantidad de Rebaja:</label>";
-                                echo "<input type='number' class='form-control' id='rebaja{$empleado->empleadoID}' name='rebaja'>";
-                                echo "</div>";
-                                echo "<div class='modal-footer'>";
-                                echo "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>";
-                                echo "<button type='submit' class='btn btn-dark'>Guardar</button>";
-                                echo "</div>";
-                                echo "</form>";
-                                echo "</div>";
-                                echo "</div>";
-                                echo "</div>";
-                                echo "</div>";                                
+                              
                             }
                         } else {
                             echo "<p class='text-center'>No se encontraron empleados.</p>";
