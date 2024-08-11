@@ -28,6 +28,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Verificar si se proporcionaron datos para actualizar
     if (!empty($clienteID) && (!empty($correo) || !empty($telefono))) {
+        // Obtener personaID a partir del clienteID
+        $sql = "SELECT personaID FROM CLIENTES WHERE clienteID = :clienteID";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute(['clienteID' => $clienteID]);
+        $personaID = $stmt->fetchColumn();
+
+        if (!$personaID) {
+            setAlertContent('error', "
+                <div class='alert alert-danger alert-dismissible fade show' role='alert'>
+                    <strong>Error:</strong> Cliente no encontrado.
+                    <button type='button' class='btn-close' data-bs-dismiss='alert' aria-label='Close'></button>
+                </div>");
+            header('Location: edit_user_view.php');
+            exit();
+        }
+
         // Validación de teléfono (al menos 10 dígitos) solo si se ingresa un número
         if (!empty($telefono) && strlen($telefono) < 10) {
             setAlertContent('error', "
@@ -40,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
 
         // Verificar duplicados
-        if (checkDuplicate($pdo, $correo, $telefono, $clienteID)) {
+        if (checkDuplicate($pdo, $correo, $telefono, $personaID)) {
             setAlertContent('error', "
                 <div class='alert alert-danger alert-dismissible fade show' role='alert'>
                     <strong>Error:</strong> El teléfono o el correo ya corresponden a un usuario existente.
@@ -61,7 +77,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
 
             if (count($fields) > 0) {
-                $params[] = $clienteID;
+                $params[] = $personaID;
                 $sql = "UPDATE PERSONAS SET " . implode(', ', $fields) . " WHERE personaID = ?";
                 $stmt = $pdo->prepare($sql);
 
@@ -109,4 +125,3 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     exit();
 }
 ?>
-<!-- x -->
