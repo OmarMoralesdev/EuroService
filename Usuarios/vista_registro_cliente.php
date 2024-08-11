@@ -62,20 +62,6 @@ $pdo = $con->conectar();
         unset($_SESSION['modal']);
     }
     ?>
-    <script>
-        // Muestra el modal de éxito
-        document.addEventListener('DOMContentLoaded', function () {
-            // Obtiene el modal
-            var modalElement = document.getElementById('staticBackdrop');
-            if (modalElement) {
-                // Crea una instancia de bootstrap modal
-                var myModal = new bootstrap.Modal(modalElement, {
-                    keyboard: false
-                });
-                myModal.show();
-            }
-        });
-    </script>
     
     <script>
 
@@ -91,6 +77,7 @@ $pdo = $con->conectar();
             myModal.show();
         }
     });
+    
 
     $(document).ready(function() {
         if ($('#staticBackdrop').length) {
