@@ -2,23 +2,25 @@
 // Datos de conexión a la base de datos
 require '../includes/db.php'; // Ajusta la ruta según tu estructura de carpetas
 
-$con = new Database();
-$pdo = $con->conectar();
+// Inicializar variables
 $resultado = []; // Inicializar como array vacío
 $mensaje_error = ''; // Variable para almacenar el mensaje de error
 $semana_seleccionada = ''; // Inicializar variable de la semana seleccionada
 
-
 try {
+    // Crear una nueva instancia de la clase Database
+    $con = new Database();
+    $pdo = $con->conectar();
+
     // Obtener la semana desde el formulario
     $semana_seleccionada = isset($_GET['semana']) ? $_GET['semana'] : date('Y-m-d');
 
     // Calcular las fechas de inicio y fin de la semana seleccionada
-    $inicio_semana = date('Y-m-d', strtotime($semana_seleccionada . ' 0 days'));
+    $inicio_semana = date('Y-m-d', strtotime($semana_seleccionada . ' -' . date('N', strtotime($semana_seleccionada)) - 1 . ' days'));
     $fin_semana = date('Y-m-d', strtotime($inicio_semana . ' +6 days'));
 
     // Preparar la consulta SQL para llamar al procedimiento almacenado
-    $sql = "CALL gestionPagosSemanal(:fecha_inicio, :fecha_fin)";
+    $sql = "CALL ObtenerPagosSemanal(:fecha_inicio, :fecha_fin)";
 
     // Preparar la sentencia
     $stmt = $pdo->prepare($sql);
@@ -64,7 +66,9 @@ try {
                             <div class="form-group col-md-6 offset-md-3">
                                 <label for="semana">Selecciona la semana:</label>
                                 <div id="week-picker" class="input-group date">
-                                    <div class="form-control"><?php echo date('Y-m-d', strtotime($inicio_semana)) . ' - ' . date('Y-m-d', strtotime($fin_semana)); ?></div>
+                                    <div class="form-control">
+                                        <?php echo date('Y-m-d', strtotime($inicio_semana)) . ' - ' . date('Y-m-d', strtotime($fin_semana)); ?>
+                                    </div>
                                     <input type="hidden" id="semana" name="semana" value="<?php echo htmlspecialchars($semana_seleccionada); ?>">
                                     <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
                                 </div>
@@ -79,17 +83,20 @@ try {
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>Recibo ID</th>
-                                        <th>Fecha Recibo</th>
-                                        <th>Cliente</th>
-                                        <th>Cantidad Pagada</th>
-                                        <th>Estado Pago</th>
+                                        <th>ID Pago</th>
+                                        <th>ID Orden</th>
+                                        <th>Fecha Orden</th>
+                                        <th>Fecha Pago</th>
+                                        <th>Monto</th>
+                                        <th>Tipo de Pago</th>
+                                        <th>Forma de Pago</th>
+                                        <th>Estado</th>
                                     </tr>
                                 </thead>
                                 <tbody>
                                     <?php foreach ($resultado as $fila) : ?>
                                         <?php
-                                        $estado_pago = $fila['estado_pago'];
+                                        $estado_pago = $fila['estado'];
                                         $color_celda_estado = "";
 
                                         if ($estado_pago == 'verde') {
@@ -101,12 +108,15 @@ try {
                                         }
                                         ?>
                                         <tr>
-                                            <td><?= htmlspecialchars($fila['reciboID']); ?></td>
-                                            <td><?= htmlspecialchars($fila['fecha_recibo']); ?></td>
-                                            <td><?= htmlspecialchars($fila['cliente']); ?></td>
-                                            <td><?= htmlspecialchars($fila['cantidad_pagada']); ?></td>
+                                            <td><?= htmlspecialchars($fila['pagoID']); ?></td>
+                                            <td><?= htmlspecialchars($fila['ordenID']); ?></td>
+                                            <td><?= htmlspecialchars($fila['fecha_orden']); ?></td>
+                                            <td><?= htmlspecialchars($fila['fecha_pago']); ?></td>
+                                            <td><?= htmlspecialchars($fila['monto']); ?></td>
+                                            <td><?= htmlspecialchars($fila['tipo_pago']); ?></td>
+                                            <td><?= htmlspecialchars($fila['forma_de_pago']); ?></td>
                                             <td style="background-color: <?= htmlspecialchars($color_celda_estado); ?>;">
-                                                <?= htmlspecialchars($fila['estado_pago']); ?>
+                                                <?= htmlspecialchars($fila['estado']); ?>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

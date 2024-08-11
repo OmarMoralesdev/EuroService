@@ -2,10 +2,10 @@
 // Datos de conexión a la base de datos
 require '../includes/db.php'; // Ajusta la ruta según tu estructura de carpetas
 
-$con = new Database();
-$pdo = $con->conectar();
 try {
-
+    // Crear una nueva instancia de la clase Database
+    $con = new Database();
+    $pdo = $con->conectar();
 
     // Obtener la semana desde el formulario
     $semana = $_POST['week'];
@@ -14,8 +14,8 @@ try {
     $fecha_inicio = date('Y-m-d', strtotime($semana));
     $fecha_fin = date('Y-m-d', strtotime($fecha_inicio . ' +6 days'));
 
-    // Preparar la consulta SQL para llamar al procedimiento almacenado
-    $sql = "CALL gestionPagosSemanal(:fecha_inicio, :fecha_fin)";
+    // Preparar la consulta SQL para llamar al procedimiento almacenado con parámetros
+    $sql = "CALL ObtenerPagosSemanal(:fecha_inicio, :fecha_fin)";
 
     // Preparar la sentencia
     $stmt = $pdo->prepare($sql);
@@ -32,27 +32,30 @@ try {
 
     if (count($result) > 0) {
         // Mostrar los resultados en una tabla HTML
-        echo "<table border='1'>";
-        echo "<tr><th>Recibo ID</th><th>Fecha Recibo</th><th>Cliente</th><th>Cantidad Pagada</th><th>Estado Pago</th></tr>";
+        echo "<table border='1' cellpadding='5' cellspacing='0'>";
+        echo "<tr><th>ID Pago</th><th>ID Orden</th><th>Fecha Orden</th><th>Fecha Pago</th><th>Monto</th><th>Tipo de Pago</th><th>Forma de Pago</th><th>Estado</th></tr>";
         
         foreach ($result as $row) {
-            $estado_pago = $row['estado_pago'];
+            $estado = $row['estado'];
             $color = "";
 
-            if ($estado_pago == 'verde') {
+            if ($estado == 'verde') {
                 $color = "#d4edda"; // Verde claro
-            } elseif ($estado_pago == 'naranja') {
+            } elseif ($estado == 'naranja') {
                 $color = "#fff3cd"; // Naranja claro
-            } elseif ($estado_pago == 'rojo') {
+            } elseif ($estado == 'rojo') {
                 $color = "#f8d7da"; // Rojo claro
             }
 
             echo "<tr style='background-color: $color;'>";
-            echo "<td>" . htmlspecialchars($row['reciboID']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['fecha_recibo']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['cliente']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['cantidad_pagada']) . "</td>";
-            echo "<td>" . htmlspecialchars($row['estado_pago']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['pagoID']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['ordenID']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['fecha_orden']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['fecha_pago']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['monto']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['tipo_pago']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['forma_de_pago']) . "</td>";
+            echo "<td>" . htmlspecialchars($row['estado']) . "</td>";
             echo "</tr>";
         }
         
@@ -66,5 +69,5 @@ try {
 }
 
 // Cerrar la conexión
-$conn = null;
+$pdo = null;
 ?>
