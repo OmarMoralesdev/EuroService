@@ -61,7 +61,8 @@ try {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Cuenta</title>
     <link rel="stylesheet" href="style.css">
-    <style>
+    
+        <style>
         body {
             background-color: black;
             color: white;
@@ -72,19 +73,7 @@ try {
         .card {
             margin-bottom: 0px;
         }
-
-        .modal-dialog {
-            margin: 0;
-        }
-
-        .modal-body {
-            padding: 1rem;
-        }
-
-        .modal-footer {
-            padding: 0.5rem;
-        }
-
+     
         
         .help-icon {
     position: fixed;
@@ -124,7 +113,13 @@ try {
     width: 80%;
     max-width: 600px;
 }
-
+.modal{
+    padding-top: 2% !important;
+    color: black;
+    padding-top: 100px;
+    width: 100%;
+    height: 100%;
+}
 
     </style>
 </head>
@@ -173,7 +168,7 @@ try {
                             </div>
 
                             <!-- Modal -->
-                            <div class="modal fade" id="citaModal<?php echo $cita['citaID']; ?>" tabindex="-1" aria-labelledby="citaModalLabel<?php echo $cita['citaID']; ?>" aria-hidden="true">
+                            <div class="modal " id="citaModal<?php echo $cita['citaID']; ?>" tabindex="-1" aria-labelledby="citaModalLabel<?php echo $cita['citaID']; ?>" aria-hidden="true">
                                 <div class="modal-dialog modal-lg">
                                     <div class="modal-content">
                                         <div class="modal-header">
@@ -192,7 +187,7 @@ try {
                                             <p><strong>Días Restantes:</strong> <?php echo htmlspecialchars($cita['dias_restantes']); ?> días</p>
                                         </div>
                                         <div class="modal-footer">
-                               2             <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
+                                           <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
                                         </div>
                                     </div>
                                 </div>

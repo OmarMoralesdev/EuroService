@@ -87,6 +87,7 @@
             </div>
         </div>
     </div>
+    <!-- x -->
 
     <!-- MUESTRA EL MODAL DE EXITO -->
     <?php
