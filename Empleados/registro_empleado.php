@@ -9,29 +9,13 @@ session_start();
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
     <title>Registro Empleado</title>
-    <link rel="stylesheet" href="../assets/css/styles.css">
 </head>
 <style>
-    .wrapper {
-        display: flex;
-        height: 100vh;
-    }
+    
 
-    .main {
-        flex: 1;
-        display: flex;
-        align-items: center;
-        justify-content: center;
-    }
+   
 
-    .form-container {
-        width: 100%;
-        max-width: 100%;
-        padding: 20px;
-        background-color: #ffffff;
-        border-radius: 10px;
-        box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.1);
-    }
+  
 
     .is-invalid {
         border-color: #dc3545;
@@ -109,9 +93,7 @@ session_start();
         </div>
     </div>
 
-    <!-- Incluye jQuery y Bootstrap JS -->
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
 
     <script>
         $(document).ready(function() {
@@ -200,19 +182,19 @@ session_start();
             }
         });
     </script>
-        <script>
-    $(document).ready(function() {
-        // Verifica si el modal está presente
-        if ($('#staticBackdrop').length) {
-            // Muestra el modal
-            $('#staticBackdrop').modal('show');
-            // Cierra el modal después de 2 segundos (2000 milisegundos)
-            setTimeout(function() {
-                $('#staticBackdrop').modal('hide');
-            }, 1000);
-        }
-    });
-</script>
+    <script>
+        $(document).ready(function() {
+            // Verifica si el modal está presente
+            if ($('#staticBackdrop').length) {
+                // Muestra el modal
+                $('#staticBackdrop').modal('show');
+                // Cierra el modal después de 2 segundos (2000 milisegundos)
+                setTimeout(function() {
+                    $('#staticBackdrop').modal('hide');
+                }, 1000);
+            }
+        });
+    </script>
 </body>
 
 </html>
