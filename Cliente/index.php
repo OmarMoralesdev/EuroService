@@ -58,30 +58,20 @@ try {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Mi Cuenta</title>
     <link rel="stylesheet" href="style.css">
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH" crossorigin="anonymous">
     <style>
         body {
             background-color: black;
             color: white;
         }
-
-        .navbar {
-            margin-bottom: 0;
-        }
-
         .container {
             margin-top: 75px; /* Ajustar según el tamaño de la navbar */
         }
-
-        .content {
-            margin-bottom: 20px;
-        }
-
         .card {
-            margin-bottom: 10px;
+            margin-bottom: 0px;
         }
 
         .modal-dialog {
@@ -96,9 +86,6 @@ try {
             padding: 0.5rem;
         }
 
-        .section-heading {
-            margin-bottom: 20px;
-        }
         
         .help-icon {
     position: fixed;
@@ -139,24 +126,11 @@ try {
     max-width: 600px;
 }
 
-.close {
-    color: #aaa;
-    float: right;
-    font-size: 28px;
-    font-weight: bold;
-}
 
-.close:hover,
-.close:focus {
-    color: #fff;
-    text-decoration: none;
-    cursor: pointer;
-}
     </style>
 </head>
 <body>
-    <?php
-    include 'nav.php'; ?>
+    <?php include 'nav.php'; ?>
 
     <div class="container">
         <section class="features text-center">
@@ -236,7 +210,7 @@ try {
         <?php
                     $usuario = obtenerDetallesClientepersona($pdo, $clienteID);
                     if ($usuario) {
-                        echo "<h2 class='section-heading'>MIS VEHICULOS</h2>";
+                        echo "<h2 class='section-heading'>MIS VEHICULOS REGISTRADOS</h2>";
                     }?>
             <hr class="bg-light">
             <div class="row">

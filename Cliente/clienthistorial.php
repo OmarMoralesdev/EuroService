@@ -40,7 +40,7 @@ try {
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet">
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>HISTORIAL</title>
+    <title>Historial de Citas</title>
     <link rel="stylesheet" href="style.css">
     <style>
         body {
@@ -48,41 +48,42 @@ try {
             color: white;
         }
 
-        .navbar {
-            margin-bottom: 0;
-        }
-
         .container {
-            margin-top: 80px; /* Ajustar según el tamaño de la navbar */
+            width: 80%;
+            margin-top: 100px;
+
         }
 
-        .content {
-            margin-bottom: 20px;
+        .card-columns {
+            column-count: 1;
         }
 
         .card {
-            margin-bottom: 10px;
-        }
-
-        .modal-dialog {
-            margin: 0;
-        }
-
-        .modal-body {
-            padding: 1rem;
-        }
-
-        .modal-footer {
-            padding: 0.5rem;
-        }
-
-        .section-heading {
+            align-items: center;
+            background-color: #333;
             border-radius: 10px;
             margin-bottom: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
 
         .card-body {
             background-color: white;
+            border-radius: 10px;
+            width: 100%;
+        }
+
+        .card-title {
+            text-align: center;
+            color: black;
+        }
+        
+        .card-text {
+            color: black;
+        }
+        
+        .modal-content {
+            background-color: white;
+            color: black;
             border-radius: 10px;
         }
     </style>
@@ -90,12 +91,12 @@ try {
 
 <body>
     <?php include 'nav.php'; ?>
-    <div class="container mt-2">
-        <h1>Historial de Citas</h1>
+    <div class="container">
+        <h2 style="text-align: center;">Historial</h2>
         <div class="card-columns">
             <?php if (!empty($citas)) : ?>
                 <?php foreach ($citas as $cita) : ?>
-                    <div class="card mb-3">
+                    <div class="card">
                         <div class="card-body">
                             <h5 class="card-title"><?php echo htmlspecialchars($cita['marca'] . " " . $cita['modelo']); ?></h5>
                             <p class="card-text"><strong>VIN:</strong> <?php echo htmlspecialchars($cita['vin']); ?></p>

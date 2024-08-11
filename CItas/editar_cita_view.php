@@ -156,13 +156,19 @@ if ($cita) {
                         document.getElementById('estado').checked = false;
                     });
                 </script>
-                <script>
-                    $(document).ready(function() {
-                        if ($('#staticBackdrop').length) {
-                            $('#staticBackdrop').modal('show');
-                        }
-                    });
-                </script>
+                  <script>
+    $(document).ready(function() {
+        // Verifica si el modal está presente
+        if ($('#staticBackdrop').length) {
+            // Muestra el modal
+            $('#staticBackdrop').modal('show');
+            // Cierra el modal después de 2 segundos (2000 milisegundos)
+            setTimeout(function() {
+                $('#staticBackdrop').modal('hide');
+            }, 1000);
+        }
+    });
+</script>
      <script>
     // Al salir de la página, borrar la cita de la sesión
     window.addEventListener('beforeunload', function(event) {

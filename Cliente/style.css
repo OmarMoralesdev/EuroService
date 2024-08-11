@@ -4,15 +4,6 @@ body {
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 }
 
-.container {
-    background-color:black;
-    padding: 20px;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
-    width: 95%;
-    margin: 50px auto;
-}
-
 h2 {
     text-align: center;
     color: #ffffff;
@@ -20,54 +11,27 @@ h2 {
     margin-bottom: 20px;
 }
 
-.welcome {
-    text-align: center;
-}
 
 .card-columns {
     column-count: 1;
 }
 
 .card {
-    border: 1px solid #333333;
-    border-radius: 10px;
     transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-    background-color:black
 }
-
 .card:hover {
-    transform: scale(1.03);
+    transform: scale(1.05);
     box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
-}
-
-.card-header {
-    color: #ffffff;
-    font-weight: bold;
-    background-color: #333333;
-}
-
-.card-footer {
-    background-color: #1e1e1e;
-    border-top: 1px solid #333333;
-}
-
-.modal-content {
-    border-radius: 10px;
-    border: 1px solid #333333;
-    background-color: #2c2c2c;
 }
 
 .navbar {
     background-color: #000000;
 }
-.navbar-brand {
-    color: #000000;
-}
 
 .navbar-nav .nav-item .nav-link:hover {
     color: #007bff;
+}
 
-    body{
-        background-color: #000000 !important;
-    }
+.black{
+    background-color: #000000;
 }

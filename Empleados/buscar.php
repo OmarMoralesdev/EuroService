@@ -6,7 +6,7 @@ $conexion->conectar();
 
 $buscar = isset($_POST['buscar']) ? $_POST['buscar'] : '';
 
-$consulta_empleados = "SELECT e.empleadoID, CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, e.alias, e.tipo, n.total, (e.salario_diario*5) as total, e.rebajas as rebajas, e.bonos as bonos
+$consulta_empleados = "SELECT e.empleadoID, CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, e.alias, e.tipo, n.total, (e.salario_diario*5) as total, n.bonos, n.rebajas
                     FROM EMPLEADOS e
                     INNER JOIN PERSONAS p ON e.personaID = p.personaID
                     LEFT JOIN NOMINAS n ON e.empleadoID = n.empleadoID";
@@ -78,7 +78,7 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                                 echo "<p class='card-text'><strong>Alias:</strong> {$empleado->alias}</p>";
                                 echo "<p class='card-text'><strong>Tipo:</strong> {$empleado->tipo}</p>";
                                 echo "<HR>";
-                                echo "<p class='card-text'><strong>Salario:</strong> {$empleado->total}</p>";
+                                echo "<p class='card-text'><strong>Salario semanal :</strong> {$empleado->total}</p> <br>";
                                 echo "<div class='btn-container mb-1'>"; // Añadido margen inferior
                                 echo "<button type='button' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#modalRebajas{$empleado->empleadoID}' data-empleado-id='{$empleado->empleadoID}'>BAJAR</button>";
                                 echo "<button type='button' class='btn btn-dark' data-bs-toggle='modal' data-bs-target='#modalAumento{$empleado->empleadoID}' data-empleado-id='{$empleado->empleadoID}'>AUMENTAR</button>";
