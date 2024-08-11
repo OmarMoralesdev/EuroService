@@ -42,7 +42,7 @@ session_start();
         <?php include '../includes/vabr.php'; ?>
         <div class="main p-3">
             <div class="container">
-                <h2>Registro de Cuenta de Administrador</h2>
+                <h2>HABILITAR CUENTA DE ADMINISTADOR</h2>
                 <div class="form-container">
                     <?php
                     if (isset($_SESSION['error'])) {

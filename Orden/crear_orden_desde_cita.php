@@ -53,7 +53,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session
     <?php include '../includes/vabr.php'; ?>
     <div class="main p-3">
         <div class="container">
-            <h2>Completar Detalles de Orden de Trabajo</h2>
+            <h2>CREAR Orden de Trabajo</h2>
             <div class="form-container">
                 <?php
                 if (isset($_SESSION['error'])) {
