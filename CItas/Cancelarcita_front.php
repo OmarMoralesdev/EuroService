@@ -40,7 +40,7 @@ if ($cita) {
         <?php include '../includes/vabr.php'; ?>
         <div class="main p-2">
             <div class="container">
-                <h2>EDITAR CITA</h2>
+                <h2>CANCELAR CITA</h2>
                 <div class="form-container">
                     <?php
                     if (isset($_SESSION['error'])) {
@@ -53,7 +53,7 @@ if ($cita) {
                             <div class='modal-dialog'>
                                 <div class='modal-content'>
                                     <div class='modal-header'>
-                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Se ha cancelado la cita!</h1>
                                         <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                                     </div>
                                     <div class='modal-body'>

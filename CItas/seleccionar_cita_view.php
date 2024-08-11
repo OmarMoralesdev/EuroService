@@ -239,7 +239,6 @@ session_start();
         if ($('#staticBackdrop').length) {
             // Muestra el modal
             $('#staticBackdrop').modal('show');
-
             // Cierra el modal después de 2 segundos (2000 milisegundos)
             setTimeout(function() {
                 $('#staticBackdrop').modal('hide');

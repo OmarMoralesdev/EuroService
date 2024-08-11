@@ -10,25 +10,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($empleadoID && $bono !== null) {
         try {
-            $sql = "SELECT salario_diario FROM EMPLEADOS WHERE empleadoID = :empleadoID";
+            // Obtener la nómina actual del empleado
+            $sql = "SELECT nominaID, total, bonos FROM NOMINAS WHERE empleadoID = :empleadoID";
             $stmt = $pdo->prepare($sql);
             $stmt->bindValue(':empleadoID', $empleadoID);
             $stmt->execute();
-            $empleado = $stmt->fetch(PDO::FETCH_ASSOC);
+            $nomina = $stmt->fetch(PDO::FETCH_ASSOC);
 
-            if ($empleado) {
-                $salarioDiario = $empleado['salario_diario'];
-                $nuevoSalario = $salarioDiario - $bono / 5;
+            if ($nomina) {
+                // Calcular la nueva cantidad de bonos
+                $nuevosBonos = $nomina['bonos'] + $bono;
+                // Calcular el nuevo total de la nómina
+                $nuevoTotal = $nomina['total'] + $bono;
 
-                $sql = "UPDATE EMPLEADOS SET salario_diario = :nuevoSalario WHERE empleadoID = :empleadoID";
+                // Actualizar el campo bonos y total en la tabla NOMINAS
+                $sql = "UPDATE NOMINAS SET bonos = :nuevosBonos, total = :nuevoTotal WHERE nominaID = :nominaID";
                 $stmt = $pdo->prepare($sql);
-                $stmt->bindValue(':nuevoSalario', $nuevoSalario);
-                $stmt->bindValue(':empleadoID', $empleadoID);
+                $stmt->bindValue(':nuevosBonos', $nuevosBonos);
+                $stmt->bindValue(':nuevoTotal', $nuevoTotal);
+                $stmt->bindValue(':nominaID', $nomina['nominaID']);
                 $stmt->execute();
 
-                echo json_encode(['status' => 'success', 'message' => 'Rebaja aplicada correctamente']);
+                echo json_encode(['status' => 'success', 'message' => 'Bono aplicado y nómina actualizada correctamente']);
             } else {
-                echo json_encode(['status' => 'error', 'message' => 'Empleado no encontrado']);
+                echo json_encode(['status' => 'error', 'message' => 'Nómina no encontrada']);
             }
         } catch (PDOException $e) {
             echo json_encode(['status' => 'error', 'message' => 'Error: ' . $e->getMessage()]);

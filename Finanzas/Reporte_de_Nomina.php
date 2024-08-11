@@ -15,7 +15,7 @@ try {
 
     // Consulta para obtener los detalles de la nómina de la semana seleccionada
     $nomina_query = "
-        SELECT N.fecha_de_pago, E.alias, N.faltas, N.rebajas, N.total
+        SELECT N.fecha_de_pago, E.alias, E.salario_diario, N.faltas, N.rebajas, N.bonos, N.total
         FROM NOMINAS N
         JOIN EMPLEADOS E ON N.empleadoID = E.empleadoID
         WHERE N.fecha_de_pago BETWEEN :week_start AND :week_end
@@ -70,25 +70,35 @@ try {
                                 <tr>
                                     <th>Fecha de Pago</th>
                                     <th>Empleado</th>
+                                    <th>Sueldo diario</th>
                                     <th>Faltas</th>
                                     <th>Rebajas</th>
+                                    <th>Bonos</th>
                                     <th>Total</th>
                                 </tr>
                             </thead>
                             <tbody>
-                                <?php foreach ($nomina as $n) : ?>
-                                    <tr>
-                                        <td><?php echo htmlspecialchars($n['fecha_de_pago']); ?></td>
-                                        <td><?php echo htmlspecialchars($n['alias']); ?></td>
-                                        <td><?php echo htmlspecialchars($n['faltas']); ?></td>
-                                        <td>$<?php echo number_format($n['rebajas'], 2); ?></td>
-                                        <td>$<?php echo number_format($n['total'], 2); ?></td>
+                                <?php if (!empty($nomina)) : ?>
+                                    <?php foreach ($nomina as $n) : ?>
+                                        <tr>
+                                            <td><?php echo htmlspecialchars($n['fecha_de_pago']); ?></td>
+                                            <td><?php echo htmlspecialchars($n['alias']); ?></td>
+                                            <td>$<?php echo number_format($n['salario_diario'], 2); ?></td>
+                                            <td><?php echo htmlspecialchars($n['faltas']); ?></td>
+                                            <td>$<?php echo number_format($n['rebajas'], 2); ?></td>
+                                            <td>$<?php echo number_format($n['bonos'], 2); ?></td>
+                                            <td>$<?php echo number_format($n['total'], 2); ?></td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                    <tr class="font-weight-bold">
+                                        <td colspan="6" class="text-right">Total:</td>
+                                        <td>$<?php echo number_format($total_nomina, 2); ?></td>
                                     </tr>
-                                <?php endforeach; ?>
-                                <tr class="font-weight-bold">
-                                    <td colspan="4" class="text-right">Total:</td>
-                                    <td>$<?php echo number_format($total_nomina, 2); ?></td>
-                                </tr>
+                                <?php else : ?>
+                                    <tr>
+                                        <td colspan="7" class="text-center">No hay datos para la semana seleccionada.</td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
                         </table>
                     </div>
