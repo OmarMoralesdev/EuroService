@@ -100,7 +100,7 @@
         <?php include '../includes/vabr.php'; ?>
         <div class="main">
             <div class="container">
-                <h2 style="text-align: center;">COMPRAS</h2>
+                <h2 style="text-align: center;">REGISTRO DE COMPRAS</h2>
                 <div class="form-container">
                     <div class="table-wrapper">
                         <table class="table">
