@@ -70,6 +70,17 @@ session_start();
                                 ?>
                             </select>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="formadepago" class="form-label">Forma de pago:</label>
+                            <select name="formadepago" class="form-control" required>
+                                <option value="efectivo">Efectivo</option>
+                                <option value="tarjeta">Tarjeta</option>
+                                <option value="transferencia">Transferencia</option>
+                            </select>
+                            <div class="invalid-feedback">Debes seleccionar una forma de pago.</div>
+                        </div>
+
                         <button type="submit" class="btn btn-dark d-grid gap-2 col-6 mx-auto">Confirmar entrega</button>
                     </form>
                 </div>

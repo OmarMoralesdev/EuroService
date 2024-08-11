@@ -11,7 +11,7 @@ try {
         header("Location: entregar.php");
         exit();
     }
-
+    $formaDePago = isset($_POST['formadepago']) ? trim($_POST['formadepago']) : '';
     $ordenID = $_POST['ordenID'];
     $nuevaUbicacionID = 4;
 
@@ -40,8 +40,8 @@ try {
     $pagoID = $pago['pagoID'];
 
     // Registrar la entrega usando el procedimiento almacenado
-    $stmt = $pdo->prepare("CALL registrar_entrega(?)");
-    $stmt->execute([$pagoID]);
+    $stmt = $pdo->prepare("CALL registrar_entrega(?,?)");
+    $stmt->execute([$ordenID, $formaDePago]);
 
 
     // Actualizar la orden de trabajo con la nueva ubicación

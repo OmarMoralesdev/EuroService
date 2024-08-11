@@ -4,6 +4,7 @@ session_start();
 $con = new Database();
 $pdo = $con->conectar();
 
+// Obtener y sanitizar datos
 $empleadoID = isset($_POST['empleadoID']) ? intval($_POST['empleadoID']) : null;
 $ubicacionID = isset($_POST['ubicacionID']) ? intval($_POST['ubicacionID']) : null;
 $formaDePago = isset($_POST['formadepago']) ? trim($_POST['formadepago']) : '';
@@ -38,23 +39,17 @@ try {
     $fechaPago = date('Y-m-d');
     $tipoPago = "anticipo";
 
+    // Llamar al procedimiento almacenado para realizar el pago
+    $sql = "CALL realizarPago(:ordenID, :fechaPago, :monto, :tipoPago, :formaDePago)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ':ordenID' => $ordenID,
+        ':fechaPago' => $fechaPago,
+        ':monto' => $anticipo,
+        ':tipoPago' => $tipoPago,
+        ':formaDePago' => $formaDePago,
+    ]);
 
-    try {
-        // Llamar al procedimiento almacenado para realizar el pago
-        $sql = "CALL realizarPago(:ordenID, :fechaPago, :monto, :tipoPago, :formaDePago)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            ':ordenID' => $ordenID,
-            ':fechaPago' => $fechaPago,
-            ':monto' => $anticipo,
-            ':tipoPago' => $tipoPago,
-            ':formaDePago' => $formaDePago,
-        ]);
-    } catch (PDOException $e) {
-        $_SESSION['error'] = ("Error al realizar el pago: " . $e->getMessage());
-        header("Location: inspeccion_view.php");
-        exit();
-    }
     // Consultar el pago asociado a la orden
     $stmt = $pdo->prepare("SELECT pagoID FROM PAGOS WHERE ordenID = ?");
     $stmt->execute([$ordenID]);
@@ -62,31 +57,33 @@ try {
 
     if (!$pago) {
         $_SESSION['error'] = "No se encontró un pago asociado a esta orden.";
-        header("Location: entregar.php");
+        header("Location: inspeccion_view.php");
         exit();
     }
 
     $pagoID = $pago['pagoID'];
 
     // Registrar la entrega usando el procedimiento almacenado
-    $stmt = $pdo->prepare("CALL registrar_entrega(?,?)");
-    $stmt->execute([$pagoID, $formaDePago]);
+    $sqlRegistrarEntrega = "CALL registrar_entrega(:pagoID, :formaDePago)";
+    $stmtRegistrarEntrega = $pdo->prepare($sqlRegistrarEntrega);
+    $stmtRegistrarEntrega->execute([
+        ':pagoID' => $ordenID,
+        ':formaDePago' => $formaDePago
+    ]);
 
-    $nuevaUbicacionID = 4;
     // Actualizar la orden de trabajo con la nueva ubicación
+    $nuevaUbicacionID = 4; // Ajusta esta ID según sea necesario
     $sqlActualizarOrden = "UPDATE ORDENES_TRABAJO SET ubicacionID = ? WHERE ordenID = ?";
     $stmtActualizarOrden = $pdo->prepare($sqlActualizarOrden);
     $stmtActualizarOrden->execute([$nuevaUbicacionID, $ordenID]);
-    $_SESSION['bien'] = "Ejecutado exitosamente";
-    header("Location: inspeccion_view.php");
-    exit();
-
 
     $_SESSION['bien'] = "Ejecutado exitosamente.";
     header("Location: inspeccion_view.php");
     exit();
 } catch (PDOException $e) {
-    echo "Error: " . $e->getMessage();
+    // Manejo de errores
+    $_SESSION['error'] = "Error: " . $e->getMessage();
     header("Location: inspeccion_view.php");
     exit();
 }
+?>

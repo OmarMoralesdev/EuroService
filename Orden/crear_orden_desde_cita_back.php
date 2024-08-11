@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmtOrden = $pdo->prepare($sqlOrden);
         $stmtOrden->execute([$fechaOrden, $costoManoObra, $costoRefacciones, $atencion, $citaID, $empleado, $ubicacionID]);
         $ordenID = $pdo->lastInsertId();
-        
+        $tipoPago = "anticipo";
        
         // Esto ya se maneja en los triggers
         try {
