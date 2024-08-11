@@ -56,7 +56,7 @@ session_start();
                             <div class='modal-dialog'>
                                 <div class='modal-content'>
                                     <div class='modal-header'>
-                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Empleado registrado!</h1>
                                         <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                                     </div>
                                     <div class='modal-body'>
@@ -74,23 +74,23 @@ session_start();
                     <form id="x" method="post" action="registrar_empleado.php">
                         <div class="mb-3">
                             <label for="nombre" class="form-label">Nombre:</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" required>
+                            <input type="text" class="form-control" id="nombre" name="nombre" maxlength="40" required>
                         </div>
                         <div class="mb-3">
                             <label for="apellido_paterno" class="form-label">Apellido Paterno:</label>
-                            <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" required>
+                            <input type="text" class="form-control" id="apellido_paterno" maxlength="40" name="apellido_paterno" required>
                         </div>
                         <div class="mb-3">
                             <label for="apellido_materno" class="form-label">Apellido Materno:</label>
-                            <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" required>
+                            <input type="text" class="form-control" id="apellido_materno" maxlength="40" name="apellido_materno" required>
                         </div>
                         <div class="mb-3">
                             <label for="alias" class="form-label">Alias:</label>
-                            <input type="text" class="form-control" id="alias" name="alias" required>
+                            <input type="text" class="form-control" id="alias" maxlength="30" name="alias" required>
                         </div>
                         <div class="mb-3">
                             <label for="salario_diario" class="form-label">Salario diario:</label>
-                            <input type="number" class="form-control" id="salario_diario" name="salario" min="0" step="0.01" required>
+                            <input type="number" class="form-control" id="salario_diario" maxlength="5" name="salario" min="0" step="0.01" required>
                             <div class="form-text">Introduce el salario diario.</div>
                         </div>
                         <div class="mb-3">
@@ -198,6 +198,19 @@ session_start();
             }
         });
     </script>
+        <script>
+    $(document).ready(function() {
+        // Verifica si el modal está presente
+        if ($('#staticBackdrop').length) {
+            // Muestra el modal
+            $('#staticBackdrop').modal('show');
+            // Cierra el modal después de 2 segundos (2000 milisegundos)
+            setTimeout(function() {
+                $('#staticBackdrop').modal('hide');
+            }, 1000);
+        }
+    });
+</script>
 </body>
 
 </html>

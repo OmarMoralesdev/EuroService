@@ -29,23 +29,23 @@ $pdo = $con->conectar();
                     <form method="post" id="x" action="./registro_cliente.php">
                     <div class="form-group">
                             <label for="nombre">Nombre:</label>
-                            <input type="text" class="form-control" id="nombre"  maxlength="10" name="nombre" required pattern="[a-zA-Z\s]+" title="Solo letras y espacios">
+                            <input type="text" class="form-control" id="nombre"  maxlength="40" name="nombre" required pattern="[a-zA-Z\s]+" title="Solo letras y espacios">
                         </div>
                         <div class="form-group">
                             <label for="apellido_paterno">Apellido Paterno:</label>
-                            <input type="text" class="form-control" id="apellido_paterno" name="apellido_paterno" required pattern="[a-zA-Z\s]+" title="Solo letras y espacios">
+                            <input type="text" class="form-control" id="apellido_paterno" maxlength="40" name="apellido_paterno" required pattern="[a-zA-Z\s]+" title="Solo letras y espacios">
                         </div>
                         <div class="form-group">
                             <label for="apellido_materno">Apellido Materno:</label>
-                            <input type="text" class="form-control" id="apellido_materno" name="apellido_materno" required pattern="[a-zA-Z\s]+" title="Solo letras y espacios">
+                            <input type="text" class="form-control" id="apellido_materno" maxlength="40" name="apellido_materno" required pattern="[a-zA-Z\s]+" title="Solo letras y espacios">
                         </div>
                         <div class="form-group">
                             <label for="correo">Correo electrónico:</label>
-                            <input type="email" class="form-control" id="correo" name="correo" required>
+                            <input type="email" class="form-control" id="correo" maxlength="256" name="correo" required>
                         </div>
                         <div class="form-group">
                             <label for="telefono">Teléfono:</label>
-                            <input type="text" class="form-control" id="telefono" name="telefono" required pattern="\d{10}" title="Debe contener 10 dígitos">
+                            <input type="text" class="form-control" id="telefono" name="telefono" required pattern="\d{10}" maxlength="10" title="Debe contener 10 dígitos">
                         </div>
                         <br>
                         <button type="submit" class="btn btn-dark btnn d-grid gap-2 col-6 mx-auto">Registrar</button>
