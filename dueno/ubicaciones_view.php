@@ -73,15 +73,15 @@
                         echo "<div class='modal-body'>";
                         
                         $consulta = "SELECT DISTINCT 
-                            CONCAT(vehiculos.marca, ' ', vehiculos.modelo, ' ', vehiculos.anio, ' - ', vehiculos.color) AS VEHICULO, 
-                            CONCAT(personas.nombre, ' ', personas.apellido_paterno, ' ', personas.apellido_materno) AS PROPIETARIO
+                            CONCAT(VEHICULOS.marca, ' ', VEHICULOS.modelo, ' ', VEHICULOS.anio, ' - ', VEHICULOS.color) AS VEHICULO, 
+                            CONCAT(PERSONAS.nombre, ' ', PERSONAS.apellido_paterno, ' ', PERSONAS.apellido_materno) AS PROPIETARIO
                             FROM PERSONAS 
-                            INNER JOIN CLIENTES ON clientes.personaID = personas.personaID 
-                            INNER JOIN VEHICULOS ON vehiculos.clienteID = clientes.clienteID 
-                            INNER JOIN CITAS ON citas.vehiculoID = vehiculos.vehiculoID 
-                            INNER JOIN ORDENES_TRABAJO ON ordenes_trabajo.citaID = citas.citaID 
-                            INNER JOIN UBICACIONES ON ordenes_trabajo.ubicacionID = ubicaciones.ubicacionID 
-                            WHERE ubicaciones.ubicacionID = {$ubicacion->ubicacionID} and ubicaciones.activo = 'si'";
+                            INNER JOIN CLIENTES ON CLIENTES.personaID = PERSONAS.personaID 
+                            INNER JOIN VEHICULOS ON VEHICULOS.clienteID = CLIENTES.clienteID 
+                            INNER JOIN CITAS ON CITAS.vehiculoID = VEHICULOS.vehiculoID 
+                            INNER JOIN ORDENES_TRABAJO ON ORDENES_TRABAJO.citaID = CITAS.citaID 
+                            INNER JOIN UBICACIONES ON ORDENES_TRABAJO.ubicacionID = UBICACIONES.ubicacionID 
+                            WHERE UBICACIONES.ubicacionID = {$ubicacion->ubicacionID} and UBICACIONES.activo = 'si'";
                         
                         $tabla = $conexion->seleccionar($consulta);
 
