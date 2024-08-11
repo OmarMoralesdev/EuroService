@@ -83,8 +83,8 @@ try {
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
-                                        <th>ID Pago</th>
-                                        <th>ID Orden</th>
+                                        <th>Folio Pago</th>
+                                        <th>Folio Orden</th>
                                         <th>Fecha Orden</th>
                                         <th>Fecha Pago</th>
                                         <th>Monto</th>
