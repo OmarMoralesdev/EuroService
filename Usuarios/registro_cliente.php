@@ -117,19 +117,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         $correo = trim($_POST['correo']);
         $telefono = trim($_POST['telefono']);
         
-        // Validar datos desde la aplicación
-        if (
-            // Validar que el nombre solo contenga letras y espacios
-            preg_match('/^[a-zA-Z\s]+$/', $nombre) &&
-            // Validar que el apellido paterno y materno solo contengan letras y espacios
-            preg_match('/^[a-zA-Z\s]+$/', $apellido_paterno) &&
-            // Validar que el correo sea un correo electrónico válido
-            preg_match('/^[a-zA-Z\s]+$/', $apellido_materno) &&
-            // Validar que el teléfono sea un número de 10 dígitos
-            filter_var($correo, FILTER_VALIDATE_EMAIL) &&
-            // Validar que el teléfono sea un número de 10 dígitos
-            preg_match('/^\d{10}$/', $telefono)
-        ) {
             // Verificar si el correo ya existe
             if (checkEmailDuplicate($pdo, $correo)) {
                 setAlertContent('error', "
@@ -253,7 +240,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     }          
                 }
             }
-        }
+        
         // Mostrar una alerta si los datos no son válidos
     } catch (Exception $e) {
         setAlertContent('error', "
