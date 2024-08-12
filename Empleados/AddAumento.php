@@ -37,6 +37,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         echo json_encode(['status' => 'error', 'message' => 'Datos inválidos']);
     }
 }
-
+header("Location: ../Empleados/buscar.php");
 $conexion->desconectar();
 ?>

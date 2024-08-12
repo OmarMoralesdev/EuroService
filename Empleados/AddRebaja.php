@@ -20,19 +20,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             if ($empleado) {
                 $salarioDiario = $empleado['salario_diario'];
 
-                if ($rebaja > $salarioDiario * 5) { 
-                    echo json_encode(['status' => 'error', 'message' => 'La rebaja no puede ser mayor al salario total']);
+                if ($rebaja > $salarioDiario * 5) {
+                    // Si la rebaja es mayor al salario total, el salario se ajusta a 0
+                    $nuevoSalario = 0;
                 } else {
                     // Aplicar la rebaja
                     $nuevoSalario = $salarioDiario - $rebaja / 5;
-
-                    $sql = "UPDATE EMPLEADOS SET salario_diario = :nuevoSalario WHERE empleadoID = :empleadoID";
-                    $stmt = $pdo->prepare($sql);
-                    $stmt->bindValue(':nuevoSalario', $nuevoSalario);
-                    $stmt->bindValue(':empleadoID', $empleadoID);
-                    $stmt->execute();
-                    echo json_encode(['status' => 'success', 'message' => 'Rebaja aplicada correctamente']);
                 }
+
+                // Actualizar el salario en la base de datos
+                $sql = "UPDATE EMPLEADOS SET salario_diario = :nuevoSalario WHERE empleadoID = :empleadoID";
+                $stmt = $pdo->prepare($sql);
+                $stmt->bindValue(':nuevoSalario', $nuevoSalario);
+                $stmt->bindValue(':empleadoID', $empleadoID);
+                $stmt->execute();
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Empleado no encontrado']);
             }
@@ -40,9 +41,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             echo json_encode(['status' => 'error', 'message' => 'Error: ' . $e->getMessage()]);
         }
     } else {
-        echo json_encode(['status' => 'error', 'message' => 'Datos inválidos']);
+        echo json_encode(['status' => 'error', 'message' => 'Datos mal ingresados']);
     }
 }
+header("Location: ../Empleados/buscar.php");
 
 $conexion->desconectar();
 ?>
