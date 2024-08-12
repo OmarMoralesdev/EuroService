@@ -7,7 +7,6 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Nómina Automáticamente</title>
 </head>
@@ -19,16 +18,16 @@ session_start();
             <div class="container">
                 <h2>Registrar Nómina Automáticamente</h2>
                 <div class="form-container">
-                    <?php if (isset( $_SESSION['mensaje'])) : ?>
-                        <div class="alert alert-<?php echo strpos( $_SESSION['mensaje'], 'ya ha sido registrada') !== false ? 'warning' : (strpos( $_SESSION['mensaje'], 'No hay registros') !== false ? 'danger' : 'success'); ?>" role="alert">
-                            <?php echo htmlspecialchars($_SESSION['mensaje']);unset($_SESSION['mensaje'])?>
+                    <?php if (isset($_SESSION['mensaje'])): ?>
+                        <div class="alert alert-<?php echo strpos($_SESSION['mensaje'], 'ya ha sido registrada') !== false ? 'warning' : (strpos($_SESSION['mensaje'], 'No hay registros') !== false ? 'danger' : 'success'); ?>" role="alert">
+                            <?php echo htmlspecialchars($_SESSION['mensaje']); unset($_SESSION['mensaje']); ?>
                         </div>
                     <?php endif; ?>
                     <form method="POST" action="./procesar_nomina.php">
                         <div class="form-row">
                             <div class="form-group col-md-6 offset-md-3">
                                 <label for="week">Selecciona la semana:</label>
-                                <input type="week" id="week" name="week" class="form-control" value="<?php echo date('Y-\WW'); ?>" required>
+                                <input type="week" id="week" name="week" class="form-control" value="<?php echo date('Y-\W'); ?>" required>
                             </div>
                         </div><br>
                         <button type="submit" class="btn btn-dark w-100">Registrar Nómina</button>
@@ -37,12 +36,6 @@ session_start();
             </div>
         </div>
     </div>
-
 </body>
 
 </html>
-
-<?php
-$pdo = null;
-?>
-

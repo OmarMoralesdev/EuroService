@@ -5,20 +5,24 @@ $con = new Database();
 $pdo = $con->conectar();
 
 try {
-
     // Obtener la semana seleccionada
     $selected_week = isset($_GET['week']) ? $_GET['week'] : date('Y-\WW');
 
-    // Calcular las fechas de inicio y fin de la semana seleccionada
-    $week_start = date('Y-m-d', strtotime($selected_week));
-    $week_end = date('Y-m-d', strtotime($week_start . ' +6 days'));
+    // Calcular la fecha del primer día de la semana
+    $date = new DateTime();
+    $date->setISODate(date('Y'), date('W'), 1); // Primer día de la semana
+    $date->modify('monday this week'); // Ajustar a la semana seleccionada
+
+    $week_start = $date->format('Y-m-d');
+    $date->modify('+6 days'); // Último día de la semana
+    $week_end = $date->format('Y-m-d');
 
     // Consulta para obtener los detalles de la nómina de la semana seleccionada
     $nomina_query = "
         SELECT N.fecha_de_pago, E.alias, N.faltas, N.rebajas, N.total
         FROM NOMINAS N
         JOIN EMPLEADOS E ON N.empleadoID = E.empleadoID
-        WHERE N.fecha_de_pago BETWEEN :week_start AND :week_end
+        WHERE N.fecha_inicio = :week_start AND N.fecha_fin = :week_end
     ";
     $stmt = $pdo->prepare($nomina_query);
     $stmt->execute(['week_start' => $week_start, 'week_end' => $week_end]);
@@ -28,7 +32,7 @@ try {
     $total_nomina_query = "
         SELECT SUM(N.total) as total_nomina
         FROM NOMINAS N
-        WHERE N.fecha_de_pago BETWEEN :week_start AND :week_end
+        WHERE N.fecha_inicio = :week_start AND N.fecha_fin = :week_end
     ";
     $stmt_total = $pdo->prepare($total_nomina_query);
     $stmt_total->execute(['week_start' => $week_start, 'week_end' => $week_end]);
@@ -88,17 +92,4 @@ try {
                                 <tr class="font-weight-bold">
                                     <td colspan="4" class="text-right">Total:</td>
                                     <td>$<?php echo number_format($total_nomina, 2); ?></td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-        </div>
-</body>
-
-</html>
-
-<?php
-$pdo = null; // Cerrar la conexión
-?>
+                      
