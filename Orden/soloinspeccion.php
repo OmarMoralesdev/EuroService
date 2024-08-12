@@ -72,7 +72,7 @@ try {
     ]);
 
     // Actualizar la orden de trabajo con la nueva ubicación
-    $nuevaUbicacionID = 4; // Ajusta esta ID según sea necesario
+    $nuevaUbicacionID = 1; // Ajusta esta ID según sea necesario
     $sqlActualizarOrden = "UPDATE ORDENES_TRABAJO SET ubicacionID = ? WHERE ordenID = ?";
     $stmtActualizarOrden = $pdo->prepare($sqlActualizarOrden);
     $stmtActualizarOrden->execute([$nuevaUbicacionID, $ordenID]);
