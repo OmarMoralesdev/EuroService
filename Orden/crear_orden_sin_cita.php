@@ -33,7 +33,7 @@ unset($_SESSION['mensaje']);
                             <div class='modal-dialog'>
                                 <div class='modal-content'>
                                     <div class='modal-header'>
-                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Usuario registrado!</h1>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Registro exitoso!</h1>
                                         <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                                     </div>
                                     <div class='modal-body'>
@@ -73,17 +73,17 @@ unset($_SESSION['mensaje']);
                         <div class="mb-3">
                             <label for="costoManoObra" class="form-label">Costo de Mano de Obra:</label>
                             <input type="number" step="0.01" class="form-control" id="costoManoObra" name="costoManoObra" required>
-                            <div class="form-text">Introduce el salario diario (no puede ser negativo).</div>
+
                         </div>
                         <div class="mb-3">
                             <label for="costoRefacciones" class="form-label">Costo de Refacciones:</label>
                             <input type="number" step="0.01" class="form-control" id="costoRefacciones" name="costoRefacciones" required>
-                            <div class="form-text">Introduce el salario diario (no puede ser negativo).</div>
+
                         </div>
                         <div class="mb-3">
                             <label for="anticipo" class="form-label">Anticipo:</label>
                             <input type="number" step="0.01" class="form-control" id="anticipo" name="anticipo" required>
-                            <div class="form-text">Introduce el salario diario (no puede ser negativo).</div>
+
                         </div>
                         <div class="mb-3">
                             <label for="empleado" class="form-label">Empleado:</label>

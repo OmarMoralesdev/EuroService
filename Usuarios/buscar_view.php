@@ -45,7 +45,6 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Lista de Clientes</title>
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
@@ -72,6 +71,21 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
             background-color: #252525;
             border-color: #000; 
         }
+        /* Ajustes para modal en dispositivos móviles */
+        .modal-dialog {
+            max-width: 90%;
+            margin: 1.75rem auto;
+        }
+        .modal-content {
+            border-radius: 0.3rem;
+        }
+        .modal-header, .modal-footer {
+            padding: 1rem;
+        }
+        .modal-body {
+            padding: 1rem;
+            overflow-x: auto;
+        }
     </style>
 </head>
 <body>
@@ -92,7 +106,7 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
                     <!-- Mostrar resultados de clientes -->
                     <div class="row mt-4">
                         <?php
-                        // si existe clinete- tajeta con todos los datos de los clientes
+                        // si existe clinete- tarjeta con todos los datos de los clientes
                         if (!empty($clientes)) {
                             foreach ($clientes as $cliente) {
                                 // Consulta para obtener vehículos del cliente
@@ -116,7 +130,7 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
                                 
                                 // Modal de vehículos
                                 echo "<div class='modal fade' id='modalCliente{$cliente->clienteID}' tabindex='-1' aria-labelledby='modalLabel{$cliente->clienteID}' aria-hidden='true'>";
-                                echo "<div class='modal-dialog modal-lg'>";
+                                echo "<div class='modal-dialog modal-dialog-centered modal-dialog-scrollable'>";
                                 echo "<div class='modal-content'>";
                                 echo "<div class='modal-header'>";
                                 echo "<h5 class='modal-title' id='modalLabel{$cliente->clienteID}'>Vehículos de {$cliente->nombre_completo}</h5>";
@@ -125,7 +139,8 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
                                 echo "<div class='modal-body'>";
                                 
                                 if (!empty($vehiculos)) {
-                                    echo "<table class='table'>";
+                                    echo "<div class='table-responsive'>";
+                                    echo "<table class='table table-striped'>";
                                     echo "<thead><tr><th>Marca</th><th>Modelo</th><th>Año</th><th>Color</th><th>Kilometraje</th></tr></thead>";
                                     echo "<tbody>";
                                     foreach ($vehiculos as $vehiculo) {
@@ -139,6 +154,7 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
                                     }
                                     echo "</tbody>";
                                     echo "</table>";
+                                    echo "</div>";
                                 } else {
                                     echo "<p>No se encontraron vehículos para este cliente.</p>";
                                 }
@@ -190,13 +206,5 @@ $total_paginas = ceil($total_clientes / $resultados_por_pagina);
             </div>
         </div>
     </div>
-
-    <!-- Bootstrap JS (no olvidar incluir en el footer o justo antes del cierre del body) -->
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-<?php
-// Desconectar la base de datos al finalizar
-$conexion->desconectar();
-?>
