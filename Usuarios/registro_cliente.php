@@ -3,9 +3,9 @@ session_start();
 require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
-require '../vendor/autoload.php';
+/*require '../vendor/autoload.php';
 use PHPMailer\PHPMailer\PHPMailer;
-use PHPMailer\PHPMailer\Exception;
+use PHPMailer\PHPMailer\Exception;*/
 
 $showModal = false;
 $showAlert = false;
@@ -191,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmt_cuenta = $pdo->prepare("INSERT INTO CUENTAS (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
                     $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID]);
                     if ($stmt_cuenta->rowCount() > 0) {
-                        require '../vendor/autoload.php'; // Asegúrate de que la ruta sea correcta                
+                /*        require '../vendor/autoload.php'; // Asegúrate de que la ruta sea correcta                
                         $mail = new PHPMailer(true);
                         
                         try {
@@ -215,7 +215,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             echo 'Mensaje enviado correctamente';
                         } catch (Exception $e) {
                             echo "No se pudo enviar el mensaje. Error de correo: {$mail->ErrorInfo}";
-                        }
+                        }*/
                         setModalContent('success', "
                         <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
                             <div class='modal-dialog'>
