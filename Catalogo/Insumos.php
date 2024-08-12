@@ -218,16 +218,14 @@
                                     }
                                 }
 
-                                // Manejo de formulario de aumento de stock
                                 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['increaseStock'])) {
                                     $insumo_proveedorID = trim($_POST['insumo_proveedorID']);
                                     $cantidad_aumentar = trim($_POST['cantidad_aumentar']);
-                                    $tipo_compra = trim($_POST['tipo_compra']);
-
-                                    if (!empty($insumo_proveedorID) && !empty($cantidad_aumentar) && !empty($tipo_compra)) {
+                                
+                                    if (!empty($insumo_proveedorID) && !empty($cantidad_aumentar)) {
                                         try {
                                             $pdo->beginTransaction();
-
+                                
                                             // Verificar existencia de insumo
                                             $stmt = $pdo->prepare("
                                                 SELECT cantidad_stock, precio 
@@ -238,15 +236,33 @@
                                             $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
                                             $stmt->execute();
                                             $result = $stmt->fetch(PDO::FETCH_ASSOC);
-
+                                
                                             if (!$result) {
                                                 throw new Exception('Insumo no encontrado.');
                                             }
-
+                                
                                             $current_stock = $result['cantidad_stock'];
                                             $precio = $result['precio'];
                                             $new_stock = $current_stock + $cantidad_aumentar;
-
+                                
+                                            // Obtener el tipo de compra más reciente asociada con el insumo
+                                            $stmt = $pdo->prepare("
+                                                SELECT C.tipo_compraID 
+                                                FROM COMPRAS C
+                                                JOIN DETALLE_COMPRA DC ON C.compraID = DC.compraID
+                                                WHERE DC.insumo_proveedorID = :insumo_proveedorID
+                                                ORDER BY C.fecha_compra DESC
+                                                LIMIT 1
+                                            ");
+                                            $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
+                                            $stmt->execute();
+                                            $tipo_compra = $stmt->fetchColumn();
+                                
+                                            if (!$tipo_compra) {
+                                                // Establecer un tipo de compra predeterminado o manejar el error
+                                                $tipo_compra = 1; // Ajusta este valor según tu lógica de negocio
+                                            }
+                                
                                             // Aumentar stock
                                             $stmt = $pdo->prepare("
                                                 UPDATE INVENTARIOS 
@@ -256,7 +272,7 @@
                                             $stmt->bindParam(':new_stock', $new_stock);
                                             $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
                                             if ($stmt->execute()) {
-
+                                
                                                 // Registrar la compra
                                                 $stmt = $pdo->prepare("INSERT INTO COMPRAS (fecha_compra, tipo_compraID, total) VALUES (CURDATE(), :tipo_compra, :total)");
                                                 $stmt->bindParam(':tipo_compra', $tipo_compra);
@@ -264,7 +280,7 @@
                                                 $stmt->bindParam(':total', $total);
                                                 if ($stmt->execute()) {
                                                     $compraID = $pdo->lastInsertId();
-                                                    
+                                
                                                     $stmt = $pdo->prepare("INSERT INTO DETALLE_COMPRA (compraID, insumo_proveedorID, cantidad, precio_unitario, subtotal) VALUES (:compraID, :insumo_proveedorID, :cantidad, :precio_unitario, :subtotal)");
                                                     $stmt->bindParam(':compraID', $compraID);
                                                     $stmt->bindParam(':insumo_proveedorID', $insumo_proveedorID);
@@ -272,10 +288,10 @@
                                                     $stmt->bindParam(':precio_unitario', $precio);
                                                     $subtotal = $precio * $cantidad_aumentar;
                                                     $stmt->bindParam(':subtotal', $subtotal);
-                                                    
+                                
                                                     if ($stmt->execute()) {
                                                         $pdo->commit();
-                                                        $message = "<div class='alert alert-success' role='alert'>insumo aumentado y compra registrada exitosamente.</div>";
+                                                        $message = "<div class='alert alert-success' role='alert'>Insumo aumentado y compra registrada exitosamente.</div>";
                                                     } else {
                                                         throw new Exception('Error al agregar el detalle de la compra.');
                                                     }
@@ -293,6 +309,7 @@
                                         $message = "<div class='alert alert-danger' role='alert'>Por favor, complete todos los campos.</div>";
                                     }
                                 }
+                                               
 
                                 if ($message) {
                                     echo $message;
@@ -472,14 +489,7 @@
                                 <label for="cantidad_aumentar" class="form-label">Cantidad a Aumentar</label>
                                 <input type="number" class="form-control" id="cantidad_aumentar" name="cantidad_aumentar" required>
                             </div>
-                            <div class="mb-3">
-                                <label for="tipo_compra" class="form-label">Tipo de Compra</label>
-                                <select class="form-select" id="tipo_compra" name="tipo_compra" required>
-                                    <option value="" disabled selected>Selecciona un tipo de compra</option>
-                                    <option value="1">Administrativa</option>
-                                    <option value="2">Vehículo</option>
-                                </select>
-                            </div>
+                           
                             <button type="submit" name="increaseStock" class="btn btn-primary">Aumentar</button>
                         </form>
                         <script>if (window.history.replaceState) {
