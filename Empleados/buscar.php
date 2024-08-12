@@ -6,15 +6,17 @@ $conexion->conectar();
 
 $buscar = isset($_POST['buscar']) ? $_POST['buscar'] : '';
 
+
+
 $consulta_empleados = "SELECT DISTINCT e.empleadoID, 
        CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, 
        e.alias, 
        e.tipo, 
-       n.total, 
+    p.correo,
+    p.telefono, 
        (e.salario_diario * 5) AS total_salario
 FROM EMPLEADOS e
 INNER JOIN PERSONAS p ON e.personaID = p.personaID
-LEFT JOIN NOMINAS n ON e.empleadoID = n.empleadoID
 WHERE e.activo = 'si'";
 
 if (!empty($buscar)) {
@@ -85,6 +87,8 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                                 echo "<hr>";
                                 echo "<p class='card-text'><strong>Alias:</strong> {$empleado->alias}</p>";
                                 echo "<p class='card-text'><strong>Tipo:</strong> {$empleado->tipo}</p>";
+                                echo "<p class='card-text'><strong>correo:</strong> {$empleado->correo}</p>";
+                                echo "<p class='card-text'><strong>teléfono:</strong> {$empleado->telefono}</p>";
                                 echo "<HR>";
                                 echo "<p class='card-text'><strong>Salario semanal :</strong> {$empleado->total_salario}</p> <br>";
                                 echo "<div class='btn-container mb-1'>"; // Añadido margen inferior
