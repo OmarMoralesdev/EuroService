@@ -96,7 +96,7 @@
     require '../includes/db.php';
     $con = new Database();
     $pdo = $con->conectar();
-        $citas = listarCitasPendientes2($pdo);
+        $citas = listarCitasPendientes($pdo);
         echo json_encode($citas);
     ?>;
 
