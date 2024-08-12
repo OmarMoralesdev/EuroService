@@ -73,9 +73,17 @@ session_start();
                             <input type="text" class="form-control" id="alias" maxlength="30" name="alias" required>
                         </div>
                         <div class="mb-3">
-                            <label for="salario_diario" class="form-label">Salario diario:</label>
+                            <label for="salario_diario" class="form-label">Salario:</label>
                             <input type="number" class="form-control" id="salario_diario" maxlength="5" name="salario" min="0" step="0.01" required>
                             <div class="form-text">Introduce el salario diario.</div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="alias" class="form-label">Correo:</label>
+                            <input type="text" class="form-control" id="correo" maxlength="256" name="correo" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="alias" class="form-label">Telefono:</label>
+                            <input type="text" class="form-control" id="telefono" maxlength="10" name="telefono" required>
                         </div>
                         <div class="mb-3">
                             <label for="tipo" class="form-label">Tipo:</label>
@@ -110,6 +118,7 @@ session_start();
             const apellido_materno = document.getElementById('apellido_materno').value;
             const alias = document.getElementById('alias').value;
             const salario_diario = parseFloat(document.getElementById('salario_diario').value);
+            const telefono = parseFloat(document.getElementById('telefono').value);
 
            // Validar nombre
            if (/\d/.test(nombre)) {
@@ -151,6 +160,13 @@ session_start();
                 document.getElementById('salario_diario').classList.remove('is-invalid');
             }
 
+            if (isNaN(telefono.length < 10)) {
+                document.getElementById('telefono').classList.add('is-invalid');
+                valid = false;
+            } else {
+                document.getElementById('telefono').classList.remove('is-invalid');
+            }
+
             if (!valid) {
                 event.preventDefault();
             }
@@ -173,6 +189,7 @@ session_start();
         document.getElementById('apellido_materno').addEventListener('input', validarLetras);
         document.getElementById('alias').addEventListener('input', validarLetras);
         document.getElementById('salario_diario').addEventListener('input', validarNumeros);
+        document.getElementById('telefono').addEventListener('input', validarNumeros);
 
         document.getElementById('salario_diario').addEventListener('input', function(event) {
             var value = parseFloat(event.target.value);

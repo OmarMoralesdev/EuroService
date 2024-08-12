@@ -10,6 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     if ($empleadoID && $rebaja !== null) {
         try {
+            // Consultar el salario diario del empleado
             $sql = "SELECT salario_diario FROM EMPLEADOS WHERE empleadoID = :empleadoID";
             $stmt = $pdo->prepare($sql);
             $stmt->bindValue(':empleadoID', $empleadoID);
@@ -18,15 +19,20 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             if ($empleado) {
                 $salarioDiario = $empleado['salario_diario'];
-                $nuevoSalario = $salarioDiario - $rebaja / 5;
 
-                $sql = "UPDATE EMPLEADOS SET salario_diario = :nuevoSalario WHERE empleadoID = :empleadoID";
-                $stmt = $pdo->prepare($sql);
-                $stmt->bindValue(':nuevoSalario', $nuevoSalario);
-                $stmt->bindValue(':empleadoID', $empleadoID);
-                $stmt->execute();
+                if ($rebaja > $salarioDiario * 5) { 
+                    echo json_encode(['status' => 'error', 'message' => 'La rebaja no puede ser mayor al salario total']);
+                } else {
+                    // Aplicar la rebaja
+                    $nuevoSalario = $salarioDiario - $rebaja / 5;
 
-                echo json_encode(['status' => 'success', 'message' => 'Rebaja aplicada correctamente']);
+                    $sql = "UPDATE EMPLEADOS SET salario_diario = :nuevoSalario WHERE empleadoID = :empleadoID";
+                    $stmt = $pdo->prepare($sql);
+                    $stmt->bindValue(':nuevoSalario', $nuevoSalario);
+                    $stmt->bindValue(':empleadoID', $empleadoID);
+                    $stmt->execute();
+                    echo json_encode(['status' => 'success', 'message' => 'Rebaja aplicada correctamente']);
+                }
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'Empleado no encontrado']);
             }
