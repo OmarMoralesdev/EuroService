@@ -58,19 +58,20 @@ function listarCitasPendientes($pdo) {
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
-function listarCitasPendientes2($pdo) {
+function listarCitasPendientesHoy($pdo) {
     $sql = "SELECT CITAS.citaID, CITAS.vehiculoID, CITAS.servicio_solicitado, VEHICULOS.marca, VEHICULOS.modelo, VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
             FROM CITAS 
             JOIN VEHICULOS ON CITAS.vehiculoID = VEHICULOS.vehiculoID
             JOIN CLIENTES ON VEHICULOS.clienteID = CLIENTES.clienteID
             JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID
             WHERE CITAS.estado = 'pendiente'
-              AND CITAS.fecha_cita >= NOW()"; // Filtrar por citas con fecha actual o futura
+              AND DATE(CITAS.fecha_cita) = CURDATE()"; // Filtrar por citas del día actual
               
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
+
 
 
 function obtenerDetallesCita($pdo, $citaID)
