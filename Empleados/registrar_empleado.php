@@ -13,10 +13,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $salario = trim($_POST['salario']);
     $alias = trim($_POST['alias']);
     $tipo = trim($_POST['tipo']);
+    $correo = trim($_POST['correo']);
+    $telefono = trim($_POST['telefono']);
 
     // Validar que los campos no estén vacíos y no contengan solo espacios
     if (empty($nombre) || empty($apellido_paterno) || empty($apellido_materno) || empty($alias) || empty($tipo) ||
-        ctype_space($nombre) || ctype_space($apellido_paterno) || ctype_space($apellido_materno) || ctype_space($alias) || ctype_space($tipo)) {
+        ctype_space($nombre) || ctype_space($apellido_paterno) || ctype_space($apellido_materno) || ctype_space($alias) ||
+        ctype_space($tipo) || ctype_space($correo) || ctype_space($telefono)) {
         $_SESSION['error'] = "Todos los campos son obligatorios y no pueden contener solo espacios.";
         header('Location: registro_empleado.php'); 
         exit();
@@ -31,8 +34,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     try {
         // Insertar en PERSONAS
-        $stmt_persona = $pdo->prepare("INSERT INTO PERSONAS (nombre, apellido_paterno, apellido_materno) VALUES (?, ?, ?)");
-        $stmt_persona->execute([$nombre, $apellido_paterno, $apellido_materno]);
+        $stmt_persona = $pdo->prepare("INSERT INTO PERSONAS (nombre, apellido_paterno, apellido_materno, correo, telefono) VALUES (?, ?, ?, ?, ?)");
+        $stmt_persona->execute([$nombre, $apellido_paterno, $apellido_materno, $correo, $telefono]);
 
         if ($stmt_persona->rowCount() > 0) {
             $personaID = $pdo->lastInsertId();
