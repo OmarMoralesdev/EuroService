@@ -59,7 +59,16 @@ function listarCitasPendientes($pdo) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 function listarCitasPendientes2($pdo) {
-    $sql = "SELECT CITAS.citaID, CITAS.vehiculoID, CITAS.servicio_solicitado, VEHICULOS.marca, VEHICULOS.modelo, VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
+    $sql = "SELECT CITAS.citaID, 
+                   CITAS.vehiculoID, 
+                   CITAS.servicio_solicitado, 
+                   VEHICULOS.marca, 
+                   VEHICULOS.modelo, 
+                   VEHICULOS.anio, 
+                   PERSONAS.nombre, 
+                   PERSONAS.apellido_paterno, 
+                   PERSONAS.apellido_materno,
+                   DATE_FORMAT(CITAS.fecha_cita, '%d/%m/%Y') AS fecha_cita_formateada
             FROM CITAS 
             JOIN VEHICULOS ON CITAS.vehiculoID = VEHICULOS.vehiculoID
             JOIN CLIENTES ON VEHICULOS.clienteID = CLIENTES.clienteID

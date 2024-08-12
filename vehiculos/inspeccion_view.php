@@ -195,105 +195,8 @@ session_start();
                                 modalSuccess.show();
                             }
                         });
-
-                        document.getElementById('formCita').addEventListener('submit', function(event) {
-                            let valid = true;
-                            const currentYear = new Date().getFullYear();
-
-                            const marca = document.getElementById('marca').value.trim();
-                            const modelo = document.getElementById('modelo').value.trim();
-                            const anio = parseInt(document.getElementById('anio').value.trim(), 10);
-                            const color = document.getElementById('color').value.trim();
-                            const kilometraje = document.getElementById('kilometraje').value.trim();
-                            const placas = document.getElementById('placas').value.trim();
-                            const vin = document.getElementById('vin').value.trim();
-
-                            // Validar marca
-                            if (/\d/.test(marca)) {
-                                document.getElementById('marca').classList.add('is-invalid');
-                                valid = false;
-                            } else {
-                                document.getElementById('marca').classList.remove('is-invalid');
-                            }
-
-                            if (/\d/.test(campo)) {
-                                document.getElementById('campo').classList.add('is-invalid');
-                                valid = false;
-                            } else {
-                                document.getElementById('campo').classList.remove('is-invalid');
-                            }
-
-                            // Validar color
-                            if (/\d/.test(color)) {
-                                document.getElementById('color').classList.add('is-invalid');
-                                valid = false;
-                            } else {
-                                document.getElementById('color').classList.remove('is-invalid');
-                            }
-
-                            if (kilometraje.length < 0) {
-                                document.getElementById('vin').classList.add('is-invalid');
-                                valid = false;
-                            } else {
-                                document.getElementById('vin').classList.remove('is-invalid');
-                            }
-
-                            // Validar año
-                            if (anio < 1886 || anio > currentYear || isNaN(anio) || anio.toString().length > 4 ) {
-                                document.getElementById('anio').classList.add('is-invalid');
-                                valid = false;
-                            } else {
-                                document.getElementById('anio').classList.remove('is-invalid');
-                            }
-
-                            // Validar placas
-                            if (placas.length > 10) {
-                                document.getElementById('placas').classList.add('is-invalid');
-                                valid = false;
-                            } else {
-                                document.getElementById('placas').classList.remove('is-invalid');
-                            }
-
-                            // Validar VIN
-                            if (vin.length > 20) {
-                                document.getElementById('vin').classList.add('is-invalid');
-                                valid = false;
-                            } else {
-                                document.getElementById('vin').classList.remove('is-invalid');
-                            }
-
-                            if (!valid) {
-                                event.preventDefault();
-                            }
-                        });
-
-                        $(document).ready(function() {
-                            if ($('#staticBackdrop').length) {
-                                $('#staticBackdrop').modal('show');
-                            }
-
-                            if (window.history.replaceState) {
-                                window.history.replaceState(null, null, window.location.href);
-                            }
-                        });
-
-                        function validarLetras(event) {
-                            const input = event.target;
-                            input.value = input.value.replace(/[^a-zA-Z]/g, '');
-                        }
-
-                        function validarNumeros(event) {
-                            const input = event.target;
-                            input.value = input.value.replace(/[^0-9]/g, '');
-                        }
-
-                        document.getElementById('campo').addEventListener('input', validarLetras);
-                        document.getElementById('marca').addEventListener('input', validarLetras);
-                        document.getElementById('color').addEventListener('input', validarLetras);
-                        document.getElementById('kilometraje').addEventListener('input', validarNumeros);
-                        document.getElementById('anio').addEventListener('input', validarNumeros);
-                    </script>
-                    
+                        </script>
+             
                     <script>
                         $(document).ready(function() {  
                             if ($('#staticBackdrop').length) {
@@ -301,7 +204,89 @@ session_start();
                             }
                         });
                 </script>
-                
+                <script>
+    document.getElementById('formCita').addEventListener('submit', function(event) {
+        let valid = true;
+        const currentYear = new Date().getFullYear();
+
+        const marca = document.getElementById('marca').value.trim();
+        const modelo = document.getElementById('modelo').value.trim();
+        const anio = parseInt(document.getElementById('anio').value.trim(), 10);
+        const color = document.getElementById('color').value.trim();
+        const kilometraje = document.getElementById('kilometraje').value.trim();
+        const placas = document.getElementById('placas').value.trim();
+        const vin = document.getElementById('vin').value.trim();
+
+        // Validar marca
+        if (/\d/.test(marca)) {
+            document.getElementById('marca').classList.add('is-invalid');
+            valid = false;
+        } else {
+            document.getElementById('marca').classList.remove('is-invalid');
+        }
+
+        // Validar campo cliente
+        if (/\d/.test(campo)) {
+            document.getElementById('campo').classList.add('is-invalid');
+            valid = false;
+        } else {
+            document.getElementById('campo').classList.remove('is-invalid');
+        }
+
+        // Validar color
+        if (/\d/.test(color)) {
+            document.getElementById('color').classList.add('is-invalid');
+            valid = false;
+        } else {
+            document.getElementById('color').classList.remove('is-invalid');
+        }
+
+        // Validar año
+        if (anio < 1886 || anio > currentYear || isNaN(anio) || anio.toString().length > 4) {
+            document.getElementById('anio').classList.add('is-invalid');
+            valid = false;
+        } else {
+            document.getElementById('anio').classList.remove('is-invalid');
+        }
+
+        // Validar placas: pueden estar vacías o tener exactamente 7 caracteres
+        if (placas.length !== 0 && placas.length !== 7) {
+            document.getElementById('placas').classList.add('is-invalid');
+            valid = false;
+        } else {
+            document.getElementById('placas').classList.remove('is-invalid');
+        }
+
+        // Validar VIN: debe tener exactamente 17 caracteres
+        if (vin.length !== 17) {
+            document.getElementById('vin').classList.add('is-invalid');
+            valid = false;
+        } else {
+            document.getElementById('vin').classList.remove('is-invalid');
+        }
+
+        if (!valid) {
+            event.preventDefault();
+        }
+    });
+
+    function validarLetras(event) {
+        const input = event.target;
+        input.value = input.value.replace(/[^a-zA-Z]/g, '');
+    }
+
+    function validarNumeros(event) {
+        const input = event.target;
+        input.value = input.value.replace(/[^0-9]/g, '');
+    }
+
+    document.getElementById('campo').addEventListener('input', validarLetras);
+    document.getElementById('marca').addEventListener('input', validarLetras);
+    document.getElementById('color').addEventListener('input', validarLetras);
+    document.getElementById('kilometraje').addEventListener('input', validarNumeros);
+    document.getElementById('anio').addEventListener('input', validarNumeros);
+</script>
+
             </div>
         </div>
     </div>

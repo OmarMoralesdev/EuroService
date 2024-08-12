@@ -48,46 +48,50 @@ if ($stmt->rowCount() > 0) {
     $fechaPago = date('Y-m-d');
     $tipoPago = "anticipo";
 
-    try {
-        // Llamar al procedimiento almacenado para realizar el pago
-        $sql = "CALL realizarPago(:ordenID, :fechaPago, :monto, :tipoPago, :formaDePago)";
-        $stmt = $pdo->prepare($sql);
-        $stmt->execute([
-            ':ordenID' => $ordenID,
-            ':fechaPago' => $fechaPago,
-            ':monto' => $anticipo,
-            ':tipoPago' => $tipoPago,
-            ':formaDePago' => $formaDePago,
-        ]);
+    
+    $fechaPago = date('Y-m-d');
+    $tipoPago = "anticipo";
 
-        // Consultar el pago asociado a la orden
-        $stmt = $pdo->prepare("SELECT pagoID FROM PAGOS WHERE ordenID = ?");
-        $stmt->execute([$ordenID]);
-        $pago = $stmt->fetch(PDO::FETCH_ASSOC);
+    // Llamar al procedimiento almacenado para realizar el pago
+    $sql = "CALL realizarPago(:ordenID, :fechaPago, :monto, :tipoPago, :formaDePago)";
+    $stmt = $pdo->prepare($sql);
+    $stmt->execute([
+        ':ordenID' => $ordenID,
+        ':fechaPago' => $fechaPago,
+        ':monto' => $anticipo,
+        ':tipoPago' => $tipoPago,
+        ':formaDePago' => $formaDePago,
+    ]);
 
-        if (!$pago) {
-            $_SESSION['error'] = "No se encontró un pago asociado a esta orden.";
-            header("Location: entregar.php");
-            exit();
-        }
+    // Consultar el pago asociado a la orden
+    $stmt = $pdo->prepare("SELECT pagoID FROM PAGOS WHERE ordenID = ?");
+    $stmt->execute([$ordenID]);
+    $pago = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $pagoID = $pago['pagoID'];
-
-        // Registrar la entrega usando el procedimiento almacenado
-        $stmt = $pdo->prepare("CALL registrar_entrega(?,?)");
-        $stmt->execute([$pagoID, $formaDePago]);
-
-        $nuevaUbicacionID = 4;
-        // Actualizar la orden de trabajo con la nueva ubicación
-        $sqlActualizarOrden = "UPDATE ORDENES_TRABAJO SET ubicacionID = ? WHERE ordenID = ?";
-        $stmtActualizarOrden = $pdo->prepare($sqlActualizarOrden);
-        $stmtActualizarOrden->execute([$nuevaUbicacionID, $ordenID]);
-        $_SESSION['bien'] = "Ejecutado exitosamente";
-        header("Location: inspeccion_view.php");
-        exit();
-    } catch (Exception $e) {
-        $_SESSION['error'] = "Error al realizar el pago: " . $e->getMessage();
+    if (!$pago) {
+        $_SESSION['error'] = "No se encontró un pago asociado a esta orden.";
         header("Location: inspeccion_view.php");
         exit();
     }
+
+    $pagoID = $pago['pagoID'];
+
+    // Registrar la entrega usando el procedimiento almacenado
+    $sqlRegistrarEntrega = "CALL registrar_entrega(:pagoID, :formaDePago)";
+    $stmtRegistrarEntrega = $pdo->prepare($sqlRegistrarEntrega);
+    $stmtRegistrarEntrega->execute([
+        ':pagoID' => $ordenID,
+        ':formaDePago' => $formaDePago
+    ]);
+
+    // Actualizar la orden de trabajo con la nueva ubicación
+    $nuevaUbicacionID = 1; // Ajusta esta ID según sea necesario
+    $sqlActualizarOrden = "UPDATE ORDENES_TRABAJO SET ubicacionID = ? WHERE ordenID = ?";
+    $stmtActualizarOrden = $pdo->prepare($sqlActualizarOrden);
+    $stmtActualizarOrden->execute([$nuevaUbicacionID, $ordenID]);
+
+    $_SESSION['bien'] = "Ejecutado exitosamente.";
+        header("Location: inspeccion_view.php");
+        exit();
+   
 }
