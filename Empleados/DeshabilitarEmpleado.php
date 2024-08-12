@@ -15,11 +15,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             $stmt->bindValue(':empleadoID', $empleadoID);
             $stmt->execute();
 
+
+
             if ($stmt->rowCount() > 0) {
                 echo json_encode(['status' => 'success', 'message' => 'Empleado deshabilitado correctamente']);
             } else {
                 echo json_encode(['status' => 'error', 'message' => 'No se encontró el empleado o ya está deshabilitado']);
             }
+
+            
         } catch (PDOException $e) {
             echo json_encode(['status' => 'error', 'message' => 'Error: ' . $e->getMessage()]);
         }
@@ -29,6 +33,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 } else {
     echo json_encode(['status' => 'error', 'message' => 'Método no permitido']);
 }
+header("Location: ../Empleados/buscar.php");
 
 $conexion->desconectar();
 ?>

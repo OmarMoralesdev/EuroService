@@ -5,15 +5,12 @@ $conexion = new Database();
 $conexion->conectar();
 
 $buscar = isset($_POST['buscar']) ? $_POST['buscar'] : '';
-
-
-
 $consulta_empleados = "SELECT DISTINCT e.empleadoID, 
        CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS nombre_completo, 
        e.alias, 
        e.tipo, 
-    p.correo,
-    p.telefono, 
+       p.correo,
+       p.telefono, 
        (e.salario_diario * 5) AS total_salario
 FROM EMPLEADOS e
 INNER JOIN PERSONAS p ON e.personaID = p.personaID
@@ -22,10 +19,7 @@ WHERE e.activo = 'si'";
 if (!empty($buscar)) {
     $consulta_empleados .= " AND (p.nombre LIKE '%$buscar%' OR p.apellido_paterno LIKE '%$buscar%' OR p.apellido_materno LIKE '%$buscar%' OR e.alias LIKE '%$buscar%')";
 }
-
 $consulta_empleados .= " ORDER BY nombre_completo";
-
-
 $empleados = $conexion->seleccionar($consulta_empleados);
 ?>
 <!DOCTYPE html>
@@ -33,10 +27,8 @@ $empleados = $conexion->seleccionar($consulta_empleados);
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Buscar Empleados</title>
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/css/bootstrap.min.css">
     <style>
         .card-body {
             padding: 1rem;
@@ -74,12 +66,10 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                             <button type="submit" class="btn btn-dark">Buscar</button>
                         </div>
                     </form>
-
                     <div class="row mt-4">
                         <?php
                         if (!empty($empleados)) {
                             foreach ($empleados as $empleado) {
-                    
                                 echo "<div class='col-md-4 mb-3'>";
                                 echo "<div class='card' style='width: 100%;'>";
                                 echo "<div class='card-body'>";
@@ -99,13 +89,11 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                                 echo "<div class='btn-container mb-1'>"; // Añadido margen inferior
                                 echo "</div>"; 
                                 echo "<div class='mt-1 x'>";
-                                echo "<button type='button' class='btn btn-danger' data-bs-toggle='modal' data-bs-target='#modalDeshabilitar{$empleado->empleadoID}' data-empleado-id='{$empleado->empleadoID}'>ELIMINAR</button>";
+                                echo "<button type='button' class='btn btn-danger' data-bs-toggle='modal' data-bs-target='#modalDeshabilitar{$empleado->empleadoID}' data-empleado-id='{$empleado->empleadoID}' data-empleado-nombre='{$empleado->nombre_completo}'>ELIMINAR</button>";
                                 echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
-
-
 
                                 // Modal para Rebajas
                                 echo "<div class='modal fade' id='modalRebajas{$empleado->empleadoID}' tabindex='-1' aria-labelledby='modalRebajasLabel' aria-hidden='true'>";
@@ -170,20 +158,19 @@ $empleados = $conexion->seleccionar($consulta_empleados);
                                 echo "<form id='DeshabilitarForm{$empleado->empleadoID}' method='POST' action='DeshabilitarEmpleado.php'>";
                                 echo "<div class='modal-body'>";
                                 echo "<input type='hidden' name='empleadoID' value='{$empleado->empleadoID}'>";
-                                echo "<p>¿Estás seguro de que deseas deshabilitar a este empleado?</p>";
+                                echo "<p>¿Estás seguro de que deseas eliminar al empleado <strong>{$empleado->nombre_completo}</strong>?</p>";
                                 echo "</div>";
                                 echo "<div class='modal-footer'>";
                                 echo "<button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cancelar</button>";
-                                echo "<button type='submit' class='btn btn-dark'>ELIMINAR</button>";
+                                echo "<button type='submit' class='btn btn-danger'>Eliminar</button>";
                                 echo "</div>";
                                 echo "</form>";
-                                echo "<div id='DeshabilitarMessage{$empleado->empleadoID}' class='alert' style='display:none;'></div>";
                                 echo "</div>";
                                 echo "</div>";
                                 echo "</div>";
                             }
                         } else {
-                            echo "<p>No se encontraron empleados.</p>";
+                            echo "<p class='text-center'>No se encontraron empleados.</p>";
                         }
                         ?>
                     </div>
@@ -192,128 +179,7 @@ $empleados = $conexion->seleccionar($consulta_empleados);
         </div>
     </div>
 
-    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
-    <script>
-        $(document).ready(function() {
-            $('form[id^="DeshabilitarForm"]').on('submit', function(e) {
-                e.preventDefault();
-
-                var form = $(this);
-                var formId = form.attr('id');
-                var messageElement = $('#' + formId.replace('Form', 'Message'));
-                var url = form.attr('action');
-
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            messageElement.removeClass('alert-danger').addClass('alert-success');
-                        } else {
-                            messageElement.removeClass('alert-success').addClass('alert-danger');
-                        }
-                        messageElement.text(response.message).show();
-                        setTimeout(function() {
-                            messageElement.hide();
-                            var modal = form.closest('.modal');
-                            modal.modal('hide');
-                            location.reload(); // Recargar la página para reflejar los cambios
-                        }, 600);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error:', error);
-                        messageElement.removeClass('alert-success').addClass('alert-danger').text('Error en la solicitud').show();
-                    }
-                });
-            });
-
-            $('form[id^="rebajaForm"], form[id^="AumentoForm"]').on('submit', function(e) {
-                e.preventDefault();
-
-                var form = $(this);
-                var formId = form.attr('id');
-                var messageElement = $('#' + formId.replace('Form', 'Message'));
-                var url = form.attr('action');
-
-                $.ajax({
-                    type: 'POST',
-                    url: url,
-                    data: form.serialize(),
-                    dataType: 'json',
-                    success: function(response) {
-                        if (response.status === 'success') {
-                            messageElement.removeClass('alert-danger').addClass('alert-success');
-                        } else {
-                            messageElement.removeClass('alert-success').addClass('alert-danger');
-                        }
-                        messageElement.text(response.message).show();
-                        setTimeout(function() {
-                            messageElement.hide();
-                            var modal = form.closest('.modal');
-                            modal.modal('hide');
-                            location.reload(); // Recargar la página para reflejar los cambios
-                        }, 600);
-                    },
-                    error: function(xhr, status, error) {
-                        console.error('Error:', error);
-                        messageElement.removeClass('alert-success').addClass('alert-danger').text('Error en la solicitud').show();
-                    }
-                });
-            });
-        });
-    </script>
-
-<script>
-        $(document).ready(function() {
-            if ($('#staticBackdrop').length) {
-                $('#staticBackdrop').modal('show');
-            }
-        });
-
-        document.getElementById('rebajaForm').addEventListener('submit', function(event) {
-            let valid = true;
-            const rebaja = parseFloat(document.getElementById('rebaja').value);
-            // Validar salario
-            if (isNaN(rebaja) || rebaja < 0) {
-                document.getElementById('rebaja').classList.add('is-invalid');
-                valid = false;
-            } else {
-                document.getElementById('rebaja').classList.remove('is-invalid');
-            }
-            if (!valid) {
-                event.preventDefault();
-            }
-        });
-        function validarNumeros(event) {
-            const input = event.target;
-            input.value = input.value.replace(/[^0-9.]/g, '');
-        }
-
-        document.getElementById('rebaja').addEventListener('input', validarNumeros);
-
-
-        document.getElementById('rebaja').addEventListener('input', function(event) {
-            var value = parseFloat(event.target.value);
-            if (value < 0) {
-                event.target.value = '';
-                alert('El stock no puede ser negativo.');
-            }
-
-        document.getElementById('rebaja').addEventListener('input', function(event) {
-            var value = parseFloat(event.target.value);
-            if (value < 0) {
-                event.target.value = '';
-                alert('La rebaja no puede ser negativa.');
-            }
-        });
-    });
-    </script>
+    <!-- Bootstrap JavaScript -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
-
-<?php
-$conexion->desconectar();
-?>
