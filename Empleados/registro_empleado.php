@@ -83,7 +83,7 @@ session_start();
                         </div>
                         <div class="mb-3">
                             <label for="alias" class="form-label">Telefono:</label>
-                            <input type="text" class="form-control" id="telefono" maxlength="30" name="telefono" required>
+                            <input type="text" class="form-control" id="telefono" maxlength="10" name="telefono" required>
                         </div>
                         <div class="mb-3">
                             <label for="tipo" class="form-label">Tipo:</label>
@@ -159,11 +159,12 @@ session_start();
             } else {
                 document.getElementById('salario_diario').classList.remove('is-invalid');
             }
+
             if (isNaN(telefono.length < 10)) {
-                document.getElementById('salario_diario').classList.add('is-invalid');
+                document.getElementById('telefono').classList.add('is-invalid');
                 valid = false;
             } else {
-                document.getElementById('salario_diario').classList.remove('is-invalid');
+                document.getElementById('telefono').classList.remove('is-invalid');
             }
 
             if (!valid) {
@@ -188,6 +189,7 @@ session_start();
         document.getElementById('apellido_materno').addEventListener('input', validarLetras);
         document.getElementById('alias').addEventListener('input', validarLetras);
         document.getElementById('salario_diario').addEventListener('input', validarNumeros);
+        document.getElementById('telefono').addEventListener('input', validarNumeros);
 
         document.getElementById('salario_diario').addEventListener('input', function(event) {
             var value = parseFloat(event.target.value);
