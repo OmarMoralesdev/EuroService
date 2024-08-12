@@ -9,7 +9,7 @@ try {
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         // Obtener la semana seleccionada
         $semana_seleccionada = $_POST['week'];
-        $inicio_semana = date('Y-m-d', strtotime($semana_seleccionada));
+        $inicio_semana = date('Y-m-d', strtotime($semana_seleccionada . 'monday this week'));
         $fin_semana = date('Y-m-d', strtotime($inicio_semana . ' +6 days'));
 
         // Validar que la semana seleccionada tenga un formato correcto
@@ -74,7 +74,7 @@ try {
         $insercion_nomina = $pdo->prepare($consulta_insercion_nomina);
 
         foreach ($datos_nomina as $dato) {
-            $sueldo_semanal = $dato['salario_diario'] * 5;
+            $sueldo_semanal = $dato['salario_diario'] * 5; // Asegúrate de que esto es correcto
             $total_faltas = $dato['faltas'] * $dato['salario_diario'];
             $total = $sueldo_semanal - $total_faltas;
 

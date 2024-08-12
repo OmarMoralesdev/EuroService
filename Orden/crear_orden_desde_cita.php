@@ -87,15 +87,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session
 
                     <label for="costoManoObra">Costo Mano de Obra:</label>
                     <input type="number" step="0.01" id="costoManoObra" name="costoManoObra" min="0" class="form-control" required>
-                    <div class="form-text">Introduce el salario diario (no puede ser negativo).</div><br>
 
                     <label for="costoRefacciones">Costo de Refacciones:</label>
                     <input type="number" step="0.01" id="costoRefacciones" name="costoRefacciones" min="0" class="form-control" required>
-                    <div class="form-text">Introduce el salario diario (no puede ser negativo).</div><br>
 
                     <label for="anticipo">Anticipo:</label>
                     <input type="number" step="0.01" min="0" name="anticipo" class="form-control" required>
-                    <div class="form-text">Introduce el salario diario (no puede ser negativo).</div>
                     <br>
 
                     <label for="atencion" class="form-label">Atencion:</label>

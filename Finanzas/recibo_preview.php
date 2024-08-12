@@ -38,8 +38,8 @@ $html = <<<EOD
         <td>{$fecha_recibo}</td>
     </tr>
     <tr>
-        <td><strong>No.{$orden}:</strong></td>
-        <td>8</td>
+        <td><strong>No:</strong></td>
+        <td>{$orden}</td>
     </tr>
     <tr>
         <td><strong>Recibí de:</strong></td>
