@@ -7,7 +7,8 @@ $pdo = $con->conectar();
 function obtenerEmpleadosDisponibles($pdo) {
     $sql = "SELECT EMPLEADOS.empleadoID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno 
             FROM EMPLEADOS 
-            JOIN PERSONAS ON EMPLEADOS.personaID = PERSONAS.personaID";
+            JOIN PERSONAS ON EMPLEADOS.personaID = PERSONAS.personaID
+            WHERE EMPLEADOS.tipo != 'administrativo'";
     $stmt = $pdo->query($sql);
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
