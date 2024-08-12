@@ -25,7 +25,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt = $pdo->prepare($sql);
 
         try {
-            // Ejecuta la consulta
             $stmt->execute([$activo, $personaID]);
             $showModal = true;
             $modalContent = "
@@ -48,12 +47,15 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     }
 }
 ?>
+
+
+
+
 <!DOCTYPE html>
 <html lang="es">
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Eliminar Cliente</title>
     <style>
@@ -67,6 +69,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         }
     </style>
 </head>
+
+
+
+
 <body>
     <div class="wrapper">
         <?php include '../includes/vabr.php'; ?>
@@ -106,6 +112,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 
+
+
+
+
     <!-- Modal de confirmación -->
     <div class="modal fade" id="confirmacionModal" tabindex="-1" aria-labelledby="confirmacionModalLabel" aria-hidden="true">
         <div class="modal-dialog">
@@ -115,7 +125,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>¿Estás seguro de que deseas eliminar al cliente <br> <span id="nombreCliente" style="font-weight: bold;"></span>?</p>
+                    <p>¿Estás seguro de que deseas eliminar al cliente? <br> <span id="nombreCliente" style="font-weight: bold;"></span></p>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
@@ -124,6 +134,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
+
+
 
     <!-- Modal de resultado -->
     <?php
@@ -156,11 +168,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             this.classList.add('was-validated');
         });
 
+
+
         // Limpia la URL al recargar la página
         if (window.history.replaceState) {
             // Evita que se muestre la URL con los datos del formulario
             window.history.replaceState(null, null, window.location.href);
         }
+
+
+
+
         // Muestra la lista de clientes al escribir en el campo
         document.getElementById('campo').addEventListener('input', function() {
             const searchTerm = this.value;
@@ -200,11 +218,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 lista.style.display = 'none';
             }
         });
+
+
+
         // Muestra el modal de confirmación al hacer clic en el botón
         document.getElementById('btnEliminar').addEventListener('click', function() {
             const confirmacionModal = new bootstrap.Modal(document.getElementById('confirmacionModal'));
             confirmacionModal.show();
         });
+
+
         // Envía el formulario al confirmar la eliminación
         document.getElementById('confirmarEliminar').addEventListener('click', function() {
             document.getElementById('formCita').submit();
@@ -219,11 +242,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             }
         });
 
+
         document.getElementById('formCita').addEventListener('submit', function(event) {
             let valid = true;
-
             const campo = document.getElementById('campo').value;
-
             // Validar nombre
             if (/\d/.test(campo)) {
                 document.getElementById('campo').classList.add('is-invalid');
