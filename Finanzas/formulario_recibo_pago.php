@@ -76,12 +76,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
     $pdo = null;
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
     <title>Generar Recibo de Pago</title>
     <style>
