@@ -18,7 +18,7 @@
         th, td {
             padding: 12px;
             border-bottom: 1px solid #ddd;
-            cursor: default; /* Mantener el cursor como estándar */
+            cursor: default; 
         }
         th {
             background-color: #f4f4f4;
@@ -33,22 +33,6 @@
         }
         .main {
             margin: 20px 0;
-        }
-        .chart-container {
-            display: flex;
-            justify-content: center; /* Centrar el gráfico horizontalmente */
-            margin-top: 20px;
-        }
-        .chart-wrapper {
-            flex: 1;
-            max-width: 1000px; /* Ajustar el ancho máximo del contenedor */
-            height: 500px; /* Altura fija para el gráfico */
-            position: relative;
-        }
-        canvas {
-            width: 100% !important;
-            height: 100% !important;
-            display: block;
         }
     </style>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -77,7 +61,6 @@
                     SUM(total_gasto_insumo) AS total_gasto_insumo,
                     SUM(total_ingresos_mensuales) - 
                     (SUM(total_gastos_mensuales) + SUM(total_gasto_insumo)) AS total_neto,
-                    SUM(total_ingresos_mensuales) + SUM(total_ingresos_servicios) AS total_con_ingresos_servicios,
                     SUM(total_gastos_mensuales) + SUM(total_gasto_insumo) AS total_gastos_totales
                 FROM (
                     SELECT DATE_FORMAT(p.fecha_pago, '%Y-%m') AS mes,
@@ -135,7 +118,6 @@
                 $stmt = $pdo->query($sql);
 
                 if ($stmt->rowCount() > 0) {
-                    // Mostrar datos en una tabla
                     echo "<div class='table-responsive'>";
                     echo "<table class='table table-striped table-bordered'>";
                     echo "<tr>
@@ -145,7 +127,6 @@
                             <th>Total Ingresos Servicios</th>
                             <th>Total Gasto Insumo</th>
                             <th>Total Neto</th>
-                            <th>Total con Ingresos Servicios</th>
                             <th>Total Gastos Totales</th>
                           </tr>";
 
@@ -157,7 +138,6 @@
                         'ingresos_servicios' => [],
                         'gasto_insumo' => [],
                         'total_neto' => [],
-                        'total_con_ingresos_servicios' => [],
                         'total_gastos_totales' => []
                     ];
 
@@ -169,19 +149,8 @@
                         echo "<td>" . number_format($row['total_ingresos_servicios'], 2) . "</td>";
                         echo "<td>" . number_format($row['total_gasto_insumo'], 2) . "</td>";
                         echo "<td>" . number_format($row['total_neto'], 2) . "</td>";
-                        echo "<td>" . number_format($row['total_con_ingresos_servicios'], 2) . "</td>";
                         echo "<td>" . number_format($row['total_gastos_totales'], 2) . "</td>";
                         echo "</tr>";
-
-                        // Recolectar datos para gráficos
-                        $data['meses'][] = $row['mes'];
-                        $data['ingresos'][] = (float)$row['total_ingresos_mensuales'];
-                        $data['gastos'][] = (float)$row['total_gastos_mensuales'];
-                        $data['ingresos_servicios'][] = (float)$row['total_ingresos_servicios'];
-                        $data['gasto_insumo'][] = (float)$row['total_gasto_insumo'];
-                        $data['total_neto'][] = (float)$row['total_neto'];
-                        $data['total_con_ingresos_servicios'][] = (float)$row['total_con_ingresos_servicios'];
-                        $data['total_gastos_totales'][] = (float)$row['total_gastos_totales'];
                     }
                     echo "</table>";
                     echo "</div>";

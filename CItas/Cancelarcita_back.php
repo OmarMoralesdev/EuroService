@@ -18,7 +18,6 @@ if ($estado === 'cancelado' && $citaID) {
     $resultUpdate = $queryUpdate->execute(['cancelado', $citaID]);
 
     if ($resultUpdate) {
-        $_SESSION['bien'] = "Cita cancelada exitosamente";
     } else {
         $_SESSION['error'] = "Error al cancelar la cita: " . implode(", ", $queryUpdate->errorInfo());
     }

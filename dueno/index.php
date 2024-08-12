@@ -76,7 +76,6 @@
                     SUM(total_gasto_insumo) AS total_gasto_insumo,
                     SUM(total_ingresos_mensuales) - 
                     (SUM(total_gastos_mensuales) + SUM(total_gasto_insumo)) AS total_neto,
-                    SUM(total_ingresos_mensuales) + SUM(total_ingresos_servicios) AS total_con_ingresos_servicios,
                     SUM(total_gastos_mensuales) + SUM(total_gasto_insumo) AS total_gastos_totales
                 FROM (
                     SELECT DATE_FORMAT(p.fecha_pago, '%Y-%m') AS mes,
@@ -142,7 +141,6 @@
                         'ingresos_servicios' => [],
                         'gasto_insumo' => [],
                         'total_neto' => [],
-                        'total_con_ingresos_servicios' => [],
                         'total_gastos_totales' => []
                     ];
 
@@ -154,7 +152,6 @@
                         $data['ingresos_servicios'][] = (float)$row['total_ingresos_servicios'];
                         $data['gasto_insumo'][] = (float)$row['total_gasto_insumo'];
                         $data['total_neto'][] = (float)$row['total_neto'];
-                        $data['total_con_ingresos_servicios'][] = (float)$row['total_con_ingresos_servicios'];
                         $data['total_gastos_totales'][] = (float)$row['total_gastos_totales'];
                     }
                     echo "</table>";
@@ -179,7 +176,6 @@
                         var ingresos_servicios = <?php echo json_encode($data['ingresos_servicios']); ?>;
                         var gasto_insumo = <?php echo json_encode($data['gasto_insumo']); ?>;
                         var total_neto = <?php echo json_encode($data['total_neto']); ?>;
-                        var total_con_ingresos_servicios = <?php echo json_encode($data['total_con_ingresos_servicios']); ?>;
                         var total_gastos_totales = <?php echo json_encode($data['total_gastos_totales']); ?>;
 
                         // Crear gráfico
@@ -222,13 +218,6 @@
                                         data: total_neto,
                                         backgroundColor: 'rgba(255, 206, 86, 0.2)',
                                         borderColor: 'rgba(255, 206, 86, 1)',
-                                        borderWidth: 1
-                                    },
-                                    {
-                                        label: 'Total con Ingresos Servicios',
-                                        data: total_con_ingresos_servicios,
-                                        backgroundColor: 'rgba(75, 192, 192, 0.2)',
-                                        borderColor: 'rgba(75, 192, 192, 1)',
                                         borderWidth: 1
                                     },
                                     {

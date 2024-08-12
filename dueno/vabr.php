@@ -34,10 +34,6 @@ body {
     padding: 0;
 }
 
-.btnn:hover {
-    transform: scale(1.01) translateY(-2px);
-}
-
 a {
     text-decoration: none;
 }
@@ -54,7 +50,6 @@ h1 {
 .wrapper {
     display: flex;
 }
-
         .main {
             min-height: 100vh;
             width: 100%;
@@ -66,13 +61,11 @@ h1 {
         }
 
         #sidebar {
-        
             width: 70px;  
             z-index: 1000;
             top: 0;
             left: 0;
             background-color: #000;
-       
             transition: all .35s ease-in-out;
             display: flex;
             flex-direction: column;
