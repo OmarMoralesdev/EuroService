@@ -59,17 +59,27 @@ function listarCitasPendientes($pdo) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 function listarCitasPendientes2($pdo) {
-    $sql = "SELECT CITAS.citaID, CITAS.vehiculoID, CITAS.servicio_solicitado, VEHICULOS.marca, VEHICULOS.modelo, VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
-            FROM CITAS 
-            JOIN VEHICULOS ON CITAS.vehiculoID = VEHICULOS.vehiculoID
-            JOIN CLIENTES ON VEHICULOS.clienteID = CLIENTES.clienteID
-            JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID
-            WHERE CITAS.estado = 'pendiente'
-              AND CITAS.fecha_cita >= NOW()"; 
-    $stmt = $pdo->prepare($sql);
-    $stmt->execute();
-    return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    try {
+        $sql = "SELECT CITAS.citaID, CITAS.vehiculoID, CITAS.servicio_solicitado, 
+                       VEHICULOS.marca, VEHICULOS.modelo, VEHICULOS.anio, 
+                       PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
+                FROM CITAS 
+                JOIN VEHICULOS ON CITAS.vehiculoID = VEHICULOS.vehiculoID
+                JOIN CLIENTES ON VEHICULOS.clienteID = CLIENTES.clienteID
+                JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID
+                WHERE CITAS.estado = 'pendiente'
+                  AND CITAS.fecha_cita >= NOW()"; 
+
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute();
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
+    } catch (PDOException $e) {
+        // Manejo de errores, puedes registrar el error o retornar un mensaje específico
+        error_log("Error al obtener citas pendientes: " . $e->getMessage());
+        return []; // Retorna un arreglo vacío si ocurre un error
+    }
 }
+
 
 
 function obtenerDetallesCita($pdo, $citaID)
