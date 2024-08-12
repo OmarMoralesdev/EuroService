@@ -102,10 +102,10 @@ $modalContent = '';
                 </div>
             </div>";
             // Redirigir al usuario después de la acción
-            header('Location: ubicaciones_view.php');
-            exit();
-    
+            
+        }
     }
-    }
+    header('Location: ubicaciones_view.php');
+    exit();
 }
 ?>
