@@ -65,7 +65,7 @@ function listarCitasPendientes2($pdo) {
             JOIN CLIENTES ON VEHICULOS.clienteID = CLIENTES.clienteID
             JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID
             WHERE CITAS.estado = 'pendiente'
-              AND CITAS.fecha_cita <= NOW()"; // Filtrar por citas con fecha pasada o actual
+              AND CITAS.fecha_cita >= NOW()"; // Filtrar por citas con fecha actual o futura
               
     $stmt = $pdo->prepare($sql);
     $stmt->execute();
