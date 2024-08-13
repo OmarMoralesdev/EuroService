@@ -214,6 +214,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             margin-top: 40px;
         }
     </style>
+    
 
     <script>
         document.addEventListener('DOMContentLoaded', function () {

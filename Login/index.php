@@ -1,11 +1,3 @@
-<?php
-            session_start();
-            if (isset($_SESSION['alert'])) : ?>
-                <div class="alert alert-danger" role="alert">
-                    <?php echo $_SESSION['alert']['message']; ?>
-                    <?php unset($_SESSION['alert']); ?>
-                </div>
-                <?php endif; ?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -43,7 +35,6 @@
 
         .form-container::before {
             content: '';
-            
             position: absolute;
             top: 0;
             left: 0;
@@ -125,20 +116,18 @@
     </style>
 </head>
 
-<body>
-    <?php include('../nav.php'); ?>
-    <nav class="navbar navbar-expand-lg navbar-dark" >
-        <div class="container-fluid">
-        <p href="" class="navbar-brand">EURO SERVICE</p><a href="../index.php" class="navbar-brand"><h5>VOLVER AL INICIO</h5></a>
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </div>
-    </nav>
+<body>z
     <div class="form-container">
-            
-            <div class="modal-body">
-                <?php
+        <?php
+        session_start();
+        if (isset($_SESSION['alert'])) : ?>
+            <div class="alert alert-danger" role="alert">
+                <?php echo $_SESSION['alert']['message']; ?>
+                <?php unset($_SESSION['alert']); ?>
+            </div>
+        <?php endif; ?>
+        <div class="modal-body">
+        <?php
                     if (isset($_SESSION['error'])) {
                         echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
                         unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
@@ -146,20 +135,20 @@
                     if (isset($_SESSION['bien'])) {
                         echo "
                         <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
-                        <div class='modal-dialog'>
-                        <div class='modal-content'>
-                        <div class='modal-header'>
-                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>¡Orden de Trabajo Registrada!</h1>
-                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                        </div>
-                        <div class='modal-body'>
-                        <div class='alert alert-success' role='alert'>{$_SESSION['bien']}</div>
-                        </div>
-                        <div class='modal-footer'>
-                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                        </div>
-                        </div>
-                        </div>
+                            <div class='modal-dialog'>
+                                <div class='modal-content'>
+                                    <div class='modal-header'>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>¡Orden de Trabajo Registrada!</h1>
+                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                    </div>
+                                    <div class='modal-body'>
+                                        <div class='alert alert-success' role='alert'>{$_SESSION['bien']}</div>
+                                    </div>
+                                    <div class='modal-footer'>
+                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>";
                         unset($_SESSION['bien']);
                     }
