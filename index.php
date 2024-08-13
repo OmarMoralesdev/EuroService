@@ -43,40 +43,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             color: #fff;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-
-        .navbar {
-            background-color: black;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            z-index: 1000;
-            transition: all 0.3s ease;
-        }
-
-        .navbar.scrolled {
-            background-color: #000;
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.6);
-        }
-
-        .navbar-brand {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: #fff;
-        }
-
-        .nav-link {
-            color: #fff !important;
-            font-size: 1.2rem;
-            margin-right: 15px;
-            transition: color 0.3s, transform 0.3s;
-        }
-
-        .nav-link:hover {
-            color: #ccc;
-            transform: scale(1.1);
-        }
-
         .bg-fixed {
             background-size: cover;
             background-position: center center;
@@ -261,7 +227,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 </head>
 
 <body>
-    <nav class="navbar navbar-expand-lg navbar-dark" >
+<?php include('nav.php'); ?>
+<nav class="navbar navbar-expand-lg navbar-dark" >
         <div class="container-fluid">
             <p class="navbar-brand">EURO SERVICE</p>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -270,10 +237,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
                     <li class="nav-item">
-                        <a class="nav-link" href="#servicios">Servicios</a>
+                        <a class="nav-link" href="#servicios">SERVICIOS</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#ubi">Ubicación</a>
+                        <a class="nav-link" href="#ubi">UBICACIÓN</a>
                     </li>
                     <li class="nav-item">
                         <a href="./Login/index.php" class="nav-link btn pulse">INICIAR SESIÓN</a>
@@ -282,7 +249,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </nav>
-
+?>
     <div class="bg-fixed" style="background-image: url('path/to/your/image.jpg');">
         <div class="overlay">
             <div class="text-center text-light">
