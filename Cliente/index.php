@@ -221,6 +221,8 @@ try {
                                     <p><strong>Año:</strong> <?php echo htmlspecialchars($vehiculo['anio']); ?></p>
                                     <p><strong>Color:</strong> <?php echo htmlspecialchars($vehiculo['color']); ?></p>
                                     <p><strong>Kilometraje:</strong> <?php echo htmlspecialchars($vehiculo['kilometraje']); ?> km</p>
+                                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#vehiculoModal<?php echo $vehiculo['vehiculoID']; ?>">
+                                        HISTORIAL
                                 </div>
                             </div>
                         </div>
