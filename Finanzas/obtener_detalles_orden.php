@@ -21,7 +21,7 @@ if (isset($_GET['empleadoID'])) {
                 WHERE ORDENES_TRABAJO.empleadoID = :empleadoID";
         
         $stmt = $pdo->prepare($sql);
-        $stmt->bindParam(':empleadoID', $empleadoID);
+        $stmt->bindParam(':empleadoID', $empleadoID, PDO::PARAM_INT);
         $stmt->execute();
 
         $ordenes = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -31,7 +31,7 @@ if (isset($_GET['empleadoID'])) {
             echo '<thead><tr><th>ID de Orden</th><th>Fecha de Orden</th><th>Costo Mano de Obra</th><th>Costo Refacciones</th><th>Total Estimado</th><th>Anticipo</th><th>Atención</th><th>Servicio Solicitado</th><th>Tipo de Servicio</th><th>Fecha de Solicitud</th><th>Fecha de Cita</th><th>Estado</th><th>Detalles del Vehículo</th></tr></thead>';
             echo '<tbody>';
             foreach ($ordenes as $orden) {
-                $detalleVehiculo = htmlspecialchars($orden['marca']) . ' ' . htmlspecialchars($orden['modelo']) . ', Año: ' . htmlspecialchars($orden['anio']) . ', Color: ' . htmlspecialchars($orden['color']);
+                $detalleVehiculo = htmlspecialchars($orden['marca']) . ' ' . htmlspecialchars($orden['modelo']) . ', Año: ' . htmlspecialchars($orden['anio']);
                 
                 echo '<tr>';
                 echo '<td>' . htmlspecialchars($orden['ordenID']) . '</td>';
@@ -45,7 +45,7 @@ if (isset($_GET['empleadoID'])) {
                 echo '<td>' . htmlspecialchars($orden['tipo_servicio']) . '</td>';
                 echo '<td>' . htmlspecialchars($orden['fecha_solicitud']) . '</td>';
                 echo '<td>' . htmlspecialchars($orden['fecha_cita']) . '</td>';
-               
+        
                 echo '<td>' . htmlspecialchars($orden['estado']) . '</td>';
                 echo '<td>' . $detalleVehiculo . '</td>';
                 echo '</tr>';
@@ -55,10 +55,12 @@ if (isset($_GET['empleadoID'])) {
             echo '<p>No se encontraron detalles para las órdenes de este técnico.</p>';
         }
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage();
+        echo '<p>Error: ' . htmlspecialchars($e->getMessage()) . '</p>';
     }
 
     // Cerrar la conexión
     $pdo = null;
+} else {
+    echo '<p>Empleado no especificado.</p>';
 }
 ?>

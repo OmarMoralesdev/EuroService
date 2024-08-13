@@ -9,7 +9,7 @@ try {
     $semana_seleccionada = isset($_GET['semana']) ? $_GET['semana'] : date('Y-m-d');
 
     // Calcular las fechas de inicio y fin de la semana seleccionada
-    $inicio_semana = date('Y-m-d', strtotime('monday this week', strtotime($semana_seleccionada))); 
+    $inicio_semana = date('Y-m-d', strtotime('monday this week', strtotime($semana_seleccionada)));
     $fin_semana = date('Y-m-d', strtotime('sunday this week', strtotime($semana_seleccionada)));
 
     // Preparar la consulta SQL para obtener los datos del rendimiento de los técnicos
@@ -42,28 +42,44 @@ $pdo = null;
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte de Rendimiento</title>
-<!-- Datepicker CSS -->
-<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <!-- Datepicker CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <style>
+        .main {
+            align-items: center;
+        }
+
         .datepicker {
             background-color: #f7f7f7;
             border-radius: 5px;
             padding: 15px;
         }
+
         .modal-dialog {
             max-width: 90%;
         }
+
         .modal-body {
             overflow-y: auto;
+            height: auto;
+        }
+
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
         }
     </style>
 </head>
+
 <body>
     <div class="wrapper">
         <?php include '../includes/vabr.php'; ?>
@@ -72,18 +88,19 @@ $pdo = null;
                 <h2>REPORTE DE RENDIMIENTO</h2>
                 <div class="form-container">
                     <form method="GET" action="" class="mb-4">
-                        <div class="form-row">
-                            <div class="form-group col-md-6 offset-md-3">
+                        <div class="row">
+                            <div class="col-md-6 offset-md-3">
                                 <label for="semana">Selecciona la semana:</label>
-                                <div id="week-picker" class="input-group date">
-                                    <div class="form-control"><?php echo date('Y-m-d', strtotime($inicio_semana)) . ' - ' . date('Y-m-d', strtotime($fin_semana)); ?></div>
+                                <div id="week-picker" class="input-group">
                                     <input type="hidden" id="semana" name="semana" value="<?php echo htmlspecialchars($semana_seleccionada); ?>">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <div id="week-picker" class="input-group">
+                                        <div class="form-control"><?php echo date('Y-m-d', strtotime($inicio_semana)) . ' - ' . date('Y-m-d', strtotime($fin_semana)); ?></div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
-                        <br>
-                        <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Ver Reporte</button>
+                        <hr>
+                        <button type="submit" class="btn btn-dark d-grid gap-2 col-6 mx-auto">Ver Reporte</button>
                     </form>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered">
@@ -106,7 +123,7 @@ $pdo = null;
                                             <td><?php echo htmlspecialchars($fila['num_ordenes']); ?></td>
                                             <td>$<?php echo number_format($fila['total_estimado'], 2); ?></td>
                                             <td>
-                                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detallesOrdenModal" data-empleado-id="<?php echo $fila['empleadoID']; ?>" onclick="cargarDetallesOrden(<?php echo $fila['empleadoID']; ?>)">
+                                                <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detallesOrdenModal" data-empleado-id="<?php echo $fila['empleadoID']; ?>" onclick="cargarDetallesOrden(<?php echo $fila['empleadoID']; ?>)">
                                                     Ver Detalles
                                                 </button>
                                             </td>
@@ -126,14 +143,12 @@ $pdo = null;
     </div>
 
     <!-- Modal para mostrar los detalles de las órdenes -->
-    <div class="modal fade" id="detallesOrdenModal" tabindex="-1" role="dialog" aria-labelledby="detallesOrdenModalLabel" aria-hidden="true">
-        <div class="modal-dialog modal-lg" role="document">
+    <div class="modal fade" id="detallesOrdenModal" tabindex="-1" aria-labelledby="detallesOrdenModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg">
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="detallesOrdenModalLabel">Detalles de las Órdenes de Trabajo</h5>
-                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                        <span aria-hidden="true">&times;</span>
-                    </button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div id="detallesOrdenContent">
@@ -141,35 +156,40 @@ $pdo = null;
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
                 </div>
             </div>
         </div>
     </div>
 
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <script src="../assets/js/weekpicker.js"></script>
-    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 
+    <!-- jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <!-- Datepicker JS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+    <!-- Tu script personalizado -->
+    <script src="../assets/js/weekpicker.js"></script>
 
     <!-- Script para cargar detalles de la orden -->
     <script>
-    function cargarDetallesOrden(empleadoID) {
-        // Realiza una petición AJAX para obtener los detalles de las órdenes del técnico seleccionado
-        $.ajax({
-            url: 'obtener_detalles_orden.php', // Este archivo PHP debe devolver los detalles de las órdenes en formato HTML
-            method: 'GET',
-            data: { empleadoID: empleadoID },
-            success: function(response) {
-                // Carga los detalles en el modal
-                $('#detallesOrdenContent').html(response);
-            },
-            error: function() {
-                $('#detallesOrdenContent').html('<p>Error al cargar los detalles de las órdenes.</p>');
-            }
-        });
-    }
+        function cargarDetallesOrden(empleadoID) {
+            // Realiza una petición AJAX para obtener los detalles de las órdenes del técnico seleccionado
+            $.ajax({
+                url: 'obtener_detalles_orden.php', // Este archivo PHP debe devolver los detalles de las órdenes en formato HTML
+                method: 'GET',
+                data: {
+                    empleadoID: empleadoID
+                },
+                success: function(response) {
+                    // Carga los detalles en el modal
+                    $('#detallesOrdenContent').html(response);
+                },
+                error: function() {
+                    $('#detallesOrdenContent').html('<p>Error al cargar los detalles de las órdenes.</p>');
+                }
+            });
+        }
     </script>
 </body>
+
 </html>
