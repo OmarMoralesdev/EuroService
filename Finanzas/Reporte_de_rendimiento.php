@@ -9,8 +9,8 @@ try {
     $semana_seleccionada = isset($_GET['semana']) ? $_GET['semana'] : date('Y-m-d');
 
     // Calcular las fechas de inicio y fin de la semana seleccionada
-    $inicio_semana = date('Y-m-d', strtotime($semana_seleccionada . ' 0 days')); 
-    $fin_semana = date('Y-m-d', strtotime($inicio_semana . ' +6 days'));
+    $inicio_semana = date('Y-m-d', strtotime('monday this week', strtotime($semana_seleccionada))); 
+    $fin_semana = date('Y-m-d', strtotime('sunday this week', strtotime($semana_seleccionada)));
 
     // Preparar la consulta SQL para obtener los datos del rendimiento de los técnicos
     $sql = "SELECT ORDENES_TRABAJO.empleadoID, COUNT(*) AS num_ordenes, SUM(total_estimado) AS total_estimado, 
@@ -48,18 +48,21 @@ $pdo = null;
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Reporte de Rendimiento</title>
-
-    <!-- Datepicker CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+<!-- Datepicker CSS -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <style>
-    .datepicker {
-        background-color: #f7f7f7;
-        border-radius: 5px;
-        padding: 15px;
-    }
-
-</style>
-
+        .datepicker {
+            background-color: #f7f7f7;
+            border-radius: 5px;
+            padding: 15px;
+        }
+        .modal-dialog {
+            max-width: 90%;
+        }
+        .modal-body {
+            overflow-y: auto;
+        }
+    </style>
 </head>
 <body>
     <div class="wrapper">
@@ -84,11 +87,12 @@ $pdo = null;
                     </form>
                     <div class="table-responsive">
                         <table class="table table-striped table-bordered">
-                        <thead>
+                            <thead>
                                 <tr>
                                     <th>Nombre del Técnico</th>
                                     <th>Número de Órdenes</th>
                                     <th>Total Estimado</th>
+                                    <th>Detalles</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -101,11 +105,16 @@ $pdo = null;
                                             <td><?php echo htmlspecialchars($nombreCompleto); ?></td>
                                             <td><?php echo htmlspecialchars($fila['num_ordenes']); ?></td>
                                             <td>$<?php echo number_format($fila['total_estimado'], 2); ?></td>
+                                            <td>
+                                                <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#detallesOrdenModal" data-empleado-id="<?php echo $fila['empleadoID']; ?>" onclick="cargarDetallesOrden(<?php echo $fila['empleadoID']; ?>)">
+                                                    Ver Detalles
+                                                </button>
+                                            </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else : ?>
                                     <tr>
-                                        <td colspan="3">No se encontraron órdenes para el periodo especificado.</td>
+                                        <td colspan="4">No se encontraron órdenes para el periodo especificado.</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
@@ -116,9 +125,51 @@ $pdo = null;
         </div>
     </div>
 
+    <!-- Modal para mostrar los detalles de las órdenes -->
+    <div class="modal fade" id="detallesOrdenModal" tabindex="-1" role="dialog" aria-labelledby="detallesOrdenModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="detallesOrdenModalLabel">Detalles de las Órdenes de Trabajo</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="detallesOrdenContent">
+                        <!-- Los detalles de las órdenes se cargarán aquí -->
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
 
-    <!-- Datepicker JS -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="../assets/js/weekpicker.js"></script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+
+
+    <!-- Script para cargar detalles de la orden -->
+    <script>
+    function cargarDetallesOrden(empleadoID) {
+        // Realiza una petición AJAX para obtener los detalles de las órdenes del técnico seleccionado
+        $.ajax({
+            url: 'obtener_detalles_orden.php', // Este archivo PHP debe devolver los detalles de las órdenes en formato HTML
+            method: 'GET',
+            data: { empleadoID: empleadoID },
+            success: function(response) {
+                // Carga los detalles en el modal
+                $('#detallesOrdenContent').html(response);
+            },
+            error: function() {
+                $('#detallesOrdenContent').html('<p>Error al cargar los detalles de las órdenes.</p>');
+            }
+        });
+    }
+    </script>
 </body>
 </html>
