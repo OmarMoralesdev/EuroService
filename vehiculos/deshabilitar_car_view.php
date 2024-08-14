@@ -21,7 +21,7 @@
 </head>
 <body>
 <div class="wrapper">
-        <?php include '../includes/vabr.php'; ?>
+        <?php session_start(); include '../includes/vabr.php'; ?>
         <div class="main p-3">
         <div class="container">
             <h2 class="text-center">ELIMINAR VEHÍCULO</h2>
@@ -51,6 +51,7 @@
                                         unset($_SESSION['x']);
                                     }
                     if (isset($_SESSION['error'])) {
+                        echo '<br>';
                         echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
                         unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
                     }
