@@ -7,9 +7,11 @@ $pdo = $con->conectar();
 // Sanitización y validación de los inputs
 $vehiculoID = filter_input(INPUT_POST, 'vehiculoID', FILTER_SANITIZE_NUMBER_INT);
 $servicioSolicitado = filter_input(INPUT_POST, 'servicioSolicitado', FILTER_SANITIZE_STRING);
+$costo_mano_obra = filter_input(INPUT_POST, 'costoManoObra', FILTER_SANITIZE_STRING);
+$costo_refacciones = filter_input(INPUT_POST, 'costoRefacciones', FILTER_SANITIZE_STRING);
 $fechaCita = filter_input(INPUT_POST, 'fecha_cita', FILTER_SANITIZE_STRING);
 
-if (!$vehiculoID || !$servicioSolicitado || !$fechaCita) {
+if (!$vehiculoID || !$servicioSolicitado || !$fechaCita || !$costo_mano_obra || !$costo_refacciones) {
     $_SESSION['error'] = "Error: Todos los campos son obligatorios.";
     header("Location: seleccionar_cita_view.php");
     exit();
@@ -82,11 +84,19 @@ if ($countCitasVehiculo > 0) {
     exit();
 }
 
+   // Validación inicial para evitar números negativos
+   if ($costoManoObra < 0 || $costoRefacciones < 0) {
+    $_SESSION['error'] = "No puedes ingresar números negativos.";
+    header("Location: crear_orden_desde_cita.php?citaID=$citaID");
+    exit();
+}
+
+
 // Insertar la nueva cita en la base de datos
-$sqlInsert = "INSERT INTO CITAS (vehiculoID, servicio_solicitado, fecha_solicitud, fecha_cita, urgencia, estado)
-              VALUES (?, ?, ?, ?, ?, 'pendiente')";
+$sqlInsert = "INSERT INTO CITAS (vehiculoID, servicio_solicitado, fecha_solicitud, costo_mano_obra, costo_refacciones, fecha_cita, urgencia, estado)
+              VALUES (?, ?, ?, ?, ?, ?, ?, 'pendiente')";
 $queryInsert = $pdo->prepare($sqlInsert);
-$resultInsert = $queryInsert->execute([$vehiculoID, $servicioSolicitado, $fechaActual->format('Y-m-d H:i:s'), $fechaCita->format('Y-m-d H:i:s'), 'no']);
+$resultInsert = $queryInsert->execute([$vehiculoID, $servicioSolicitado, $costo_mano_obra, $costo_refacciones, $fechaActual->format('Y-m-d H:i:s'), $fechaCita->format('Y-m-d H:i:s'), 'no']);
 
 if ($resultInsert) {
     $_SESSION['bien'] = "Cita registrada correctamente.";

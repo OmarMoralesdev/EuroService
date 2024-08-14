@@ -7,8 +7,6 @@ $pdo = $con->conectar();
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $citaID = $_POST['citaID'];
-    $costoManoObra = $_POST['costoManoObra'];
-    $costoRefacciones = $_POST['costoRefacciones'];
     $empleado = $_POST['empleado'];
     $ubicacionID = $_POST['ubicacionID'];
     $anticipo = $_POST['anticipo'];
@@ -18,19 +16,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $fechaPago = date('Y-m-d H:i:s');
 
      // Validar que los campos requeridos no estén vacíos
-     if (empty($citaID) || empty($costoManoObra) || empty($costoRefacciones) || 
-     empty($empleado) || empty($ubicacionID) || empty($anticipo) || 
+     if (empty($empleado) || empty($ubicacionID) || empty($anticipo) || 
      empty($formaDePago) || empty($atencion)) {
      $_SESSION['error'] = "Todos los campos son obligatorios. Por favor, completa todos los campos.";
      header("Location: crear_orden_desde_cita.php?citaID=$citaID");
      exit();
  }
-    // Validación inicial para evitar números negativos
-    if ($costoManoObra < 0 || $costoRefacciones < 0) {
-        $_SESSION['error'] = "No puedes ingresar números negativos.";
-        header("Location: crear_orden_desde_cita.php?citaID=$citaID");
-        exit();
-    }
 
     try {
         // Iniciar la transacción
@@ -38,11 +29,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Insertar la nueva orden de trabajo
         $sqlOrden = "
-            INSERT INTO ORDENES_TRABAJO (fecha_orden, costo_mano_obra, costo_refacciones, atencion, citaID, empleadoID, ubicacionID) 
-            VALUES (?, ?, ?, ?, ?, ?, ?)
+            INSERT INTO ORDENES_TRABAJO (fecha_orden, atencion, citaID, empleadoID, ubicacionID) 
+            VALUES (?, ?, ?, ?, ?)
         ";
         $stmtOrden = $pdo->prepare($sqlOrden);
-        $stmtOrden->execute([$fechaOrden, $costoManoObra, $costoRefacciones, $atencion, $citaID, $empleado, $ubicacionID]);
+        $stmtOrden->execute([$fechaOrden, $atencion, $citaID, $empleado, $ubicacionID]);
         $ordenID = $pdo->lastInsertId();
         $tipoPago = "anticipo";
        

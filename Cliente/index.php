@@ -29,20 +29,23 @@ if (!function_exists('obtenerVehiculosCliente')) {
 }
 
 // Obtener citas pendientes del cliente
-if (!function_exists('obtenerCitasPendientes')) {
-    function obtenerCitasPendientes($pdo, $clienteID)
+if (!function_exists('obtenerCitasPendientes')) {function obtenerCitasPendientes($pdo, $clienteID)
     {
         $sql = "SELECT c.citaID, c.servicio_solicitado, c.fecha_cita, c.estado,
                     v.vin, v.marca, v.modelo, v.anio,
-                    DATEDIFF(c.fecha_cita, CURDATE()) AS dias_restantes
+                    DATEDIFF(c.fecha_cita, CURDATE()) AS dias_restantes,
+                    COALESCE(SUM(ot.total_estimado), 0) AS costo
                 FROM CITAS c
                 INNER JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
+                LEFT JOIN ORDENES_TRABAJO ot ON c.citaID = ot.citaID
                 WHERE v.clienteID = ? AND c.estado IN ('pendiente', 'en proceso')
+                GROUP BY c.citaID, c.servicio_solicitado, c.fecha_cita, c.estado,
+                         v.vin, v.marca, v.modelo, v.anio, dias_restantes
                 ORDER BY c.fecha_cita DESC";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$clienteID]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    }    
 }
 
 try {
@@ -52,6 +55,18 @@ try {
     echo "Error en la consulta: " . $e->getMessage();
     die();
 }
+
+
+if (!function_exists('obtenerDetallesClientepersona2')) {
+    function obtenerDetallesClientepersona2($pdo, $clienteID)
+    {
+        $sql = "SELECT nombre, apellido_paterno, apellido_materno FROM CLIENTES WHERE clienteID = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$clienteID]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -156,14 +171,21 @@ try {
                                     <?php echo htmlspecialchars($cita['marca'] . " " . $cita['modelo']); ?>
                                 </div>
                                 <div class="card-body">
-                                    <p><strong>Fecha de la Cita:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
-                                    <p><strong>Días Restantes:</strong> <?php echo htmlspecialchars($cita['dias_restantes']); ?> días</p>
-                                    <p><strong>Servicio Solicitado:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
-                                </div>
-                                <div class="card-footer text-center">
-                                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#citaModal<?php echo $cita['citaID']; ?>">
-                                        Ver Detalles
-                                    </button>
+                                            <p><strong>Folio:</strong> <?php echo htmlspecialchars($cita['citaID']); ?></p>
+                                            <p><strong>VIN:</strong> <?php echo htmlspecialchars($cita['vin']); ?></p>
+                                            <p><strong>Marca:</strong> <?php echo htmlspecialchars($cita['marca']); ?></p>
+                                            <p><strong>Modelo:</strong> <?php echo htmlspecialchars($cita['modelo']); ?></p>
+                                            <p><strong>Año:</strong> <?php echo htmlspecialchars($cita['anio']); ?></p> 
+                                            <HR>
+                                            <p>DETALLES</p>
+                                            <HR>
+                                            <p><strong>Días Restantes:</strong> <?php echo htmlspecialchars($cita['dias_restantes']); ?> días</p>
+                                            <p><strong>Estado:</strong> <?php echo htmlspecialchars($cita['estado']); ?></p>
+                                            <p><strong>Costo:</strong> <?php echo htmlspecialchars($cita['costo']); ?></p>
+                                            <p><strong>Servicio Solicitado:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
+                                            <p><strong>Fecha de la Cita:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
+
+
                                 </div>
                             </div>
 
@@ -221,8 +243,10 @@ try {
                                     <p><strong>Año:</strong> <?php echo htmlspecialchars($vehiculo['anio']); ?></p>
                                     <p><strong>Color:</strong> <?php echo htmlspecialchars($vehiculo['color']); ?></p>
                                     <p><strong>Kilometraje:</strong> <?php echo htmlspecialchars($vehiculo['kilometraje']); ?> km</p>
-                                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#vehiculoModal<?php echo $vehiculo['vehiculoID']; ?>">
-                                        HISTORIAL
+                                 <!-- Button trigger modal -->
+<button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#historial">
+  HISTORIAL
+</button>
                                 </div>
                             </div>
                         </div>
@@ -230,10 +254,62 @@ try {
                 <?php else : ?>
 
                     <p class="text-light">No tienes vehículos registrados.</p>
-                
-                
+                       
                     <?php endif; ?>
 
+                    <!-- Modal -->
+<div class="modal fade" id="historial" tabindex="-1" aria-labelledby="historialLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h1 class="modal-title fs-5" id="historialLabel">HISTORIAL</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <div class="card-columns">
+            <?php if (!empty($citas)) : ?>
+                <?php foreach ($citas as $cita) : ?>
+                    <div class="card" id="vehiculo-<?php echo $cita['citaID']; ?>">
+                        <div class="card-body">
+                            <h5 class="card-title"><?php echo htmlspecialchars($cita['marca'] . " " . $cita['modelo']); ?></h5>
+                            <p class="card-text"><strong>VIN:</strong> <?php echo htmlspecialchars($cita['vin']); ?></p>
+                            <p class="card-text"><strong>Servicio:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
+                            <p class="card-text"><strong>Fecha de la Cita:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
+                        </div>
+                    </div>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <p class="text-center">No hay citas registradas.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <!-- más largo el boton -->
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
+    </div>
+
+    <script>
+    function mostrarHistorial(citaID) {
+        // Obtén la tarjeta del vehículo seleccionado
+        var vehiculo = document.getElementById('vehiculo-' + citaID);
+        
+        // Extrae la información del vehículo
+        var marca = vehiculo.querySelector('.card-title').innerText;
+        var vin = vehiculo.querySelector('.card-text:nth-child(2)').innerText;
+        var servicio = vehiculo.querySelector('.card-text:nth-child(3)').innerText;
+        var fechaCita = vehiculo.querySelector('.card-text:nth-child(4)').innerText;
+
+        // Actualiza el contenido del modal de historial
+        var modalBody = document.querySelector('#historialModal .modal-body');
+        modalBody.innerHTML = `
+            <p><strong>Marca y Modelo:</strong> ${marca}</p>
+            <p><strong>${vin}</strong></p>
+            <p><strong>${servicio}</strong></p>
+            <p><strong>${fechaCita}</strong></p>
+        `;
+    }
+    </script>
+</div>
             </div>
         </section>
     </div>

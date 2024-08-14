@@ -26,14 +26,6 @@
                         <?php
                         $usuario = obtenerDetallesClientepersona($pdo, $clienteID);
                         if ($usuario) {
-                            echo "<a class='nav-link' href='./clienthistorial.php'>HISTORIAL</a>";
-                        }
-                        ?>
-                    </li>
-                    <li class="nav-item">
-                        <?php
-                        $usuario = obtenerDetallesClientepersona($pdo, $clienteID);
-                        if ($usuario) {
                             echo "<a class='nav-link' href='../includes/cerrarsesion.php'>CERRAR SESIÓN</a>";
                         } else {
                             echo "<a class='nav-link' href='../index.php'>INICIAR SESIÓN</a>";

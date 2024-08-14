@@ -85,12 +85,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session
                 <form action="crear_orden_desde_cita_back.php" method="post">
                     <input type="hidden" name="citaID" value="<?php echo htmlspecialchars($citaID, ENT_QUOTES, 'UTF-8'); ?>">
 
-                    <label for="costoManoObra">Costo Mano de Obra:</label>
-                    <input type="number" step="0.01" id="costoManoObra" name="costoManoObra" min="0" class="form-control" required>
-
-                    <label for="costoRefacciones">Costo de Refacciones:</label>
-                    <input type="number" step="0.01" id="costoRefacciones" name="costoRefacciones" min="0" class="form-control" required>
-
                     <label for="anticipo">Anticipo:</label>
                     <input type="number" step="0.01" min="0" name="anticipo" class="form-control" required>
                     <br>
