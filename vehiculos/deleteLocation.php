@@ -6,7 +6,7 @@ if (isset($_GET['id'])) {
     $ubicacionID = $_GET['id'];
 
     $conexion = new Database();
-   $pdo = $conexion->conectar();
+    $pdo = $conexion->conectar();
     $sqlUbicacion = "SELECT lugar AS ubi
     FROM UBICACIONES
     WHERE ubicacionID = $ubicacionID";
