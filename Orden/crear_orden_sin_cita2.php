@@ -4,7 +4,7 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Obtener datos del formulario
     $vehiculoID = $_POST['vehiculoID'];
-    $servicioSolicitado = $_POST['servicioSolicitado'];
+    $tipoServicio = "reparación"; // Cambio en el nombre del campo
     $costoManoObra = $_POST['costoManoObra'];
     $costoRefacciones = $_POST['costoRefacciones'];
     $empleadoID = $_POST['empleado'];
@@ -14,21 +14,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     // Fechas y estados predefinidos
     $fechaSolicitud = date('Y-m-d'); // Fecha actual
-    $fechaCita = date('Y-m-d'); // Fecha actual para la cita
+    $fechaCita = date('Y-m-d H:i:s'); // Fecha actual con hora para la cita
     $fechaOrden = $fechaCita;
     $urgencia = "si";
-    $atencion = "Muy Urgente";
+    $atencion = "muy urgente";
 
     if (
-        empty($vehiculoID) || empty($servicioSolicitado) || empty($costoManoObra) ||
+        empty($vehiculoID) || empty($tipoServicio) || empty($costoManoObra) ||
         empty($costoRefacciones) || empty($empleadoID) || empty($ubicacionID) ||
         empty($anticipo) || empty($formaDePago)
     ) {
-
         $_SESSION['error'] = "Todos los campos son requeridos.";
         header("Location: crear_orden_sin_cita.php");
         exit();
     }
+
     // Validación de datos
     if ($costoManoObra < 0 || $costoRefacciones < 0) {
         $_SESSION['error'] = "No puedes ingresar números negativos.";
@@ -55,16 +55,15 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $pdo->beginTransaction();
 
         // Insertar cita
-        $sqlCita = "INSERT INTO CITAS (vehiculoID, servicio_solicitado, fecha_solicitud, fecha_cita, urgencia, estado) VALUES (?, ?, ?, ?, ?, 'pendiente')";
+        $sqlCita = "INSERT INTO CITAS (vehiculoID, servicio_solicitado, tipo_servicio, fecha_solicitud, costo_mano_obra, costo_refacciones, fecha_cita, urgencia, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pendiente')";
         $stmtCita = $pdo->prepare($sqlCita);
-        $stmtCita->execute([$vehiculoID, $servicioSolicitado, $fechaSolicitud, $fechaCita, $urgencia]);
+        $stmtCita->execute([$vehiculoID, $tipoServicio, $tipoServicio, $fechaSolicitud, $costoManoObra, $costoRefacciones, $fechaCita, $urgencia]);
         $citaID = $pdo->lastInsertId();
 
-      
         // Insertar orden de trabajo
-        $sqlOrden = "INSERT INTO ORDENES_TRABAJO (fecha_orden, costo_mano_obra, costo_refacciones, atencion, citaID, empleadoID, ubicacionID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        $sqlOrden = "INSERT INTO ORDENES_TRABAJO (fecha_orden, anticipo, atencion, citaID, empleadoID, ubicacionID) VALUES (?, ?, ?, ?, ?, ?)";
         $stmtOrden = $pdo->prepare($sqlOrden);
-        $stmtOrden->execute([$fechaOrden, $costoManoObra, $costoRefacciones, $atencion, $citaID, $empleadoID, $ubicacionID]);
+        $stmtOrden->execute([$fechaOrden, $anticipo, $atencion, $citaID, $empleadoID, $ubicacionID]);
         $ordenID = $pdo->lastInsertId();
 
         $fechaPago = date('Y-m-d');
@@ -81,26 +80,27 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
                 ':tipoPago' => $tipoPago,
                 ':formaDePago' => $formaDePago,
             ]);
-        
-            
+
         } catch (PDOException $e) {
-            $_SESSION['error'] = ("Error al realizar el pago: " . $e->getMessage());
+            $_SESSION['error'] = "Error al realizar el pago: " . $e->getMessage();
+            $pdo->rollBack();
             header("Location: crear_orden_sin_cita.php");
             exit();
-          
-        }   
+        }
 
         $pdo->commit();
         $_SESSION['bien'] = "Cita y orden de trabajo creadas exitosamente.";
+        header("Location: crear_orden_sin_cita.php");
+        exit();
     } catch (PDOException $e) {
         $pdo->rollBack();
         $_SESSION['error'] = "Error al crear la cita y orden de trabajo: " . $e->getMessage();
+        header("Location: crear_orden_sin_cita.php");
+        exit();
     }
-
-    header("Location: crear_orden_sin_cita.php");
-    exit();
 } else {
     $_SESSION['error'] = "Método de solicitud no válido.";
     header("Location: crear_orden_sin_cita.php");
     exit();
 }
+?>
