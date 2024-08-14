@@ -210,7 +210,7 @@ echo "</div>";
                         <div class='mb-3'>
                             <label for='lugar' class='form-label'>Lugar</label>
                             <select class="form-select" name="lugaru" id="lugaru" required>
-                            <option value="Selecciona la ubicación">Selecciona la ubicación</option>
+                            <option value="">Selecciona la ubicación</option>
                             <?php
                     include '../class/database.php';
                     $conexion = new Database();

@@ -26,6 +26,9 @@
         <div class="container">
             <h2 class="text-center">ELIMINAR VEHÍCULO</h2>
                 <div class="form-container">
+                <div class="d-flex flex-column flex-md-row gap-2">
+    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#enableCarModal">HABILITAR VEHÍCULO</button>
+</div>
                 <?php
                     if (isset($_SESSION['error'])) {
                         echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
@@ -113,6 +116,46 @@ VEHICULOS.clienteID = CLIENTES.clienteID and VEHICULOS.activo = 'si'";
             </div>
         </div>
     </div>
+
+    <!-- Modal para habilitar un vehículo -->
+    <div class='modal fade' id='enableCarModal' tabindex='-1' aria-labelledby='enableLocationModalLabel' aria-hidden='true'>
+        <div class='modal-dialog'>
+            <div class='modal-content'>
+                <div class='modal-header'>
+                    <h5 class='modal-title' id='enableLocationModalLabel'>Habilitar Vehículo</h5>
+                    <button type='button' class='btn-close bg-dark' data-bs-dismiss='modal' aria-label='Close'></button>
+                </div>
+                <div class='modal-body'>
+                    <form action='enableCar.php' method='POST'>
+                        <div class='mb-3'>
+                            <label for='carro' class='form-label'>Vehículo</label>
+                            <select class="form-select" name="auto" id="auto" required>
+                            <option value="">Selecciona el vehículo</option>
+                            <?php
+                    include '../class/database.php';
+                    $conexion = new Database();
+                    $conexion->conectar();
+                    $consulta = "SELECT CONCAT(VEHICULOS.marca,' ',VEHICULOS.modelo,' ',VEHICULOS.anio,' ',VEHICULOS.color) AS VEHICULO,
+                                 vehiculoID
+                                 FROM VEHICULOS
+                                 WHERE activo = 'no'";
+                    $inhabilitados = $conexion->seleccionar($consulta);
+                    foreach($inhabilitados as $inhabilitado) {
+                        echo "<option value='".$inhabilitado->vehiculoID."'>".$inhabilitado->VEHICULO."</option>";
+                    }
+                    ?>
+                            </select>
+                        </div>
+                        <div class='modal-footer'>
+                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                            <button type='submit' class='btn btn-dark'>Guardar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script>
         $(document).ready(function() {
             if ($('#staticBackdrop').length) {
