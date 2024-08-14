@@ -26,6 +26,10 @@
         <div class="container">
             <h2 class="text-center">UBICACIONES DE VEHÍCULOS</h2>
                 <div class="form-container">
+                <div class="d-flex flex-column flex-md-row gap-2">
+    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addLocationModal">AÑADIR NUEVA UBICACIÓN</button>
+    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#enableLocationModal">HABILITAR UBICACIÓN</button>
+</div>
                 <?php
                 if (isset($_SESSION['r'])) {
                     echo "
@@ -248,10 +252,7 @@ echo "</div>";
                 $conexion->desconectar();
                 ?>
             </div>
-            <div class="d-flex flex-column flex-md-row gap-2">
-    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addLocationModal">AÑADIR NUEVA UBICACIÓN</button>
-    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#enableLocationModal">HABILITAR UBICACIÓN</button>
-</div></div>
+        </div>
     </div>
 
     <!-- Modal para añadir una nueva ubicación -->
