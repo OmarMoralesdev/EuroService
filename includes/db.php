@@ -59,7 +59,8 @@ function listarCitasPendientes($pdo) {
     return $stmt->fetchAll(PDO::FETCH_ASSOC);
 }
 function listarCitasPendientes2($pdo) {
-    $sql = "SELECT CITAS.citaID, CITAS.vehiculoID, CITAS.servicio_solicitado, VEHICULOS.marca, VEHICULOS.modelo, VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
+    $sql = "SELECT CITAS.citaID, CITAS.vehiculoID, CITAS.servicio_solicitado, VEHICULOS.marca, VEHICULOS.modelo, 
+    VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno, ROUND(SUM(CITAS.costo_mano_obra + CITAS.costo_refacciones) / 2, 2) as costo_minimo
             FROM CITAS 
             JOIN VEHICULOS ON CITAS.vehiculoID = VEHICULOS.vehiculoID
             JOIN CLIENTES ON VEHICULOS.clienteID = CLIENTES.clienteID
