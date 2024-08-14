@@ -31,13 +31,14 @@ if (!function_exists('obtenerVehiculosCliente')) {
 // Obtener citas pendientes del cliente
 if (!function_exists('obtenerCitasPendientes')) {function obtenerCitasPendientes($pdo, $clienteID)
     {
-        $sql = "SELECT c.citaID, c.servicio_solicitado, c.fecha_cita, c.estado,
-                    v.vin, v.marca, v.modelo, v.anio,
+        $sql = "SELECT c.citaID, c.servicio_solicitado, c.fecha_cita, c.estado, c.tipo_servicio, e.alias,
+                    v.vin, v.marca, v.modelo, v.anio,  
                     DATEDIFF(c.fecha_cita, CURDATE()) AS dias_restantes,
                     COALESCE(SUM(c.total_estimado), 0) AS costo
                 FROM CITAS c
                 INNER JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
                 LEFT JOIN ORDENES_TRABAJO ot ON c.citaID = ot.citaID
+                LEFT JOIN EMPLEADOS e ON ot.empleadoID = e.empleadoID 
                 WHERE v.clienteID = ? AND c.estado IN ('pendiente', 'en proceso')
                 GROUP BY c.citaID, c.servicio_solicitado, c.fecha_cita, c.estado,
                          v.vin, v.marca, v.modelo, v.anio, dias_restantes
@@ -135,6 +136,10 @@ if (!function_exists('obtenerDetallesClientepersona2')) {
     width: 100%;
     height: 100%;
 }
+.modal-body{
+    text-align: left;
+    color: black;
+}
 
     </style>
 </head>
@@ -221,6 +226,7 @@ if (!function_exists('obtenerDetallesClientepersona2')) {
                 <?php endif; ?>
             </div>
         </section>
+        <hr>
 
         <section id="v" class="content text-center">
         <?php
@@ -243,7 +249,7 @@ if (!function_exists('obtenerDetallesClientepersona2')) {
                                     <p><strong>Año:</strong> <?php echo htmlspecialchars($vehiculo['anio']); ?></p>
                                     <p><strong>Color:</strong> <?php echo htmlspecialchars($vehiculo['color']); ?></p>
                                     <p><strong>Kilometraje:</strong> <?php echo htmlspecialchars($vehiculo['kilometraje']); ?> km</p>
-                                 <!-- Button trigger modal -->
+                                 <!-- boton para activar modal -->
 <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#historial">
   HISTORIAL
 </button>
@@ -271,12 +277,17 @@ if (!function_exists('obtenerDetallesClientepersona2')) {
                 <?php foreach ($citas as $cita) : ?>
                     <div class="card" id="vehiculo-<?php echo $cita['citaID']; ?>">
                         <div class="card-body">
-                            <h5 class="card-title"><?php echo htmlspecialchars($cita['marca'] . " " . $cita['modelo']); ?></h5>
+                            <h3 class="card-title"><?php echo htmlspecialchars($cita['marca'] . " " . $cita['modelo']); ?></h3>
+                            <hr>
                             <p class="card-text"><strong>VIN:</strong> <?php echo htmlspecialchars($cita['vin']); ?></p>
-                            <p class="card-text"><strong>Servicio:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
-                            <p class="card-text"><strong>Fecha de la Cita:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
+                            <p class="card-text"><strong>TIPO:</strong> <?php echo htmlspecialchars($cita['tipo_servicio']); ?></p>
+                            <p class="card-text"><strong>SERVICIO:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
+                            <p class="card-text"><strong>COSTO:</strong> <?php echo htmlspecialchars($cita['costo']); ?></p>
+                            <p class="card-text"><strong>REPONSABLE:</strong> <?php echo htmlspecialchars($cita['alias']); ?></p>
+                            <p class="card-text"><strong>FECHA DE LA CITA:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
                         </div>
                     </div>
+                    <hr>
                 <?php endforeach; ?>
             <?php else : ?>
                 <p class="text-center">No hay citas registradas.</p>
