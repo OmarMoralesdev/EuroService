@@ -4,6 +4,20 @@ require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
 
+function obtenerCostoMinimoPorCliente($pdo, $clienteID) {
+    $sql = "SELECT ROUND(SUM(CITAS.costo_mano_obra + CITAS.costo_refacciones) / 2, 2) as costo_minimo
+            FROM CITAS 
+            JOIN VEHICULOS ON CITAS.vehiculoID = VEHICULOS.vehiculoID
+            WHERE VEHICULOS.clienteID = :clienteID
+            AND CITAS.estado = 'pendiente'
+            AND (DATE(CITAS.fecha_cita) <= CURDATE())";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':clienteID', $clienteID, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result ? $result['costo_minimo'] : 0; // Retorna 0 si no hay resultados
+}
+
 function obtenerEmpleadosDisponibles($pdo) {
     $sql = "SELECT EMPLEADOS.empleadoID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno 
             FROM EMPLEADOS 
@@ -20,25 +34,34 @@ function obtenerUbicacionesActivas($pdo) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['citaID'])) {
-    // Almacenar la citaID en la sesión cuando se recibe por POST
     $_SESSION['citaID'] = $_POST['citaID'];
 }
 
 $citaID = isset($_SESSION['citaID']) ? $_SESSION['citaID'] : null;
 
 if (!$citaID) {
-    // Si no hay citaID en la sesión, mostrar un mensaje de error o redirigir
     $_SESSION['error'] = 'No se ha seleccionado una cita válida.';
-    header('Location: seleccionar_cita.php'); // Cambia esto a la página de selección de cita
+    header('Location: seleccionar_cita.php');
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session'])) {
-    // Eliminar la variable de sesión 'citaID'
-    unset($_SESSION['citaID']);
-    exit(); // Terminar la ejecución para no procesar el resto del script
-}
+// Obtener el clienteID basado en la citaID
+$sql = "SELECT VEHICULOS.clienteID
+        FROM CITAS
+        JOIN VEHICULOS ON CITAS.vehiculoID = VEHICULOS.vehiculoID
+        WHERE CITAS.citaID = :citaID";
+$stmt = $pdo->prepare($sql);
+$stmt->bindParam(':citaID', $citaID, PDO::PARAM_INT);
+$stmt->execute();
+$cliente = $stmt->fetch(PDO::FETCH_ASSOC);
+$clienteID = $cliente ? $cliente['clienteID'] : null;
 
+$costoMinimo = $clienteID ? obtenerCostoMinimoPorCliente($pdo, $clienteID) : 0;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session'])) {
+    unset($_SESSION['citaID']);
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -86,7 +109,8 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session
                     <input type="hidden" name="citaID" value="<?php echo htmlspecialchars($citaID, ENT_QUOTES, 'UTF-8'); ?>">
 
                     <label for="anticipo">Anticipo:</label>
-                    <input type="number" step="0.01" min="0" name="anticipo" class="form-control" required>
+                    <input type="number" step="0.01" min="0" name="anticipo" class="form-control" value="<?php echo htmlspecialchars($costoMinimo, ENT_QUOTES, 'UTF-8'); ?>" required>
+                    <small class="form-text text-muted">cantidad minima de anticipo. <strong><?php echo htmlspecialchars($costoMinimo, ENT_QUOTES, 'UTF-8'); ?></strong></small><br>
                     <br>
 
                     <label for="atencion" class="form-label">Atencion:</label>
@@ -130,29 +154,22 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session
     </div>
 </div>
 
-
 <script>
 document.addEventListener('DOMContentLoaded', function() {
     function validateNonNegative(event) {
         var value = parseFloat(event.target.value);
-        if (value < 0) {
+        if (isNaN(value) || value < 0) {
             event.target.value = '';
-            alert('El valor no puede ser negativo.');
         }
     }
 
-    document.getElementById('costoManoObra').addEventListener('input', validateNonNegative);
-    document.getElementById('costoRefacciones').addEventListener('input', validateNonNegative);
-    document.getElementById('anticipo').addEventListener('input', validateNonNegative);
+    document.querySelectorAll('input[type="number"]').forEach(function(input) {
+        input.addEventListener('blur', validateNonNegative);
+    });
 });
 </script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        if ($('#staticBackdrop').length) {
-            $('#staticBackdrop').modal('show');
-        }
-    });
-</script>
 
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gD9nA2j6keFtn5L1mF7r2F06J5yVmnY7HAs+ptW4FwwkFJEJ9s" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-9gTjAs8a20dmtQ5k0z5b8LE5J4OoWohUE5lO6k29p5dPm5X0P9V19Vsc8SwGm9IFz" crossorigin="anonymous"></script>
 </body>
 </html>

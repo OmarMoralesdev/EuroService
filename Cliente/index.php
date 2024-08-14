@@ -34,7 +34,7 @@ if (!function_exists('obtenerCitasPendientes')) {function obtenerCitasPendientes
         $sql = "SELECT c.citaID, c.servicio_solicitado, c.fecha_cita, c.estado,
                     v.vin, v.marca, v.modelo, v.anio,
                     DATEDIFF(c.fecha_cita, CURDATE()) AS dias_restantes,
-                    COALESCE(SUM(ot.total_estimado), 0) AS costo
+                    COALESCE(SUM(c.total_estimado), 0) AS costo
                 FROM CITAS c
                 INNER JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
                 LEFT JOIN ORDENES_TRABAJO ot ON c.citaID = ot.citaID
@@ -292,7 +292,6 @@ if (!function_exists('obtenerDetallesClientepersona2')) {
     function mostrarHistorial(citaID) {
         // Obtén la tarjeta del vehículo seleccionado
         var vehiculo = document.getElementById('vehiculo-' + citaID);
-        
         // Extrae la información del vehículo
         var marca = vehiculo.querySelector('.card-title').innerText;
         var vin = vehiculo.querySelector('.card-text:nth-child(2)').innerText;
