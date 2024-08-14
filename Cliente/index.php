@@ -231,55 +231,90 @@ try {
 
                     <p class="text-light">No tienes vehículos registrados.</p>
                 
+                <?php endif; ?>
                 
-                    <?php endif; ?>
-
-            </div>
-        </section>
-    </div>
-    <!-- Modal de Ayuda -->
-    <div class="help-modal" id="helpModal">
-        <div class="help-modal-content">
-            <span class="close" id="closeHelpModal">&times;</span>
-            <h5>¿Cómo se usa?</h5>
-            <HR>
-            
-
-        <P >MIS VEHICULOS  <br>
-            En esta ventana se mostrarán todos tus vehículos actualmente registados en el sistema de EURO SERVICE 
-            <HR>
-            CITAS PENDIENTES <br>
-            En esta ventana se mostrarán todas tus citas que tienes pendientes la cual cuenta con tu vehículo, temporizador indicando  el tiempo restante y el servicio que se realizará para el día de tu cita <HR>
-            HISTORIAL <br>
-            En esta ventana se mostrarán todas tus citas que has tenido en el pasado, mostrando la fecha de la cita, el vehículo que se utilizó, el servicio que se realizó y el estado de la cita.
-            <HR>
-
-
-        </P>
-
-           </div>
-    </div>
-    <!-- Ícono de Ayuda -->
-    <div class="help-icon" id="helpIcon">
-        ?
-    </div>
-
-    <script>
-        // Funcionalidad del modal de ayuda
-        document.getElementById('helpIcon').addEventListener('click', function() {
-            document.getElementById('helpModal').style.display = 'flex';
-        });
-
-        document.getElementById('closeHelpModal').addEventListener('click', function() {
-            document.getElementById('helpModal').style.display = 'none';
-        });
-
-        window.addEventListener('click', function(event) {
-            if (event.target === document.getElementById('helpModal')) {
-                document.getElementById('helpModal').style.display = 'none';
-            }
-        });
-    </script>
+                </div>
+                </section>
+                </div>
+                
+                <!-- Sección de Filtros -->
+                <div class="filter-section">
+                    <form id="filterForm">
+                        <label for="vehicleFilter">Filtrar por vehículo:</label>
+                        <input type="text" id="vehicleFilter" name="vehicleFilter" placeholder="Nombre del vehículo">
+                
+                        <label for="dateFilter">Filtrar por fecha:</label>
+                        <input type="date" id="dateFilter" name="dateFilter">
+                
+                        <button type="button" id="applyFilters">Aplicar Filtros</button>
+                    </form>
+                </div>
+                
+                <!-- Modal de Ayuda -->
+                <div class="help-modal" id="helpModal">
+                    <div class="help-modal-content">
+                        <span class="close" id="closeHelpModal">&times;</span>
+                        <h5>¿Cómo se usa?</h5>
+                        <HR>
+                        <P>MIS VEHICULOS<br>
+                            En esta ventana se mostrarán todos tus vehículos actualmente registados en el sistema de EURO SERVICE 
+                            <HR>
+                            CITAS PENDIENTES<br>
+                            En esta ventana se mostrarán todas tus citas que tienes pendientes la cual cuenta con tu vehículo, temporizador indicando el tiempo restante y el servicio que se realizará para el día de tu cita
+                            <HR>
+                            HISTORIAL<br>
+                            En esta ventana se mostrarán todas tus citas que has tenido en el pasado, mostrando la fecha de la cita, el vehículo que se utilizó, el servicio que se realizó y el estado de la cita.
+                            <HR>
+                        </P>
+                    </div>
+                </div>
+                
+                <!-- Ícono de Ayuda -->
+                <div class="help-icon" id="helpIcon">?</div>
+                
+                <script>
+                    // Funcionalidad del modal de ayuda
+                    document.getElementById('helpIcon').addEventListener('click', function() {
+                        document.getElementById('helpModal').style.display = 'flex';
+                    });
+                
+                    document.getElementById('closeHelpModal').addEventListener('click', function() {
+                        document.getElementById('helpModal').style.display = 'none';
+                    });
+                
+                    window.addEventListener('click', function(event) {
+                        if (event.target == document.getElementById('helpModal')) {
+                            document.getElementById('helpModal').style.display = 'none';
+                        }
+                    });
+                
+                    // Funcionalidad de los filtros
+                    document.getElementById('applyFilters').addEventListener('click', function() {
+                        const vehicleFilter = document.getElementById('vehicleFilter').value.toLowerCase();
+                        const dateFilter = document.getElementById('dateFilter').value;
+                
+                        const vehicles = document.querySelectorAll('.vehicle-item'); // Asumiendo que cada vehículo tiene la clase 'vehicle-item'
+                        const appointments = document.querySelectorAll('.appointment-item'); // Asumiendo que cada cita tiene la clase 'appointment-item'
+                
+                        vehicles.forEach(vehicle => {
+                            const vehicleName = vehicle.querySelector('.vehicle-name').textContent.toLowerCase(); // Asumiendo que el nombre del vehículo está en un elemento con la clase 'vehicle-name'
+                            if (vehicleName.includes(vehicleFilter)) {
+                                vehicle.style.display = '';
+                            } else {
+                                vehicle.style.display = 'none';
+                            }
+                        });
+                
+                        appointments.forEach(appointment => {
+                            const appointmentDate = appointment.querySelector('.appointment-date').textContent; // Asumiendo que la fecha de la cita está en un elemento con la clase 'appointment-date'
+                            if (dateFilter === '' || appointmentDate === dateFilter) {
+                                appointment.style.display = '';
+                            } else {
+                                appointment.style.display = 'none';
+                            }
+                        });
+                    });
+                </script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>

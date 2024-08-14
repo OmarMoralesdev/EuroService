@@ -1,17 +1,3 @@
-<?php
-if (session_status() == PHP_SESSION_NONE) {
-    session_start();
-}
-
-// Verificar si el usuario ha iniciado sesión y tiene un rol administrativo
-if (!isset($_SESSION['username']) || !isset($_SESSION['empleadoID']) || $_SESSION['role'] != 2) {
-    // Redirige a la página de inicio de sesión si no es administrador
-    $_SESSION['error'] = 'Acceso no autorizado. Solo los administradores pueden acceder a esta página.';
-    header('Location: ../Login/index.php');
-    exit();
-}
-
-?>
 
 
 <link href="https://cdn.lineicons.com/4.0/lineicons.css" rel="stylesheet" />

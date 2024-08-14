@@ -17,6 +17,7 @@ session_start();
         .is-invalid {
             border-color: #dc3545;
         }
+
         .invalid-feedback {
             display: block;
         }
@@ -68,26 +69,35 @@ session_start();
                             <label for="vehiculoSeleccionado" class="form-label">Seleccione un vehículo:</label>
                             <input type="text" class="form-control" id="vehiculoSeleccionado" readonly>
                             <ul id="lista-vehiculos" class="list-group lista"></ul>
-                            <input type="hidden" id="vehiculoID" name="vehiculoID">
+                            <input type="hidden" id="vehiculoID" name="vehiculoID" value="<?php echo isset($_SESSION['formData']['vehiculoID']) ? $_SESSION['formData']['vehiculoID'] : ''; ?>">
                             <div class="invalid-feedback">Debes seleccionar un vehículo.</div>
                         </div>
+
+                        <div class="mb-3">
+                            <label for="diagnostico" class="form-label">Ingresar Diagnostico:</label>
+                            <input type="text" class="form-control" id="diagnostico" name="diagnostico" value="<?php echo isset($_SESSION['formData']['diagnostico']) ? $_SESSION['formData']['diagnostico'] : ''; ?>" required>
+                            <div class="invalid-feedback">Debes ingresar el diagnostico.</div>
+                        </div>
+
                         <div class="mb-3">
                             <label for="empleado" class="form-label">Empleado:</label>
                             <select name="empleadoID" id="empleado" class="form-control" required>
                                 <?php
+                                // Función para obtener empleados disponibles
                                 function obtenerEmpleadosDisponibles($pdo)
                                 {
                                     $sql = "SELECT EMPLEADOS.empleadoID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno 
-                                            FROM EMPLEADOS 
-                                            JOIN PERSONAS ON EMPLEADOS.personaID = PERSONAS.personaID
-                                            WHERE EMPLEADOS.tipo != 'administrativo'";
+                        FROM EMPLEADOS 
+                        JOIN PERSONAS ON EMPLEADOS.personaID = PERSONAS.personaID
+                        WHERE EMPLEADOS.tipo != 'administrativo'";
                                     $stmt = $pdo->query($sql);
                                     return $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 }
                                 $empleados = obtenerEmpleadosDisponibles($pdo);
                                 foreach ($empleados as $empleado) {
                                     $nombreCompleto = "{$empleado['nombre']} {$empleado['apellido_paterno']} {$empleado['apellido_materno']}";
-                                    echo "<option value=\"{$empleado['empleadoID']}\">{$nombreCompleto}</option>";
+                                    $selected = (isset($_SESSION['formData']['empleadoID']) && $_SESSION['formData']['empleadoID'] == $empleado['empleadoID']) ? 'selected' : '';
+                                    echo "<option value=\"{$empleado['empleadoID']}\" $selected>{$nombreCompleto}</option>";
                                 }
                                 ?>
                             </select>
@@ -97,20 +107,17 @@ session_start();
                             <label for="ubicacionID" class="form-label">Ubicación de Vehículo:</label>
                             <select name="ubicacionID" id="ubicacionID" class="form-control" required>
                                 <?php
-                                // Función para obtener las ubicaciones activas en la base de datos
+                                // Función para obtener ubicaciones activas
                                 function obtenerUbicacionesActivas($pdo)
                                 {
-                                    // Seleccionar todas las ubicaciones activas
                                     $sql = "SELECT * FROM UBICACIONES WHERE activo = 'si';";
                                     $stmt = $pdo->query($sql);
-                                    // Retornar todas las ubicaciones activas en un array asociativo
                                     return $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 }
-                                // Obtener todas las ubicaciones activas en la base de datos y mostrarlas en un select HTML
                                 $ubicaciones = obtenerUbicacionesActivas($pdo);
                                 foreach ($ubicaciones as $ubicacion) {
-                                    // Mostrar cada ubicación en un option del select HTML 
-                                    echo "<option value=\"{$ubicacion['ubicacionID']}\">{$ubicacion['lugar']}</option>";
+                                    $selected = (isset($_SESSION['formData']['ubicacionID']) && $_SESSION['formData']['ubicacionID'] == $ubicacion['ubicacionID']) ? 'selected' : '';
+                                    echo "<option value=\"{$ubicacion['ubicacionID']}\" $selected>{$ubicacion['lugar']}</option>";
                                 }
                                 ?>
                             </select>
@@ -119,9 +126,9 @@ session_start();
                         <div class="mb-3">
                             <label for="formadepago" class="form-label">Forma de Pago:</label>
                             <select name="formadepago" id="formadepago" class="form-control" required>
-                                <option value="efectivo">Efectivo</option>
-                                <option value="tarjeta">Tarjeta</option>
-                                <option value="transferencia">Transferencia</option>
+                                <option value="efectivo" <?php echo (isset($_SESSION['formData']['formadepago']) && $_SESSION['formData']['formadepago'] == 'efectivo') ? 'selected' : ''; ?>>Efectivo</option>
+                                <option value="tarjeta" <?php echo (isset($_SESSION['formData']['formadepago']) && $_SESSION['formData']['formadepago'] == 'tarjeta') ? 'selected' : ''; ?>>Tarjeta</option>
+                                <option value="transferencia" <?php echo (isset($_SESSION['formData']['formadepago']) && $_SESSION['formData']['formadepago'] == 'transferencia') ? 'selected' : ''; ?>>Transferencia</option>
                             </select>
                             <div class="invalid-feedback">Debes seleccionar una forma de pago.</div>
                         </div>
@@ -149,12 +156,12 @@ session_start();
         });
     </script>
     <script>
-    $(document).ready(function() {
-        if ($('#staticBackdrop').length) {
-            $('#staticBackdrop').modal('show');
-        }
-    });
-</script>
+        $(document).ready(function() {
+            if ($('#staticBackdrop').length) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
+    </script>
 
 </body>
 
