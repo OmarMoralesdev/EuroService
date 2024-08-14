@@ -10,12 +10,47 @@ $ubicacionID = isset($_POST['ubicacionID']) ? intval($_POST['ubicacionID']) : nu
 $formaDePago = isset($_POST['formadepago']) ? trim($_POST['formadepago']) : '';
 $diagnostico = isset($_POST['diagnostico']) ? trim($_POST['diagnostico']) : '';
 $vehiculoID = filter_input(INPUT_POST, 'vehiculoID', FILTER_SANITIZE_NUMBER_INT);
+
+// Consultar el nombre del empleado
+$sqlEmpleado = "SELECT EMPLEADOS.empleadoID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno 
+FROM EMPLEADOS 
+JOIN PERSONAS ON EMPLEADOS.personaID = PERSONAS.personaID
+WHERE empleadoID = ?";
+$stmtEmpleado = $pdo->prepare($sqlEmpleado);
+$stmtEmpleado->execute([$empleadoID]);
+$empleado = $stmtEmpleado->fetch(PDO::FETCH_ASSOC);
+$empleadoNombre = $empleado ? $empleado['nombre'] : 'Desconocido';
+
+// Consultar el nombre de la ubicación
+$sqlUbicacion = "SELECT lugar FROM UBICACIONES WHERE ubicacionID = ?";
+$stmtUbicacion = $pdo->prepare($sqlUbicacion);
+$stmtUbicacion->execute([$ubicacionID]);
+$ubicacion = $stmtUbicacion->fetch(PDO::FETCH_ASSOC);
+$ubicacionNombre = $ubicacion ? $ubicacion['nombre'] : 'Desconocido';
+
+// Consultar el vehículo
+$sqlVehiculo = "SELECT marca, modelo, anio FROM VEHICULOS WHERE vehiculoID = ?";
+$stmtVehiculo = $pdo->prepare($sqlVehiculo);
+$stmtVehiculo->execute([$vehiculoID]);
+$vehiculo = $stmtVehiculo->fetch(PDO::FETCH_ASSOC);
+if (!$vehiculo) {
+    $_SESSION['error'] = 'Error: El vehículo no está registrado en la base de datos.';
+    header("Location: inspeccion_view.php");
+    exit();
+}
+
+// Guardar datos en sesión para repoblar el formulario en caso de error
 $_SESSION['formData'] = [
-    'vehiculoID' => '1',
+    'vehiculoID' => $vehiculoID,
     'diagnostico' => $diagnostico,
-    'empleadoID' => '2',
-    'ubicacionID' => '3',
-    'formadepago' => 'tarjeta'
+    'empleadoID' => $empleadoID,
+    'ubicacionID' => $ubicacionID,
+    'formadepago' => $formaDePago,
+    'vehiculoMarca' => $vehiculo['marca'],
+    'vehiculoModelo' => $vehiculo['modelo'],
+    'vehiculoAnio' => $vehiculo['anio'],
+    'empleadoNombre' => $empleadoNombre,
+    'ubicacionNombre' => $ubicacionNombre
 ];
 
 if (!$empleadoID || !$ubicacionID || !$formaDePago || !$diagnostico || !$vehiculoID) {
@@ -42,19 +77,19 @@ try {
     }
 
     // Insertar cita
-// Insertar cita
-$sqlCita = "INSERT INTO CITAS (vehiculoID, servicio_solicitado, tipo_servicio, fecha_solicitud, fecha_cita, urgencia, estado) 
+    // Insertar cita
+    $sqlCita = "INSERT INTO CITAS (vehiculoID, servicio_solicitado, tipo_servicio, fecha_solicitud, fecha_cita, urgencia, estado) 
             VALUES (?, ?, ?, ?, ?, ?, 'pendiente')";
-$stmtCita = $pdo->prepare($sqlCita);
-$stmtCita->execute([
-    $vehiculoID,                 
-    $diagnostico,                // Servicio solicitado
-    'inspección',                // Tipo de servicio (inspección, reparación, mantenimiento)
-    date('Y-m-d'),               // Fecha de solicitud (solo la fecha actual)
-    date('Y-m-d H:i:s'),         // Fecha de la cita (fecha y hora actuales)
-    'si'                         // Urgencia
-]);
-$citaID = $pdo->lastInsertId();  // Obtener el ID de la cita recién insertada
+    $stmtCita = $pdo->prepare($sqlCita);
+    $stmtCita->execute([
+        $vehiculoID,
+        $diagnostico,                // Servicio solicitado
+        'inspección',                // Tipo de servicio (inspección, reparación, mantenimiento)
+        date('Y-m-d'),               // Fecha de solicitud (solo la fecha actual)
+        date('Y-m-d H:i:s'),         // Fecha de la cita (fecha y hora actuales)
+        'si'                         // Urgencia
+    ]);
+    $citaID = $pdo->lastInsertId();  // Obtener el ID de la cita recién insertada
 
     // Insertar orden de trabajo
     $sqlOrden = "INSERT INTO ORDENES_TRABAJO (fecha_orden, costo_mano_obra, costo_refacciones, atencion, citaID, empleadoID, ubicacionID) VALUES (?, ?, ?, ?, ?, ?, ?)";
@@ -104,7 +139,7 @@ $citaID = $pdo->lastInsertId();  // Obtener el ID de la cita recién insertada
     $sqlActualizarOrden = "UPDATE ORDENES_TRABAJO SET ubicacionID = ? WHERE ordenID = ?";
     $stmtActualizarOrden = $pdo->prepare($sqlActualizarOrden);
     $stmtActualizarOrden->execute([$nuevaUbicacionID, $ordenID]);
-
+unset($_SESSION['formData']);
     $_SESSION['bien'] = "Ejecutado exitosamente.";
     header("Location: inspeccion_view.php");
     exit();
@@ -115,4 +150,3 @@ $citaID = $pdo->lastInsertId();  // Obtener el ID de la cita recién insertada
     header("Location: inspeccion_view.php");
     exit();
 }
-?>
