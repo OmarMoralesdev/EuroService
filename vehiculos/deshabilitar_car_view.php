@@ -24,9 +24,36 @@
         <?php include '../includes/vabr.php'; ?>
         <div class="main p-3">
         <div class="container">
-            <h2 class="text-center">ELIMINAR VEHÍCULOS</h2>
+            <h2 class="text-center">ELIMINAR VEHÍCULO</h2>
                 <div class="form-container">
+                <?php
+                    if (isset($_SESSION['error'])) {
+                        echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
+                        unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
+                    }
+                    if (isset($_SESSION['bien'])) {
+                        echo "
+                        <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                            <div class='modal-dialog'>
+                                <div class='modal-content'>
+                                    <div class='modal-header'>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Vehículo Inhabilitado!</h1>
+                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                    </div>
+                                    <div class='modal-body'>
+                                        <div class='alert alert-success' role='alert'>{$_SESSION['bien']}</div>
+                                    </div>
+                                    <div class='modal-footer'>
+                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>";
+                    }
+                    unset($_SESSION['bien']);
+                    ?>
             <div class="row mt-3">
+            
                 <?php
                 include '../includes/db.php';
                 $conexion = new Database();
@@ -86,76 +113,13 @@ VEHICULOS.clienteID = CLIENTES.clienteID and VEHICULOS.activo = 'si'";
             </div>
         </div>
     </div>
-
-    <!-- Modal para añadir una nueva ubicación -->
-    <div class='modal fade' id='addLocationModal' tabindex='-1' aria-labelledby='addLocationModalLabel' aria-hidden='true'>
-        <div class='modal-dialog'>
-            <div class='modal-content'>
-                <div class='modal-header'>
-                    <h5 class='modal-title' id='addLocationModalLabel'>Añadir Nueva Ubicación</h5>
-                    <button type='button' class='btn-close bg-dark' data-bs-dismiss='modal' aria-label='Close'></button>
-                </div>
-                <div class='modal-body'>
-                    <form action='addLocation.php' method='POST'>
-                        <div class='mb-3'>
-                            <label for='lugar' class='form-label'>Lugar</label>
-                            <input type='text' class='form-control' id='lugar' name='lugar' required>
-                        </div>
-                        <div class='mb-3'>
-                            <label for='capacidad' class='form-label'>Capacidad</label>
-                            <input type='number' class='form-control' id='capacidad' name='capacidad' required>
-                        </div>
-                        <div class='modal-footer'>
-                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                            <button type='submit' class='btn btn-dark'>Guardar</button> 
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-
-     <!-- Modal para habilitar un vehiculo -->
-     <div class='modal fade' id='enableLocationModal' tabindex='-1' aria-labelledby='enableLocationModalLabel' aria-hidden='true'>
-        <div class='modal-dialog'>
-            <div class='modal-content'>
-                <div class='modal-header'>
-                    <h5 class='modal-title' id='enableLocationModalLabel'>Habilitar Ubicación</h5>
-                    <button type='button' class='btn-close bg-dark' data-bs-dismiss='modal' aria-label='Close'></button>
-                </div>
-                <div class='modal-body'>
-                    <form action='enableLocation.php' method='POST'>
-                        <div class='mb-3'>
-                            <label for='lugar' class='form-label'>Lugar</label>
-                            <select class="form-select" name="lugaru" id="lugaru" required>
-                            <option value="Selecciona la ubicación">Selecciona la ubicación</option>
-                            <?php
-                    include '../class/database.php';
-                    $conexion = new Database();
-                    $conexion->conectar();
-                    $consulta = "SELECT u.ubicacionID, u.lugar, u.capacidad, COUNT(v.vehiculoID) AS cantidad_vehiculos
-                                        FROM UBICACIONES U
-                                        LEFT JOIN OREDENES_TRABAJO ot ON u.ubicacionID = ot.ubicacionID
-                                        LEFT JOIN CITAS c ON ot.citaID = c.citaID
-                                        LEFT JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
-                                        WHERE u.activo = 'no' and u.lugar != 'Dueño'
-                                        GROUP BY u.ubicacionID, u.lugar, u.capacidad";
-                    $desactivados = $conexion->seleccionar($consulta);
-                    foreach($desactivados as $desactivado) {
-                        echo "<option value='".$desactivado->ubicacionID."'>".$desactivado->lugar."</option>";
-                    }
-                    ?>
-                            </select>
-                        </div>
-                        <div class='modal-footer'>
-                            <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                            <button type='submit' class='btn btn-dark'>Guardar</button>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    <script>
+        $(document).ready(function() {
+            if ($('#staticBackdrop').length) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
+    </script>
 
 </body>
 </html>
