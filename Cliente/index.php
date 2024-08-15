@@ -29,20 +29,24 @@ if (!function_exists('obtenerVehiculosCliente')) {
 }
 
 // Obtener citas pendientes del cliente
-if (!function_exists('obtenerCitasPendientes')) {
-    function obtenerCitasPendientes($pdo, $clienteID)
+if (!function_exists('obtenerCitasPendientes')) {function obtenerCitasPendientes($pdo, $clienteID)
     {
-        $sql = "SELECT c.citaID, c.servicio_solicitado, c.fecha_cita, c.estado,
-                    v.vin, v.marca, v.modelo, v.anio,
-                    DATEDIFF(c.fecha_cita, CURDATE()) AS dias_restantes
+        $sql = "SELECT c.citaID, c.servicio_solicitado, c.fecha_cita, c.estado, c.tipo_servicio, e.alias,
+                    v.vin, v.marca, v.modelo, v.anio,  
+                    DATEDIFF(c.fecha_cita, CURDATE()) AS dias_restantes,
+                    COALESCE(SUM(c.total_estimado), 0) AS costo
                 FROM CITAS c
                 INNER JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
+                LEFT JOIN ORDENES_TRABAJO ot ON c.citaID = ot.citaID
+                LEFT JOIN EMPLEADOS e ON ot.empleadoID = e.empleadoID 
                 WHERE v.clienteID = ? AND c.estado IN ('pendiente', 'en proceso')
+                GROUP BY c.citaID, c.servicio_solicitado, c.fecha_cita, c.estado,
+                         v.vin, v.marca, v.modelo, v.anio, dias_restantes
                 ORDER BY c.fecha_cita DESC";
         $stmt = $pdo->prepare($sql);
         $stmt->execute([$clienteID]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
-    }
+    }    
 }
 
 try {
@@ -52,6 +56,18 @@ try {
     echo "Error en la consulta: " . $e->getMessage();
     die();
 }
+
+
+if (!function_exists('obtenerDetallesClientepersona2')) {
+    function obtenerDetallesClientepersona2($pdo, $clienteID)
+    {
+        $sql = "SELECT nombre, apellido_paterno, apellido_materno FROM CLIENTES WHERE clienteID = ?";
+        $stmt = $pdo->prepare($sql);
+        $stmt->execute([$clienteID]);
+        return $stmt->fetch(PDO::FETCH_ASSOC);
+    }
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -120,6 +136,10 @@ try {
     width: 100%;
     height: 100%;
 }
+.modal-body{
+    text-align: left;
+    color: black;
+}
 
     </style>
 </head>
@@ -156,14 +176,21 @@ try {
                                     <?php echo htmlspecialchars($cita['marca'] . " " . $cita['modelo']); ?>
                                 </div>
                                 <div class="card-body">
-                                    <p><strong>Fecha de la Cita:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
-                                    <p><strong>Días Restantes:</strong> <?php echo htmlspecialchars($cita['dias_restantes']); ?> días</p>
-                                    <p><strong>Servicio Solicitado:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
-                                </div>
-                                <div class="card-footer text-center">
-                                    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#citaModal<?php echo $cita['citaID']; ?>">
-                                        Ver Detalles
-                                    </button>
+                                            <p><strong>Folio:</strong> <?php echo htmlspecialchars($cita['citaID']); ?></p>
+                                            <p><strong>VIN:</strong> <?php echo htmlspecialchars($cita['vin']); ?></p>
+                                            <p><strong>Marca:</strong> <?php echo htmlspecialchars($cita['marca']); ?></p>
+                                            <p><strong>Modelo:</strong> <?php echo htmlspecialchars($cita['modelo']); ?></p>
+                                            <p><strong>Año:</strong> <?php echo htmlspecialchars($cita['anio']); ?></p> 
+                                            <HR>
+                                            <p>DETALLES</p>
+                                            <HR>
+                                            <p><strong>Días Restantes:</strong> <?php echo htmlspecialchars($cita['dias_restantes']); ?> días</p>
+                                            <p><strong>Estado:</strong> <?php echo htmlspecialchars($cita['estado']); ?></p>
+                                            <p><strong>Costo:</strong> <?php echo htmlspecialchars($cita['costo']); ?></p>
+                                            <p><strong>Servicio Solicitado:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
+                                            <p><strong>Fecha de la Cita:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
+
+
                                 </div>
                             </div>
 
@@ -199,6 +226,7 @@ try {
                 <?php endif; ?>
             </div>
         </section>
+        <hr>
 
         <section id="v" class="content text-center">
         <?php
@@ -221,6 +249,10 @@ try {
                                     <p><strong>Año:</strong> <?php echo htmlspecialchars($vehiculo['anio']); ?></p>
                                     <p><strong>Color:</strong> <?php echo htmlspecialchars($vehiculo['color']); ?></p>
                                     <p><strong>Kilometraje:</strong> <?php echo htmlspecialchars($vehiculo['kilometraje']); ?> km</p>
+                                 <!-- boton para activar modal -->
+<button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#historial">
+  HISTORIAL
+</button>
                                 </div>
                             </div>
                         </div>
@@ -228,91 +260,112 @@ try {
                 <?php else : ?>
 
                     <p class="text-light">No tienes vehículos registrados.</p>
-                
-                <?php endif; ?>
-                
-                </div>
-                </section>
-                </div>
-                
-                <!-- Sección de Filtros -->
-                <div class="filter-section">
-                    <form id="filterForm">
-                        <label for="vehicleFilter">Filtrar por vehículo:</label>
-                        <input type="text" id="vehicleFilter" name="vehicleFilter" placeholder="Nombre del vehículo">
-                
-                        <label for="dateFilter">Filtrar por fecha:</label>
-                        <input type="date" id="dateFilter" name="dateFilter">
-                
-                        <button type="button" id="applyFilters">Aplicar Filtros</button>
-                    </form>
-                </div>
-                
-                <!-- Modal de Ayuda -->
-                <div class="help-modal" id="helpModal">
-                    <div class="help-modal-content">
-                        <span class="close" id="closeHelpModal">&times;</span>
-                        <h5>¿Cómo se usa?</h5>
-                        <HR>
-                        <P>MIS VEHICULOS<br>
-                            En esta ventana se mostrarán todos tus vehículos actualmente registados en el sistema de EURO SERVICE 
-                            <HR>
-                            CITAS PENDIENTES<br>
-                            En esta ventana se mostrarán todas tus citas que tienes pendientes la cual cuenta con tu vehículo, temporizador indicando el tiempo restante y el servicio que se realizará para el día de tu cita
-                            <HR>
-                            HISTORIAL<br>
-                            En esta ventana se mostrarán todas tus citas que has tenido en el pasado, mostrando la fecha de la cita, el vehículo que se utilizó, el servicio que se realizó y el estado de la cita.
-                            <HR>
-                        </P>
+                       
+                    <?php endif; ?>
+
+                    <!-- Modal -->
+<div class="modal fade" id="historial" tabindex="-1" aria-labelledby="historialLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+    <div class="modal-header">
+        <h1 class="modal-title fs-5" id="historialLabel">HISTORIAL</h1>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+    </div>
+    <div class="modal-body">
+        <div class="card-columns">
+            <?php if (!empty($citas)) : ?>
+                <?php foreach ($citas as $cita) : ?>
+                    <div class="card" id="vehiculo-<?php echo $cita['citaID']; ?>">
+                        <div class="card-body">
+                            <h3 class="card-title"><?php echo htmlspecialchars($cita['marca'] . " " . $cita['modelo']); ?></h3>
+                            <hr>
+                            <p class="card-text"><strong>VIN:</strong> <?php echo htmlspecialchars($cita['vin']); ?></p>
+                            <p class="card-text"><strong>TIPO:</strong> <?php echo htmlspecialchars($cita['tipo_servicio']); ?></p>
+                            <p class="card-text"><strong>SERVICIO:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
+                            <p class="card-text"><strong>COSTO:</strong> <?php echo htmlspecialchars($cita['costo']); ?></p>
+                            <p class="card-text"><strong>REPONSABLE:</strong> <?php echo htmlspecialchars($cita['alias']); ?></p>
+                            <p class="card-text"><strong>FECHA DE LA CITA:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
+                        </div>
                     </div>
-                </div>
-                
-                <!-- Ícono de Ayuda -->
-                <div class="help-icon" id="helpIcon">?</div>
-                
-                <script>
-                    // Funcionalidad del modal de ayuda
-                    document.getElementById('helpIcon').addEventListener('click', function() {
-                        document.getElementById('helpModal').style.display = 'flex';
-                    });
-                
-                    document.getElementById('closeHelpModal').addEventListener('click', function() {
-                        document.getElementById('helpModal').style.display = 'none';
-                    });
-                
-                    window.addEventListener('click', function(event) {
-                        if (event.target == document.getElementById('helpModal')) {
-                            document.getElementById('helpModal').style.display = 'none';
-                        }
-                    });
-                
-                    // Funcionalidad de los filtros
-                    document.getElementById('applyFilters').addEventListener('click', function() {
-                        const vehicleFilter = document.getElementById('vehicleFilter').value.toLowerCase();
-                        const dateFilter = document.getElementById('dateFilter').value;
-                
-                        const vehicles = document.querySelectorAll('.vehicle-item'); // Asumiendo que cada vehículo tiene la clase 'vehicle-item'
-                        const appointments = document.querySelectorAll('.appointment-item'); // Asumiendo que cada cita tiene la clase 'appointment-item'
-                
-                        vehicles.forEach(vehicle => {
-                            const vehicleName = vehicle.querySelector('.vehicle-name').textContent.toLowerCase(); // Asumiendo que el nombre del vehículo está en un elemento con la clase 'vehicle-name'
-                            if (vehicleName.includes(vehicleFilter)) {
-                                vehicle.style.display = '';
-                            } else {
-                                vehicle.style.display = 'none';
-                            }
-                        });
-                
-                        appointments.forEach(appointment => {
-                            const appointmentDate = appointment.querySelector('.appointment-date').textContent; // Asumiendo que la fecha de la cita está en un elemento con la clase 'appointment-date'
-                            if (dateFilter === '' || appointmentDate === dateFilter) {
-                                appointment.style.display = '';
-                            } else {
-                                appointment.style.display = 'none';
-                            }
-                        });
-                    });
-                </script>
+                    <hr>
+                <?php endforeach; ?>
+            <?php else : ?>
+                <p class="text-center">No hay citas registradas.</p>
+            <?php endif; ?>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <!-- más largo el boton -->
+        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
+    </div>
+
+    <script>
+    function mostrarHistorial(citaID) {
+        // Obtén la tarjeta del vehículo seleccionado
+        var vehiculo = document.getElementById('vehiculo-' + citaID);
+        // Extrae la información del vehículo
+        var marca = vehiculo.querySelector('.card-title').innerText;
+        var vin = vehiculo.querySelector('.card-text:nth-child(2)').innerText;
+        var servicio = vehiculo.querySelector('.card-text:nth-child(3)').innerText;
+        var fechaCita = vehiculo.querySelector('.card-text:nth-child(4)').innerText;
+
+        // Actualiza el contenido del modal de historial
+        var modalBody = document.querySelector('#historialModal .modal-body');
+        modalBody.innerHTML = `
+            <p><strong>Marca y Modelo:</strong> ${marca}</p>
+            <p><strong>${vin}</strong></p>
+            <p><strong>${servicio}</strong></p>
+            <p><strong>${fechaCita}</strong></p>
+        `;
+    }
+    </script>
+</div>
+            </div>
+        </section>
+    </div>
+    <!-- Modal de Ayuda -->
+    <div class="help-modal" id="helpModal">
+        <div class="help-modal-content">
+            <span class="close" id="closeHelpModal">&times;</span>
+            <h5>¿Cómo se usa?</h5>
+            <HR>
+            
+
+        <P >MIS VEHICULOS  <br>
+            En esta ventana se mostrarán todos tus vehículos actualmente registados en el sistema de EURO SERVICE 
+            <HR>
+            CITAS PENDIENTES <br>
+            En esta ventana se mostrarán todas tus citas que tienes pendientes la cual cuenta con tu vehículo, temporizador indicando  el tiempo restante y el servicio que se realizará para el día de tu cita <HR>
+            HISTORIAL <br>
+            En esta ventana se mostrarán todas tus citas que has tenido en el pasado, mostrando la fecha de la cita, el vehículo que se utilizó, el servicio que se realizó y el estado de la cita.
+            <HR>
+
+
+        </P>
+
+           </div>
+    </div>
+    <!-- Ícono de Ayuda -->
+    <div class="help-icon" id="helpIcon">
+        ?
+    </div>
+
+    <script>
+        // Funcionalidad del modal de ayuda
+        document.getElementById('helpIcon').addEventListener('click', function() {
+            document.getElementById('helpModal').style.display = 'flex';
+        });
+
+        document.getElementById('closeHelpModal').addEventListener('click', function() {
+            document.getElementById('helpModal').style.display = 'none';
+        });
+
+        window.addEventListener('click', function(event) {
+            if (event.target === document.getElementById('helpModal')) {
+                document.getElementById('helpModal').style.display = 'none';
+            }
+        });
+    </script>
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 </body>

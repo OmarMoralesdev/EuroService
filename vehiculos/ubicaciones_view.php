@@ -21,12 +21,101 @@
 </head>
 <body>
 <div class="wrapper">
-        <?php include '../includes/vabr.php'; ?>
+        <?php session_start(); include '../includes/vabr.php';?>
         <div class="main p-3">
         <div class="container">
             <h2 class="text-center">UBICACIONES DE VEHÍCULOS</h2>
                 <div class="form-container">
-        
+                <div class="d-flex flex-column flex-md-row gap-2">
+    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addLocationModal">AÑADIR NUEVA UBICACIÓN</button>
+    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#enableLocationModal">HABILITAR UBICACIÓN</button>
+</div>
+                <?php
+                if (isset($_SESSION['r'])) {
+                    echo "
+                    <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                        <div class='modal-dialog'>
+                            <div class='modal-content'>
+                                <div class='modal-header'>
+                                    <h1 class='modal-title fs-5' id='staticBackdropLabel'>Ubicación Renombrada!</h1>
+                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                </div>
+                                <div class='modal-body'>
+                                    <div class='alert alert-success' role='alert'>{$_SESSION['r']}</div>
+                                </div>
+                                <div class='modal-footer'>
+                                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>";
+                    unset($_SESSION['r']);
+                }
+                if (isset($_SESSION['L'])) {
+                    echo "
+                    <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                        <div class='modal-dialog'>
+                            <div class='modal-content'>
+                                <div class='modal-header'>
+                                    <h1 class='modal-title fs-5' id='staticBackdropLabel'>Ubicación Inhabilitada!</h1>
+                                    <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                </div>
+                                <div class='modal-body'>
+                                    <div class='alert alert-success' role='alert'>{$_SESSION['L']}</div>
+                                </div>
+                                <div class='modal-footer'>
+                                    <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>";
+                    unset($_SESSION['L']);
+                }
+                                    if (isset($_SESSION['x'])) {
+                                        echo "
+                                        <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                                            <div class='modal-dialog'>
+                                                <div class='modal-content'>
+                                                    <div class='modal-header'>
+                                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Ubicación Habilitada!</h1>
+                                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                                    </div>
+                                                    <div class='modal-body'>
+                                                        <div class='alert alert-success' role='alert'>{$_SESSION['x']}</div>
+                                                    </div>
+                                                    <div class='modal-footer'>
+                                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>";
+                                        unset($_SESSION['x']);
+                                    }
+                    if (isset($_SESSION['error'])) {
+                        echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
+                        unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
+                    }
+                    if (isset($_SESSION['bien'])) {
+                        echo "
+                        <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
+                            <div class='modal-dialog'>
+                                <div class='modal-content'>
+                                    <div class='modal-header'>
+                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>Ubicación registrada!</h1>
+                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
+                                    </div>
+                                    <div class='modal-body'>
+                                        <div class='alert alert-success' role='alert'>{$_SESSION['bien']}</div>
+                                    </div>
+                                    <div class='modal-footer'>
+                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>";
+                        unset($_SESSION['bien']);
+                    }
+                    ?>
             <div class="row mt-3">
                 <?php
                 include '../includes/db.php';
@@ -163,10 +252,7 @@ echo "</div>";
                 $conexion->desconectar();
                 ?>
             </div>
-            <div class="d-flex flex-column flex-md-row gap-2">
-    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addLocationModal">AÑADIR NUEVA UBICACIÓN</button>
-    <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#enableLocationModal">HABILITAR UBICACIÓN</button>
-</div></div>
+        </div>
     </div>
 
     <!-- Modal para añadir una nueva ubicación -->
@@ -210,7 +296,7 @@ echo "</div>";
                         <div class='mb-3'>
                             <label for='lugar' class='form-label'>Lugar</label>
                             <select class="form-select" name="lugaru" id="lugaru" required>
-                            <option value="Selecciona la ubicación">Selecciona la ubicación</option>
+                            <option value="">Selecciona la ubicación</option>
                             <?php
                     include '../class/database.php';
                     $conexion = new Database();
@@ -238,6 +324,12 @@ echo "</div>";
             </div>
         </div>
     </div>
-
+    <script>
+        $(document).ready(function() {
+            if ($('#staticBackdrop').length) {
+                $('#staticBackdrop').modal('show');
+            }
+        });
+    </script>
 </body>
 </html>

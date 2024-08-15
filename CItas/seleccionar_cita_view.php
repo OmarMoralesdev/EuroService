@@ -76,6 +76,15 @@ session_start();
                             <input type="text" class="form-control" id="servicioSolicitado" name="servicioSolicitado" required>
                             <div class="invalid-feedback">Debes ingresar el servicio solicitado.</div>
                         </div>
+                           <!-- Formulario de Orden de Trabajo -->
+                           <div class="mb-3">
+                            <label for="costoManoObra" class="form-label">Costo de Mano de Obra:</label>
+                            <input type="number" step="0.01" class="form-control" id="costoManoObra" name="costoManoObra" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="costoRefacciones" class="form-label">Costo de Refacciones:</label>
+                            <input type="number" step="0.01" class="form-control" id="costoRefacciones" name="costoRefacciones" required>
+                        </div>
                         <div class="mb-3">
                             <label for="fecha_cita" class="form-label">Fecha de la Cita:</label>
                             <input type="datetime-local" class="form-control" id="fecha_cita" name="fecha_cita" required>

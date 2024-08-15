@@ -4,6 +4,42 @@ require '../includes/db.php';
 $con = new Database();
 $pdo = $con->conectar();
 
+function obtenerManoObra($pdo, $clienteID) {
+    $sql = "SELECT CITAS.costo_mano_obra as mano_obra
+            FROM CITAS 
+            JOIN VEHICULOS ON CITAS.vehiculoID = VEHICULOS.vehiculoID
+            WHERE VEHICULOS.clienteID = :clienteID";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':clienteID', $clienteID, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result ? $result['mano_obra'] : 0; // Retorna 0 si no hay resultados
+}
+
+function obtenerAnticipo($pdo, $clienteID) {
+    $sql = "SELECT ROUND((CITAS.costo_mano_obra + CITAS.costo_refacciones + 800)/2) as minimo
+            FROM CITAS 
+            JOIN VEHICULOS ON CITAS.vehiculoID = VEHICULOS.vehiculoID
+            WHERE VEHICULOS.clienteID = :clienteID";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':clienteID', $clienteID, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result ? $result['minimo'] : 0; // Retorna 0 si no hay resultados
+}
+
+function obtenerRefacciones($pdo, $clienteID) {
+    $sql = "SELECT CITAS.costo_refacciones as refaccion
+            FROM CITAS 
+            JOIN VEHICULOS ON CITAS.vehiculoID = VEHICULOS.vehiculoID
+            WHERE VEHICULOS.clienteID = :clienteID";
+    $stmt = $pdo->prepare($sql);
+    $stmt->bindParam(':clienteID', $clienteID, PDO::PARAM_INT);
+    $stmt->execute();
+    $result = $stmt->fetch(PDO::FETCH_ASSOC);
+    return $result ? $result['refaccion'] : 0; // Retorna 0 si no hay resultados
+}
+
 function obtenerEmpleadosDisponibles($pdo) {
     $sql = "SELECT EMPLEADOS.empleadoID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno 
             FROM EMPLEADOS 
@@ -20,25 +56,36 @@ function obtenerUbicacionesActivas($pdo) {
 }
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['citaID'])) {
-    // Almacenar la citaID en la sesión cuando se recibe por POST
     $_SESSION['citaID'] = $_POST['citaID'];
 }
 
 $citaID = isset($_SESSION['citaID']) ? $_SESSION['citaID'] : null;
 
 if (!$citaID) {
-    // Si no hay citaID en la sesión, mostrar un mensaje de error o redirigir
     $_SESSION['error'] = 'No se ha seleccionado una cita válida.';
-    header('Location: seleccionar_cita.php'); // Cambia esto a la página de selección de cita
+    header('Location: seleccionar_cita.php');
     exit;
 }
 
-if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session'])) {
-    // Eliminar la variable de sesión 'citaID'
-    unset($_SESSION['citaID']);
-    exit(); // Terminar la ejecución para no procesar el resto del script
-}
+// Obtener el clienteID basado en la citaID
+$sql = "SELECT VEHICULOS.clienteID
+        FROM CITAS
+        JOIN VEHICULOS ON CITAS.vehiculoID = VEHICULOS.vehiculoID
+        WHERE CITAS.citaID = :citaID";
+$stmt = $pdo->prepare($sql);
+$stmt->bindParam(':citaID', $citaID, PDO::PARAM_INT);
+$stmt->execute();
+$cliente = $stmt->fetch(PDO::FETCH_ASSOC);
+$clienteID = $cliente ? $cliente['clienteID'] : null;
 
+$costo_mano_obra = $clienteID ? obtenerManoObra($pdo, $clienteID) : 0;
+$costo_refaccion = $clienteID ? obtenerRefacciones($pdo, $clienteID) : 0;
+$anticipoM = $clienteID ? obtenerAnticipo($pdo, $clienteID) : 0;
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session'])) {
+    unset($_SESSION['citaID']);
+    exit();
+}
 ?>
 
 <!DOCTYPE html>
@@ -85,14 +132,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session
                 <form action="crear_orden_desde_cita_back.php" method="post">
                     <input type="hidden" name="citaID" value="<?php echo htmlspecialchars($citaID, ENT_QUOTES, 'UTF-8'); ?>">
 
-                    <label for="costoManoObra">Costo Mano de Obra:</label>
-                    <input type="number" step="0.01" id="costoManoObra" name="costoManoObra" min="0" class="form-control" required>
-
-                    <label for="costoRefacciones">Costo de Refacciones:</label>
-                    <input type="number" step="0.01" id="costoRefacciones" name="costoRefacciones" min="0" class="form-control" required>
+                    <label for="anticipo">Costo inspeccion:</label>
+                    <input type="number" step="0.01" min="0" name="" class="form-control" value="800" readonly>
+                    <label for="anticipo">Costo mano de Obra:</label>
+                    <input type="number" step="0.01" min="0" name="costo_mano_obra" class="form-control" value="<?php echo htmlspecialchars($costo_mano_obra, ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                    <label for="anticipo">Costo refacciones:</label>
+                    <input type="number" step="0.01" min="0" name="costo_refacciones" class="form-control" value="<?php echo htmlspecialchars($costo_refaccion, ENT_QUOTES, 'UTF-8'); ?>" readonly>
+                    <small class="form-text text-muted">Cantidad mínima de anticipo. <strong><?php echo htmlspecialchars($anticipoM, ENT_QUOTES, 'UTF-8'); ?></strong></small><br>
+                    <br>
 
                     <label for="anticipo">Anticipo:</label>
-                    <input type="number" step="0.01" min="0" name="anticipo" class="form-control" required>
+                    <input type="number" step="0.01" min="0" name="anticipo" id="anticipo" class="form-control" value="<?php echo htmlspecialchars($costoMinimo, ENT_QUOTES, 'UTF-8'); ?>" required>
+                
                     <br>
 
                     <label for="atencion" class="form-label">Atencion:</label>
@@ -136,29 +187,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['eliminar_cita_session
     </div>
 </div>
 
-
-<script>
-document.addEventListener('DOMContentLoaded', function() {
-    function validateNonNegative(event) {
-        var value = parseFloat(event.target.value);
-        if (value < 0) {
-            event.target.value = '';
-            alert('El valor no puede ser negativo.');
-        }
-    }
-
-    document.getElementById('costoManoObra').addEventListener('input', validateNonNegative);
-    document.getElementById('costoRefacciones').addEventListener('input', validateNonNegative);
-    document.getElementById('anticipo').addEventListener('input', validateNonNegative);
-});
-</script>
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        if ($('#staticBackdrop').length) {
-            $('#staticBackdrop').modal('show');
-        }
-    });
-</script>
-
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-oBqDVmMz4fnFO9gD9nA2j6keFtn5L1mF7r2F06J5yVmnY7HAs+ptW4FwwkFJEJ9s" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-9gTjAs8a20dmtQ5k0z5b8LE5J4OoWohUE5lO6k29p5dPm5X0P9V19Vsc8SwGm9IFz" crossorigin="anonymous"></script>
 </body>
 </html>

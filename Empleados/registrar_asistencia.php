@@ -24,14 +24,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $diferencia_horas = ($time_salida - $time_entrada) / 3600;
 
     // Validación: Verificar que no se registre una asistencia/falta/justificada al mismo empleado más de una vez en un día
-    $sqlVehiculo = "SELECT count(*) AS L FROM ASISTENCIA WHERE empleadoID= ? AND fecha = ?";
-    $queryGlobal = $pdo->prepare($sqlVehiculo);
+    $sqlAsistencia = "SELECT count(*) AS L FROM ASISTENCIA WHERE empleadoID= ? AND fecha = ?";
+    $queryGlobal = $pdo->prepare($sqlAsistencia);
     $queryGlobal->execute([$empleadoID, $fecha]);
 
     $rowGlobal = $queryGlobal->fetch(PDO::FETCH_ASSOC);
-    $countCitasGlobal = $rowGlobal['L'];
+    $countAsistenciasGlobal = $rowGlobal['L'];
 
-    if ($countCitasGlobal >= 1) {
+    if ($countAsistenciasGlobal >= 1) {
         $_SESSION['error'] = "No puedes tener registrado más de una vez a un empleado en la misma fecha";
         header('Location: registro_asistencia.php'); 
         exit();
