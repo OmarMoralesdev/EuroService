@@ -30,6 +30,7 @@
     <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#addLocationModal">AÑADIR NUEVA UBICACIÓN</button>
     <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#enableLocationModal">HABILITAR UBICACIÓN</button>
 </div>
+<br>
                 <?php
                 if (isset($_SESSION['r'])) {
                     echo "
@@ -148,7 +149,7 @@
 echo "<div class='card-footer d-flex flex-wrap justify-content-between align-items-center'>";
 echo "<button type='button' class='btn btn-dark btn-md mb-2 me-2 flex-fill' style='min-width: 150px;' data-bs-toggle='modal' data-bs-target='#modal{$ubicacion->ubicacionID}'>VER VEHÍCULOS</button>";
 echo "<button type='button' class='btn btn-dark btn-md mb-2 me-2 flex-fill' style='min-width: 80px;' data-bs-toggle='modal' data-bs-target='#renameModal{$ubicacion->ubicacionID}'><i class='lni lni-pencil'></i></button>";
-echo "<button type='button' class='btn btn-danger btn-md mb-2 flex-fill' style='min-width: 80px;' data-bs-toggle='modal' data-bs-target='#deleteModal{$ubicacion->ubicacionID}'><i class='lni lni-pause'></i></button>";
+echo "<button type='button' class='btn btn-danger btn-md mb-2 flex-fill' style='min-width: 80px;' data-bs-toggle='modal' data-bs-target='#deleteModal{$ubicacion->ubicacionID}'>INHABILITAR</button>";
 echo "</div>"; // Cierre de card-footer
 
 echo "</div>"; // Cierre de card
