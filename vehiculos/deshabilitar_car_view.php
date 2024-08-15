@@ -105,8 +105,8 @@ VEHICULOS.clienteID = CLIENTES.clienteID and VEHICULOS.activo = 'si'";
                         echo "</div>"; // Cierre de card-body
 
                         // Botones en un div separado para controlar la alineación
-                        echo "<div class='card-footer d-flex justify-content-between align-items-center'>";
-                        echo "<button type='button' class='btn btn-danger btn-md ml-2' style='width: 100%;' data-bs-toggle='modal' data-bs-target='#deleteModal{$vehiculo->vehiculoID}'><i class='lni lni-pause'></i></button>";
+                        echo "<div class='card-footer d-flex flex-wrap justify-content-between align-items-center'>";
+                        echo "<button type='button' class='btn btn-danger btn-md mb-2 me-2 flex-fill' style='min-width: 80px;' data-bs-toggle='modal' data-bs-target='#deleteModal{$vehiculo->vehiculoID}'>INHABILITAR</button>";
                         echo "</div>"; // Cierre de card-footer
 
                         echo "</div>"; // Cierre de card
@@ -130,6 +130,7 @@ VEHICULOS.clienteID = CLIENTES.clienteID and VEHICULOS.activo = 'si'";
                         echo "</div>";
                         echo "</div>";
                         echo "</div>";
+
                     }
                 }
                 $conexion->desconectar();
