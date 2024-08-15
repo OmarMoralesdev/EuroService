@@ -7,7 +7,8 @@ $pdo = $con->conectar();
 
 $cita = null;
 $mensaje = "";
-
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (isset($_POST['buscar'])) {
         $citaID = filter_input(INPUT_POST, 'citaID', FILTER_SANITIZE_NUMBER_INT);
@@ -89,8 +90,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $resultUpdate = $queryUpdate->execute([$servicioSolicitado, $fechaCita->format('Y-m-d H:i:s'), $citaID]);
 
                      
-                        use PHPMailer\PHPMailer\PHPMailer;
-                        use PHPMailer\PHPMailer\Exception;
+                      
                         
                         // Incluir el autoload de Composer
                         require '../vendor/autoload.php';  
