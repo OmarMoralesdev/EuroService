@@ -9,8 +9,8 @@ if (isset($_GET['empleadoID'])) {
 
     try {
         // Preparar la consulta SQL para obtener los detalles de las órdenes del técnico
-        $sql = "SELECT ORDENES_TRABAJO.ordenID, ORDENES_TRABAJO.fecha_orden, ORDENES_TRABAJO.costo_mano_obra, 
-                       ORDENES_TRABAJO.costo_refacciones, ORDENES_TRABAJO.total_estimado, ORDENES_TRABAJO.anticipo, 
+        $sql = "SELECT ORDENES_TRABAJO.ordenID, ORDENES_TRABAJO.fecha_orden, CITAS.costo_mano_obra, 
+                       CITAS.costo_refacciones, CITAS.total_estimado, ORDENES_TRABAJO.anticipo, 
                        ORDENES_TRABAJO.atencion, CITAS.servicio_solicitado, CITAS.tipo_servicio,
                        CITAS.fecha_solicitud, CITAS.fecha_cita, CITAS.urgencia, CITAS.estado, VEHICULOS.marca, 
                        VEHICULOS.modelo, VEHICULOS.anio, VEHICULOS.color, VEHICULOS.kilometraje, VEHICULOS.placas, 

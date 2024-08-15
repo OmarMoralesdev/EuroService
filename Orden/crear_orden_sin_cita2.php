@@ -4,6 +4,7 @@ session_start();
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Obtener datos del formulario
     $vehiculoID = $_POST['vehiculoID'];
+    $servicio_solicitado = $_POST['servicioSolicitado'];
     $tipoServicio = "reparación"; // Cambio en el nombre del campo
     $costoManoObra = $_POST['costoManoObra'];
     $costoRefacciones = $_POST['costoRefacciones'];
@@ -55,11 +56,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $pdo->beginTransaction();
 
         // Insertar cita
-        $sqlCita = "INSERT INTO CITAS (vehiculoID, servicio_solicitado, tipo_servicio, fecha_solicitud, costo_mano_obra, costo_refacciones, fecha_cita, urgencia, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pendiente')";
+        $sqlCita = "INSERT INTO CITAS (vehiculoID, servicio_solicitado, costo_mano_obra, costo_refacciones, tipo_servicio, fecha_solicitud, fecha_cita, urgencia, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, 'pendiente')";
         $stmtCita = $pdo->prepare($sqlCita);
-        $stmtCita->execute([$vehiculoID, $tipoServicio, $tipoServicio, $fechaSolicitud, $costoManoObra, $costoRefacciones, $fechaCita, $urgencia]);
+        $stmtCita->execute([$vehiculoID, $servicio_solicitado, $costoManoObra, $costoRefacciones, $tipoServicio, $fechaSolicitud, $fechaCita, $urgencia]);
         $citaID = $pdo->lastInsertId();
-
+        
         // Insertar orden de trabajo
         $sqlOrden = "INSERT INTO ORDENES_TRABAJO (fecha_orden, anticipo, atencion, citaID, empleadoID, ubicacionID) VALUES (?, ?, ?, ?, ?, ?)";
         $stmtOrden = $pdo->prepare($sqlOrden);
