@@ -96,7 +96,7 @@ if ($countCitasVehiculo > 0) {
 $sqlInsert = "INSERT INTO CITAS (vehiculoID, servicio_solicitado, fecha_solicitud, costo_mano_obra, costo_refacciones, fecha_cita, urgencia, estado)
               VALUES (?, ?, ?, ?, ?, ?, ?, 'pendiente')";
 $queryInsert = $pdo->prepare($sqlInsert);
-$resultInsert = $queryInsert->execute([$vehiculoID, $servicioSolicitado, $costo_mano_obra, $costo_refacciones, $fechaActual->format('Y-m-d H:i:s'), $fechaCita->format('Y-m-d H:i:s'), 'no']);
+$resultInsert = $queryInsert->execute([$vehiculoID, $servicioSolicitado,$fechaActual->format('Y-m-d H:i:s') ,$costo_mano_obra, $costo_refacciones, $fechaCita->format('Y-m-d H:i:s'), 'no']);
 
 if ($resultInsert) {
     $_SESSION['bien'] = "Cita registrada correctamente.";

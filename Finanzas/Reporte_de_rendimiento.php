@@ -13,13 +13,29 @@ try {
     $fin_semana = date('Y-m-d', strtotime('sunday this week', strtotime($semana_seleccionada)));
 
     // Preparar la consulta SQL para obtener los datos del rendimiento de los técnicos
-    $sql = "SELECT ORDENES_TRABAJO.empleadoID, COUNT(*) AS num_ordenes, SUM(total_estimado) AS total_estimado, 
-                   PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
-            FROM ORDENES_TRABAJO
-            INNER JOIN EMPLEADOS ON EMPLEADOS.empleadoID = ORDENES_TRABAJO.empleadoID 
-            INNER JOIN PERSONAS ON PERSONAS.personaID = EMPLEADOS.personaID
-            WHERE fecha_orden BETWEEN :fecha_inicio AND :fecha_fin
-            GROUP BY ORDENES_TRABAJO.empleadoID, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno";
+    $sql = "SELECT 
+    OT.empleadoID, 
+    COUNT(*) AS num_ordenes, 
+    SUM(C.costo_mano_obra + C.costo_refacciones) AS total_estimado, 
+    P.nombre, 
+    P.apellido_paterno, 
+    P.apellido_materno
+FROM 
+    ORDENES_TRABAJO OT
+INNER JOIN 
+    EMPLEADOS E ON E.empleadoID = OT.empleadoID
+INNER JOIN 
+    PERSONAS P ON P.personaID = E.personaID
+INNER JOIN 
+    CITAS C ON C.citaID = OT.citaID
+WHERE 
+    OT.fecha_orden BETWEEN :fecha_inicio AND :fecha_fin
+GROUP BY 
+    OT.empleadoID, 
+    P.nombre, 
+    P.apellido_paterno, 
+    P.apellido_materno";
+
 
     // Preparar la declaración
     $stmt = $pdo->prepare($sql);
@@ -61,11 +77,7 @@ $pdo = null;
             border-radius: 5px;
             padding: 15px;
         }
-
-        .modal-dialog {
-            max-width: 90%;
-        }
-
+        
         .modal-body {
             overflow-y: auto;
             height: auto;
@@ -148,7 +160,6 @@ $pdo = null;
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="detallesOrdenModalLabel">Detalles de las Órdenes de Trabajo</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div id="detallesOrdenContent">

@@ -60,7 +60,8 @@ function listarCitasPendientes($pdo) {
 }
 function listarCitasPendientes2($pdo) {
     $sql = "SELECT CITAS.citaID, CITAS.vehiculoID, CITAS.servicio_solicitado, VEHICULOS.marca, VEHICULOS.modelo, 
-    VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno, ROUND(SUM(CITAS.costo_mano_obra + CITAS.costo_refacciones) / 2, 2) as costo_minimo
+    VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno,ROUND((CITAS.costo_mano_obra + CITAS.costo_refacciones + 800) / 2, 2)
+ as costo_minimo
             FROM CITAS 
             JOIN VEHICULOS ON CITAS.vehiculoID = VEHICULOS.vehiculoID
             JOIN CLIENTES ON VEHICULOS.clienteID = CLIENTES.clienteID
@@ -125,7 +126,7 @@ function actualizarEstadoCita($pdo, $citaID, $nuevoEstado)
 }
 
 function obtenerDetallesVehiculoyCliente($pdo, $vehiculoID) {
-    $sql = "SELECT VEHICULOS.marca, VEHICULOS.modelo, VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
+    $sql = "SELECT VEHICULOS.marca, VEHICULOS.modelo, VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno, PERSONAS.correo
             FROM VEHICULOS 
             JOIN CLIENTES ON VEHICULOS.clienteID = CLIENTES.clienteID
             JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID

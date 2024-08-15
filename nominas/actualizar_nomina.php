@@ -2,6 +2,11 @@
 require '../includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Validar entrada
+    if (empty($_POST['empleadoID']) || empty($_POST['bonos']) || empty($_POST['rebajas_adicionales']) || empty($_POST['fecha_inicio'])) {
+        die('Todos los campos son obligatorios.');
+    }
+
     $empleadoID = $_POST['empleadoID'];
     $bonos = $_POST['bonos'];
     $rebajas_adicionales = $_POST['rebajas_adicionales'];
@@ -20,7 +25,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         // Primero, obtenemos el ID de nómina para el empleado y las fechas proporcionadas
         $query = "
-        SELECT nominaID
+        SELECT nominaID, bonos, rebajas_adicionales
         FROM NOMINAS
         WHERE empleadoID = :empleadoID AND fecha_inicio = :fecha_inicio
         ";
@@ -33,6 +38,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($result) {
             $nominaID = $result['nominaID'];
+            // Sumar los bonos y rebajas adicionales a los existentes
+            $bonos += $result['bonos'];
+            $rebajas_adicionales += $result['rebajas_adicionales'];
         } else {
             // Si no hay nómina existente, crear una nueva
             $query = "
@@ -47,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bindParam(':fecha_fin', $fecha_fin);
             $stmt->bindParam(':empleadoID', $empleadoID);
             $stmt->execute();
-            
+
             $nominaID = $pdo->lastInsertId();
         }
 
@@ -82,26 +90,30 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->execute();
         $row = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        $salario_diario = $row['salario_diario'];
-        $faltas = $row['faltas'];
+        if ($row) {
+            $salario_diario = $row['salario_diario'];
+            $faltas = $row['faltas'];
 
-        $rebajas = $faltas * $salario_diario;
-        $total = ($salario_diario * 7) - $rebajas + $bonos - $rebajas_adicionales;
+            $rebajas = $faltas * $salario_diario;
+            $total = ($salario_diario * 7) - $rebajas + $bonos - $rebajas_adicionales;
 
-        $query = "
-        UPDATE NOMINAS
-        SET faltas = :faltas, rebajas = :rebajas, total = :total
-        WHERE nominaID = :nominaID
-        ";
+            $query = "
+            UPDATE NOMINAS
+            SET faltas = :faltas, rebajas = :rebajas, total = :total
+            WHERE nominaID = :nominaID
+            ";
 
-        $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':nominaID', $nominaID);
-        $stmt->bindParam(':faltas', $faltas);
-        $stmt->bindParam(':rebajas', $rebajas);
-        $stmt->bindParam(':total', $total);
-        $stmt->execute();
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(':nominaID', $nominaID);
+            $stmt->bindParam(':faltas', $faltas);
+            $stmt->bindParam(':rebajas', $rebajas);
+            $stmt->bindParam(':total', $total);
+            $stmt->execute();
 
-        echo "Bonos y rebajas adicionales actualizados correctamente. Total recalculado.<br>";
+            echo "Bonos y rebajas adicionales actualizados correctamente. Total recalculado.<br>";
+        } else {
+            die('No se pudo obtener la información del empleado para recalcular el total.');
+        }
 
     } catch (PDOException $e) {
         echo "Error: " . $e->getMessage() . "<br>";
