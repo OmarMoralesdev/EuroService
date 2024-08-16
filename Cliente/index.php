@@ -144,6 +144,10 @@ if (!function_exists('obtenerDetallesClientepersona2')) {
     <?php include 'nav.php'; ?>
 
     <div class="container">
+        <br>
+        <br>
+        <br>
+        <br>
         <section class="features text-center">
             <h1>BIENVENID@, 
             <?php
