@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/css/bootstrap.min.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/css/bootstrap.min.css">
     <!-- Datepicker CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <title>Actualizar Bonos y Rebajas</title>
@@ -37,37 +37,35 @@
     <div class="wrapper">
         <?php include '../includes/vabr.php'; ?>
         <div class="main p-3">
+            
             <div class="container">
                 <h2>Actualizar Bonos y Rebajas Adicionales por Empleado</h2>
                 <div class="form-container">
-                <?php
-                    if (isset($_SESSION['error'])) {
-                        echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
-                        unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
-                    }
-                    if (isset($_SESSION['bien'])) {
-                        echo "
-                        <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
-                            <div class='modal-dialog'>
-                                <div class='modal-content'>
-                                    <div class='modal-header'>
-                                        <h1 class='modal-title fs-5' id='staticBackdropLabel'>¡Orden de Trabajo Registrada!</h1>
-                                        <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
-                                    </div>
-                                    <div class='modal-body'>
-                                        <div class='alert alert-success' role='alert'>{$_SESSION['bien']}</div>
-                                    </div>
-                                    <div class='modal-footer'>
-                                        <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>";
-                        unset($_SESSION['bien']);
-                    }
-                    ?>
-                    <form action="actualizar_nomina.php" method="post">
-                        <label for="empleadoID" class="form-label">Empleado:</label>
+                    
+                            <div class="d-flex flex-column flex-md-row gap-2">
+                                            <input type="radio" class="btn-check" name="options-base" id="option1" autocomplete="off" checked>
+                                            <label class="btn" for="option1">BONOS</label>
+                                            <input type="radio" class="btn-check" name="options-base" id="option2" autocomplete="off">
+                                            <label class="btn" for="option2">REBAJAS</label>
+                                        </div>
+                                        <br>
+                                        <script>
+                        document.getElementById('option1').addEventListener('change', function() {
+                            if (this.checked) {
+                                window.location.href = './bonosforms.php'; // Reemplaza con la URL deseada
+                            }
+                        });
+                        
+                        document.getElementById('option2').addEventListener('change', function() {
+                            if (this.checked) {
+                                window.location.href = './rabajasforms.php'; // Reemplaza con la URL deseada
+                            }
+                        });
+                    </script>
+
+
+                                        <form action="actualizar_nomina.php" method="post">
+                                            <label for="empleadoID" class="form-label">Empleado:</label>
                         <select name="empleadoID" class="form-control" required>
                             <?php
                             require '../includes/db.php';
@@ -113,7 +111,7 @@
     <!-- jQuery -->
     <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
     <!-- Bootstrap JS -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/4.6.0/js/bootstrap.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap/5.3.3/js/bootstrap.bundle.min.js"></script>
     <!-- Datepicker JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="../assets/js/weekpicker.js"></script>

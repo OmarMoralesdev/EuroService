@@ -41,6 +41,26 @@ session_start();
         <?php include '../includes/vabr.php'; ?>
         <div class="main p-3">
             <div class="container">
+            <div class="d-flex flex-column flex-md-row gap-2">
+                                            <input type="radio" class="btn-check" name="options-base" id="option1" autocomplete="off" checked>
+                                            <label class="btn" for="option1">BONOS</label>
+                                            <input type="radio" class="btn-check" name="options-base" id="option2" autocomplete="off">
+                                            <label class="btn" for="option2">REBAJAS</label>
+                                        </div>
+                                        <br>
+                                        <script>
+                        document.getElementById('option1').addEventListener('change', function() {
+                            if (this.checked) {
+                                window.location.href = './bonosforms.php'; // Reemplaza con la URL deseada
+                            }
+                        });
+                        
+                        document.getElementById('option2').addEventListener('change', function() {
+                            if (this.checked) {
+                                window.location.href = './rabajasforms.php'; // Reemplaza con la URL deseada
+                            }
+                        });
+                    </script>
                 <h2>Actualizar Bonos</h2>
                 <div class="form-container">
                 <?php
