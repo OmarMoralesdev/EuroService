@@ -94,8 +94,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt->bindParam(':fecha_fin', $fecha_fin);
         $stmt->execute();
 
-        echo "Nómina semanal registrada o actualizada correctamente.<br>";
-
+        $_SESSION['bien'] = "Nómina semanal registrada o actualizada correctamente.<br>";
+        header("Location: nomina_Semana.php");
+        exit();
     } catch (PDOException $e) {
         $_SESSION['error'] = "Error: " . $e->getMessage() . "<br>";
         header("Location: nomina_Semana.php");
