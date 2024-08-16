@@ -345,12 +345,6 @@ h2 {
                 <span>BUSCAR EMPLEADOS</span>
             </a>
         </li>
-        <li class="sidebar-item">
-            <a href="finanzas_view.php" class="sidebar-link">
-                <i class="lni lni-coin"></i>
-                <span>FINANZAS</span>
-            </a>    
-        </li>
     </ul>
 </li>
 <div class="sidebar-footer">
