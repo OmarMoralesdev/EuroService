@@ -58,23 +58,6 @@ session_start();
                     $formValues = isset($_SESSION['form_values']) ? $_SESSION['form_values'] : array();
                     ?>
 
-                    <div class="d-flex flex-column flex-md-row gap-2">
-                        <input type="radio" class="btn-check" name="options-base" id="option1" autocomplete="off" checked>
-                        <label class="btn" for="option1">CON SEGUIMIENTO</label>
-                        <input type="radio" class="btn-check" name="options-base" id="option2" autocomplete="off">
-                        <label class="btn" for="option2">SIN SEGUIMIENTO</label>
-                    </div>
-
-                    <br>
-
-                    <script>
-                        document.getElementById('option2').addEventListener('change', function() {
-                            if (this.checked) {
-                                window.location.href = './inspeccion_view.php'; // Reemplaza con la URL deseada
-                            }
-                        });
-                    </script>
-
                     <form id="formCita" action="autos.php" method="POST" autocomplete="off" novalidate>
                         <div class="mb-3">
                             <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required value="<?= htmlspecialchars($formValues['campo'] ?? '') ?>">
