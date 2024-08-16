@@ -13,10 +13,15 @@ try {
     }
     $formaDePago = isset($_POST['formadepago']) ? trim($_POST['formadepago']) : '';
     $ordenID = $_POST['ordenID'];
-    $nuevaUbicacionID = 4;
+    $nuevaUbicacionID = 1;
 
-    // Consultar el total estimado de la orden
-    $stmt = $pdo->prepare("SELECT total_estimado, ubicacionID FROM ORDENES_TRABAJO WHERE ordenID = ?");
+    // Consultar el total estimado de la orden y la ubicación
+    $stmt = $pdo->prepare("
+SELECT C.total_estimado, OT.ubicacionID 
+FROM ORDENES_TRABAJO OT
+JOIN CITAS C ON OT.citaID = C.citaID
+WHERE OT.ordenID = ?
+");
     $stmt->execute([$ordenID]);
     $orden = $stmt->fetch(PDO::FETCH_ASSOC);
 
@@ -25,6 +30,7 @@ try {
         header("Location: entregar.php");
         exit();
     }
+
 
     // Registrar la entrega usando el procedimiento almacenado
     $stmt = $pdo->prepare("CALL registrar_entrega(?,?)");
