@@ -3,8 +3,7 @@ session_start();
 ?>
 <!DOCTYPE html>
 <html lang="es">
-
-<head>
+    <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -19,7 +18,6 @@ session_start();
         }
     </style>
 </head>
-
 <body>
     <div class="wrapper">
         <?php include '../includes/vabr.php'; ?>
@@ -56,6 +54,9 @@ session_start();
                         </div>";
                         unset($_SESSION['bien']);
                     }
+
+                    // Recuperar valores del formulario si existen
+                    $formValues = isset($_SESSION['form_values']) ? $_SESSION['form_values'] : array();
                     ?>
 
                     <div class="d-flex flex-column flex-md-row gap-2">
@@ -77,32 +78,32 @@ session_start();
 
                     <form id="formCita" action="autos.php" method="POST" autocomplete="off" novalidate>
                         <div class="mb-3">
-                            <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required>
+                            <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required value="<?= htmlspecialchars($formValues['campo'] ?? '') ?>">
                             <ul id="lista" class="list-group lista" style="display: none;"></ul>
-                            <input type="hidden" id="clienteID" name="clienteID">
+                            <input type="hidden" id="clienteID" name="clienteID" value="<?= htmlspecialchars($formValues['clienteID'] ?? '') ?>">
                             <div class="invalid-feedback">Debes seleccionar un cliente.</div>
                         </div>
                         <div class="form-group">
                             <label for="marca">Marca:</label>
-                            <input type="text" id="marca" name="marca" maxlength="30" class="form-control" placeholder="Introduce la marca del vehículo" required>
+                            <input type="text" id="marca" name="marca" maxlength="30" class="form-control" placeholder="Introduce la marca del vehículo" required value="<?= htmlspecialchars($formValues['marca'] ?? '') ?>">
 
                             <label for="modelo">Modelo:</label>
-                            <input type="text" id="modelo" name="modelo" maxlength="30" class="form-control" placeholder="Introduce el modelo del vehículo" required>
+                            <input type="text" id="modelo" name="modelo" maxlength="30" class="form-control" placeholder="Introduce el modelo del vehículo" required value="<?= htmlspecialchars($formValues['modelo'] ?? '') ?>">
 
                             <label for="anio">Año:</label>
-                            <input class="form-control" type="number" id="anio" name="anio" min="1886" max="<?= date('Y') ?>" placeholder="Introduce el año del vehículo" required maxlength="4">
+                            <input class="form-control" type="number" id="anio" name="anio" min="1886" max="<?= date('Y') ?>" placeholder="Introduce el año del vehículo" required maxlength="4" value="<?= htmlspecialchars($formValues['anio'] ?? '') ?>">
 
                             <label for="color">Color:</label>
-                            <input type="text" id="color" name="color" maxlength="33" class="form-control" placeholder="Introduce el color del vehículo" required>
+                            <input type="text" id="color" name="color" maxlength="33" class="form-control" placeholder="Introduce el color del vehículo" required value="<?= htmlspecialchars($formValues['color'] ?? '') ?>">
 
                             <label for="kilometraje">Kilometraje:</label>
-                            <input type="text" id="kilometraje" name="kilometraje" maxlength="8" class="form-control" placeholder="Introduce el kilometraje del vehículo" required>
+                            <input type="text" id="kilometraje" name="kilometraje" maxlength="8" class="form-control" placeholder="Introduce el kilometraje del vehículo" required value="<?= htmlspecialchars($formValues['kilometraje'] ?? '') ?>">
 
                             <label for="placas">Placas:</label>
-                            <input type="text" id="placas" name="placas" maxlength="9" class="form-control" placeholder="Introduce las placas del vehículo" required>
+                            <input type="text" id="placas" name="placas" maxlength="9" class="form-control" placeholder="Introduce las placas del vehículo" required value="<?= htmlspecialchars($formValues['placas'] ?? '') ?>">
 
                             <label for="vin">VIN:</label>
-                            <input type="text" id="vin" name="vin" maxlength="20" class="form-control" placeholder="Introduce el VIN del vehículo" required>
+                            <input type="text" id="vin" name="vin" maxlength="20" class="form-control" placeholder="Introduce el VIN del vehículo" required value="<?= htmlspecialchars($formValues['vin'] ?? '') ?>">
 
                             <br>
                             <button type="submit" value="Registrar Vehículo" class="btn btn-dark d-grid gap-2 col-6 mx-auto">Registrar</button>
@@ -199,13 +200,11 @@ session_start();
                             input.value = input.value.replace(/[^A-Za-z0-9\-]/g, ''); // placas
                         }
 
-
-                        
-                            function validarKil(event) {
+                        function validarKil(event) {
                             const input = event.target;
                             input.value = input.value.replace(/[^0-9]/g, '');
                             if (input.value.length > 9) {
-                                input.value = input.value.slice(0, 4);
+                                input.value = input.value.slice(0, 9);
                             }
                         }
 
@@ -223,5 +222,4 @@ session_start();
         </div>
     </div>
 </body>
-
 </html>
