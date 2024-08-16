@@ -101,11 +101,17 @@
                 <div class="form-container">
                     <div class="table-wrapper">
                         <table class="table">
-                            <thead>
+                            <thead align="center">
                                 <tr>
                                     <th scope="col">VEHÍCULO</th>
+                                    <th scope="col">CLIENTE</th>
                                     <th scope="col">SERVICIO SOLICITADO</th>
                                     <th scope="col">FECHA DE CITA</th>
+                                    <th scope="col">COSTO DE REFACCIONES</th>
+                                    <th scope="col">COSTO DE MANO DE OBRA</th>
+                                    <th scope="col">TOTAL 
+                                        (costo inspección incluido)</th>
+                                    <th scope="col">ANTICIPO MÍNIMO</th>
                                     <th scope="col">TIEMPO RESTANTE</th>
                                 </tr>
                             </thead>
@@ -116,10 +122,14 @@
                                 $pdo = $con->conectar();
 
                                 $stmt = $pdo->prepare("
-                                SELECT c.*, v.marca AS vehiculo, 
-                                    DATEDIFF(c.fecha_cita, CURDATE()) AS dias_restantes
+                                SELECT c.*, CONCAT(v.marca, ' ', v.modelo, ' ', v.anio, ' - ', v.color) AS VEHICULO, 
+                                CONCAT(p.nombre, ' ', p.apellido_paterno, ' ', p.apellido_materno) AS PROPIETARIO,
+                                (c.total_estimado/2) AS anticipo_minimo,
+                                DATEDIFF(c.fecha_cita, CURDATE()) AS dias_restantes
                                 FROM CITAS c 
                                 JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
+                                JOIN CLIENTES cl ON v.clienteID = cl.clienteID
+                                JOIN PERSONAS p ON cl.personaID = p.personaID
                                 WHERE c.estado = 'pendiente' 
                                 ORDER BY c.fecha_cita ASC;
                                 ");
@@ -129,9 +139,14 @@
 
                                 foreach ($citas as $cita) {
                                     echo '<tr>';
-                                    echo '<td>' . htmlspecialchars($cita['vehiculo']) . '</td>';
+                                    echo '<td>' . htmlspecialchars($cita['VEHICULO']) . '</td>';
+                                    echo '<td>' . htmlspecialchars($cita['PROPIETARIO']) . '</td>';
                                     echo '<td>' . htmlspecialchars($cita['servicio_solicitado']) . '</td>';
                                     echo '<td>' . htmlspecialchars($cita['fecha_cita']) . '</td>';
+                                    echo '<td>' . htmlspecialchars($cita['costo_refacciones']) . '</td>';
+                                    echo '<td>' . htmlspecialchars($cita['costo_mano_obra']) . '</td>';
+                                    echo '<td>' . htmlspecialchars($cita['total_estimado']) . '</td>';
+                                    echo '<td>' . htmlspecialchars($cita['anticipo_minimo']) . '</td>';
                                 
                                     // Asignar tiempo restante basado en los días restantes
                                     $diasRestantes = $cita['dias_restantes'];

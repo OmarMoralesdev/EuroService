@@ -13,6 +13,21 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $anticipo = $_POST['anticipo'];
     $formaDePago = $_POST['formadepago'];
 
+    // Guardar los datos del formulario en la sesión
+    $_SESSION['form_data'] = [
+        'campo' => $campo,
+        'clienteID' => $_POST['clienteID'],
+        'vehiculoID' => $vehiculoID,
+        'vehiculoSeleccionado' => $_POST['vehiculoSeleccionado'],
+        'servicioSolicitado' => $servicio_solicitado,
+        'costoManoObra' => $costoManoObra,
+        'costoRefacciones' => $costoRefacciones,
+        'anticipo' => $anticipo,
+        'empleado' => $empleadoID,
+        'ubicacionID' => $ubicacionID,
+        'formadepago' => $formaDePago
+    ];
+
     // Fechas y estados predefinidos
     $fechaSolicitud = date('Y-m-d'); // Fecha actual
     $fechaCita = date('Y-m-d H:i:s'); // Fecha actual con hora para la cita
@@ -33,6 +48,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     // Validación de datos
     if ($costoManoObra < 0 || $costoRefacciones < 0) {
         $_SESSION['error'] = "No puedes ingresar números negativos.";
+        header("Location: crear_orden_sin_cita.php");
+        exit();
+    }
+    // Validación de datos
+    if (($costoManoObra + $costoRefacciones + 800) < $anticipo) {
+        $_SESSION['error'] = "el anticipo no puede ser mayor a el total!";
         header("Location: crear_orden_sin_cita.php");
         exit();
     }
@@ -91,6 +112,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $pdo->commit();
         $_SESSION['bien'] = "Cita y orden de trabajo creadas exitosamente.";
+        unset($_SESSION['form_data']); // Limpiar los datos del formulario
         header("Location: crear_orden_sin_cita.php");
         exit();
     } catch (PDOException $e) {

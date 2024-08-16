@@ -123,7 +123,7 @@ try {
                                     <th>Monto</th>
                                     <th>Tipo de Pago</th>
                                     <th>Forma de Pago</th>
-                                    <th>Folio</th>
+                                    <th>Folio de Orden</th>
                                     <th>Nombre del Cliente</th>
                                     <th>Vehículo</th>
                                     <th>Servicio Solicitado</th>

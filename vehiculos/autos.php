@@ -4,9 +4,7 @@ $con = new Database();
 $pdo = $con->conectar();
 session_start();
 
-// Comprobar si el formulario ha sido enviado
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Verificar si las claves existen en el array $_POST
     $clienteID = isset($_POST['clienteID']) ? $_POST['clienteID'] : '';
     $marca = isset($_POST['marca']) ? trim($_POST['marca']) : '';
     $modelo = isset($_POST['modelo']) ? trim($_POST['modelo']) : '';
@@ -22,8 +20,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $stmtVerificar = $pdo->prepare($verificar);
     $stmtVerificar->execute([$vin]);
 
+    if ($marca == "" || $modelo == "" || $anio == "" || $color == "" || $kilometraje == "" || $placas == "" || $vin == "") {
+        $_SESSION['error'] = "Todos los campos son obligatorios.";
+        $_SESSION['form_values'] = $_POST; // Guardar valores del formulario
+        header("Location: autos_view.php");
+        exit();
+    }
+
     if ($stmtVerificar->rowCount() > 0) {
         $_SESSION['error'] = "El vehículo ya está registrado.";
+        $_SESSION['form_values'] = $_POST; // Guardar valores del formulario
         header("Location: autos_view.php");
         exit();
     } else {
@@ -34,10 +40,12 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
         if ($stmt->rowCount() > 0) {
             $_SESSION['bien'] = "Vehículo registrado exitosamente.";
+            unset($_SESSION['form_values']); // Limpiar valores del formulario en caso de éxito
             header("Location: autos_view.php");
             exit();
         } else {
             $_SESSION['error'] = "Error: " . $pdo->errorInfo()[2];
+            $_SESSION['form_values'] = $_POST; // Guardar valores del formulario
             header("Location: autos_view.php");
             exit();
         }

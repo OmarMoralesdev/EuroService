@@ -66,94 +66,83 @@
                 // Conectar a la base de datos
                 $con = new Database();
                 $pdo = $con->conectar();
-                
-                // Consulta SQL actualizada
-                $sql = "       
-                    SELECT 
-                        DATE_FORMAT(p.fecha_pago, '%Y-%m-%d') AS dia,
-                        SUM(p.monto) AS total_ingresos_mensuales,
-                        0 AS total_gastos_mensuales,
-                        0 AS total_ingresos_servicios,
-                        0 AS total_gasto_insumo,
-                        SUM(p.monto) AS total_neto,
-                        SUM(p.monto) AS total_con_ingresos_servicios,
-                        0 AS total_gastos_totales
-                    FROM PAGOS p
-                    WHERE p.fecha_pago >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-                    GROUP BY p.fecha_pago
 
-                    UNION ALL     
-
+                // Consulta SQL actualizada para datos semanales
+                $sql = "
                     SELECT 
-                        DATE_FORMAT(c.fecha_compra, '%Y-%m-%d') AS dia,
-                        0 AS total_ingresos_mensuales,
-                        COALESCE(SUM(dc.subtotal), 0) AS total_gastos_mensuales,
-                        0 AS total_ingresos_servicios,
-                        COALESCE(SUM(dc.subtotal), 0) AS total_gasto_insumo,
-                        0 AS total_neto,
-                        0 AS total_con_ingresos_servicios,
-                        COALESCE(SUM(dc.subtotal), 0) AS total_gastos_totales
-                    FROM DETALLE_COMPRA dc
-                    JOIN COMPRAS c ON dc.compraID = c.compraID
-                    WHERE c.fecha_compra >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-                    GROUP BY c.fecha_compra
+                        DATE_FORMAT(fecha_pago, '%Y-%u') AS semana,
+                        SUM(CASE WHEN tipo_pago = 'anticipo' THEN monto ELSE 0 END) AS ingresos_totales,
+                        0 AS gastos_totales,
+                        0 AS ingresos_semanales,
+                        0 AS gastos_semanales,
+                        0 AS compras_semanales
+                    FROM PAGOS
+                    WHERE fecha_pago >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+                    GROUP BY YEARWEEK(fecha_pago)
 
                     UNION ALL
 
                     SELECT 
-                        DATE_FORMAT(c.fecha_cita, '%Y-%m-%d') AS dia,
-                        0 AS total_ingresos_mensuales,
-                        0 AS total_gastos_mensuales,
-                        COALESCE(SUM(c.total_estimado), 0) AS total_ingresos_servicios,
-                        0 AS total_gasto_insumo,
-                        COALESCE(SUM(c.total_estimado), 0) AS total_neto,
-                        COALESCE(SUM(c.total_estimado), 0) AS total_con_ingresos_servicios,
-                        0 AS total_gastos_totales
+                        DATE_FORMAT(c.fecha_compra, '%Y-%u') AS semana,
+                        0 AS ingresos_totales,
+                        COALESCE(SUM(dc.cantidad * dc.precio_unitario), 0) AS gastos_totales,
+                        0 AS ingresos_semanales,
+                        COALESCE(SUM(dc.cantidad * dc.precio_unitario), 0) AS gastos_semanales,
+                        COALESCE(SUM(dc.cantidad * dc.precio_unitario), 0) AS compras_semanales
+                    FROM DETALLE_COMPRA dc
+                    JOIN COMPRAS c ON dc.compraID = c.compraID
+                    WHERE c.fecha_compra >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+                    GROUP BY YEARWEEK(c.fecha_compra)
+
+                    UNION ALL
+
+                    SELECT 
+                        DATE_FORMAT(c.fecha_cita, '%Y-%u') AS semana,
+                        COALESCE(SUM(c.total_estimado), 0) AS ingresos_semanales,
+                        0 AS gastos_totales,
+                        COALESCE(SUM(c.total_estimado), 0) AS ingresos_semanales,
+                        0 AS gastos_semanales,
+                        0 AS compras_semanales
                     FROM CITAS c
-                    WHERE c.fecha_cita >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-                    GROUP BY c.fecha_cita
+                    WHERE c.fecha_cita >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+                    GROUP BY YEARWEEK(c.fecha_cita)
 
                     UNION ALL
 
                     SELECT 
-                        DATE_FORMAT(c.fecha_compra, '%Y-%m-%d') AS dia,
-                        0 AS total_ingresos_mensuales,
-                        0 AS total_gastos_mensuales,
-                        0 AS total_ingresos_servicios,
-                        COALESCE(SUM(dc.cantidad * dc.precio_unitario), 0) AS total_gasto_insumo,
-                        0 AS total_neto,
-                        0 AS total_con_ingresos_servicios,
-                        COALESCE(SUM(dc.cantidad * dc.precio_unitario), 0) AS total_gastos_totales
-                    FROM DETALLE_COMPRA dc
-                    JOIN COMPRAS c ON dc.compraID = c.compraID
-                    WHERE c.fecha_compra >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
-                    GROUP BY c.fecha_compra
+                        DATE_FORMAT(fecha_pago, '%Y-%u') AS semana,
+                        0 AS ingresos_totales,
+                        SUM(CASE WHEN tipo_pago = 'pago_empleado' THEN monto ELSE 0 END) AS gastos_totales,
+                        0 AS ingresos_semanales,
+                        SUM(CASE WHEN tipo_pago = 'pago_empleado' THEN monto ELSE 0 END) AS gastos_semanales,
+                        0 AS compras_semanales
+                    FROM PAGOS
+                    WHERE fecha_pago >= DATE_SUB(CURDATE(), INTERVAL 1 MONTH)
+                    GROUP BY YEARWEEK(fecha_pago)
                 ";
 
                 // Ejecutar consulta
                 $stmt = $pdo->query($sql);
 
-                if ($stmt->rowCount() > 0) {
-                    // Datos para gráficos
-                    $data = [
-                        'dias' => [],
-                        'ingresos' => [],
-                        'gastos' => [],
-                        'ingresos_servicios' => [],
-                        'gasto_insumo' => [],
-                        'total_neto' => [],
-                        'total_gastos_totales' => []
-                    ];
+                // Inicializar datos para gráficos
+                $data = [
+                    'semanas' => [],
+                    'ingresos_totales' => [],
+                    'gastos_totales' => [],
+                    'ingresos_semanales' => [],
+                    'gastos_semanales' => [],
+                    'compras_semanales' => []
+                ];
 
+                if ($stmt->rowCount() > 0) {
                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         // Recolectar datos para gráficos
-                        $data['dias'][] = $row['dia'];
-                        $data['ingresos'][] = (float)$row['total_ingresos_mensuales'];
-                        $data['gastos'][] = (float)$row['total_gastos_mensuales'];
-                        $data['ingresos_servicios'][] = (float)$row['total_ingresos_servicios'];
-                        $data['gasto_insumo'][] = (float)$row['total_gasto_insumo'];
-                        $data['total_neto'][] = (float)$row['total_neto'];
-                        $data['total_gastos_totales'][] = (float)$row['total_gastos_totales'];
+                        $data['semanas'][] = $row['semana'];
+                        $data['ingresos_totales'][] = (float)$row['ingresos_totales'];
+                        $data['gastos_totales'][] = (float)$row['gastos_totales'];
+                        $data['ingresos_semanales'][] = (float)$row['ingresos_semanales'];
+                        $data['gastos_semanales'][] = (float)$row['gastos_semanales'];
+                        $data['compras_semanales'][] = (float)$row['compras_semanales'];
                     }
                 } else {
                     echo "<p>No se encontraron resultados.</p>";
@@ -170,59 +159,44 @@
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         // Datos provenientes de PHP
-                        var dias = <?php echo json_encode($data['dias']); ?>;
-                        var ingresos = <?php echo json_encode($data['ingresos']); ?>;
-                        var gastos = <?php echo json_encode($data['gastos']); ?>;
-                        var ingresos_servicios = <?php echo json_encode($data['ingresos_servicios']); ?>;
-                        var gasto_insumo = <?php echo json_encode($data['gasto_insumo']); ?>;
-                        var total_neto = <?php echo json_encode($data['total_neto']); ?>;
-                        var total_gastos_totales = <?php echo json_encode($data['total_gastos_totales']); ?>;
+                        var semanas = <?php echo json_encode($data['semanas']); ?>;
+                        var ingresos_totales = <?php echo json_encode($data['ingresos_totales']); ?>;
+                        var gastos_totales = <?php echo json_encode($data['gastos_totales']); ?>;
+                        var ingresos_semanales = <?php echo json_encode($data['ingresos_semanales']); ?>;
+                        var gastos_semanales = <?php echo json_encode($data['gastos_semanales']); ?>;
+                        var compras_semanales = <?php echo json_encode($data['compras_semanales']); ?>;
 
                         // Crear gráfico
                         var ctx = document.getElementById('financialChart').getContext('2d');
                         new Chart(ctx, {
                             type: 'bar', // Tipo de gráfico
                             data: {
-                                labels: dias,
+                                labels: semanas,
                                 datasets: [
                                     {
-                                        label: 'Ingresos Mensuales',
-                                        data: ingresos,
+                                        label: 'Ingresos Totales',
+                                        data: ingresos_totales,
                                         backgroundColor: 'rgba(0, 128, 0, 0.7)',
                                         borderColor: 'rgba(0, 128, 0, 1)',
                                         borderWidth: 1
                                     },
                                     {
-                                        label: 'Gastos Mensuales',
-                                        data: gastos,
-                                        backgroundColor: 'rgba(255, 0, 0, 0.7)',
-                                        borderColor: 'rgba(255, 0, 0, 1)',
-                                        borderWidth: 1
-                                    },
-                                    {
-                                        label: 'Ingresos Servicios',
-                                        data: ingresos_servicios,
+                                        label: 'Ingresos Semanales',
+                                        data: ingresos_semanales,
                                         backgroundColor: 'rgba(153, 102, 255, 0.7)',
                                         borderColor: 'rgba(153, 102, 255, 1)',
                                         borderWidth: 1
                                     },
                                     {
-                                        label: 'Gasto Insumo',
-                                        data: gasto_insumo,
-                                        backgroundColor: 'rgba(255, 159, 64, 0.7)',
-                                        borderColor: 'rgba(255, 159, 64, 1)',
-                                        borderWidth: 1
-                                    },
-                                    {
-                                        label: 'Total Neto',
-                                        data: total_neto,
+                                        label: 'Gastos Semanales',
+                                        data: gastos_semanales,
                                         backgroundColor: 'rgba(255, 206, 86, 0.7)',
                                         borderColor: 'rgba(255, 206, 86, 1)',
                                         borderWidth: 1
                                     },
                                     {
-                                        label: 'Total Gastos Totales',
-                                        data: total_gastos_totales,
+                                        label: 'Compras Semanales',
+                                        data: compras_semanales,
                                         backgroundColor: 'rgba(75, 192, 192, 0.7)',
                                         borderColor: 'rgba(75, 192, 192, 1)',
                                         borderWidth: 1
