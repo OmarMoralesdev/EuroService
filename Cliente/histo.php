@@ -7,6 +7,9 @@ $pdo = $con->conectar();
 
 $clienteID = $_SESSION['clienteID'];
 
+// Obtén el término de búsqueda
+$searchTerm = isset($_POST['search']) ? $_POST['search'] : '';
+
 if (!function_exists('obtenerDetallesClientepersona')) {
     function obtenerDetallesClientepersona($pdo, $clienteID)
     {
@@ -18,21 +21,25 @@ if (!function_exists('obtenerDetallesClientepersona')) {
 }
 
 try {
-    $sql = "SELECT c.citaID, c.servicio_solicitado, c.fecha_cita, c.estado,
+    // Modifica la consulta para incluir el término de búsqueda
+    $sql = "SELECT c.citaID, c.servicio_solicitado, c.fecha_cita, c.estado, c.costo_mano_obra, c.costo_refacciones, c.total_estimado,
                 v.vin, v.marca, v.modelo, v.anio,
-                   DATEDIFF(c.fecha_cita, CURDATE()) AS dias_restantes
+                DATEDIFF(c.fecha_cita, CURDATE()) AS dias_restantes
             FROM CITAS c
             INNER JOIN VEHICULOS v ON c.vehiculoID = v.vehiculoID
-            WHERE v.clienteID = ? and (c.estado = 'cancelado' or c.estado = 'completado')
+            WHERE v.clienteID = ? 
+            AND (c.estado = 'cancelado' OR c.estado = 'completado')
+            AND c.servicio_solicitado LIKE ?
             ORDER BY c.fecha_cita DESC";
     $stmt = $pdo->prepare($sql);
-    $stmt->execute([$clienteID]);
+    $stmt->execute([$clienteID, "%$searchTerm%"]);
     $citas = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
     echo "Error en la consulta: " . $e->getMessage();
     die();
 }
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
@@ -51,7 +58,6 @@ try {
         .container {
             width: 80%;
             margin-top: 100px;
-
         }
 
         .card-columns {
@@ -76,11 +82,11 @@ try {
             text-align: center;
             color: black;
         }
-        
+
         .card-text {
             color: black;
         }
-        
+
         .modal-content {
             background-color: white;
             color: black;
@@ -92,7 +98,17 @@ try {
 <body>
     <?php include 'nav.php'; ?>
     <div class="container">
+
+    
         <h2 style="text-align: center;">Historial</h2>
+        <form method="post" class="mb-4">
+            <div class="input-group">
+                <input type="text" class="form-control" name="search" placeholder="Buscar por servicio" value="<?php echo htmlspecialchars($searchTerm); ?>">
+                <button class="btn btn-dark" type="submit">Buscar</button>
+            </div>
+        </form>
+
+        
         <div class="card-columns">
             <?php if (!empty($citas)) : ?>
                 <?php foreach ($citas as $cita) : ?>
@@ -121,6 +137,9 @@ try {
                                     <p><strong>Modelo:</strong> <?php echo htmlspecialchars($cita['modelo']); ?></p>
                                     <p><strong>Año:</strong> <?php echo htmlspecialchars($cita['anio']); ?></p>
                                     <p><strong>Servicio Solicitado:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
+                                    <p><strong>Costo mano de obra:</strong> <?php echo htmlspecialchars($cita['costo_mano_obra']); ?></p>
+                                    <p><strong>Costo refacciones:</strong> <?php echo htmlspecialchars($cita['costo_refacciones']); ?></p>
+                                    <p><strong>Total:</strong> <?php echo htmlspecialchars($cita['total_estimado']); ?></p>
                                     <p><strong>Fecha de la Cita:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
                                     <p><strong>Estado:</strong> <?php echo htmlspecialchars($cita['estado']); ?></p>
                                 </div>
