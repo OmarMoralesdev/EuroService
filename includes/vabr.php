@@ -373,6 +373,9 @@ h2 {
                 <li class="sidebar-item">
                     <a href="../Finanzas/Reporte_de_rendimiento.php" class="sidebar-link">RENDIMIENTO</a>
                 </li>
+                <li class="sidebar-item">
+                    <a href="../nominas/Bonos_Rebajas_Adicionales.php" class="sidebar-link">REGISTRAR NOMINAS</a>
+                </li>
             </ul>
         </li>
 
@@ -447,7 +450,7 @@ h2 {
                     <a href="../Finanzas/gestion_pagoforms.php" class="sidebar-link">GESTION</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Empleados/nominas.php" class="sidebar-link">REGISTRAR NOMINAS</a>
+                    <a href="../nominas/nomina_Semana.php" class="sidebar-link">REGISTRAR NOMINAS</a>
                 </li>
             </ul>
 
