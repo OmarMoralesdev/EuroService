@@ -2,9 +2,6 @@
 require '../includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-    // Verificar los datos recibidos
-    var_dump($_POST); // Añadir esta línea para verificar los datos recibidos
-
     // Validar entrada
     if (empty($_POST['empleadoID']) || empty($_POST['rebajas_adicionales']) || empty($_POST['fecha'])) {
         die('Todos los campos son obligatorios.');
@@ -25,7 +22,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $con = new Database();
         $pdo = $con->conectar();
 
-        // Primero, obtenemos el ID de nómina para el empleado y las fechas proporcionadas
+        // Obtener el ID de nómina para el empleado y las fechas proporcionadas
         $query = "
         SELECT nominaID, bonos, rebajas_adicionales
         FROM NOMINAS
@@ -46,7 +43,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Sumar las nuevas rebajas adicionales a las existentes
             $rebajas_adicionales_totales = $rebajas_adicionales + $rebajas_adicionales_existentes;
 
-            // Actualizamos las rebajas adicionales para la nómina especificada
+            // Actualizar las rebajas adicionales para la nómina especificada
             $query = "
             UPDATE NOMINAS
             SET rebajas_adicionales = :rebajas_adicionales
@@ -58,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bindParam(':rebajas_adicionales', $rebajas_adicionales_totales);
             $stmt->execute();
         } else {
-            // Si no hay nómina existente, crear una nueva
+            // Crear una nueva nómina si no existe
             $query = "
             INSERT INTO NOMINAS (faltas, rebajas, bonos, rebajas_adicionales, fecha_de_pago, total, fecha_inicio, fecha_fin, empleadoID)
             VALUES (0, 0, 0, :rebajas_adicionales, CURDATE(), 0, :fecha_inicio, :fecha_fin, :empleadoID)
@@ -96,16 +93,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $salario_diario = $row['salario_diario'];
             $faltas = $row['faltas'];
 
+            // Calcular rebajas por faltas y total ganado
             $rebajas = $faltas * $salario_diario;
-            $total_earned = ($salario_diario * 7) - $rebajas; // Total ganado menos rebajas por faltas
+            $total_earned = ($salario_diario * 7) - $rebajas;
 
-            // Validar que las rebajas adicionales no excedan el salario total
+            // Validar que las rebajas adicionales no excedan el salario total ganado
             if ($rebajas_adicionales_totales > $total_earned) {
                 die('Las rebajas adicionales no pueden exceder el salario total.');
             }
 
+            // Calcular el total final
             $total = $total_earned - $rebajas_adicionales_totales;
 
+            // Actualizar la nómina con el total recalculado
             $query = "
             UPDATE NOMINAS
             SET faltas = :faltas, rebajas = :rebajas, total = :total
