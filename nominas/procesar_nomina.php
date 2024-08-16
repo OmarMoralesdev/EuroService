@@ -9,7 +9,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
-    $fecha_inicio = $_POST['fecha'];
+    $fecha_inicio = date('Y-m-d', strtotime($_POST['fecha']));
 
     // Validar que la fecha es un lunes
     if (date('N', strtotime($fecha_inicio)) !== '1') {
@@ -47,13 +47,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 AND a.fecha BETWEEN :fecha_inicio AND :fecha_fin
             WHERE e.activo = 'si'
             GROUP BY e.empleadoID
-            HAVING dias_registrados < 5
+            HAVING dias_registrados < 7
         ";
         $stmt_asistencias = $pdo->prepare($query_asistencias);
         $stmt_asistencias->bindParam(':fecha_inicio', $fecha_inicio);
         $stmt_asistencias->bindParam(':fecha_fin', $fecha_fin);
         $stmt_asistencias->execute();
-        
+
         if ($stmt_asistencias->rowCount() > 0) {
             $_SESSION['error'] = 'No todas las asistencias están registradas para la semana seleccionada.';
             header("Location: nomina_Semana.php");
