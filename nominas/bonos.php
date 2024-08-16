@@ -20,13 +20,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         exit();
     }
 
+    // Validar que la fecha está dentro de la semana actual
+    $hoy = date('Y-m-d');
+    $primer_dia_semana_actual = date('Y-m-d', strtotime('monday this week'));
+    $ultimo_dia_semana_actual = date('Y-m-d', strtotime('sunday this week'));
+
+    if ($fecha_inicio < $primer_dia_semana_actual || $fecha_inicio > $ultimo_dia_semana_actual) {
+        $_SESSION['error'] = ('La fecha seleccionada debe estar dentro de la semana actual.');
+        header("Location: bonosforms.php");
+        exit();
+    }
+
     $fecha_fin = date('Y-m-d', strtotime($fecha_inicio . ' +6 days'));
 
     try {
         $con = new Database();
         $pdo = $con->conectar();
 
-        // Primero, obtenemos el ID de nómina para el empleado y las fechas proporcionadas
+        // Obtener el ID de nómina para el empleado y las fechas proporcionadas
         $query = "
         SELECT nominaID, bonos, rebajas_adicionales
         FROM NOMINAS
@@ -47,7 +58,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Sumar los bonos a los existentes
             $bonos_totales = $bonos + $bonos_existentes;
 
-            // Actualizamos los bonos para la nómina especificada
+            // Actualizar los bonos para la nómina especificada
             $query = "
             UPDATE NOMINAS
             SET bonos = :bonos
@@ -126,11 +137,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             header("Location: bonosforms.php");
             exit();
         } else {
-            $_SESSION['error'] =('No se pudo obtener la información del empleado para recalcular el total.');
+            $_SESSION['error'] = ('No se pudo obtener la información del empleado para recalcular el total.');
             header("Location: bonosforms.php");
             exit();
         }
-
     } catch (PDOException $e) {
         $_SESSION['error'] = "Error: " . $e->getMessage() . "<br>";
         header("Location: bonosforms.php");

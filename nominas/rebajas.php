@@ -6,7 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($_POST['empleadoID']) || empty($_POST['rebajas_adicionales']) || empty($_POST['fecha'])) {
         $_SESSION['error'] = ('Todos los campos son obligatorios.');
         header("Location: rabajasforms.php");
-                exit();
+        exit();
     }
 
     $empleadoID = $_POST['empleadoID'];
@@ -17,7 +17,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (date('N', strtotime($fecha_inicio)) !== '1') {
         $_SESSION['error'] = ('La fecha seleccionada debe ser un lunes.');
         header("Location: rabajasforms.php");
-                exit();
+        exit();
+    }
+
+    // Validar que la fecha está dentro de la semana actual
+    $hoy = date('Y-m-d');
+    $primer_dia_semana_actual = date('Y-m-d', strtotime('monday this week'));
+    $ultimo_dia_semana_actual = date('Y-m-d', strtotime('sunday this week'));
+
+    if ($fecha_inicio < $primer_dia_semana_actual || $fecha_inicio > $ultimo_dia_semana_actual) {
+        $_SESSION['error'] = ('La fecha seleccionada debe estar dentro de la semana actual.');
+        header("Location: rabajasforms.php");
+        exit();
     }
 
     $fecha_fin = date('Y-m-d', strtotime($fecha_inicio . ' +6 days'));
@@ -103,7 +114,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Validar que las rebajas adicionales no excedan el salario total ganado
             if ($rebajas_adicionales_totales > $total_earned) {
-                $_SESSION['bien'] = ('Las rebajas adicionales no pueden exceder el salario total.');
+                $_SESSION['error'] = ('Las rebajas adicionales no pueden exceder el salario total.');
                 header("Location: rabajasforms.php");
                 exit();
             }
