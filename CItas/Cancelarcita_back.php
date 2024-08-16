@@ -58,6 +58,7 @@ if ($estado === 'cancelado' && $citaID) {
                 $mail->isHTML(true);
                 $mail->Subject = 'Cancelación de Cita';
                 $mail->Body    = "Estimado/a {$detalles['nombre']} {$detalles['apellido_paterno']} {$detalles['apellido_materno']},<br><br>Su cita ha sido cancelada.<br><br>Saludos,<br>EuroService";
+                $mail->CharSet = 'UTF-8';
                 // Enviar el correo
                 $mail->send();
             } catch (Exception $e) {

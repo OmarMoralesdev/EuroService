@@ -124,6 +124,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                 $mail->isHTML(true);
                                 $mail->Subject = 'Cambio de Fecha de Cita';
                                 $mail->Body    = "Estimado/a {$detalles['nombre']} {$detalles['apellido_paterno']} {$detalles['apellido_materno']},<br><br>Su cita ha sido reprogramada para el día {$cita['fecha_cita']}.<br><br>Saludos,<br>EuroService";
+                                $mail->CharSet = 'UTF-8';
                                 // Enviar el correo
                                 $mail->send();
                             } catch (Exception $e) {
