@@ -391,6 +391,9 @@ h2 {
                     <a href="../vehiculos/atencion_view.php" class="sidebar-link">ATENCIÓN</a>
                 </li>
                 <li class="sidebar-item">
+                    <a href="../vehiculos/editCarView.php" class="sidebar-link">EDITAR</a>
+                </li>
+                <li class="sidebar-item">
                     <a href="../vehiculos/deshabilitar_car_view.php" class="sidebar-link">ELIMINAR</a>
                 </li>
                 <li class="sidebar-item">
