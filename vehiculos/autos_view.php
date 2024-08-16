@@ -7,7 +7,6 @@ session_start();
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
-
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Vehículo</title>
     <style>
@@ -26,18 +25,15 @@ session_start();
         <?php include '../includes/vabr.php'; ?>
         <div class="main">
             <div class="container">
-
                 <h2>REGISTRAR VEHÍCULO</h2>
                 <div class="form-container">
-                    
+
                     <?php
                     // Mostrar mensajes de error o éxito en la operación de registro de vehículo si los hay en la sesión de usuario actual
                     if (isset($_SESSION['error'])) {
-                        // Mostrar mensaje de error en un div con clase 'alert alert-danger' 
                         echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
-                        unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
+                        unset($_SESSION['error']);
                     }
-                    // Mostrar mensaje de éxito en un div con clase 'alert alert-success'
                     if (isset($_SESSION['bien'])) {
                         echo "
                         <div class='modal fade' id='staticBackdrop' data-bs-backdrop='static' data-bs-keyboard='false' tabindex='-1' aria-labelledby='staticBackdropLabel' aria-hidden='true'>
@@ -48,13 +44,12 @@ session_start();
                                         <button type='button' class='btn-close' data-bs-dismiss='modal' aria-label='Close'></button>
                                     </div>
                                     <div class='modal-body'>
-                                    <div class='alert alert-success' role='alert'>{$_SESSION['bien']}</div>
+                                        <div class='alert alert-success' role='alert'>{$_SESSION['bien']}</div>
                                         Presiona siguiente para agendar su cita
                                     </div>
                                     <div class='modal-footer'>
                                         <button type='button' class='btn btn-secondary' data-bs-dismiss='modal'>Cerrar</button>
                                         <a href='../CItas/seleccionar_cita_view.php' type='button' class='btn btn-dark'>Siguiente</a>
-
                                     </div>
                                 </div>
                             </div>
@@ -63,34 +58,22 @@ session_start();
                     }
                     ?>
 
+                    <div class="d-flex flex-column flex-md-row gap-2">
+                        <input type="radio" class="btn-check" name="options-base" id="option1" autocomplete="off" checked>
+                        <label class="btn" for="option1">CON SEGUIMIENTO</label>
+                        <input type="radio" class="btn-check" name="options-base" id="option2" autocomplete="off">
+                        <label class="btn" for="option2">SIN SEGUIMIENTO</label>
+                    </div>
 
+                    <br>
 
-
-
-<div class="d-flex flex-column flex-md-row gap-2">
-    
-    
-    <input type="radio" class="btn-check" name="options-base" id="option1" autocomplete="off" checked>
-    <label class="btn" for="option1">CON SEGUIMIENTO</label>
-    
-    
-    <input type="radio" class="btn-check" name="options-base" id="option2" autocomplete="off"  >
-    <label class="btn" for="option2">SIN SEGUIMIENTO</label>
-
-</div>
-
-
-<br>
-
-<script>
-        document.getElementById('option2').addEventListener('change', function() {
-            if (this.checked) {
-                window.location.href = './inspeccion_view.php'
-; // Reemplaza con la URL deseada
-            }
-        });
-    </script>
-    
+                    <script>
+                        document.getElementById('option2').addEventListener('change', function() {
+                            if (this.checked) {
+                                window.location.href = './inspeccion_view.php'; // Reemplaza con la URL deseada
+                            }
+                        });
+                    </script>
 
                     <form id="formCita" action="autos.php" method="POST" autocomplete="off" novalidate>
                         <div class="mb-3">
@@ -101,53 +84,35 @@ session_start();
                         </div>
                         <div class="form-group">
                             <label for="marca">Marca:</label>
-                            <input type="text" id="marca" name="marca" maxlength="30" class="form-control" placeholder="Introduce la marca del vehiculo"    required>
-                            
+                            <input type="text" id="marca" name="marca" maxlength="30" class="form-control" placeholder="Introduce la marca del vehículo" required>
+
                             <label for="modelo">Modelo:</label>
-                            <input type="text" id="modelo" name="modelo" maxlength="30" class="form-control" placeholder="Introduce el modelo del vehiculo" required>
-                            
+                            <input type="text" id="modelo" name="modelo" maxlength="30" class="form-control" placeholder="Introduce el modelo del vehículo" required>
+
                             <label for="anio">Año:</label>
-                            <input  class="form-control" type="number" id="anio" name="anio" min="1886"  maxlength="4" max="<?= date('Y') ?>" placeholder="Introduce el año del vehiculo" required>
-                            
+                            <input class="form-control" type="number" id="anio" name="anio" min="1886" max="<?= date('Y') ?>" placeholder="Introduce el año del vehículo" required maxlength="4">
+
                             <label for="color">Color:</label>
-                            <input type="text" id="color" name="color" maxlength="33" class="form-control" placeholder="Introduce el color del vehiculo"   required>
-                            
+                            <input type="text" id="color" name="color" maxlength="33" class="form-control" placeholder="Introduce el color del vehículo" required>
+
                             <label for="kilometraje">Kilometraje:</label>
                             <input type="text" id="kilometraje" name="kilometraje" maxlength="8" class="form-control" placeholder="Introduce el kilometraje del vehículo" required>
-                            
+
                             <label for="placas">Placas:</label>
-                            <input type="text" id="placas" name="placas" maxlength="10" class="form-control" placeholder="Introduce las placas del vehículo" required>
-                            
+                            <input type="text" id="placas" name="placas" maxlength="9" class="form-control" placeholder="Introduce las placas del vehículo" required>
+
                             <label for="vin">VIN:</label>
-                            <input type="text" id="vin" name="vin" maxlength="20" class="form-control"  placeholder="Introduce el VIN del vehículo"  required>
+                            <input type="text" id="vin" name="vin" maxlength="20" class="form-control" placeholder="Introduce el VIN del vehículo" required>
+
                             <br>
-                        <button type="submit"  value="Registrar Vehículo" class="btn btn-dark btnn d-grid gap-2 col-6 mx-auto">Registrar</button>
+                            <button type="submit" value="Registrar Vehículo" class="btn btn-dark d-grid gap-2 col-6 mx-auto">Registrar</button>
                         </div>
                     </form>
 
-
-                    <script>
-        document.addEventListener('DOMContentLoaded', function () {
-            var miModal = new bootstrap.Modal(document.getElementById('miModal'));
-            miModal.show();
-        });
-    </script>
-
-
-                    <script src="app.js"></script>
                     <script>
                         document.addEventListener('DOMContentLoaded', function() {
-                            const modalSuccess = new bootstrap.Modal(document.getElementById('modalSuccess'));
-                            if (document.getElementById('modalSuccess')) {
-                                modalSuccess.show();
-                            }
-                        });
-                    </script>
-
-                        <script>
-                        document.addEventListener('DOMContentLoaded', function() {
-                            const modalSuccess = new bootstrap.Modal(document.getElementById('modalSuccess'));
-                            if (document.getElementById('modalSuccess')) {
+                            const modalSuccess = new bootstrap.Modal(document.getElementById('staticBackdrop'));
+                            if (document.getElementById('staticBackdrop')) {
                                 modalSuccess.show();
                             }
                         });
@@ -155,15 +120,22 @@ session_start();
                         document.getElementById('formCita').addEventListener('submit', function(event) {
                             let valid = true;
                             const currentYear = new Date().getFullYear();
+                            const marca = document.getElementById('marca').value;
+                            const campo = document.getElementById('campo').value;
+                            const color = document.getElementById('color').value;
+                            const anio = document.getElementById('anio').value;
+                            const placas = document.getElementById('placas').value;
+                            const vin = document.getElementById('vin').value;
 
-                            // Validar marca
-                            if (/\d/.test(marca)) {
+                             // Validar marca
+                             if (marca.trim() === '' || /\d/.test(marca)) {
                                 document.getElementById('marca').classList.add('is-invalid');
                                 valid = false;
                             } else {
                                 document.getElementById('marca').classList.remove('is-invalid');
                             }
 
+                            // Validar campo
                             if (/\d/.test(campo)) {
                                 document.getElementById('campo').classList.add('is-invalid');
                                 valid = false;
@@ -172,7 +144,7 @@ session_start();
                             }
 
                             // Validar color
-                            if (/\d/.test(color)) {
+                            if (color.trim() === '' || /\d/.test(color)) {
                                 document.getElementById('color').classList.add('is-invalid');
                                 valid = false;
                             } else {
@@ -181,7 +153,7 @@ session_start();
 
 
                             // Validar año
-                            if (anio < 1886 && anio > currentYear && isNaN(anio) && anio.toString().length !== 4) {
+                            if (anio < 1886 || anio > currentYear || isNaN(anio) || anio.toString().length !== 4) {
                                 document.getElementById('anio').classList.add('is-invalid');
                                 valid = false;
                             } else {
@@ -189,7 +161,7 @@ session_start();
                             }
 
                             // Validar placas
-                            if (placas.length > 10) {
+                           if (!/^[A-Za-z0-9\- ]{1,10}$/.test(placas)) {
                                 document.getElementById('placas').classList.add('is-invalid');
                                 valid = false;
                             } else {
@@ -209,44 +181,43 @@ session_start();
                             }
                         });
 
-                        $(document).ready(function() {
-                            if ($('#staticBackdrop').length) {
-                                $('#staticBackdrop').modal('show');
-                            }
-
-                            if (window.history.replaceState) {
-                                window.history.replaceState(null, null, window.location.href);
-                            }
-                        });
-
-                        function validarLetras(event) {
+                       function validarLetras(event) {
                             const input = event.target;
-                            input.value = input.value.replace(/[^a-zA-Z]/g, '');
+                            input.value = input.value.replace(/[^a-zA-Z\s]/g, ''); // Permite letras y espacios
                         }
 
-                        function validarNumeros(event) {
+                        function validarAño(event) {
                             const input = event.target;
                             input.value = input.value.replace(/[^0-9]/g, '');
+                            if (input.value.length > 4) {
+                                input.value = input.value.slice(0, 4);
+                            }
+                        }
+                        
+                        function validarPlacas(event) {
+                            const input = event.target;
+                            input.value = input.value.replace(/[^A-Za-z0-9\-]/g, ''); // placas
+                        }
+
+
+                        
+                            function validarKil(event) {
+                            const input = event.target;
+                            input.value = input.value.replace(/[^0-9]/g, '');
+                            if (input.value.length > 9) {
+                                input.value = input.value.slice(0, 4);
+                            }
                         }
 
                         document.getElementById('campo').addEventListener('input', validarLetras);
                         document.getElementById('marca').addEventListener('input', validarLetras);
                         document.getElementById('color').addEventListener('input', validarLetras);
-                        document.getElementById('kilometraje').addEventListener('input', validarNumeros);
-                        document.getElementById('anio').addEventListener('input', validarNumeros);
+                        document.getElementById('placas').addEventListener('input', validarPlacas);
+                        document.getElementById('kilometraje').addEventListener('input', validarKil);
+                        document.getElementById('anio').addEventListener('input', validarAño);
                     </script>
-                    <script>
-                        $(document).ready(function() {  
-                            if ($('#staticBackdrop').length) {
-                                $('#staticBackdrop').modal('show');
-                            }
-                        });
 
-                             //unicamente un modal a la vez
-        if (window.history.replaceState) {
-                window.history.replaceState(null, null, window.location.href);
-            }
-                    </script>
+                    <script src="app.js"></script>
                 </div>
             </div>
         </div>
