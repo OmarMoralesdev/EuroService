@@ -1,3 +1,6 @@
+<?php
+session_start();
+?>
 <!DOCTYPE html>
 <html lang="es">
 
@@ -114,6 +117,19 @@
     <!-- Datepicker JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="../assets/js/weekpicker.js"></script>
+    <script>
+    $(document).ready(function() {
+        // Verifica si el modal está presente
+        if ($('#staticBackdrop').length) {
+            // Muestra el modal
+            $('#staticBackdrop').modal('show');
+            // Cierra el modal después de 2 segundos (2000 milisegundos)
+            setTimeout(function() {
+                $('#staticBackdrop').modal('hide');
+            }, 1000);
+        }
+    });
+</script>
 </body>
 
 </html>

@@ -1,16 +1,20 @@
 <?php
 require '../includes/db.php';
-
+session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($_POST['fecha'])) {
-        die('La fecha es requerida.');
+        $_SESSION['error'] =('La fecha es requerida.');
+        header("Location: nomina_Semana.php");
+        exit();
     }
 
     $fecha_inicio = $_POST['fecha'];
 
     // Validar que la fecha es un lunes
     if (date('N', strtotime($fecha_inicio)) !== '1') {
-        die('La fecha seleccionada debe ser un lunes.');
+        $_SESSION['error'] =('La fecha seleccionada debe ser un lunes.');
+        header("Location: nomina_Semana.php");
+        exit();
     }
 
     $fecha_fin = date('Y-m-d', strtotime($fecha_inicio . ' +6 days'));
@@ -29,7 +33,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_existente->execute();
 
         if ($stmt_existente->fetchColumn() > 0) {
-            die('Ya existe una nómina para la fecha seleccionada.');
+            $_SESSION['error'] =('Ya existe una nómina para la fecha seleccionada.');
+            header("Location: nomina_Semana.php");
+            exit();
         }
 
         // Verificar si todas las asistencias están registradas para todos los empleados activos en la semana
@@ -48,7 +54,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_asistencias->execute();
         
         if ($stmt_asistencias->rowCount() > 0) {
-            die('No todas las asistencias están registradas para la semana seleccionada.');
+            $_SESSION['error'] =('No todas las asistencias están registradas para la semana seleccionada.');
+            header("Location: nomina_Semana.php");
+            exit();
         }
 
         // Insertar o actualizar las nóminas para la semana
@@ -89,7 +97,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         echo "Nómina semanal registrada o actualizada correctamente.<br>";
 
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage() . "<br>";
+        $_SESSION['error'] = "Error: " . $e->getMessage() . "<br>";
+        header("Location: nomina_Semana.php");
+        exit();
     }
 
     $pdo = null;

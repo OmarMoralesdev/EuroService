@@ -1,6 +1,6 @@
 <?php
 require '../includes/db.php';
-
+session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validar entrada
     if (empty($_POST['empleadoID']) || empty($_POST['rebajas_adicionales']) || empty($_POST['fecha'])) {
