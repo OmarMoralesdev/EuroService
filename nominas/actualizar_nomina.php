@@ -2,15 +2,18 @@
 require '../includes/db.php';
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+    // Verificar los datos recibidos
+    var_dump($_POST); // Añadir esta línea para verificar los datos recibidos
+
     // Validar entrada
-    if (empty($_POST['empleadoID']) || empty($_POST['bonos']) || empty($_POST['rebajas_adicionales']) || empty($_POST['fecha_inicio'])) {
+    if (empty($_POST['empleadoID']) || empty($_POST['bonos']) || empty($_POST['rebajas_adicionales']) || empty($_POST['fecha'])) {
         die('Todos los campos son obligatorios.');
     }
 
     $empleadoID = $_POST['empleadoID'];
     $bonos = $_POST['bonos'];
     $rebajas_adicionales = $_POST['rebajas_adicionales'];
-    $fecha_inicio = $_POST['fecha_inicio'];
+    $fecha_inicio = $_POST['fecha'];
 
     // Validar que la fecha es un lunes
     if (date('N', strtotime($fecha_inicio)) !== '1') {
@@ -41,6 +44,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             // Sumar los bonos y rebajas adicionales a los existentes
             $bonos += $result['bonos'];
             $rebajas_adicionales += $result['rebajas_adicionales'];
+
+            // Actualizamos los bonos y las rebajas adicionales para la nómina especificada
+            $query = "
+            UPDATE NOMINAS
+            SET bonos = :bonos, rebajas_adicionales = :rebajas_adicionales
+            WHERE nominaID = :nominaID
+            ";
+
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(':nominaID', $nominaID);
+            $stmt->bindParam(':bonos', $bonos);
+            $stmt->bindParam(':rebajas_adicionales', $rebajas_adicionales);
+            $stmt->execute();
         } else {
             // Si no hay nómina existente, crear una nueva
             $query = "
@@ -57,20 +73,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->execute();
 
             $nominaID = $pdo->lastInsertId();
+
+            // Actualizamos los bonos y las rebajas adicionales para la nómina recién creada
+            $query = "
+            UPDATE NOMINAS
+            SET bonos = :bonos, rebajas_adicionales = :rebajas_adicionales
+            WHERE nominaID = :nominaID
+            ";
+
+            $stmt = $pdo->prepare($query);
+            $stmt->bindParam(':nominaID', $nominaID);
+            $stmt->bindParam(':bonos', $bonos);
+            $stmt->bindParam(':rebajas_adicionales', $rebajas_adicionales);
+            $stmt->execute();
         }
-
-        // Actualizamos los bonos y las rebajas adicionales para la nómina especificada
-        $query = "
-        UPDATE NOMINAS
-        SET bonos = :bonos, rebajas_adicionales = :rebajas_adicionales
-        WHERE nominaID = :nominaID
-        ";
-
-        $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':nominaID', $nominaID);
-        $stmt->bindParam(':bonos', $bonos);
-        $stmt->bindParam(':rebajas_adicionales', $rebajas_adicionales);
-        $stmt->execute();
 
         // Recalcular el total
         $query = "

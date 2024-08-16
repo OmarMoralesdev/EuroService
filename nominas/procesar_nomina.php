@@ -40,7 +40,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 AND a.fecha BETWEEN :fecha_inicio AND :fecha_fin
             WHERE e.activo = 1
             GROUP BY e.empleadoID
-            HAVING dias_registrados < 7
+            HAVING dias_registrados < 5
         ";
         $stmt_asistencias = $pdo->prepare($query_asistencias);
         $stmt_asistencias->bindParam(':fecha_inicio', $fecha_inicio);

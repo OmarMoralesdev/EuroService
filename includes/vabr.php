@@ -374,7 +374,7 @@ h2 {
                     <a href="../Finanzas/Reporte_de_rendimiento.php" class="sidebar-link">RENDIMIENTO</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../nominas/Bonos_Rebajas_Adicionales.php" class="sidebar-link">REGISTRAR NOMINAS</a>
+                    <a href="../nominas/Bonos_Rebajas_Adicionales.php" class="sidebar-link">AGREGAR BONOS O REBAJAS</a>
                 </li>
             </ul>
         </li>
