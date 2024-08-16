@@ -34,15 +34,15 @@ if ($stmt->rowCount() > 0) {
     $vehiculoID = $pdo->lastInsertId();
 
     // Insertar cita
-    $sqlCita = "INSERT INTO CITAS (vehiculoID, servicio_solicitado, fecha_solicitud, fecha_cita, urgencia, estado) VALUES (?, ?, ?, ?, ?, 'pendiente')";
+    $sqlCita = "INSERT INTO CITAS (vehiculoID, servicio_solicitado, tipo_servicio, fecha_solicitud, costo_mano_obra, costo_refacciones, total_estimado, fecha_cita, urgencia, estado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
     $stmtCita = $pdo->prepare($sqlCita);
-    $stmtCita->execute([$vehiculoID, 'Inspección', date('Y-m-d'), date('Y-m-d'), 'si']);
+    $stmtCita->execute([$vehiculoID, 'Inspección', 'inspeccion', date('Y-m-d'), 800, 0, 800, date('Y-m-d'), 'si', 'pendiente']);
     $citaID = $pdo->lastInsertId();
 
     // Insertar orden de trabajo
-    $sqlOrden = "INSERT INTO ORDENES_TRABAJO (fecha_orden, costo_mano_obra, costo_refacciones, atencion, citaID, empleadoID, ubicacionID) VALUES (?, ?, ?, ?, ?, ?, ?)";
+    $sqlOrden = "INSERT INTO ORDENES_TRABAJO (fecha_orden, atencion, citaID, empleadoID, ubicacionID) VALUES (?, ?, ?, ?, ?)";
     $stmtOrden = $pdo->prepare($sqlOrden);
-    $stmtOrden->execute([date('d-m-y'), 800, 0, 'Muy Urgente', $citaID, $empleadoID, $ubicacionID]);
+    $stmtOrden->execute([date('d-m-y'), 'Muy Urgente', $citaID, $empleadoID, $ubicacionID]);
     $ordenID = $pdo->lastInsertId();
     $anticipo = 800 * 0.5;
     $fechaPago = date('Y-m-d');

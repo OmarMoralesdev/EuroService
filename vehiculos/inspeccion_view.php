@@ -126,7 +126,7 @@ session_start();
                             <input type="text" id="kilometraje" name="kilometraje" maxlength="8" class="form-control <?php echo isset($errors['kilometraje']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el kilometraje del vehículo" required>
 
                             <label for="placas">Placas:</label>
-                            <input type="text" id="placas" name="placas" maxlength="9" class="form-control <?php echo isset($errors['placas']) ? 'is-invalid' : ''; ?>" placeholder="Introduce las placas del vehículo" required>
+                            <input type="text" id="placas" name="placas" maxlength="7" class="form-control <?php echo isset($errors['placas']) ? 'is-invalid' : ''; ?>" placeholder="Introduce las placas del vehículo" required>
 
                             <label for="vin">VIN:</label>
                             <input type="text" id="vin" name="vin" maxlength="17" class="form-control <?php echo isset($errors['vin']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el VIN del vehículo" required>
