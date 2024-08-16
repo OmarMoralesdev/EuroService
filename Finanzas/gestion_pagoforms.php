@@ -119,7 +119,7 @@ try {
                                         <th>Tipo de Pago</th>
                                         <th>Forma de Pago</th>
                                         <th>Vehículo</th>                                  
-                                        <th>Persona Nombre</th>
+                                        <th>Cliente</th>
                                         <th>Estado</th>
                                     </tr>
                                 </thead>
