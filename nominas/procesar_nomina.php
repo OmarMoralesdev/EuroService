@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             exit();
         }
 
-        // Verificar si todas las asistencias están registradas para todos los empleados activos en la semana
+        // Verificar si todos los empleados activos han registrado al menos 5 días de asistencia
         $query_asistencias = "
             SELECT e.empleadoID, COUNT(a.asistenciaID) AS dias_registrados
             FROM EMPLEADOS e
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 AND a.fecha BETWEEN :fecha_inicio AND :fecha_fin
             WHERE e.activo = 'si'
             GROUP BY e.empleadoID
-            HAVING dias_registrados < 7
+            HAVING dias_registrados < 5
         ";
         $stmt_asistencias = $pdo->prepare($query_asistencias);
         $stmt_asistencias->bindParam(':fecha_inicio', $fecha_inicio);
@@ -55,7 +55,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_asistencias->execute();
 
         if ($stmt_asistencias->rowCount() > 0) {
-            $_SESSION['error'] = 'No todas las asistencias están registradas para la semana seleccionada.';
+            $_SESSION['error'] = 'No todos los empleados activos han registrado al menos 5 días de asistencia para la semana seleccionada.';
             header("Location: nomina_Semana.php");
             exit();
         }
