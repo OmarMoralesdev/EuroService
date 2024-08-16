@@ -55,14 +55,22 @@ session_start();
                                     $pdo = $con->conectar();
                                     // Obtener órdenes de trabajo pendientes basadas en el estado de la cita
                                     $stmt = $pdo->query("
-                    SELECT ot.ordenID, ot.fecha_orden
-                    FROM ORDENES_TRABAJO ot
-                    INNER JOIN CITAS c ON ot.citaID = c.citaID
-                    WHERE c.estado = 'pendiente' or c.estado = 'en proceso'
-                ");
+                                    SELECT ot.ordenID, 
+                                           ot.fecha_orden,  
+                                           ci.total_estimado, 
+                                           CONCAT(per.nombre, ' ', per.apellido_paterno, ' ', per.apellido_materno) AS nombre_completo_cliente,
+                                           CONCAT(v.marca, ' ', v.modelo, ' ', v.anio) AS modelos
+                                    FROM ORDENES_TRABAJO ot
+                                    INNER JOIN CITAS ci ON ot.citaID = ci.citaID
+                                    INNER JOIN VEHICULOS v ON ci.vehiculoID = v.vehiculoID
+                                    INNER JOIN CLIENTES cl ON v.clienteID = cl.clienteID
+                                    INNER JOIN PERSONAS per ON cl.personaID = per.personaID
+                                    WHERE ci.estado = 'pendiente' OR ci.estado = 'en proceso'
+                                ");
+                                
 
                                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
-                                        echo "<option value=\"{$row['ordenID']}\">Orden {$row['ordenID']} - Fecha: {$row['fecha_orden']}</option>";
+                                        echo "<option value=\"{$row['ordenID']}\">Orden {$row['ordenID']} - Fecha: {$row['fecha_orden']} - Total: {$row['total_estimado']} - Cliente: {$row['nombre_completo_cliente']} - Vehiculo: {$row['modelos']}</option>";
                                     }
                                 } catch (PDOException $e) {
                                     echo "Error: " . $e->getMessage();
