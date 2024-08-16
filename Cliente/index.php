@@ -83,11 +83,8 @@ if (!function_exists('obtenerDetallesClientepersona2')) {
             background-color: black;
             color: white;
         }
-        .container {
-            margin-top: 75px; /* Ajustar según el tamaño de la navbar */
-        }
         .card {
-            margin-bottom: 0px;
+            margin-bottom:25px;
         }
      
         
@@ -130,9 +127,9 @@ if (!function_exists('obtenerDetallesClientepersona2')) {
     max-width: 600px;
 }
 .modal{
-    padding-top: 2% !important;
+    padding-top: 4% !important;
     color: black;
-    padding-top: 100px;
+    padding-bottom: 6px;
     width: 100%;
     height: 100%;
 }
@@ -173,16 +170,12 @@ if (!function_exists('obtenerDetallesClientepersona2')) {
                         <div class="col-lg-4 col-md-6 mb-3">
                             <div class="card">
                                 <div class="card-header">
-                                    <?php echo htmlspecialchars($cita['marca'] . " " . $cita['modelo']); ?>
+                                    <h3><?php echo htmlspecialchars($cita['marca'] . " " . $cita['modelo']); ?></h3>
                                 </div>
                                 <div class="card-body">
-                                            <p><strong>Folio:</strong> <?php echo htmlspecialchars($cita['citaID']); ?></p>
-                                            <p><strong>VIN:</strong> <?php echo htmlspecialchars($cita['vin']); ?></p>
-                                            <p><strong>Marca:</strong> <?php echo htmlspecialchars($cita['marca']); ?></p>
-                                            <p><strong>Modelo:</strong> <?php echo htmlspecialchars($cita['modelo']); ?></p>
-                                            <p><strong>Año:</strong> <?php echo htmlspecialchars($cita['anio']); ?></p> 
-                                            <HR>
-                                            <p>DETALLES</p>
+                                    <p><strong>Folio:</strong> <?php echo htmlspecialchars($cita['citaID']); ?></p>
+                                    <p><strong>Vehiculo:</strong> <?php echo htmlspecialchars($cita['marca'] . " " . $cita['modelo'] . " " . $cita['anio']); ?></p>
+                                    <p><strong>VIN:</strong> <?php echo htmlspecialchars($cita['vin']); ?></p>
                                             <HR>
                                             <p><strong>Días Restantes:</strong> <?php echo htmlspecialchars($cita['dias_restantes']); ?> días</p>
                                             <p><strong>Estado:</strong> <?php echo htmlspecialchars($cita['estado']); ?></p>
@@ -194,31 +187,6 @@ if (!function_exists('obtenerDetallesClientepersona2')) {
                                 </div>
                             </div>
 
-                            <!-- Modal -->
-                            <div class="modal " id="citaModal<?php echo $cita['citaID']; ?>" tabindex="-1" aria-labelledby="citaModalLabel<?php echo $cita['citaID']; ?>" aria-hidden="true">
-                                <div class="modal-dialog modal-lg">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="citaModalLabel<?php echo $cita['citaID']; ?>">Detalles de la Cita</h5>
-                                            <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                                        </div>
-                                        <div class="modal-body">
-                                            <p><strong>Folio:</strong> <?php echo htmlspecialchars($cita['citaID']); ?></p>
-                                            <p><strong>VIN:</strong> <?php echo htmlspecialchars($cita['vin']); ?></p>
-                                            <p><strong>Marca:</strong> <?php echo htmlspecialchars($cita['marca']); ?></p>
-                                            <p><strong>Modelo:</strong> <?php echo htmlspecialchars($cita['modelo']); ?></p>
-                                            <p><strong>Año:</strong> <?php echo htmlspecialchars($cita['anio']); ?></p> 
-                                            <p><strong>Servicio Solicitado:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
-                                            <p><strong>Fecha de la Cita:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
-                                            <p><strong>Estado:</strong> <?php echo htmlspecialchars($cita['estado']); ?></p>
-                                            <p><strong>Días Restantes:</strong> <?php echo htmlspecialchars($cita['dias_restantes']); ?> días</p>
-                                        </div>
-                                        <div class="modal-footer">
-                                           <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         </div>
                     <?php endforeach; ?>
                 <?php else : ?>
@@ -241,11 +209,11 @@ if (!function_exists('obtenerDetallesClientepersona2')) {
                         <div class="col-lg-4 col-md-6 mb-3">
                             <div class="card">
                                 <div class="card-header">
-                                    <?php echo htmlspecialchars($vehiculo['marca'] . " " . $vehiculo['modelo']); ?>
+                                    <h4><?php echo htmlspecialchars($vehiculo['marca'] . " " . $vehiculo['modelo']); ?></h4>
                                 </div>
                                 <div class="card-body">
-                                    <p><strong>Placas:</strong> <?php echo htmlspecialchars($vehiculo['placas']); ?></p>
                                     <p><strong>VIN:</strong> <?php echo htmlspecialchars($vehiculo['vin']); ?></p>
+                                    <p><strong>Placas:</strong> <?php echo htmlspecialchars($vehiculo['placas']); ?></p>
                                     <p><strong>Año:</strong> <?php echo htmlspecialchars($vehiculo['anio']); ?></p>
                                     <p><strong>Color:</strong> <?php echo htmlspecialchars($vehiculo['color']); ?></p>
                                     <p><strong>Kilometraje:</strong> <?php echo htmlspecialchars($vehiculo['kilometraje']); ?> km</p>
@@ -268,35 +236,36 @@ if (!function_exists('obtenerDetallesClientepersona2')) {
   <div class="modal-dialog">
     <div class="modal-content">
     <div class="modal-header">
-        <h1 class="modal-title fs-5" id="historialLabel">HISTORIAL</h1>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <h1 class="modal-title fs-5" id="historialLabel" style="text-align: center;">HISTORIAL</h1>
     </div>
     <div class="modal-body">
         <div class="card-columns">
             <?php if (!empty($citas)) : ?>
                 <?php foreach ($citas as $cita) : ?>
-                    <div class="card" id="vehiculo-<?php echo $cita['citaID']; ?>">
+                    <div class="card">
                         <div class="card-body">
-                            <h3 class="card-title"><?php echo htmlspecialchars($cita['marca'] . " " . $cita['modelo']); ?></h3>
-                            <hr>
+                            <h2 class="card-title"><?php echo htmlspecialchars($cita['marca'] . " " . $cita['modelo']); ?></h2>
                             <p class="card-text"><strong>VIN:</strong> <?php echo htmlspecialchars($cita['vin']); ?></p>
-                            <p class="card-text"><strong>TIPO:</strong> <?php echo htmlspecialchars($cita['tipo_servicio']); ?></p>
-                            <p class="card-text"><strong>SERVICIO:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
-                            <p class="card-text"><strong>COSTO:</strong> <?php echo htmlspecialchars($cita['costo']); ?></p>
-                            <p class="card-text"><strong>REPONSABLE:</strong> <?php echo htmlspecialchars($cita['alias']); ?></p>
-                            <p class="card-text"><strong>FECHA DE LA CITA:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
+                            <p class="card-text"><strong>Servicio:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
+                            <p class="card-text"><strong>Fecha de la Cita:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
+                            <p class="card-text"></p><p><strong>Folio:</strong> <?php echo htmlspecialchars($cita['citaID']); ?></p>
+                            <p class="card-text"><p><strong>VIN:</strong> <?php echo htmlspecialchars($cita['vin']); ?></p>
+                            <p class="card-text"><p><strong>Marca:</strong> <?php echo htmlspecialchars($cita['marca']); ?></p>
+                            <p class="card-text"><p><strong>Modelo:</strong> <?php echo htmlspecialchars($cita['modelo']); ?></p>
+                            <p class="card-text"><p><strong>Año:</strong> <?php echo htmlspecialchars($cita['anio']); ?></p>
+                            <p class="card-text"><p><strong>Servicio Solicitado:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
+                            <p class="card-text"><p><strong>Fecha de la Cita:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
+                            <p class="card-text"><strong>Estado:</strong> <?php echo htmlspecialchars($cita['estado']); ?></p>
+                                </div>
                         </div>
                     </div>
-                    <hr>
                 <?php endforeach; ?>
             <?php else : ?>
-                <p class="text-center">No hay citas registradas.</p>
+                <p class="text-center">No hay historial.</p>
             <?php endif; ?>
         </div>
     </div>
-    <div class="modal-footer">
-        <!-- más largo el boton -->
-        <button type="button" class="btn btn-dark" data-bs-dismiss="modal">Cerrar</button>
+        </div>
     </div>
 
     <script>

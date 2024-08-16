@@ -11,7 +11,7 @@ $total_ingresos = 0;
 try {
     // Obtener la semana seleccionada
     $semana_seleccionada = isset($_GET['semana']) ? $_GET['semana'] : date('Y-m-d');
-    
+
     // Calcular las fechas de inicio y fin de la semana seleccionada
     $inicio_semana = date('Y-m-d', strtotime($semana_seleccionada));
     $fin_semana = date('Y-m-d', strtotime($inicio_semana . ' +6 days'));
@@ -64,6 +64,7 @@ try {
 
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
@@ -71,6 +72,24 @@ try {
     <title>Reporte de Ingresos Semanal</title>
     <!-- Datepicker CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
+    <style>
+        .main {
+            align-items: center;
+        }
+
+        .datepicker {
+            background-color: #f7f7f7;
+            border-radius: 5px;
+            padding: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -82,12 +101,12 @@ try {
                 <div class="form-container">
                     <form method="GET" action="" class="mb-4">
                         <div class="form-row">
-                            <div class="form-group col-md-6 offset-md-3">
-                                <div id="week-picker" class="input-group date">
-                                    <input type="text" class="form-control" readonly value="<?php echo date('Y-m-d', strtotime($inicio_semana)) . ' - ' . date('Y-m-d', strtotime($fin_semana)); ?>">
+                            <div class="col-md-6 offset-md-3">
+                                <label for="semana">Selecciona la semana:</label>
+                                <div id="week-picker" class="input-group">
                                     <input type="hidden" id="semana" name="semana" value="<?php echo htmlspecialchars($semana_seleccionada); ?>">
-                                    <div class="input-group-append">
-                                        <span class="input-group-text"><i class="glyphicon glyphicon-calendar"><i class="bi bi-calendar"></i></i></span>
+                                    <div id="week-picker" class="input-group">
+                                        <div class="form-control"><?php echo date('Y-m-d', strtotime($inicio_semana)) . ' - ' . date('Y-m-d', strtotime($fin_semana)); ?></div>
                                     </div>
                                 </div>
                             </div>
@@ -144,6 +163,7 @@ try {
     </div>
     <!-- Datepicker JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
-    <script src="../assets/js/weekpicker.js"></script>  
+    <script src="../assets/js/weekpicker.js"></script>
 </body>
+
 </html>

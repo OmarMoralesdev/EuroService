@@ -16,14 +16,6 @@ h2 {
     column-count: 1;
 }
 
-.card {
-    transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
-}
-.card:hover {
-    transform: scale(1.05);
-    box-shadow: 0 12px 24px rgba(0, 0, 0, 0.5);
-}
-
 .navbar {
     background-color: #000000;
 }
