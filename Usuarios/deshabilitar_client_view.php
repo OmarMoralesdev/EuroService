@@ -18,6 +18,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Verificar si el cliente existe
     if (!$personaID) {
+        header('Location: deshabilitar_client_view.php');
         die("Error: Cliente no encontrado.");
     } else {
         // Actualiza la base de datos
