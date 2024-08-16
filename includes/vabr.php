@@ -440,9 +440,6 @@ h2 {
                     <a href="../Finanzas/formulario_recibo_pago.php" class="sidebar-link">RECIBO DE PAGO</a>
                 </li>
                 <li class="sidebar-item">
-                    <a href="../Finanzas/finanzas_view.php" class="sidebar-link">GRAFICA</a>
-                </li>
-                <li class="sidebar-item">
                     <a href="../Finanzas/gestion_pagoforms.php" class="sidebar-link">GESTION</a>
                 </li>
                 <li class="sidebar-item">
