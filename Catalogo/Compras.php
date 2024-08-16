@@ -115,7 +115,7 @@
                 <div class="form-container">
                     <form class="filter-form" method="GET" action="">
                         <label for="month">Mes:</label>
-                        <select name="month" id="month">
+                        <select name="month" id="month" class="form-control">
                             <option value="">Seleccionar Mes</option>
                             <?php 
                             $selectedMonth = isset($_GET['month']) ? $_GET['month'] : '';
@@ -127,7 +127,7 @@
                         </select>
 
                         <label for="year">Año:</label>
-                        <select name="year" id="year">
+                        <select name="year" id="year" class="form-control">
                             <option value="">Seleccionar Año</option>
                             <?php 
                             $selectedYear = isset($_GET['year']) ? $_GET['year'] : '';

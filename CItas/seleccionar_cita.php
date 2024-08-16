@@ -111,6 +111,7 @@ function obtenerCitaPorID($pdo, $citaID)
                 <p><strong>Vehículo:</strong> ${cita.marca} ${cita.modelo} ${cita.anio}</p>
                 <p><strong>Cliente:</strong> ${cita.nombre} ${cita.apellido_paterno} ${cita.apellido_materno}</p>
                 <p><strong>Servicio:</strong> ${cita.servicio_solicitado}</p>
+                <p><strong>Fecha de solicitud:</strong> ${cita.fecha_solicitud}</p>
                 <button onclick="seleccionarCita(${cita.citaID})" class="btn btn-dark w-100">Seleccionar</button>
             `;
             citasContenedor.appendChild(tarjeta);

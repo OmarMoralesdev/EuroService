@@ -136,7 +136,7 @@ if ($cita) {
 
                             if (selectedDate < tomorrow) {
                                 dateInput.setCustomValidity('La fecha debe ser al menos para el día siguiente.');
-                            } else if (selectedHour < 9 || (selectedHour >= 17 && selectedMinutes > 0)) {
+                            } else if (selectedHour < 9 || (selectedHour >= 17 && selectedMinutes >= 0)) {
                                 dateInput.setCustomValidity('La hora debe estar dentro del horario laboral (09:00 - 17:00).');
                             } else {
                                 dateInput.setCustomValidity('');
