@@ -191,7 +191,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     $stmt_cuenta = $pdo->prepare("INSERT INTO CUENTAS (username, password, personaID, rolID) VALUES (?, ?, ?, ?)");
                     $stmt_cuenta->execute([$username, $hashed_password, $personaID, $rolID]);
                     if ($stmt_cuenta->rowCount() > 0) {
-                        require '../vendor/autoload.php'; // Asegúrate de que la ruta sea correcta                
+                        require '../vendor/autoload.php';                
                         $mail = new PHPMailer(true);
                         
                         try {

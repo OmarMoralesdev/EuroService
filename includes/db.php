@@ -126,7 +126,7 @@ function actualizarEstadoCita($pdo, $citaID, $nuevoEstado)
 }
 
 function obtenerDetallesVehiculoyCliente($pdo, $vehiculoID) {
-    $sql = "SELECT VEHICULOS.marca, VEHICULOS.modelo, VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
+    $sql = "SELECT VEHICULOS.marca, VEHICULOS.modelo, VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno, PERSONAS.correo
             FROM VEHICULOS 
             JOIN CLIENTES ON VEHICULOS.clienteID = CLIENTES.clienteID
             JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID

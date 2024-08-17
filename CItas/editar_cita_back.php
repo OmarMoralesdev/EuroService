@@ -88,8 +88,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         $queryUpdate = $pdo->prepare($sqlUpdate);
                         $resultUpdate = $queryUpdate->execute([$servicioSolicitado, $fechaCita->format('Y-m-d H:i:s'), $citaID]);
 
+                     
+                        use PHPMailer\PHPMailer\PHPMailer;
+                        use PHPMailer\PHPMailer\Exception;
+                        
+                        // Incluir el autoload de Composer
+                        require '../vendor/autoload.php';  
+                        
+                        
                         if ($resultUpdate) {
-                            $mensaje = "Cita actualizada correctamente.";
+                            // Obtener detalles de la cita y del cliente
                             $sql = "SELECT * FROM CITAS WHERE citaID = ?";
                             $query = $pdo->prepare($sql);
                             $query->execute([$citaID]);
@@ -98,10 +106,36 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             $detalles = obtenerDetallesVehiculoyCliente($pdo, $vehiculoID);
                             $_SESSION['cita'] = $cita;
                             $_SESSION['mensaje'] = "Cita editada exitosamente.";
+                        
+                            // Configurar el correo electrónico
+                            $mail = new PHPMailer(true);
+                            try {
+                                // Configuración del servidor SMTP
+                                $mail->isSMTP();
+                                $mail->Host     = 'smtp.gmail.com';
+                                $mail->SMTPAuth   = true;
+                                $mail->Username   = 'euroservice339@gmail.com';
+                                $mail->Password   = 'uguh ipf w rqqz ewjb';
+                                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                                $mail->Port       = 587;                       
+                                $mail->setFrom('euroservice339@gmail.com', 'EuroService');
+                                $mail->addAddress($detalles['correo'], "{$detalles['nombre']} {$detalles['apellido_paterno']} {$detalles['apellido_materno']}");
+                                // Contenido del correo
+                                $mail->isHTML(true);
+                                $mail->Subject = 'Cambio de Fecha de Cita';
+                                $mail->Body    = "Estimado/a {$detalles['nombre']} {$detalles['apellido_paterno']} {$detalles['apellido_materno']},<br><br>Su cita ha sido reprogramada para el día {$cita['fecha_cita']}.<br><br>Saludos,<br>EuroService";
+                                // Enviar el correo
+                                $mail->send();
+                            } catch (Exception $e) {
+                                $_SESSION['error'] = "Error al enviar el correo: {$mail->ErrorInfo}";
+                            }
+                        
                             header("Location: editar_cita_view.php");
                             exit();
                         } else {
-                            $mensaje = "Error al actualizar la cita.";
+                            $_SESSION['error'] = "Error al actualizar la cita.";
+                            header("Location: editar_cita_view.php");
+                            exit();
                         }
                     }
                 }
