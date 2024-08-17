@@ -103,7 +103,7 @@
                         <table class="table">
                             <thead>
                                 <tr>
-                                    <th scope="col">VEHICULO</th>
+                                    <th scope="col">VEHÍCULO</th>
                                     <th scope="col">SERVICIO SOLICITADO</th>
                                     <th scope="col">FECHA DE CITA</th>
                                     <th scope="col">TIEMPO RESTANTE</th>

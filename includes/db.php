@@ -48,8 +48,10 @@ class Database
 }
 
 function listarCitasPendientes($pdo) {
-    $sql = "SELECT CITAS.citaID, CITAS.vehiculoID, CITAS.servicio_solicitado, VEHICULOS.marca, VEHICULOS.modelo, VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno
-            FROM CITAS 
+    $sql = "SELECT CITAS.citaID, CITAS.vehiculoID, CITAS.servicio_solicitado,
+    CITAS.fecha_solicitud, VEHICULOS.marca, VEHICULOS.modelo,
+    VEHICULOS.anio, PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno 
+    FROM CITAS 
             JOIN VEHICULOS ON CITAS.vehiculoID = VEHICULOS.vehiculoID
             JOIN CLIENTES ON VEHICULOS.clienteID = CLIENTES.clienteID
             JOIN PERSONAS ON CLIENTES.personaID = PERSONAS.personaID
