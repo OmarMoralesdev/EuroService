@@ -169,13 +169,13 @@ session_start();
                                 document.getElementById('placas').classList.remove('is-invalid');
                             }
 
-                            // Validar VIN
-                            if (vin.length > 20) {
-                                document.getElementById('vin').classList.add('is-invalid');
-                                valid = false;
-                            } else {
-                                document.getElementById('vin').classList.remove('is-invalid');
-                            }
+                             // Validar VIN: debe tener exactamente 17 caracteres y solo permitir letras y números
+        if (vin.length !== 17 || /[^A-Za-z0-9]/.test(vin)) {
+            document.getElementById('vin').classList.add('is-invalid');
+            valid = false;
+        } else {
+            document.getElementById('vin').classList.remove('is-invalid');
+        }
 
                             if (!valid) {
                                 event.preventDefault();
@@ -206,7 +206,12 @@ session_start();
                             if (input.value.length > 9) {
                                 input.value = input.value.slice(0, 9);
                             }
-                        }
+                        }                        
+    function validarVin(event) {
+        const input = event.target;
+        input.value = input.value.replace(/[^A-Za-z0-9]/g, ''); 
+    }
+
 
                         document.getElementById('campo').addEventListener('input', validarLetras);
                         document.getElementById('marca').addEventListener('input', validarLetras);
@@ -214,6 +219,7 @@ session_start();
                         document.getElementById('placas').addEventListener('input', validarPlacas);
                         document.getElementById('kilometraje').addEventListener('input', validarKil);
                         document.getElementById('anio').addEventListener('input', validarAño);
+                        document.getElementById('vin').addEventListener('input', validarVin);
                     </script>
 
                     <script src="app.js"></script>

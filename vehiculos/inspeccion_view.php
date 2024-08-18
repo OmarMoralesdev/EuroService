@@ -129,7 +129,7 @@ session_start();
                             <input type="text" id="placas" name="placas" maxlength="9" class="form-control <?php echo isset($errors['placas']) ? 'is-invalid' : ''; ?>" placeholder="Introduce las placas del vehículo" required>
 
                             <label for="vin">VIN:</label>
-                            <input type="text" id="vin" name="vin" maxlength="20" class="form-control <?php echo isset($errors['vin']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el VIN del vehículo" required>
+                            <input type="text" id="vin" name="vin" maxlength="17" class="form-control <?php echo isset($errors['vin']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el VIN del vehículo" required>
 
                             <label for="empleado" class="form-label">Empleado:</label>
                             <select name="empleadoID" class="form-control" required>
@@ -259,7 +259,8 @@ session_start();
         }
 
         // Validar VIN: debe tener exactamente 17 caracteres
-        if (vin.length !== 17) {
+         // Validar VIN: debe tener exactamente 17 caracteres y solo permitir letras y números
+         if (vin.length !== 17 || /[^A-Za-z0-9]/.test(vin)) {
             document.getElementById('vin').classList.add('is-invalid');
             valid = false;
         } else {
@@ -291,6 +292,12 @@ session_start();
                             input.value = input.value.replace(/[^A-Za-z0-9\-]/g, ''); // placas
                         }
 
+    function validarVin(event) {
+        const input = event.target;
+        input.value = input.value.replace(/[^A-Za-z0-9]/g, ''); // VIN solo permite letras y números
+    }
+
+
 
     document.getElementById('campo').addEventListener('input', validarLetras);
     document.getElementById('marca').addEventListener('input', validarLetras);
@@ -298,6 +305,7 @@ session_start();
     document.getElementById('placas').addEventListener('input', validarPlacas);
     document.getElementById('kilometraje').addEventListener('input', validarNumeros);
     document.getElementById('anio').addEventListener('input', validarAño);
+    document.getElementById('vin').addEventListener('input', validarVin);
 </script>
 
             </div>
