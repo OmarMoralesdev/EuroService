@@ -55,7 +55,6 @@ session_start();
                         unset($_SESSION['bien']);
                     }
 
-                    // Recuperar valores del formulario si existen
                     $formValues = isset($_SESSION['form_values']) ? $_SESSION['form_values'] : array();
                     ?>
 
