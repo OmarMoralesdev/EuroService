@@ -4,7 +4,9 @@ require '../includes/db.php';
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     // Validar entrada
     if (empty($_POST['empleadoID']) || empty($_POST['rebajas_adicionales']) || empty($_POST['fecha'])) {
-        die('Todos los campos son obligatorios.');
+        $_SESSION['error'] = ('Todos los campos son obligatorios.');
+        header("Location: rabajasforms.php");
+                exit();
     }
 
     $empleadoID = $_POST['empleadoID'];
@@ -13,7 +15,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validar que la fecha es un lunes
     if (date('N', strtotime($fecha_inicio)) !== '1') {
-        die('La fecha seleccionada debe ser un lunes.');
+        $_SESSION['error'] = ('La fecha seleccionada debe ser un lunes.');
+        header("Location: rabajasforms.php");
+                exit();
     }
 
     $fecha_fin = date('Y-m-d', strtotime($fecha_inicio . ' +6 days'));
@@ -99,7 +103,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
             // Validar que las rebajas adicionales no excedan el salario total ganado
             if ($rebajas_adicionales_totales > $total_earned) {
-                die('Las rebajas adicionales no pueden exceder el salario total.');
+                $_SESSION['bien'] = ('Las rebajas adicionales no pueden exceder el salario total.');
+                header("Location: rabajasforms.php");
+                exit();
             }
 
             // Calcular el total final
@@ -119,13 +125,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $stmt->bindParam(':total', $total);
             $stmt->execute();
 
-            echo "Rebajas adicionales actualizadas correctamente. Total recalculado.<br>";
+            $_SESSION['bien'] = "Rebajas adicionales actualizadas correctamente. Total recalculado.<br>";
+            header("Location: rabajasforms.php");
+            exit();
         } else {
-            die('No se pudo obtener la información del empleado para recalcular el total.');
+            $_SESSION['error'] = ('No se pudo obtener la información del empleado para recalcular el total.');
+            header("Location: rabajasforms.php");
+            exit();
         }
 
     } catch (PDOException $e) {
-        echo "Error: " . $e->getMessage() . "<br>";
+        $_SESSION['error'] = "Error: " . $e->getMessage() . "<br>";
+        header("Location: rabajasforms.php");
+        exit();
     }
 
     $pdo = null;
