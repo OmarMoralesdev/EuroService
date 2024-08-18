@@ -17,51 +17,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $vin = isset($_POST['vin']) ? trim($_POST['vin']) : '';
     $anioactual = date('Y');
 
-    // Validar datos del servidor
-    $errors = [];
-
-    // Validar marca: debe contener al menos un carácter alfabético y no debe contener números
-    if (!preg_match('/[a-zA-Z]/', $marca) || preg_match('/\d/', $marca)) {
-        $errors['marca'] = "La marca debe contener al menos un carácter alfabético y no debe contener números.";
-    }
-
-    // Validar modelo: debe contener al menos un carácter alfabético
-    if (!preg_match('/[a-zA-Z]/', $modelo)) {
-        $errors['modelo'] = "El modelo debe contener al menos un carácter alfabético.";
-    }
-
-    // Validar año: debe estar entre 1886 y el año actual, debe ser un número de 4 dígitos
-    if (!preg_match('/^\d{4}$/', $anio) || $anio < 1886 || $anio > $anioactual) {
-        $errors['anio'] = "El año debe ser un valor entre 1886 y el año actual.";
-    }
-
-    // Validar color: debe contener al menos un carácter alfabético y no debe contener números
-    if (!preg_match('/[a-zA-Z]/', $color) || preg_match('/\d/', $color)) {
-        $errors['color'] = "El color debe contener al menos un carácter alfabético y no debe contener números.";
-    }
-
-    // Validar kilometraje: debe ser solo números y hasta 8 dígitos
-    if (!preg_match('/^\d{1,8}$/', $kilometraje)) {
-        $errors['kilometraje'] = "El kilometraje debe ser un número de hasta 8 dígitos.";
-    }
-
-    // Validar placas: debe contener solo letras, números y espacios, y no más de 10 caracteres
-    if (!preg_match('/^[a-zA-Z0-9\s]+$/', $placas) || strlen($placas) > 10) {
-        $errors['placas'] = "Las placas deben contener solo letras, números y espacios, y no más de 10 caracteres.";
-    }
-
-    // Validar VIN: debe contener solo letras, números y espacios, y no más de 20 caracteres
-    if (!preg_match('/^[a-zA-Z0-9\s]+$/', $vin) || strlen($vin) > 20) {
-        $errors['vin'] = "El VIN debe contener solo letras, números y espacios, y no más de 20 caracteres.";
-    }
-
-    // Si hay errores, redirigir a la vista con los mensajes de error
-    if (!empty($errors)) {
-        $_SESSION['error'] = implode('<br>', $errors);
-        header("Location: autos_view.php");
-        exit();
-    }
-
     // Verificar si el VIN ya está registrado
     $verificar = "SELECT * FROM VEHICULOS WHERE vin = ?";
     $stmtVerificar = $pdo->prepare($verificar);

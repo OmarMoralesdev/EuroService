@@ -126,7 +126,7 @@ session_start();
                             <input type="text" id="kilometraje" name="kilometraje" maxlength="8" class="form-control <?php echo isset($errors['kilometraje']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el kilometraje del vehículo" required>
 
                             <label for="placas">Placas:</label>
-                            <input type="text" id="placas" name="placas" maxlength="10" class="form-control <?php echo isset($errors['placas']) ? 'is-invalid' : ''; ?>" placeholder="Introduce las placas del vehículo" required>
+                            <input type="text" id="placas" name="placas" maxlength="9" class="form-control <?php echo isset($errors['placas']) ? 'is-invalid' : ''; ?>" placeholder="Introduce las placas del vehículo" required>
 
                             <label for="vin">VIN:</label>
                             <input type="text" id="vin" name="vin" maxlength="20" class="form-control <?php echo isset($errors['vin']) ? 'is-invalid' : ''; ?>" placeholder="Introduce el VIN del vehículo" required>
@@ -217,13 +217,14 @@ session_start();
         const placas = document.getElementById('placas').value.trim();
         const vin = document.getElementById('vin').value.trim();
 
-        // Validar marca
-        if (/\d/.test(marca)) {
-            document.getElementById('marca').classList.add('is-invalid');
-            valid = false;
-        } else {
-            document.getElementById('marca').classList.remove('is-invalid');
-        }
+            // Validar marca
+            if (marca.trim() === '' || /\d/.test(marca)) {
+                                document.getElementById('marca').classList.add('is-invalid');
+                                valid = false;
+                            } else {
+                                document.getElementById('marca').classList.remove('is-invalid');
+                            }
+        
 
         // Validar campo cliente
         if (/\d/.test(campo)) {
@@ -269,22 +270,34 @@ session_start();
             event.preventDefault();
         }
     });
-
     function validarLetras(event) {
-        const input = event.target;
-        input.value = input.value.replace(/[^a-zA-Z]/g, '');
-    }
-
+                            const input = event.target;
+                            input.value = input.value.replace(/[^a-zA-Z\s]/g, ''); // Permite letras y espacios
+                        }
+                        function validarAño(event) {
+                            const input = event.target;
+                            input.value = input.value.replace(/[^0-9]/g, '');
+                            if (input.value.length > 4) {
+                                input.value = input.value.slice(0, 4);
+                            }
+                        }
     function validarNumeros(event) {
         const input = event.target;
         input.value = input.value.replace(/[^0-9]/g, '');
     }
+    
+    function validarPlacas(event) {
+                            const input = event.target;
+                            input.value = input.value.replace(/[^A-Za-z0-9\-]/g, ''); // placas
+                        }
+
 
     document.getElementById('campo').addEventListener('input', validarLetras);
     document.getElementById('marca').addEventListener('input', validarLetras);
     document.getElementById('color').addEventListener('input', validarLetras);
+    document.getElementById('placas').addEventListener('input', validarPlacas);
     document.getElementById('kilometraje').addEventListener('input', validarNumeros);
-    document.getElementById('anio').addEventListener('input', validarNumeros);
+    document.getElementById('anio').addEventListener('input', validarAño);
 </script>
 
             </div>
