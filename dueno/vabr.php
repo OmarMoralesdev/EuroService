@@ -348,7 +348,7 @@ h2 {
             </a>
         </li>
         <li class="sidebar-item">
-            <a href="Reporte_de_ingresos.php" class="sidebar-link">
+            <a href="Reporte_de_Ingresos.php" class="sidebar-link">
                 <i class="lni lni-coin"></i>
                 <span>FINANZAS</span>
             </a>    
