@@ -200,6 +200,8 @@
                                 $stmt->execute();
                                 $compras = $stmt->fetchAll(PDO::FETCH_ASSOC);
                                 
+                                $totalGeneral = 0;
+
                                 if ($compras) {
                                     foreach ($compras as $compra) {
                                         echo '<tr>';
@@ -212,12 +214,20 @@
                                         echo '<td>' . htmlspecialchars($compra['cantidad']) . '</td>';
                                         echo '<td>' . htmlspecialchars($compra['total']) . '</td>';
                                         echo '</tr>';
+
+                                        $totalGeneral += $compra['total']; // Sumar al total general
                                     }
                                 } else {
                                     echo '<tr><td colspan="8" style="text-align:center;">No se encontraron compras para el mes y año seleccionados.</td></tr>';
                                 }
                                 ?>
                             </tbody>
+                            <tfoot>
+                                <tr>
+                                    <td colspan="7" style="text-align: right; font-weight: bold;">Total General:</td>
+                                    <td style="font-weight: bold;"><?php echo number_format($totalGeneral, 2); ?></td>
+                                </tr>
+                            </tfoot>
                         </table>
                     </div>
                 </div>

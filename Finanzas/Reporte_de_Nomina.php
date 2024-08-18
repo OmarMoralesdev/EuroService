@@ -81,7 +81,6 @@ try {
                                         <div class="form-control"><?php echo date('Y-m-d', strtotime($inicio_semana)) . ' - ' . date('Y-m-d', strtotime($fin_semana)); ?></div>
                                     </div>
                                 </div>
-                            </div>
                         <br>
                         <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Ver Reporte</button>
                         <br>
@@ -94,8 +93,6 @@ try {
                                     <th>Empleado</th>
                                     <th>Faltas</th>
                                     <th>Rebajas</th>
-                                    <th>Bonos</th>
-                                    <th>Rebajas Adicionales</th>
                                     <th>Total</th>
                                 </tr>
                             </thead>
@@ -106,13 +103,11 @@ try {
                                         <td><?php echo htmlspecialchars($n['alias']); ?></td>
                                         <td><?php echo htmlspecialchars($n['faltas']); ?></td>
                                         <td>$<?php echo number_format($n['rebajas'], 2); ?></td>
-                                        <td>$<?php echo number_format($n['bonos'], 2); ?></td>
-                                        <td>$<?php echo number_format($n['rebajas_adicionales'], 2); ?></td>
                                         <td>$<?php echo number_format($n['total'], 2); ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                                 <tr class="font-weight-bold">
-                                    <td colspan="6" class="text-right">Total:</td>
+                                    <td colspan="4" class="text-right">Total:</td>
                                     <td>$<?php echo number_format($total_nomina, 2); ?></td>
                                 </tr>
                             </tbody>
