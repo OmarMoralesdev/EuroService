@@ -3,10 +3,16 @@ session_start(); // Asegúrate de que la sesión esté iniciada
 
 require '../includes/db.php'; // Asegúrate de incluir el archivo de configuración de la base de datos
 
-
 // Conecta a la base de datos
-$con = new Database();
-$pdo = $con->conectar();
+try {
+    $con = new Database();
+    $pdo = $con->conectar();
+} catch (Exception $e) {
+    die('Error al conectar a la base de datos: ' . $e->getMessage());
+}
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
 
 // Obtiene y filtra los datos del POST
 $citaID = filter_input(INPUT_POST, 'citaID', FILTER_SANITIZE_NUMBER_INT);
@@ -19,40 +25,43 @@ if ($estado === 'cancelado' && $citaID) {
     $resultUpdate = $queryUpdate->execute(['cancelado', $citaID]);
 
     if ($resultUpdate) {
-        use PHPMailer\PHPMailer\PHPMailer;
-        use PHPMailer\PHPMailer\Exception;
-        
-        // Incluir el autoload de Composer
-        require '../vendor/autoload.php';  
-        
-        // Obtener los detalles del cliente
-        $sqlCliente = "SELECT PERSONAS.nombre, PERSONAS.apellido_paterno, PERSONAS.apellido_materno, PERSONAS.correo 
-                       FROM PERSONAS 
-                       JOIN CITAS ON PERSONAS.personaID = CITAS.personaID 
-                       WHERE CITAS.citaID = ?";
-        $queryCliente = $pdo->prepare($sqlCliente);
-        $queryCliente->execute([$citaID]);
-        $detalles = $queryCliente->fetch(PDO::FETCH_ASSOC);
+        // Recuperar el correo electrónico del cliente asociado a la cita
+        $sqlSelect = "SELECT p.correo FROM PERSONAS p
+                      INNER JOIN CLIENTES c ON p.personaID = c.personaID
+                      INNER JOIN VEHICULOS v ON c.clienteID = v.clienteID
+                      INNER JOIN CITAS ci ON v.vehiculoID = ci.vehiculoID
+                      WHERE ci.citaID = ?";
+        $querySelect = $pdo->prepare($sqlSelect);
+        $querySelect->execute([$citaID]);
+        $correoDestinatario = $querySelect->fetchColumn();
 
-        if ($detalles) {
-            // Enviar correo de notificación
-            $mail = new PHPMailer;
-            $mail->isSMTP();
-            $mail->Host     = 'smtp.gmail.com';
-            $mail->SMTPAuth   = true;
-            $mail->Username   = 'euroservice339@gmail.com';
-            $mail->Password   = 'uguh ipf w rqqz ewjb';
-            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
-            $mail->Port       = 587;                       
-            $mail->setFrom('euroservice339@gmail.com', 'EuroService');
-            $mail->addAddress($detalles['correo'], "{$detalles['nombre']} {$detalles['apellido_paterno']} {$detalles['apellido_materno']}");
+        if ($correoDestinatario) {
+            // Incluir el autoload de Composer
+            require '../vendor/autoload.php';
 
-            // Contenido del correo
-            $mail->isHTML(true);
-            $mail->Subject = 'Cancelación de Cita';
-            $mail->Body    = "Estimado/a {$detalles['nombre']} {$detalles['apellido_paterno']} {$detalles['apellido_materno']},<br><br>Su cita ha sido cancelada.<br><br>Saludos,<br>EuroService";
+            // Crear una instancia de PHPMailer
+            $mail = new PHPMailer(true);
 
-            if (!$mail->send()) {
+            try {
+                // Configuración del servidor SMTP
+                $mail->isSMTP();
+                $mail->Host     = 'smtp.gmail.com';
+                $mail->SMTPAuth   = true;
+                $mail->Username   = 'euroservice339@gmail.com';
+                $mail->Password   = 'uguh ipf w rqqz ewjb';
+                $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+                $mail->Port       = 587;                       
+                $mail->setFrom('euroservice339@gmail.com', 'EuroService'); // Cambia esto si es necesario
+                $mail->addAddress($correoDestinatario); // Correo del destinatario recuperado
+
+                // Contenido del correo
+                $mail->isHTML(true);
+                $mail->Subject = 'Cancelación de Cita';
+                $mail->Body    = "Estimado/a {$detalles['nombre']} {$detalles['apellido_paterno']} {$detalles['apellido_materno']},<br><br>Su cita ha sido cancelada.<br><br>Saludos,<br>EuroService";
+                $mail->CharSet = 'UTF-8';
+                // Enviar el correo
+                $mail->send();
+            } catch (Exception $e) {
                 $_SESSION['error'] = "Error al enviar el correo de notificación: " . $mail->ErrorInfo;
             }
         } else {
@@ -65,6 +74,6 @@ if ($estado === 'cancelado' && $citaID) {
     $_SESSION['error'] = "Estado no válido o cita no encontrada";
 }
 
-// Redirige a la página deseada
 header("Location: seleccionar_citacopy.php");
 exit();
+?>
