@@ -38,6 +38,8 @@
         <?php include '../includes/vabr.php'; ?>
         <div class="main p-3">
             <div class="container">
+                <h2>Actualizar Bonos</h2>
+                <div class="form-container">
             <div class="d-flex flex-column flex-md-row gap-2">
                                             <input type="radio" class="btn-check" name="options-base" id="option1" autocomplete="off" checked>
                                             <label class="btn" for="option1">BONOS</label>
@@ -58,8 +60,6 @@
                             }
                         });
                     </script>
-                <h2>Actualizar Bonos</h2>
-                <div class="form-container">
                 <?php
                     if (isset($_SESSION['error'])) {
                         echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
