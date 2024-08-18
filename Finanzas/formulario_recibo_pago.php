@@ -169,7 +169,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                             <div class="invalid-feedback">Debes seleccionar una orden.</div>
 
                             <label for="cantidad_pagada">Cantidad Pagada:</label>
-                            <input type="text" id="cantidad_pagada" name="cantidad_pagada" class="form-control" readonly required><br><br>
+                            <input type="text" id="cantidad_pagada" name="cantidad_pagada" class="form-control" readonly required>
                             <label for="receptor">Nombre del Receptor:</label>
                             <input type="text" id="receptor" name="receptor" class="form-control" value="<?php echo htmlspecialchars($nombreCompleto); ?>" readonly required><br><br>
                             <input type="submit" value="Generar Recibo" class="btn btn-dark w-100">
