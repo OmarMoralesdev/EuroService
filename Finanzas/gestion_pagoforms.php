@@ -15,8 +15,14 @@ try {
     // Obtener la semana desde el formulario
     $semana_seleccionada = isset($_GET['semana']) ? $_GET['semana'] : date('Y-m-d');
 
+    // Validar que la fecha sea válida
+    $fecha_valida = DateTime::createFromFormat('Y-m-d', $semana_seleccionada);
+    if (!$fecha_valida) {
+        throw new Exception('Fecha inválida.');
+    }
+
     // Calcular las fechas de inicio y fin de la semana seleccionada
-    $inicio_semana = date('Y-m-d', strtotime($semana_seleccionada . ' -' . date('N', strtotime($semana_seleccionada)) - 1 . ' days'));
+    $inicio_semana = date('Y-m-d', strtotime($semana_seleccionada . ' -' . (date('N', strtotime($semana_seleccionada)) - 1) . ' days'));
     $fin_semana = date('Y-m-d', strtotime($inicio_semana . ' +6 days'));
 
     // Preparar la consulta SQL para llamar al procedimiento almacenado
@@ -35,12 +41,13 @@ try {
     // Obtener los resultados
     $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
 } catch (PDOException $e) {
+    $mensaje_error = "Error en la base de datos: " . $e->getMessage();
+} catch (Exception $e) {
     $mensaje_error = "Error: " . $e->getMessage();
 } finally {
     // Cerrar la conexión
     $pdo = null;
 }
-
 ?>
 
 <!DOCTYPE html>
@@ -63,12 +70,15 @@ try {
             padding: 15px;
         }
 
-
         .input-group {
             display: flex;
             flex-wrap: wrap;
             align-items: center;
             justify-content: center;
+        }
+
+        .table td, .table th {
+            text-align: center;
         }
     </style>
 </head>
@@ -82,7 +92,7 @@ try {
                 <div class="form-container">
                     <form method="GET" action="">
                         <div class="form-group">
-                            <div class="col-md-6 offset-md-3">
+                        <div class="col-md-6 offset-md-3">
                                 <label for="semana">Selecciona la semana:</label>
                                 <div id="week-picker" class="input-group">
                                     <input type="hidden" id="semana" name="semana" value="<?php echo htmlspecialchars($semana_seleccionada); ?>">
@@ -93,10 +103,11 @@ try {
                             </div>
                             <br>
                             <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Ver reporte</button>
+                        </div>
                     </form>
 
                     <?php if (!empty($resultado)) : ?>
-                        <div class="table-responsive">
+                        <div class="table-responsive mt-4">
                             <table class="table table-striped table-bordered">
                                 <thead>
                                     <tr>
@@ -107,6 +118,8 @@ try {
                                         <th>Monto</th>
                                         <th>Tipo de Pago</th>
                                         <th>Forma de Pago</th>
+                                        <th>Vehículo</th>                                  
+                                        <th>Persona Nombre</th>
                                         <th>Estado</th>
                                     </tr>
                                 </thead>
@@ -132,6 +145,9 @@ try {
                                             <td><?= htmlspecialchars($fila['monto']); ?></td>
                                             <td><?= htmlspecialchars($fila['tipo_pago']); ?></td>
                                             <td><?= htmlspecialchars($fila['forma_de_pago']); ?></td>
+                                            <td><?= htmlspecialchars($fila['modelos']); ?></td>                                   
+                                            <td><?= htmlspecialchars($fila['nombre_completo_cliente']); ?></td>
+                                   
                                             <td style="background-color: <?= htmlspecialchars($color_celda_estado); ?>;">
                                                 <?= htmlspecialchars($fila['estado']); ?>
                                             </td>
@@ -152,6 +168,7 @@ try {
     <!-- Datepicker JS -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
     <script src="../assets/js/weekpicker.js"></script>
+
 </body>
 
 </html>
