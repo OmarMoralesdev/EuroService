@@ -102,7 +102,7 @@ session_start();
                             <input type="text" id="placas" name="placas" maxlength="9" class="form-control" placeholder="Introduce las placas del vehículo" required value="<?= htmlspecialchars($formValues['placas'] ?? '') ?>">
 
                             <label for="vin">VIN:</label>
-                            <input type="text" id="vin" name="vin" maxlength="20" class="form-control" placeholder="Introduce el VIN del vehículo" required value="<?= htmlspecialchars($formValues['vin'] ?? '') ?>">
+                            <input type="text" id="vin" name="vin" maxlength="17" class="form-control" placeholder="Introduce el VIN del vehículo" required value="<?= htmlspecialchars($formValues['vin'] ?? '') ?>">
 
                             <br>
                             <button type="submit" value="Registrar Vehículo" class="btn btn-dark d-grid gap-2 col-6 mx-auto">Registrar</button>
