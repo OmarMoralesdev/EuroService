@@ -51,6 +51,12 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         header("Location: crear_orden_sin_cita.php");
         exit();
     }
+    // Validación de datos
+    if (($costoManoObra + $costoRefacciones + 800) < $anticipo) {
+        $_SESSION['error'] = "el anticipo no puede ser mayor a el total!";
+        header("Location: crear_orden_sin_cita.php");
+        exit();
+    }
 
     require '../includes/db.php';
     $con = new Database();

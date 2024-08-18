@@ -99,7 +99,7 @@ session_start();
                             <input type="text" id="kilometraje" name="kilometraje" maxlength="8" class="form-control" placeholder="Introduce el kilometraje del vehículo" required value="<?= htmlspecialchars($formValues['kilometraje'] ?? '') ?>">
 
                             <label for="placas">Placas:</label>
-                            <input type="text" id="placas" name="placas" maxlength="9" class="form-control" placeholder="Introduce las placas del vehículo" required value="<?= htmlspecialchars($formValues['placas'] ?? '') ?>">
+                            <input type="text" id="placas" name="placas" maxlength="7" class="form-control" placeholder="Introduce las placas del vehículo" required value="<?= htmlspecialchars($formValues['placas'] ?? '') ?>">
 
                             <label for="vin">VIN:</label>
                             <input type="text" id="vin" name="vin" maxlength="17" class="form-control" placeholder="Introduce el VIN del vehículo" required value="<?= htmlspecialchars($formValues['vin'] ?? '') ?>">

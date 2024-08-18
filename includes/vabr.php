@@ -297,11 +297,7 @@ h2 {
     </div>
     <ul class="sidebar-nav">
 
-
-      
-
-          
-     
+ 
         <!-- Sección de Catálogo ajustada -->
 
         <li class="sidebar-item">
@@ -372,9 +368,6 @@ h2 {
                 </li>
                 <li class="sidebar-item">
                     <a href="../Finanzas/Reporte_de_rendimiento.php" class="sidebar-link">RENDIMIENTO</a>
-                </li>
-                <li class="sidebar-item">
-                    <a href="../nominas/Bonos_Rebajas_Adicionales.php" class="sidebar-link">AGREGAR BONOS O REBAJAS</a>
                 </li>
             </ul>
         </li>
