@@ -18,7 +18,7 @@
         th, td {
             padding: 12px;
             border-bottom: 1px solid #ddd;
-            cursor: default; /* Mantener el cursor como estándar */
+            cursor: default;
         }
         th {
             background-color: #f4f4f4;
@@ -36,13 +36,13 @@
         }
         .chart-container {
             display: flex;
-            justify-content: center; /* Centrar el gráfico horizontalmente */
+            justify-content: center;
             margin-top: 20px;
         }
         .chart-wrapper {
             flex: 1;
-            max-width: 1000px; /* Ajustar el ancho máximo del contenedor */
-            height: 500px; /* Altura fija para el gráfico */
+            max-width: 1000px;
+            height: 500px;
             position: relative;
         }
         canvas {
@@ -67,69 +67,68 @@
                 $con = new Database();
                 $pdo = $con->conectar();
                 
-                // Consulta SQL
+                // Consulta SQL actualizada
                 $sql = "       
-                  SELECT 
-                    mes, 
-                    SUM(total_ingresos_mensuales) AS total_ingresos_mensuales,
-                    SUM(total_gastos_mensuales) AS total_gastos_mensuales,
-                    SUM(total_ingresos_servicios) AS total_ingresos_servicios,
-                    SUM(total_gasto_insumo) AS total_gasto_insumo,
-                    SUM(total_ingresos_mensuales) - 
-                    (SUM(total_gastos_mensuales) + SUM(total_gasto_insumo)) AS total_neto,
-                    SUM(total_ingresos_mensuales) + SUM(total_ingresos_servicios) AS total_con_ingresos_servicios,
-                    SUM(total_gastos_mensuales) + SUM(total_gasto_insumo) AS total_gastos_totales
-                FROM (
-                    SELECT DATE_FORMAT(p.fecha_pago, '%Y-%m') AS mes,
-                           COALESCE(SUM(p.monto), 0) AS total_ingresos_mensuales,
-                           0 AS total_gastos_mensuales,
-                           0 AS total_ingresos_servicios,
-                           0 AS total_gasto_insumo
+                    SELECT 
+                        DATE_FORMAT(p.fecha_pago, '%Y-%m-%d') AS dia,
+                        SUM(p.monto) AS total_ingresos_mensuales,
+                        0 AS total_gastos_mensuales,
+                        0 AS total_ingresos_servicios,
+                        0 AS total_gasto_insumo,
+                        SUM(p.monto) AS total_neto,
+                        SUM(p.monto) AS total_con_ingresos_servicios,
+                        0 AS total_gastos_totales
                     FROM PAGOS p
-                    WHERE p.fecha_pago >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
-                    GROUP BY DATE_FORMAT(p.fecha_pago, '%Y-%m')
-            
+                    WHERE p.fecha_pago >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+                    GROUP BY p.fecha_pago
+
                     UNION ALL     
 
-                    SELECT DATE_FORMAT(c.fecha_compra, '%Y-%m') AS mes,
-                           0 AS total_ingresos_mensuales,
-                           COALESCE(SUM(dc.subtotal), 0) AS total_gastos_mensuales,
-                           0 AS total_ingresos_servicios,
-                           0 AS total_gasto_insumo
+                    SELECT 
+                        DATE_FORMAT(c.fecha_compra, '%Y-%m-%d') AS dia,
+                        0 AS total_ingresos_mensuales,
+                        COALESCE(SUM(dc.subtotal), 0) AS total_gastos_mensuales,
+                        0 AS total_ingresos_servicios,
+                        COALESCE(SUM(dc.subtotal), 0) AS total_gasto_insumo,
+                        0 AS total_neto,
+                        0 AS total_con_ingresos_servicios,
+                        COALESCE(SUM(dc.subtotal), 0) AS total_gastos_totales
                     FROM DETALLE_COMPRA dc
                     JOIN COMPRAS c ON dc.compraID = c.compraID
-                    WHERE c.fecha_compra >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
-                    GROUP BY DATE_FORMAT(c.fecha_compra, '%Y-%m')
-            
+                    WHERE c.fecha_compra >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+                    GROUP BY c.fecha_compra
+
                     UNION ALL
-            
-                    SELECT DATE_FORMAT(o.fecha_orden, '%Y-%m') AS mes,
-                           0 AS total_ingresos_mensuales,
-                           0 AS total_gastos_mensuales,
-                           COALESCE(SUM(o.costo_mano_obra + o.costo_refacciones), 0) AS total_ingresos_servicios,
-                           0 AS total_gasto_insumo
-                    FROM ORDENES_TRABAJO o
-                    WHERE o.fecha_orden >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
-                    GROUP BY DATE_FORMAT(o.fecha_orden, '%Y-%m')
-            
+
+                    SELECT 
+                        DATE_FORMAT(c.fecha_cita, '%Y-%m-%d') AS dia,
+                        0 AS total_ingresos_mensuales,
+                        0 AS total_gastos_mensuales,
+                        COALESCE(SUM(c.total_estimado), 0) AS total_ingresos_servicios,
+                        0 AS total_gasto_insumo,
+                        COALESCE(SUM(c.total_estimado), 0) AS total_neto,
+                        COALESCE(SUM(c.total_estimado), 0) AS total_con_ingresos_servicios,
+                        0 AS total_gastos_totales
+                    FROM CITAS c
+                    WHERE c.fecha_cita >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+                    GROUP BY c.fecha_cita
+
                     UNION ALL
-            
-                    SELECT DATE_FORMAT(c.fecha_compra, '%Y-%m') AS mes,
-                           0 AS total_ingresos_mensuales,
-                           0 AS total_gastos_mensuales,
-                           0 AS total_ingresos_servicios,
-                           COALESCE(SUM(dc.cantidad * dc.precio_unitario), 0) AS total_gasto_insumo
+
+                    SELECT 
+                        DATE_FORMAT(c.fecha_compra, '%Y-%m-%d') AS dia,
+                        0 AS total_ingresos_mensuales,
+                        0 AS total_gastos_mensuales,
+                        0 AS total_ingresos_servicios,
+                        COALESCE(SUM(dc.cantidad * dc.precio_unitario), 0) AS total_gasto_insumo,
+                        0 AS total_neto,
+                        0 AS total_con_ingresos_servicios,
+                        COALESCE(SUM(dc.cantidad * dc.precio_unitario), 0) AS total_gastos_totales
                     FROM DETALLE_COMPRA dc
                     JOIN COMPRAS c ON dc.compraID = c.compraID
-                    JOIN INSUMO_PROVEEDOR ip ON dc.insumo_proveedorID = ip.insumo_proveedorID
-                    JOIN INSUMOS i ON ip.insumoID = i.insumoID
-                    WHERE c.fecha_compra >= DATE_SUB(CURDATE(), INTERVAL 3 MONTH)
-                    GROUP BY DATE_FORMAT(c.fecha_compra, '%Y-%m')
-                ) AS reporte
-                GROUP BY mes
-                ORDER BY mes DESC;
-            ";
-            
+                    WHERE c.fecha_compra >= DATE_SUB(CURDATE(), INTERVAL 30 DAY)
+                    GROUP BY c.fecha_compra
+                ";
 
                 // Ejecutar consulta
                 $stmt = $pdo->query($sql);
@@ -137,7 +136,7 @@
                 if ($stmt->rowCount() > 0) {
                     // Datos para gráficos
                     $data = [
-                        'meses' => [],
+                        'dias' => [],
                         'ingresos' => [],
                         'gastos' => [],
                         'ingresos_servicios' => [],
@@ -148,7 +147,7 @@
 
                     while ($row = $stmt->fetch(PDO::FETCH_ASSOC)) {
                         // Recolectar datos para gráficos
-                        $data['meses'][] = $row['mes'];
+                        $data['dias'][] = $row['dia'];
                         $data['ingresos'][] = (float)$row['total_ingresos_mensuales'];
                         $data['gastos'][] = (float)$row['total_gastos_mensuales'];
                         $data['ingresos_servicios'][] = (float)$row['total_ingresos_servicios'];
@@ -156,7 +155,6 @@
                         $data['total_neto'][] = (float)$row['total_neto'];
                         $data['total_gastos_totales'][] = (float)$row['total_gastos_totales'];
                     }
-                    echo "</table>";
                 } else {
                     echo "<p>No se encontraron resultados.</p>";
                 }
@@ -172,7 +170,7 @@
                 <script>
                     document.addEventListener('DOMContentLoaded', function() {
                         // Datos provenientes de PHP
-                        var meses = <?php echo json_encode($data['meses']); ?>;
+                        var dias = <?php echo json_encode($data['dias']); ?>;
                         var ingresos = <?php echo json_encode($data['ingresos']); ?>;
                         var gastos = <?php echo json_encode($data['gastos']); ?>;
                         var ingresos_servicios = <?php echo json_encode($data['ingresos_servicios']); ?>;
@@ -185,62 +183,61 @@
                         new Chart(ctx, {
                             type: 'bar', // Tipo de gráfico
                             data: {
-                                labels: meses,
+                                labels: dias,
                                 datasets: [
                                     {
                                         label: 'Ingresos Mensuales',
                                         data: ingresos,
-                                        backgroundColor: 'rgba(0, 128, 0, 0.7)', // Verde intenso
+                                        backgroundColor: 'rgba(0, 128, 0, 0.7)',
                                         borderColor: 'rgba(0, 128, 0, 1)',
                                         borderWidth: 1
                                     },
                                     {
                                         label: 'Gastos Mensuales',
                                         data: gastos,
-                                        backgroundColor: 'rgba(255, 0, 0, 0.7)', // Rojo intenso
+                                        backgroundColor: 'rgba(255, 0, 0, 0.7)',
                                         borderColor: 'rgba(255, 0, 0, 1)',
                                         borderWidth: 1
                                     },
                                     {
                                         label: 'Ingresos Servicios',
                                         data: ingresos_servicios,
-                                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
+                                        backgroundColor: 'rgba(153, 102, 255, 0.7)',
                                         borderColor: 'rgba(153, 102, 255, 1)',
                                         borderWidth: 1
                                     },
                                     {
                                         label: 'Gasto Insumo',
                                         data: gasto_insumo,
-                                        backgroundColor: 'rgba(255, 159, 64, 0.2)',
+                                        backgroundColor: 'rgba(255, 159, 64, 0.7)',
                                         borderColor: 'rgba(255, 159, 64, 1)',
                                         borderWidth: 1
                                     },
                                     {
                                         label: 'Total Neto',
                                         data: total_neto,
-                                        backgroundColor: 'rgba(255, 206, 86, 0.2)',
+                                        backgroundColor: 'rgba(255, 206, 86, 0.7)',
                                         borderColor: 'rgba(255, 206, 86, 1)',
                                         borderWidth: 1
                                     },
-                                   
                                     {
                                         label: 'Total Gastos Totales',
                                         data: total_gastos_totales,
-                                        backgroundColor: 'rgba(153, 102, 255, 0.2)',
-                                        borderColor: 'rgba(153, 102, 255, 1)',
+                                        backgroundColor: 'rgba(75, 192, 192, 0.7)',
+                                        borderColor: 'rgba(75, 192, 192, 1)',
                                         borderWidth: 1
                                     }
                                 ]
                             },
                             options: {
-                                    scales: {
-                                        y: {
-                                            beginAtZero: true
-                                        }
-                                    },
-                                    responsive: true,
-                                    maintainAspectRatio: false,
-                                }
+                                scales: {
+                                    y: {
+                                        beginAtZero: true
+                                    }
+                                },
+                                responsive: true,
+                                maintainAspectRatio: false,
+                            }
                         });
                     });
                 </script>
