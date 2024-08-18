@@ -186,11 +186,8 @@ if (!function_exists('obtenerDetallesClientepersona2')) {
                                             <p><strong>Costo:</strong> <?php echo htmlspecialchars($cita['costo']); ?></p>
                                             <p><strong>Servicio Solicitado:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
                                             <p><strong>Fecha de la Cita:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
-
-
                                 </div>
                             </div>
-
                         </div>
                     <?php endforeach; ?>
                 <?php else : ?>
@@ -199,100 +196,6 @@ if (!function_exists('obtenerDetallesClientepersona2')) {
             </div>
         </section>
         <hr>
-
-        <section id="v" class="content text-center">
-        <?php
-                    $usuario = obtenerDetallesClientepersona($pdo, $clienteID);
-                    if ($usuario) {
-                        echo "<h2 class='section-heading'>MIS VEHICULOS REGISTRADOS</h2>";
-                    }?>
-            <hr class="bg-light">
-            <div class="row">
-                <?php if (!empty($vehiculos)) : ?>
-                    <?php foreach ($vehiculos as $vehiculo) : ?>
-                        <div class="col-lg-4 col-md-6 mb-3">
-                            <div class="card">
-                                <div class="card-header">
-                                    <h4><?php echo htmlspecialchars($vehiculo['marca'] . " " . $vehiculo['modelo']); ?></h4>
-                                </div>
-                                <div class="card-body">
-                                    <p><strong>VIN:</strong> <?php echo htmlspecialchars($vehiculo['vin']); ?></p>
-                                    <p><strong>Placas:</strong> <?php echo htmlspecialchars($vehiculo['placas']); ?></p>
-                                    <p><strong>Año:</strong> <?php echo htmlspecialchars($vehiculo['anio']); ?></p>
-                                    <p><strong>Color:</strong> <?php echo htmlspecialchars($vehiculo['color']); ?></p>
-                                    <p><strong>Kilometraje:</strong> <?php echo htmlspecialchars($vehiculo['kilometraje']); ?> km</p>
-                                 <!-- boton para activar modal -->
-<button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#historial">
-  HISTORIAL
-</button>
-                                </div>
-                            </div>
-                        </div>
-                    <?php endforeach; ?>
-                <?php else : ?>
-
-                    <p class="text-light">No tienes vehículos registrados.</p>
-                       
-                    <?php endif; ?>
-
-                    <!-- Modal -->
-<div class="modal fade" id="historial" tabindex="-1" aria-labelledby="historialLabel" aria-hidden="true">
-  <div class="modal-dialog">
-    <div class="modal-content">
-    <div class="modal-header">
-        <h1 class="modal-title fs-5" id="historialLabel" style="text-align: center;">HISTORIAL</h1>
-    </div>
-    <div class="modal-body">
-        <div class="card-columns">
-            <?php if (!empty($citas)) : ?>
-                <?php foreach ($citas as $cita) : ?>
-                    <div class="card">
-                        <div class="card-body">
-                            <h2 class="card-title"><?php echo htmlspecialchars($cita['marca'] . " " . $cita['modelo']); ?></h2>
-                            <p class="card-text"><strong>VIN:</strong> <?php echo htmlspecialchars($cita['vin']); ?></p>
-                            <p class="card-text"></p><p><strong>Folio:</strong> <?php echo htmlspecialchars($cita['citaID']); ?></p>
-                            <p class="card-text"><p><strong>VIN:</strong> <?php echo htmlspecialchars($cita['vin']); ?></p>
-                            <p class="card-text"><p><strong>Marca:</strong> <?php echo htmlspecialchars($cita['marca']); ?></p>
-                            <p class="card-text"><p><strong>Modelo:</strong> <?php echo htmlspecialchars($cita['modelo']); ?></p>
-                            <p class="card-text"><p><strong>Año:</strong> <?php echo htmlspecialchars($cita['anio']); ?></p>
-                            <p class="card-text"><p><strong>Servicio Solicitado:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
-                            <p class="card-text"><p><strong>Fecha de la Cita:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
-                            <p class="card-text"><strong>Estado:</strong> <?php echo htmlspecialchars($cita['estado']); ?></p>
-                                </div>
-                        </div>
-                    </div>
-                <?php endforeach; ?>
-            <?php else : ?>
-                <p class="text-center">No hay historial.</p>
-            <?php endif; ?>
-        </div>
-    </div>
-        </div>
-    </div>
-
-    <script>
-    function mostrarHistorial(citaID) {
-        // Obtén la tarjeta del vehículo seleccionado
-        var vehiculo = document.getElementById('vehiculo-' + citaID);
-        // Extrae la información del vehículo
-        var marca = vehiculo.querySelector('.card-title').innerText;
-        var vin = vehiculo.querySelector('.card-text:nth-child(2)').innerText;
-        var servicio = vehiculo.querySelector('.card-text:nth-child(3)').innerText;
-        var fechaCita = vehiculo.querySelector('.card-text:nth-child(4)').innerText;
-
-        // Actualiza el contenido del modal de historial
-        var modalBody = document.querySelector('#historialModal .modal-body');
-        modalBody.innerHTML = `
-            <p><strong>Marca y Modelo:</strong> ${marca}</p>
-            <p><strong>${vin}</strong></p>
-            <p><strong>${servicio}</strong></p>
-            <p><strong>${fechaCita}</strong></p>
-        `;
-    }
-    </script>
-</div>
-            </div>
-        </section>
     </div>
     <!-- Modal de Ayuda -->
     <div class="help-modal" id="helpModal">

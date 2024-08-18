@@ -10,7 +10,7 @@
                         <?php
                         $usuario = obtenerDetallesClientepersona($pdo, $clienteID);
                         if ($usuario) {
-                            echo "<a class='nav-link' href='../Cliente/#v'>MIS VEHICULOS</a>";
+                            echo "<a class='nav-link' href='../Cliente/#cp'>CITAS PENDIENTES</a>";
                         }
                         ?>
                     </li>
@@ -18,7 +18,7 @@
                         <?php
                         $usuario = obtenerDetallesClientepersona($pdo, $clienteID);
                         if ($usuario) {
-                            echo "<a class='nav-link' href='../Cliente/#cp'>CITAS PENDIENTES</a>";
+                            echo "<a class='nav-link' href='../Cliente/histo.php'>HISTORIAL</a>";
                         }
                         ?>
                     </li>
