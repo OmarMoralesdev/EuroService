@@ -3,7 +3,7 @@ require '../includes/db.php';
 session_start();
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     if (empty($_POST['fecha'])) {
-        $_SESSION['error'] =('La fecha es requerida.');
+        $_SESSION['error'] = ('La fecha es requerida.');
         header("Location: nomina_Semana.php");
         exit();
     }
@@ -12,7 +12,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     // Validar que la fecha es un lunes
     if (date('N', strtotime($fecha_inicio)) !== '1') {
-        $_SESSION['error'] =('La fecha seleccionada debe ser un lunes.');
+        $_SESSION['error'] = ('La fecha seleccionada debe ser un lunes.');
         header("Location: nomina_Semana.php");
         exit();
     }
@@ -33,7 +33,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_existente->execute();
 
         if ($stmt_existente->fetchColumn() > 0) {
-            $_SESSION['error'] =('Ya existe una nómina para la fecha seleccionada.');
+            $_SESSION['error'] = ('Ya existe una nómina para la fecha seleccionada.');
             header("Location: nomina_Semana.php");
             exit();
         }
@@ -44,7 +44,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             FROM EMPLEADOS e
             LEFT JOIN ASISTENCIA a ON e.empleadoID = a.empleadoID 
                 AND a.fecha BETWEEN :fecha_inicio AND :fecha_fin
-            WHERE e.activo = 1
+            WHERE e.activo = 'si'
             GROUP BY e.empleadoID
             HAVING dias_registrados < 5
         ";
@@ -52,47 +52,99 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         $stmt_asistencias->bindParam(':fecha_inicio', $fecha_inicio);
         $stmt_asistencias->bindParam(':fecha_fin', $fecha_fin);
         $stmt_asistencias->execute();
-        
+
         if ($stmt_asistencias->rowCount() > 0) {
-            $_SESSION['error'] =('No todas las asistencias están registradas para la semana seleccionada.');
+            $_SESSION['error'] = ('No todas las asistencias están registradas para la semana seleccionada.');
             header("Location: nomina_Semana.php");
             exit();
         }
 
-        // Insertar o actualizar las nóminas para la semana
-        $query = "
-        INSERT INTO NOMINAS (faltas, rebajas, bonos, rebajas_adicionales, fecha_de_pago, total, fecha_inicio, fecha_fin, empleadoID)
-        SELECT
-            COUNT(a.asistenciaID) AS faltas,
-            COUNT(a.asistenciaID) * e.salario_diario AS rebajas,
-            COALESCE(n.bonos, 0) AS bonos,
-            COALESCE(n.rebajas_adicionales, 0) AS rebajas_adicionales,
-            CURDATE() AS fecha_de_pago,
-            (e.salario_diario * 7) - (COUNT(a.asistenciaID) * e.salario_diario) + COALESCE(n.bonos, 0) - COALESCE(n.rebajas_adicionales, 0) AS total,
-            :fecha_inicio,
-            :fecha_fin,
-            e.empleadoID
-        FROM EMPLEADOS e
-        LEFT JOIN ASISTENCIA a ON a.empleadoID = e.empleadoID
-            AND a.fecha BETWEEN :fecha_inicio AND :fecha_fin
-            AND a.asistencia = 'falta'
-        LEFT JOIN NOMINAS n ON n.empleadoID = e.empleadoID
-            AND n.fecha_inicio = :fecha_inicio
-        WHERE e.activo = 1
-        GROUP BY e.empleadoID
-        ON DUPLICATE KEY UPDATE
-            faltas = VALUES(faltas),
-            rebajas = VALUES(rebajas),
-            bonos = VALUES(bonos),
-            rebajas_adicionales = VALUES(rebajas_adicionales),
-            fecha_de_pago = VALUES(fecha_de_pago),
-            total = VALUES(total)
+        // Iterar sobre los empleados activos para insertar o actualizar nómina
+        $query_empleados = "
+            SELECT e.empleadoID, 
+                   e.salario_diario,
+                   COALESCE(n.bonos, 0) AS bonos,
+                   COALESCE(n.rebajas_adicionales, 0) AS rebajas_adicionales
+            FROM EMPLEADOS e
+            LEFT JOIN NOMINAS n ON n.empleadoID = e.empleadoID 
+            WHERE e.activo = 'si'
+            GROUP BY e.empleadoID
         ";
+        $stmt_empleados = $pdo->prepare($query_empleados);
+        $stmt_empleados->execute();
+        $empleados = $stmt_empleados->fetchAll(PDO::FETCH_ASSOC);
 
-        $stmt = $pdo->prepare($query);
-        $stmt->bindParam(':fecha_inicio', $fecha_inicio);
-        $stmt->bindParam(':fecha_fin', $fecha_fin);
-        $stmt->execute();
+        foreach ($empleados as $empleado) {
+            $empleadoID = $empleado['empleadoID'];
+            $salario_diario = $empleado['salario_diario'];
+            $bonos = $empleado['bonos'];
+            $rebajas_adicionales = $empleado['rebajas_adicionales'];
+
+            // Calcular faltas y rebajas
+            $query_faltas = "
+                SELECT COUNT(a.asistenciaID) AS faltas
+                FROM ASISTENCIA a
+                WHERE a.empleadoID = :empleadoID 
+                  AND a.fecha BETWEEN :fecha_inicio AND :fecha_fin
+                  AND a.asistencia = 'falta'
+            ";
+            $stmt_faltas = $pdo->prepare($query_faltas);
+            $stmt_faltas->bindParam(':empleadoID', $empleadoID);
+            $stmt_faltas->bindParam(':fecha_inicio', $fecha_inicio);
+            $stmt_faltas->bindParam(':fecha_fin', $fecha_fin);
+            $stmt_faltas->execute();
+            $faltas = $stmt_faltas->fetchColumn();
+
+            $rebajas = $faltas * $salario_diario;
+
+            // Calcular total
+            $total = ($salario_diario * 7) - $rebajas + $bonos - $rebajas_adicionales;
+
+            // Verificar si ya existe una nómina para este empleado en esta semana
+            $query_check_nomina = "
+                SELECT nominaID FROM NOMINAS
+                WHERE empleadoID = :empleadoID
+                AND fecha_inicio = :fecha_inicio
+            ";
+            $stmt_check_nomina = $pdo->prepare($query_check_nomina);
+            $stmt_check_nomina->bindParam(':empleadoID', $empleadoID);
+            $stmt_check_nomina->bindParam(':fecha_inicio', $fecha_inicio);
+            $stmt_check_nomina->execute();
+            $nominaID = $stmt_check_nomina->fetchColumn();
+
+            if ($nominaID) {
+                // Actualizar nómina existente
+                $query_update_nomina = "
+                    UPDATE NOMINAS
+                    SET faltas = :faltas,
+                        rebajas = :rebajas,
+                        total = :total
+                    WHERE nominaID = :nominaID
+                ";
+                $stmt_update_nomina = $pdo->prepare($query_update_nomina);
+                $stmt_update_nomina->bindParam(':faltas', $faltas);
+                $stmt_update_nomina->bindParam(':rebajas', $rebajas);
+                $stmt_update_nomina->bindParam(':total', $total);
+                $stmt_update_nomina->bindParam(':nominaID', $nominaID);
+                $stmt_update_nomina->execute();
+            } else {
+                // Insertar nueva nómina
+                $query_insert_nomina = "
+                    INSERT INTO NOMINAS (faltas, rebajas, bonos, rebajas_adicionales, fecha_de_pago, total, fecha_inicio, fecha_fin, empleadoID)
+                    VALUES (:faltas, :rebajas, :bonos, :rebajas_adicionales, CURDATE(), :total, :fecha_inicio, :fecha_fin, :empleadoID)
+                ";
+                $stmt_insert_nomina = $pdo->prepare($query_insert_nomina);
+                $stmt_insert_nomina->bindParam(':faltas', $faltas);
+                $stmt_insert_nomina->bindParam(':rebajas', $rebajas);
+                $stmt_insert_nomina->bindParam(':bonos', $bonos);
+                $stmt_insert_nomina->bindParam(':rebajas_adicionales', $rebajas_adicionales);
+                $stmt_insert_nomina->bindParam(':total', $total);
+                $stmt_insert_nomina->bindParam(':fecha_inicio', $fecha_inicio);
+                $stmt_insert_nomina->bindParam(':fecha_fin', $fecha_fin);
+                $stmt_insert_nomina->bindParam(':empleadoID', $empleadoID);
+                $stmt_insert_nomina->execute();
+            }
+        }
 
         $_SESSION['bien'] = "Nómina semanal registrada o actualizada correctamente.<br>";
         header("Location: nomina_Semana.php");
