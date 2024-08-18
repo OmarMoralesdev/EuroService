@@ -8,7 +8,6 @@ unset($_SESSION['mensaje']);
 
 <head>
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
-
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Registrar Cita y Crear Orden de Trabajo</title>
@@ -51,39 +50,36 @@ unset($_SESSION['mensaje']);
                         <!-- Formulario de Cita -->
                         <div class="mb-3">
                             <label for="clienteID" class="form-label">Ingrese un cliente:</label>
-                            <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." required>
+                            <input type="text" class="form-control" id="campo" name="campo" placeholder="Buscar cliente..." value="<?php echo isset($_SESSION['form_data']['campo']) ? htmlspecialchars($_SESSION['form_data']['campo']) : ''; ?>" required>
                             <ul id="lista" class="list-group lista" style="display: none;"></ul>
-                            <input type="hidden" id="clienteID" name="clienteID">
+                            <input type="hidden" id="clienteID" name="clienteID" value="<?php echo isset($_SESSION['form_data']['clienteID']) ? htmlspecialchars($_SESSION['form_data']['clienteID']) : ''; ?>">
                             <div class="invalid-feedback">Debes seleccionar un cliente.</div>
                         </div>
                         <div class="mb-3">
                             <label for="vehiculoSeleccionado" class="form-label">Seleccione un vehiculo:</label>
                             <ul id="lista-vehiculos" class="list-group" style="display: none;"></ul>
-                            <input type="hidden" id="vehiculoID" name="vehiculoID">
-                            <input type="text" class="form-control" id="vehiculoSeleccionado" placeholder="Vehículo seleccionado" readonly>
+                            <input type="hidden" id="vehiculoID" name="vehiculoID" value="<?php echo isset($_SESSION['form_data']['vehiculoID']) ? htmlspecialchars($_SESSION['form_data']['vehiculoID']) : ''; ?>">
+                            <input type="text" class="form-control" id="vehiculoSeleccionado" placeholder="Vehículo seleccionado" readonly value="<?php echo isset($_SESSION['form_data']['vehiculoSeleccionado']) ? htmlspecialchars($_SESSION['form_data']['vehiculoSeleccionado']) : ''; ?>">
                             <div class="invalid-feedback">Debes seleccionar un vehículo.</div>
                         </div>
                         <div class="mb-3">
                             <label for="servicioSolicitado" class="form-label">Servicio Solicitado:</label>
-                            <input type="text" class="form-control" id="servicioSolicitado" name="servicioSolicitado" required>
+                            <input type="text" class="form-control" id="servicioSolicitado" name="servicioSolicitado" value="<?php echo isset($_SESSION['form_data']['servicioSolicitado']) ? htmlspecialchars($_SESSION['form_data']['servicioSolicitado']) : ''; ?>" required>
                             <div class="invalid-feedback">Debes ingresar el servicio solicitado.</div>
                         </div>
 
                         <!-- Formulario de Orden de Trabajo -->
                         <div class="mb-3">
                             <label for="costoManoObra" class="form-label">Costo de Mano de Obra:</label>
-                            <input type="number" step="0.01" class="form-control" id="costoManoObra" name="costoManoObra" required>
-
+                            <input type="number" step="0.01" class="form-control" id="costoManoObra" name="costoManoObra" value="<?php echo isset($_SESSION['form_data']['costoManoObra']) ? htmlspecialchars($_SESSION['form_data']['costoManoObra']) : ''; ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="costoRefacciones" class="form-label">Costo de Refacciones:</label>
-                            <input type="number" step="0.01" class="form-control" id="costoRefacciones" name="costoRefacciones" required>
-
+                            <input type="number" step="0.01" class="form-control" id="costoRefacciones" name="costoRefacciones" value="<?php echo isset($_SESSION['form_data']['costoRefacciones']) ? htmlspecialchars($_SESSION['form_data']['costoRefacciones']) : ''; ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="anticipo" class="form-label">Anticipo:</label>
-                            <input type="number" step="0.01" class="form-control" id="anticipo" name="anticipo" required>
-
+                            <input type="number" step="0.01" class="form-control" id="anticipo" name="anticipo" value="<?php echo isset($_SESSION['form_data']['anticipo']) ? htmlspecialchars($_SESSION['form_data']['anticipo']) : ''; ?>" required>
                         </div>
                         <div class="mb-3">
                             <label for="empleado" class="form-label">Empleado:</label>
@@ -104,7 +100,8 @@ unset($_SESSION['mensaje']);
                                 $empleados = obtenerEmpleadosDisponibles($pdo);
                                 foreach ($empleados as $empleado) {
                                     $nombreCompleto = "{$empleado['nombre']} {$empleado['apellido_paterno']} {$empleado['apellido_materno']}";
-                                    echo "<option value=\"{$empleado['empleadoID']}\">{$nombreCompleto}</option>";
+                                    $selected = isset($_SESSION['form_data']['empleado']) && $_SESSION['form_data']['empleado'] == $empleado['empleadoID'] ? 'selected' : '';
+                                    echo "<option value=\"{$empleado['empleadoID']}\" $selected>{$nombreCompleto}</option>";
                                 }
                                 ?>
                             </select>
@@ -122,7 +119,8 @@ unset($_SESSION['mensaje']);
                                 }
                                 $ubicaciones = obtenerUbicacionesActivas($pdo);
                                 foreach ($ubicaciones as $ubicacion) {
-                                    echo "<option value=\"{$ubicacion['ubicacionID']}\">{$ubicacion['lugar']}</option>";
+                                    $selected = isset($_SESSION['form_data']['ubicacionID']) && $_SESSION['form_data']['ubicacionID'] == $ubicacion['ubicacionID'] ? 'selected' : '';
+                                    echo "<option value=\"{$ubicacion['ubicacionID']}\" $selected>{$ubicacion['lugar']}</option>";
                                 }
                                 ?>
                             </select>
@@ -132,9 +130,9 @@ unset($_SESSION['mensaje']);
                         <div class="mb-3">
                             <label for="formadepago" class="form-label">Forma de pago:</label>
                             <select name="formadepago" class="form-control" required>
-                                <option value="efectivo">Efectivo</option>
-                                <option value="tarjeta">Tarjeta</option>
-                                <option value="transferencia">Transferencia</option>
+                                <option value="efectivo" <?php echo isset($_SESSION['form_data']['formadepago']) && $_SESSION['form_data']['formadepago'] == 'efectivo' ? 'selected' : ''; ?>>Efectivo</option>
+                                <option value="tarjeta" <?php echo isset($_SESSION['form_data']['formadepago']) && $_SESSION['form_data']['formadepago'] == 'tarjeta' ? 'selected' : ''; ?>>Tarjeta</option>
+                                <option value="transferencia" <?php echo isset($_SESSION['form_data']['formadepago']) && $_SESSION['form_data']['formadepago'] == 'transferencia' ? 'selected' : ''; ?>>Transferencia</option>
                             </select>
                             <div class="invalid-feedback">Debes seleccionar una forma de pago.</div>
                         </div>
@@ -145,16 +143,6 @@ unset($_SESSION['mensaje']);
         </div>
     </div>
     <script src="app.js"></script>
-
-    <script>
-        $(document).ready(function() {
-            if ($('#staticBackdrop').length) {
-                $('#staticBackdrop').modal('show');
-            }
-        });
-    </script>
-
-
     <script>
         $(document).ready(function() {
             if ($('#staticBackdrop').length) {
@@ -165,39 +153,39 @@ unset($_SESSION['mensaje']);
         document.getElementById('formCita').addEventListener('submit', function(event) {
             let valid = true;
 
-
             const campo = document.getElementById('campo').value;
             const costoManoObra = document.getElementById('costoManoObra').value;
             const costoRefacciones = document.getElementById('costoRefacciones').value;
             const anticipo = parseFloat(document.getElementById('anticipo').value);
 
-            // Validar nombre
-            if (/\d/.test(nombre)) {
+            if (/\d/.test(campo)) {
                 document.getElementById('campo').classList.add('is-invalid');
                 valid = false;
             } else {
                 document.getElementById('campo').classList.remove('is-invalid');
             }
-            // Validar salario
+
             if (isNaN(costoManoObra) || costoManoObra < 0) {
                 document.getElementById('costoManoObra').classList.add('is-invalid');
                 valid = false;
             } else {
                 document.getElementById('costoManoObra').classList.remove('is-invalid');
             }
-            // Validar salario
+
             if (isNaN(costoRefacciones) || costoRefacciones < 0) {
                 document.getElementById('costoRefacciones').classList.add('is-invalid');
                 valid = false;
             } else {
                 document.getElementById('costoRefacciones').classList.remove('is-invalid');
             }
+
             if (isNaN(anticipo) || anticipo < 0) {
                 document.getElementById('anticipo').classList.add('is-invalid');
                 valid = false;
             } else {
                 document.getElementById('anticipo').classList.remove('is-invalid');
             }
+
             if (!valid) {
                 event.preventDefault();
             }
@@ -212,6 +200,7 @@ unset($_SESSION['mensaje']);
             const input = event.target;
             input.value = input.value.replace(/[^0-9.]/g, '');
         }
+
         document.getElementById('campo').addEventListener('input', validarLetras);
         document.getElementById('costoManoObra').addEventListener('input', validarNumeros);
         document.getElementById('costoRefacciones').addEventListener('input', validarNumeros);
@@ -221,10 +210,9 @@ unset($_SESSION['mensaje']);
             var value = parseFloat(event.target.value);
             if (value < 0) {
                 event.target.value = '';
-                alert('El  no puede ser negativo.');
+                alert('El anticipo no puede ser negativo.');
             }
         });
     </script>
 </body>
-
 </html>
