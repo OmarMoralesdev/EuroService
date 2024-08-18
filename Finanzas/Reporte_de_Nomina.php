@@ -7,14 +7,12 @@ $pdo = $con->conectar();
 try {
     // Obtener la semana seleccionada
     $selected_week = isset($_GET['week']) ? $_GET['week'] : date('Y-\WW');
-
-    // Calcular la fecha del primer día de la semana
     $date = new DateTime();
-    $date->setISODate(date('Y'), date('W'), 1); // Primer día de la semana
-    $date->modify('monday this week'); // Ajustar a la semana seleccionada
+    $date->setISODate((int)substr($selected_week, 0, 4), (int)substr($selected_week, 6, 2));
 
+    // Calcular la fecha del primer y último día de la semana seleccionada
     $week_start = $date->format('Y-m-d');
-    $date->modify('+6 days'); // Último día de la semana
+    $date->modify('+6 days');
     $week_end = $date->format('Y-m-d');
 
     // Consulta para obtener los detalles de la nómina de la semana seleccionada
@@ -43,13 +41,34 @@ try {
 ?>
 
 <!DOCTYPE html>
-<html lang="en">
+<html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <link rel="icon" type="image/x-icon" href="../img/incono.svg">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <title>Reporte de Nómina Semanal</title>
+    <style>
+        .main {
+            align-items: center;
+        }
+
+        .datepicker {
+            background-color: #f7f7f7;
+            border-radius: 5px;
+            padding: 15px;
+        }
+
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
+
 <body>
     <div class="wrapper">
         <?php include '../includes/vabr.php'; ?>
@@ -58,10 +77,13 @@ try {
                 <h2>REPORTE DE NÓMINA SEMANAL</h2>
                 <div class="form-container">
                     <form method="GET" action="" class="mb-4">
-                        <div class="form-row">
-                            <div class="form-group col-md-6 offset-md-3">
-                                <label for="week">Selecciona la semana:</label>
-                                <input type="week" id="week" name="week" class="form-control" value="<?php echo htmlspecialchars($selected_week); ?>">
+                        <div class="col-md-6 offset-md-3">
+                            <label for="semana">Selecciona la semana:</label>
+                            <div id="week-picker" class="input-group">
+                                <input type="hidden" id="semana" name="week" value="<?php echo htmlspecialchars($selected_week); ?>">
+                                <div id="week-picker" class="input-group">
+                                    <div class="form-control"><?php echo date('Y-m-d', strtotime($week_start)) . ' - ' . date('Y-m-d', strtotime($week_end)); ?></div>
+                                </div>
                             </div>
                         </div>
                         <br>
@@ -92,4 +114,19 @@ try {
                                 <tr class="font-weight-bold">
                                     <td colspan="4" class="text-right">Total:</td>
                                     <td>$<?php echo number_format($total_nomina, 2); ?></td>
-                      
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <!-- jQuery -->
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- Datepicker JS -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+        <!-- Tu script personalizado -->
+        <script src="../assets/js/weekpicker.js"></script>
+</body>
+
+</html>

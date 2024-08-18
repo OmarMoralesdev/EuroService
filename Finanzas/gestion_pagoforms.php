@@ -52,6 +52,25 @@ try {
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css">
     <title>Gestión de Pagos Semanal</title>
+    <style>
+        .main {
+            align-items: center;
+        }
+
+        .datepicker {
+            background-color: #f7f7f7;
+            border-radius: 5px;
+            padding: 15px;
+        }
+
+
+        .input-group {
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: center;
+        }
+    </style>
 </head>
 
 <body>
@@ -63,19 +82,17 @@ try {
                 <div class="form-container">
                     <form method="GET" action="">
                         <div class="form-group">
-                            <div class="form-group col-md-6 offset-md-3">
+                            <div class="col-md-6 offset-md-3">
                                 <label for="semana">Selecciona la semana:</label>
-                                <div id="week-picker" class="input-group date">
-                                    <div class="form-control">
-                                        <?php echo date('Y-m-d', strtotime($inicio_semana)) . ' - ' . date('Y-m-d', strtotime($fin_semana)); ?>
-                                    </div>
+                                <div id="week-picker" class="input-group">
                                     <input type="hidden" id="semana" name="semana" value="<?php echo htmlspecialchars($semana_seleccionada); ?>">
-                                    <span class="input-group-addon"><i class="glyphicon glyphicon-calendar"></i></span>
+                                    <div id="week-picker" class="input-group">
+                                        <div class="form-control"><?php echo date('Y-m-d', strtotime($inicio_semana)) . ' - ' . date('Y-m-d', strtotime($fin_semana)); ?></div>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                        <br>
-                        <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Ver reporte</button>
+                            <br>
+                            <button type="submit" class="btn btn-dark d-grid btnn gap-2 col-6 mx-auto">Ver reporte</button>
                     </form>
 
                     <?php if (!empty($resultado)) : ?>
