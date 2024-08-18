@@ -250,8 +250,6 @@ if (!function_exists('obtenerDetallesClientepersona2')) {
                         <div class="card-body">
                             <h2 class="card-title"><?php echo htmlspecialchars($cita['marca'] . " " . $cita['modelo']); ?></h2>
                             <p class="card-text"><strong>VIN:</strong> <?php echo htmlspecialchars($cita['vin']); ?></p>
-                            <p class="card-text"><strong>Servicio:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
-                            <p class="card-text"><strong>Fecha de la Cita:</strong> <?php echo htmlspecialchars(date('d-m-Y H:i', strtotime($cita['fecha_cita']))); ?></p>
                             <p class="card-text"></p><p><strong>Folio:</strong> <?php echo htmlspecialchars($cita['citaID']); ?></p>
                             <p class="card-text"><p><strong>VIN:</strong> <?php echo htmlspecialchars($cita['vin']); ?></p>
                             <p class="card-text"><p><strong>Marca:</strong> <?php echo htmlspecialchars($cita['marca']); ?></p>

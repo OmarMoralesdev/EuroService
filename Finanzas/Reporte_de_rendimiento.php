@@ -135,7 +135,7 @@ $pdo = null;
                                             <td><?php echo htmlspecialchars($fila['num_ordenes']); ?></td>
                                             <td>$<?php echo number_format($fila['total_estimado'], 2); ?></td>
                                             <td>
-                                                <button type="button" class="btn btn-info btn-sm" data-bs-toggle="modal" data-bs-target="#detallesOrdenModal" data-empleado-id="<?php echo $fila['empleadoID']; ?>" onclick="cargarDetallesOrden(<?php echo $fila['empleadoID']; ?>)">
+                                                <button type="button" class="btn btn-dark" data-bs-toggle="modal" data-bs-target="#detallesOrdenModal" data-empleado-id="<?php echo $fila['empleadoID']; ?>" onclick="cargarDetallesOrden(<?php echo $fila['empleadoID']; ?>)">
                                                     Ver Detalles
                                                 </button>
                                             </td>
