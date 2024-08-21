@@ -186,28 +186,6 @@ VEHICULOS <HR>
 EMPLEADOS <HR>
 FINANZAS Y PAGOS 
 </p>
-        </div>
-    </div>
-    <!-- Ícono de Ayuda -->
-    <div class="help-icon" id="helpIcon">
-        ?
-    </div>
 
-    <script>
-        // Funcionalidad del modal de ayuda
-        document.getElementById('helpIcon').addEventListener('click', function() {
-            document.getElementById('helpModal').style.display = 'flex';
-        });
-
-        document.getElementById('closeHelpModal').addEventListener('click', function() {
-            document.getElementById('helpModal').style.display = 'none';
-        });
-
-        window.addEventListener('click', function(event) {
-            if (event.target === document.getElementById('helpModal')) {
-                document.getElementById('helpModal').style.display = 'none';
-            }
-        });
-        </script>
 </body>
 </html>

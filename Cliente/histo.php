@@ -114,6 +114,8 @@ try {
                 <?php foreach ($citas as $cita) : ?>
                     <div class="card">
                         <div class="card-body">
+                            <h3> <?php echo htmlspecialchars($cita['estado']); ?></h3>
+                            <hr>
                             <h5 class="card-title"><?php echo htmlspecialchars($cita['marca'] . " " . $cita['modelo']); ?></h5>
                             <p class="card-text"><strong>VIN:</strong> <?php echo htmlspecialchars($cita['vin']); ?></p>
                             <p class="card-text"><strong>Servicio:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
@@ -137,6 +139,7 @@ try {
                                     <p><strong>Modelo:</strong> <?php echo htmlspecialchars($cita['modelo']); ?></p>
                                     <p><strong>Año:</strong> <?php echo htmlspecialchars($cita['anio']); ?></p>
                                     <p><strong>Servicio Solicitado:</strong> <?php echo htmlspecialchars($cita['servicio_solicitado']); ?></p>
+                                    <p><strong>inspección:</strong> 800</p>
                                     <p><strong>Costo mano de obra:</strong> <?php echo htmlspecialchars($cita['costo_mano_obra']); ?></p>
                                     <p><strong>Costo refacciones:</strong> <?php echo htmlspecialchars($cita['costo_refacciones']); ?></p>
                                     <p><strong>Total:</strong> <?php echo htmlspecialchars($cita['total_estimado']); ?></p>
