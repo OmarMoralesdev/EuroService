@@ -99,9 +99,9 @@ session_start(); // Asegúrate de que esta línea esté al principio del archivo
 
     <div class="form-container">
     <?php
-                    if (isset($_SESSION['error'])) {
-                        echo '<div class="alert alert-danger" role="alert">' . $_SESSION['error'] . '</div>';
-                        unset($_SESSION['error']); // Limpiar el mensaje después de mostrarlo
+                    if (isset($_SESSION['alert'])) {
+                        echo '<div class="alert alert-danger" role="alert">' . $_SESSION['alert'] . '</div>';
+                        unset($_SESSION['alert']); // Limpiar el mensaje después de mostrarlo
                     }
                     if (isset($_SESSION['bien'])) {
                         echo "
