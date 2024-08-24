@@ -46,18 +46,29 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 <html lang="es">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Cambiar Contraseña</title>
 </head>
 <body>
-    <h1>Cambiar Contraseña</h1>
-    <form method="POST" action="">
-        <label for="username">Username:</label>
-        <input type="text" id="username" name="username" required>
-        <br><br>
-        <label for="nueva_contrasena">Nueva Contraseña:</label>
-        <input type="password" id="nueva_contrasena" name="nueva_contrasena" required>
-        <br><br>
-        <input type="submit" value="Cambiar Contraseña">
-    </form>
+<div class="wrapper">
+    <?php include '../includes/vabr.php'; ?>
+    <div class="main p-3">
+        <div class="container">
+            <h2>Registrar o Actualizar Nómina Semanal</h2>
+            <div class="form-container">
+                <h1>Cambiar Contraseña</h1>
+                <form method="POST" action="">
+                    <label for="username">Username:</label>
+                    <input type="text" id="username" name="username" required>
+                    <br><br>
+                    <label for="nueva_contrasena">Nueva Contraseña:</label>
+                    <input type="password" id="nueva_contrasena" name="nueva_contrasena" required>
+                    <br><br>
+                    <input type="submit" value="Cambiar Contraseña">
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 </body>
 </html>
