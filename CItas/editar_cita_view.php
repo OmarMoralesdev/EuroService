@@ -116,13 +116,15 @@ if ($cita) {
                     document.addEventListener('DOMContentLoaded', function() {
                         const dateInput = document.getElementById('fecha_cita');
                         const today = new Date();
-                        const tomorrow = new Date(today);
-                        tomorrow.setDate(today.getDate() + 1); // Día siguiente
+                        const twelveHoursLater = new Date(today);
+                        twelveHoursLater.setHours(today.getHours() + 12); // 12 horas después
 
-                        const year = tomorrow.getFullYear();
-                        const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
-                        const day = String(tomorrow.getDate()).padStart(2, '0');
-                        const minDate = `${year}-${month}-${day}T09:00`;
+                        const year = twelveHoursLater.getFullYear();
+                        const month = String(twelveHoursLater.getMonth() + 1).padStart(2, '0');
+                        const day = String(twelveHoursLater.getDate()).padStart(2, '0');
+                        const hours = String(twelveHoursLater.getHours()).padStart(2, '0');
+                        const minutes = String(twelveHoursLater.getMinutes()).padStart(2, '0');
+                        const minDate = `${year}-${month}-${day}T${hours}:${minutes}`;
                         const maxDate = `${year + 1}-${month}-${day}T17:00`;
 
                         // Establecer el valor mínimo y máximo del Date Picker
@@ -134,15 +136,16 @@ if ($cita) {
                             const selectedHour = selectedDate.getHours();
                             const selectedMinutes = selectedDate.getMinutes();
 
-                            if (selectedDate < tomorrow) {
-                                dateInput.setCustomValidity('La fecha debe ser al menos para el día siguiente.');
-                            } else if (selectedHour < 9 || (selectedHour >= 17 && selectedMinutes >= 0)) {
+                            if (selectedDate < twelveHoursLater) {
+                                dateInput.setCustomValidity('La fecha debe ser al menos 12 horas después.');
+                            } else if (selectedHour < 9 || (selectedHour >= 17 && selectedMinutes > 0)) {
                                 dateInput.setCustomValidity('La hora debe estar dentro del horario laboral (09:00 - 17:00).');
                             } else {
                                 dateInput.setCustomValidity('');
                             }
                         });
                     });
+
                     document.getElementById('confirmCancel').addEventListener('click', function() {
                         // Marca el checkbox como checked
                         document.getElementById('estado').checked = true;
@@ -156,37 +159,37 @@ if ($cita) {
                         document.getElementById('estado').checked = false;
                     });
                 </script>
-                  <script>
-    $(document).ready(function() {
-        // Verifica si el modal está presente
-        if ($('#staticBackdrop').length) {
-            // Muestra el modal
-            $('#staticBackdrop').modal('show');
-            // Cierra el modal después de 2 segundos (2000 milisegundos)
-            setTimeout(function() {
-                $('#staticBackdrop').modal('hide');
-            }, 1000);
-        }
-    });
-</script>
-     <script>
-    // Al salir de la página, borrar la cita de la sesión
-    window.addEventListener('beforeunload', function(event) {
-        // Si el usuario está recargando la página, evitar la eliminación de la cita
-        if (event.persisted || (window.performance && window.performance.navigation.type == 1)) {
-            // Recarga de página detectada, no hacer nada
-        } else {
-            // Salida de la página detectada, eliminar la sesión del cita
-            fetch(window.location.href, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/x-www-form-urlencoded',
-                },
-                body: 'eliminar_cita_session=true'
-            });
-        }
-    });
-</script>              
+                <script>
+                    $(document).ready(function() {
+                        // Verifica si el modal está presente
+                        if ($('#staticBackdrop').length) {
+                            // Muestra el modal
+                            $('#staticBackdrop').modal('show');
+                            // Cierra el modal después de 2 segundos (2000 milisegundos)
+                            setTimeout(function() {
+                                $('#staticBackdrop').modal('hide');
+                            }, 1000);
+                        }
+                    });
+                </script>
+                <script>
+                    // Al salir de la página, borrar la cita de la sesión
+                    window.addEventListener('beforeunload', function(event) {
+                        // Si el usuario está recargando la página, evitar la eliminación de la cita
+                        if (event.persisted || (window.performance && window.performance.navigation.type == 1)) {
+                            // Recarga de página detectada, no hacer nada
+                        } else {
+                            // Salida de la página detectada, eliminar la sesión del cita
+                            fetch(window.location.href, {
+                                method: 'POST',
+                                headers: {
+                                    'Content-Type': 'application/x-www-form-urlencoded',
+                                },
+                                body: 'eliminar_cita_session=true'
+                            });
+                        }
+                    });
+                </script>
 </body>
 
 </html>
