@@ -62,17 +62,17 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                     exit();
                 }
             } else {
-                $_SESSION['alert'] = ['message' => '¡Datos inválidos, vuelve a intentarlo!'];
+                $_SESSION['error'] = '¡Datos inválidos, vuelve a intentarlo!';
                 header("Location: ./index.php");
                 exit();
             }
         } else {
-            $_SESSION['alert'] = ['message' => 'Datos inválidos, vuelve a intentarlo!'];
+            $_SESSION['error'] = 'Datos inválidos, vuelve a intentarlo!';
             header("Location: ./index.php");
             exit();
         }
     } catch (PDOException $e) {
-        $_SESSION['alert'] = ['message' => 'Error en la consulta: ' . $e->getMessage()];
+        $_SESSION['error'] = 'Error en la consulta: ' . $e->getMessage();
         header("Location: ./index.php");
         exit();
     }
