@@ -127,6 +127,27 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             font-size: 1.25rem;
             font-weight: bold;
         }
+        /* Ajuste del contenedor de la imagen */
+.bg-fixedd {
+    background-size: cover;
+    background-position: center center;
+    background-attachment: fixed;
+    height: 27rem; /* Mantener una altura adecuada en pantallas grandes */
+    width: 100%;
+    position: relative;
+    overflow-x: hidden;
+    margin-top: 50px;
+    opacity: 40%;
+}
+
+/* Media query para pantallas más pequeñas */
+@media (max-width: 768px) {
+    .bg-fixedd {
+        height: 50vh; /* Ajustar la altura en dispositivos móviles */
+        background-attachment: scroll; /* Evitar que la imagen sea fija en móviles */
+    }
+}
+
 
         .social-icons a {
             color: #fff;
